@@ -1,4 +1,5 @@
 // firebase SDK
+
 const config = {
   apiKey: "AIzaSyBmbHqONy7XHhbAJgi7XI8Zb6xrKcDQ9NM",
   authDomain: "film-db-9936d.firebaseapp.com",

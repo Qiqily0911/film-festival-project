@@ -1,62 +1,84 @@
 // import logo from "./logo.svg";
 import "./App.css";
-import React from "react";
+import React, { useState } from "react";
+// import app from "firebase/app";
 import firebase from "firebase";
 import config from "./config";
 import "firebase/firestore";
 
-class App extends React.Component {
-  constructor() {
-    super();
+firebase.initializeApp(config);
 
-    if (!firebase.apps.length) {
-      this.app = firebase.initializeApp(config);
-    } else {
-      this.app = firebase.app();
-    }
-    this.database = this.app.database();
+function App(props) {
+  const apiKey = "5c27dca1cd4fca2cefc5c8945cfb1974";
+  const db = firebase.firestore();
+  const [value, setValue] = useState("");
+  const [posterData, setData] = useState("");
+  const [posterSrc, setSrc] = useState("");
+  const [titleZh, setTitleZh] = useState("");
+  const [titleEn, setTitleEn] = useState("");
 
-    this.state = {
-      read: "",
-    };
-    // this.name = "";
+  //  get input value
+  function handleChange(e) {
+    setValue(e.target.value);
   }
 
-  //  const [name, setName] = useState('');
+  //  get poster url
+  function tmdbMovieDetail(movie_id) {
+    let xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        let xhrObj = JSON.parse(xhr.responseText);
+        setSrc(`http://image.tmdb.org/t/p/w200${xhrObj.poster_path}`);
+        console.log(xhrObj.poster_path);
+        console.log(posterSrc);
+      }
+    };
+    xhr.open(
+      "GET",
+      `https://api.themoviedb.org/3/movie/${movie_id}?api_key=${apiKey}&language=en-US`
+    );
+    xhr.send();
+  }
 
-  handleChange = (e) => {
-    // setName(e.target.value);
-    console.log(e.target.value);
-  };
+  //  get movie id & data
+  function readData() {
+    console.log(value);
+    let ref = db.collection("cannes_film").doc("palme_d_or");
 
-  readData = () => {
-    const path = "/film_festival";
-    this.database.ref(path).once("value", (e) => {
-      const data = e.val();
-      console.log(data.cannes.palme_d_or[9]);
-      // this.setState({ read: data });
+    ref.get().then((doc) => {
+      setData(doc.data()[value]);
+      let movieId = posterData["movie_id"];
+      console.log(movieId);
+      tmdbMovieDetail(movieId);
+      console.log("OK");
+      setTitleZh(posterData["film_name_zh"]);
+      setTitleEn(posterData["film_name_en"]);
     });
-  };
+  }
 
-  render() {
-    const { read } = this.state;
-    return (
+  const movieCard = (
+    <div>
+      <h3>{titleZh}</h3>
+      <h3>{titleEn}</h3>
+      <img alt="movie_poster" src={posterSrc} />
+    </div>
+  );
+
+  return (
+    <div>
       <div>
+        <input type="text" value={props.value} onChange={handleChange} />
+        <button type="button" onClick={readData}>
+          submit
+        </button>
         <div>
-          <input
-            type="text"
-            name="text"
-            value={this.name}
-            onChange={() => this.handleChange}
-          />
-          <button type="button" onClick={() => this.readData()}>
-            read
-          </button>
-          <div>data: {read}</div>
+          <div>{posterSrc !== "" ? movieCard : ""}</div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
+
+// /ajVEq3RFXyXmhEGAegY8iz8VkH2.jpg
 
 export default App;
