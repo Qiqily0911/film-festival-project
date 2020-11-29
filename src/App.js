@@ -1,4 +1,4 @@
-import "./App.css";
+import "./App.scss";
 import CannesFilm from "./CannesFilm.json";
 import MovieCard from "./components/MovieCard";
 import React, { useState } from "react";
