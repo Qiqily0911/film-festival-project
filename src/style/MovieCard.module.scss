@@ -1,0 +1,48 @@
+@import "./Default.scss";
+
+.movieCard {
+  width: 180px;
+  margin: 30px;
+  padding: 10px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+
+  .posterBox {
+    width: 160px;
+    height: 240px;
+    overflow: hidden;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+
+    .notFound {
+      border: 1px solid $color-gray;
+      color: $color-gray;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .basicInfo {
+    margin-top: 15px;
+    width: 100%;
+    text-align: center;
+
+    div {
+      margin-bottom: 5px;
+    }
+
+    .titleEn {
+      font-size: 18px;
+    }
+
+    .titleZh {
+      font-size: 14px;
+      color: $color-gray;
+    }
+  }
+}
