@@ -1,10 +1,9 @@
 import "./App.css";
 import CannesFilm from "./CannesFilm.json";
 import MovieCard from "./components/MovieCard";
-import React from "react";
+import React, { useState } from "react";
 // import app from "firebase/app";
 import firebase from "firebase";
-// import fs from "fs";
 import { config } from "./config";
 import "firebase/firestore";
 
@@ -13,25 +12,19 @@ firebase.initializeApp(config);
 function App(props) {
   //  const fs = require("fs");
   //  const db = firebase.firestore();
-  //  const [value, setValue] = useState("");
-  //  const [value, setValue] = useState("");
+  const [prize, setPrize] = useState("palme_d_or");
 
-  //  get input value
-  //  function handleChange(e) {
-  //     setValue(e.target.value);
-  //  }
-
-  // get movie poster from json
-
-  //  function readData() {
-  //     console.log(value);
-  //  }
+  function selectPrize(e) {
+    let btnValue = e.target.value;
+    setPrize(btnValue);
+    console.log(btnValue);
+  }
 
   const MovieCards = (
     <div>
       {CannesFilm
         //  choose certian prize
-        .filter((obj) => obj.prize === "un_certain_regard")
+        .filter((obj) => obj.prize === prize)
         // sort the data by year
         .sort((a, b) => (a.year > b.year ? 1 : -1))
         // render each
@@ -78,10 +71,13 @@ function App(props) {
   return (
     <div>
       <div>
-        {/* <input type="text" value={props.value} onChange={handleChange} />
-            <button type="button" onClick={readData}>
-               submit
-            </button> */}
+        {/* <input type="text" value={props.value} onChange={handleChange} /> */}
+        <button type="button" value="un_certain_regard" onClick={selectPrize}>
+          Un Certain Regard 一種注目
+        </button>
+        <button type="button" value="palme_d_or" onClick={selectPrize}>
+          Palme d'Or 金棕櫚獎
+        </button>
         <div>{MovieCards}</div>
       </div>
     </div>
