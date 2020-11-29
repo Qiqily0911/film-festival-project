@@ -1,6 +1,5 @@
 // firebase SDK
-
-const config = {
+export const config = {
   apiKey: "AIzaSyBmbHqONy7XHhbAJgi7XI8Zb6xrKcDQ9NM",
   authDomain: "film-db-9936d.firebaseapp.com",
   databaseURL: "https://film-db-9936d.firebaseio.com",
@@ -10,4 +9,5 @@ const config = {
   appId: "1:340728739287:web:6a5a212fc24c2cd1b18792",
 };
 
-export default config;
+// TMDb api key
+export const apiKey = "5c27dca1cd4fca2cefc5c8945cfb1974";
