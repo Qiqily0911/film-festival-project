@@ -3,7 +3,17 @@ import styles from "../style/MovieCard.module.scss";
 
 function MovieCard(props) {
   return (
-    <div className={styles.movieCard} key={props.movie_id}>
+    <div
+      className={styles.movieCard}
+      key={props.movie_id}
+      onClick={() => {
+        let movieId = props.movie_id;
+        props.tmdbApi("", movieId);
+        props.tmdbApi("/videos", movieId);
+        props.tmdbApi("/images", movieId);
+        props.renewData(props);
+      }}
+    >
       <div className={styles.posterBox}>
         {props.poster_path === null ? (
           // if poster_path was null

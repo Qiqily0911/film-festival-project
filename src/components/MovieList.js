@@ -4,27 +4,26 @@ import MovieCard from "./MovieCard";
 import CannesFilm from "../CannesFilm.json";
 // import CannesFilm from "./CannesFilm.json";
 
+// TODO: change different film-list by json
 function MovieList(props) {
-  //    const [prize, setPrize] = useState("palme_d_or");
-
-  //    function selectPrize(e) {
-  //       let btnValue = e.target.value;
-  //       setPrize(btnValue);
-  //       console.log(btnValue);
-  //    }
-
   const MovieCards = (
     <div>
       {CannesFilm
-        //  choose certian prize
+        // choose certian prize
         .filter((obj) => obj.prize === props.prize)
         // sort the data by year
         .sort((a, b) => (a.year > b.year ? 1 : -1))
         // render each
         .map((data) => (
           <MovieCard
+            renewData={props.renewData}
+            tmdbApi={props.tmdbApi}
             key={data.movie_id}
+            th={data.th}
             year={data.year}
+            prize={data.prize}
+            atmovie_link={data.atmovie_link}
+            imdb_link={data.imdb_link}
             movie_id={data.movie_id}
             film_name_zh={data.film_name_zh}
             film_name_en={data.film_name_en}
@@ -36,16 +35,6 @@ function MovieList(props) {
 
   return (
     <div>
-      <button type="button" value="palme_d_or" onClick={props.selectPrize}>
-        Palme d'Or 金棕櫚獎
-      </button>
-      <button
-        type="button"
-        value="un_certain_regard"
-        onClick={props.selectPrize}
-      >
-        Un Certain Regard 一種注目
-      </button>
       <div className={styles.movieList}>{MovieCards}</div>
     </div>
   );

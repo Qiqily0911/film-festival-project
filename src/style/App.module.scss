@@ -1,6 +1,19 @@
 @import "./Default.scss";
 
-// .movieList {
-//    display: flex;
-//    justify-content: center;
-// }
+.container {
+  display: flex;
+}
+
+.movieFilter {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 400px;
+  height: 60px;
+  padding: 10px;
+  background-color: white;
+}
+
+.blank {
+  height: 60px;
+}
