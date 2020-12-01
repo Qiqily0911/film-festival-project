@@ -11,3 +11,6 @@ export const config = {
 
 // TMDb api key
 export const apiKey = "5c27dca1cd4fca2cefc5c8945cfb1974";
+
+// OMDb api key
+export const omdbKey = "1bd03df3";

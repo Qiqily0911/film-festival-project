@@ -7,10 +7,14 @@ function MovieCard(props) {
       className={styles.movieCard}
       key={props.movie_id}
       onClick={() => {
+        console.log(props);
         let movieId = props.movie_id;
         props.tmdbApi("", movieId);
         props.tmdbApi("/videos", movieId);
         props.tmdbApi("/images", movieId);
+        props.tmdbApi("/credits", movieId);
+        // TODO: get the exact rating data from imdb
+        props.omdbApi(movieId);
         props.renewData(props);
       }}
     >

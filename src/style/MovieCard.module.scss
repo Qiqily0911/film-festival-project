@@ -1,6 +1,7 @@
 @import "./Default.scss";
 
 .movieCard {
+  cursor: pointer;
   width: 180px;
   margin: 30px;
   padding: 10px;
@@ -13,7 +14,7 @@
     box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
 
     .notFound {
-      border: 1px solid $color-gray;
+      // border: 1px solid $color-gray;
       color: $color-gray;
       width: 100%;
       height: 100%;

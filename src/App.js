@@ -7,7 +7,7 @@ import MovieInfo from "./components/MovieInfo";
 import React, { useState } from "react";
 // import app from "firebase/app";
 import firebase from "firebase";
-import { config, apiKey } from "./config";
+import { config, apiKey, omdbKey } from "./config";
 import "firebase/firestore";
 
 firebase.initializeApp(config);
@@ -15,11 +15,12 @@ firebase.initializeApp(config);
 function App() {
   //  const db = firebase.firestore();
   const [prize, setPrize] = useState("palme_d_or");
-  //  const [title, setTitle] = useState("123");
   const [tmdbData, setData] = useState("");
   const [tmdbVideo, setVideo] = useState("");
   const [tmdbImages, setImages] = useState("");
+  const [tmdbCredits, setCredits] = useState("");
   const [localData, renewData] = useState("");
+  const [omdbData, setomdbData] = useState("");
   //  const [filmList, setFilmList] = useState({ CannesFilm });
   //  const cannesFilm = { CannesFilm };
 
@@ -36,15 +37,10 @@ function App() {
     console.log(btnValue);
   }
 
-  //  useEffect(() => {
-  //     console.log("000");
-  //  }, [localData]);
-
   //  get tmdb movie detail & video
   function tmdbApi(type, movie_id) {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-      //  https://api.themoviedb.org/3/movie/{movie_id}?api_key=<<api_key>>&language=en-US
       xhr.open(
         "GET",
         `https://api.themoviedb.org/3/movie/${movie_id}${type}?api_key=${apiKey}`
@@ -62,8 +58,27 @@ function App() {
           setVideo(data);
         } else if (type === "/images") {
           setImages(data);
+        } else if (type === "/credits") {
+          setCredits(data);
         }
       });
+  }
+
+  //  get get imdb rating from omdb APi
+  function omdbApi(movie_id) {
+    const xhr = new XMLHttpRequest();
+    xhr.open(
+      "GET",
+      `http://www.omdbApi.com/?apikey=${omdbKey}&i=${movie_id}`,
+      true
+    );
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        let a = JSON.parse(xhr.responseText);
+        setomdbData(a);
+      }
+    };
+    xhr.send();
   }
 
   //  get movie id & data
@@ -83,54 +98,67 @@ function App() {
   //  }
 
   return (
-    <div>
-      <div className={styles.movieFilter}>
-        <div>
-          <button type="button" value="cannesFilm" onClick={selectFilmList}>
-            坎城影展
-          </button>
-          <button type="button" value="berlinFilm" onClick={selectFilmList}>
-            柏林影展
-          </button>
-          <button type="button" value="veniceFilm" onClick={selectFilmList}>
-            威尼斯影展
-          </button>
-          <button type="button" value="oscarFilm" onClick={selectFilmList}>
-            奧斯卡金像獎
-          </button>
-          <button
-            type="button"
-            value="goldenHorseFilm"
-            onClick={selectFilmList}
-          >
-            金馬影展
-          </button>
+    <div className={styles.outter}>
+      <aside>
+        <div>LOGO</div>
+        <div className={styles.timeLine}></div>
+      </aside>
+      <main>
+        <div className={styles.movieFilter}>
+          <div>
+            <button type="button" value="cannesFilm" onClick={selectFilmList}>
+              坎城影展
+            </button>
+            <button type="button" value="berlinFilm" onClick={selectFilmList}>
+              柏林影展
+            </button>
+            <button type="button" value="veniceFilm" onClick={selectFilmList}>
+              威尼斯影展
+            </button>
+            <button type="button" value="oscarFilm" onClick={selectFilmList}>
+              奧斯卡金像獎
+            </button>
+            <button
+              type="button"
+              value="goldenHorseFilm"
+              onClick={selectFilmList}
+            >
+              金馬影展
+            </button>
+          </div>
+
+          <div>
+            <button type="button" value="palme_d_or" onClick={selectPrize}>
+              Palme d'Or 金棕櫚獎
+            </button>
+            <button
+              type="button"
+              value="un_certain_regard"
+              onClick={selectPrize}
+            >
+              Un Certain Regard 一種注目
+            </button>
+          </div>
         </div>
 
-        <div>
-          <button type="button" value="palme_d_or" onClick={selectPrize}>
-            Palme d'Or 金棕櫚獎
-          </button>
-          <button type="button" value="un_certain_regard" onClick={selectPrize}>
-            Un Certain Regard 一種注目
-          </button>
+        <div className={styles.container}>
+          <MovieList
+            prize={prize}
+            selectPrize={selectPrize}
+            tmdbApi={tmdbApi}
+            omdbApi={omdbApi}
+            renewData={renewData}
+          />
+          <MovieInfo
+            tmdbData={tmdbData}
+            tmdbVideo={tmdbVideo}
+            tmdbImages={tmdbImages}
+            tmdbCredits={tmdbCredits}
+            localData={localData}
+            omdbData={omdbData}
+          />
         </div>
-      </div>
-      <div className={styles.blank}></div>
-      <div className={styles.container}>
-        <MovieList
-          prize={prize}
-          selectPrize={selectPrize}
-          tmdbApi={tmdbApi}
-          renewData={renewData}
-        />
-        <MovieInfo
-          tmdbData={tmdbData}
-          tmdbVideo={tmdbVideo}
-          tmdbImages={tmdbImages}
-          localData={localData}
-        />
-      </div>
+      </main>
     </div>
   );
 }
