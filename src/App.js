@@ -2,7 +2,7 @@ import "./App.scss";
 import styles from "./style/App.module.scss";
 // import CannesFilm from "./CannesFilm.json";
 // import MovieCard from "./components/MovieCard";
-import MovieList from "./components/MovieList";
+import YearList from "./components/YearList";
 import MovieInfo from "./components/MovieInfo";
 import React, { useState } from "react";
 // import app from "firebase/app";
@@ -168,7 +168,7 @@ function App() {
         </div>
 
         <div className={styles.container}>
-          <MovieList
+          <YearList
             prize={prize}
             selectPrize={selectPrize}
             tmdbApi={tmdbApi}

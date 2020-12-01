@@ -1,0 +1,20 @@
+@import "./Default.scss";
+
+.YearListBox {
+  display: flex;
+  width: calc(100% - 350px);
+  overflow: scroll;
+
+  .YearList {
+    // display: flex;
+
+    .yearBox {
+      display: flex;
+      height: 430px;
+      border: 1px solid red;
+    }
+    // flex-direction: column;
+    // justify-content: center;
+    // border: 1px solid red;
+  }
+}
