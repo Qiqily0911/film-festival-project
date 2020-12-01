@@ -4,26 +4,38 @@ import styles from "../style/MovieInfo.module.scss";
 function MovieInfo(props) {
   const [videoSrc, setvideoSrc] = useState("");
   const [imageSrc, setimageSrc] = useState("");
+  const [castList, setCastList] = useState("");
 
   let movieId = props.localData.movie_id;
 
   useEffect(() => {
     let videoPath = props.tmdbVideo.results;
     let images = props.tmdbImages.backdrops;
+    let casts = props.tmdbCredits.cast;
 
-    if (videoPath !== undefined && images !== undefined) {
+    if (
+      videoPath !== undefined &&
+      images !== undefined &&
+      casts !== undefined
+    ) {
       if (videoPath[0] !== undefined) {
-        let youtubeUrl = `https://www.youtube.com/watch?v=${videoPath[0].key}`;
+        let youtubeUrl = `https://www.youtube.com/embed/${videoPath[0].key}`;
         setvideoSrc(youtubeUrl);
       } else {
         setvideoSrc(" ");
       }
-      // let people = props.tmdbCredits.cast;
-      // console.log(people);
-      // console.log(images);
+
+      if (casts[0] !== undefined) {
+        setCastList(casts);
+        console.log(castList[0]);
+      }
+
+      // if (casts[0] !== undefined) {
+      //    console.log(casts[0].name);
+      // }
       //  const casts=(
-      //        {people.map((people) => (
-      //       <p> {people.name}</p>
+      //        {people.map((person) => (
+      //       <p> {person.name}</p>
       //    ))}
       //    )
 
@@ -43,15 +55,33 @@ function MovieInfo(props) {
         setimageSrc(" ");
       }
     }
-  }, [props.tmdbVideo, props.tmdbImages, props.tmdbCredits, movieId]);
+  }, [props.tmdbVideo, props.tmdbImages, props.tmdbCredits, movieId, castList]);
 
-  // const casts = (
-  //    <div>
-  //       {props.tmdbCredits.cast.map((people) => (
-  //          <p> {people.name}</p>
-  //       ))}
-  //    </div>
   // );
+
+  // show casts
+  const casts = (
+    <div className={styles.castBox}>
+      {castList
+        ? castList
+            .filter((person) => person.order <= 4)
+            .map((person) => (
+              <div key={person.credit_id}>
+                {person.profile_path ? (
+                  <img
+                    alt="profile"
+                    src={`http://image.tmdb.org/t/p/w92${person.profile_path}`}
+                  />
+                ) : (
+                  <div className={styles.noPic}>not found</div>
+                )}
+
+                <p> {person.name}</p>
+              </div>
+            ))
+        : ""}
+    </div>
+  );
 
   const content = (
     <div>
@@ -66,29 +96,34 @@ function MovieInfo(props) {
           <img alt="pic" src={imageSrc}></img>
         )}
       </div>
-      <span>
-        {props.localData.th}th {props.localData.prize}({props.localData.year})
-      </span>
-      <h3>{props.tmdbData.title}</h3>
-      <h3>{props.localData.film_name_zh}</h3>
-      <div className="rating">
-        <p>{props.omdbData.imdbRating} /10</p>
-        <p>{props.omdbData.imdbVotes} votes</p>
-      </div>
-      <a href={videoSrc} target="_blank" rel="noreferrer">
-        Trailer
-      </a>
 
-      <br />
-      <a href={props.localData.imdb_link} target="_blank" rel="noreferrer">
-        IMDb
-      </a>
-      <a href={props.localData.atmovie_link} target="_blank" rel="noreferrer">
-        開眼電影
-      </a>
-      <div>{props.tmdbData.runtime} min</div>
-      <div>{props.tmdbData.overview} </div>
-      {/* <div>{casts}</div> */}
+      <div className={styles.infoBox}>
+        <span>
+          {props.localData.th}th {props.localData.prize}({props.localData.year})
+        </span>
+        <h3>{props.tmdbData.title}</h3>
+        <h3>{props.localData.film_name_zh}</h3>
+        <div className={styles.rating}>
+          <p>{props.omdbData.imdbRating} /10</p>
+          <p>{props.omdbData.imdbVotes} votes</p>
+        </div>
+
+        <iframe title="trailer" src={videoSrc}></iframe>
+
+        <br />
+        <a href={props.localData.imdb_link} target="_blank" rel="noreferrer">
+          IMDb
+        </a>
+        <a href={props.localData.atmovie_link} target="_blank" rel="noreferrer">
+          開眼電影
+        </a>
+        <div>{props.tmdbData.runtime} min</div>
+        <div>{props.tmdbData.overview} </div>
+        <div>
+          <span>Cast:</span>
+          {casts}
+        </div>
+      </div>
     </div>
   );
 

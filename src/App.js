@@ -21,6 +21,7 @@ function App() {
   const [tmdbCredits, setCredits] = useState("");
   const [localData, renewData] = useState("");
   const [omdbData, setomdbData] = useState("");
+  const [imdbSpan, setRating] = useState("");
   //  const [filmList, setFilmList] = useState({ CannesFilm });
   //  const cannesFilm = { CannesFilm };
 
@@ -76,6 +77,31 @@ function App() {
       if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
         let a = JSON.parse(xhr.responseText);
         setomdbData(a);
+      }
+    };
+    xhr.send();
+  }
+
+  //  get get imdb rating from imdb page
+  function imdbRating(movie_id) {
+    const xhr = new XMLHttpRequest();
+    xhr.open(
+      "GET",
+      `https://cors-anywhere.herokuapp.com/https://www.imdb.com/title/${movie_id}/?ref_=tt_sims_tt`,
+      true
+    );
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+        let doc = new DOMParser().parseFromString(
+          xhr.responseText,
+          "text/html"
+        );
+        let elements = [...doc.getElementsByTagName("span")];
+        let a = elements.filter((x) => !!x.getAttribute("itemprop"));
+
+        setRating(a);
+        console.log(a[0].innerText);
+        console.log(a[2].innerText);
       }
     };
     xhr.send();
@@ -147,6 +173,7 @@ function App() {
             selectPrize={selectPrize}
             tmdbApi={tmdbApi}
             omdbApi={omdbApi}
+            imdbRating={imdbRating}
             renewData={renewData}
           />
           <MovieInfo
@@ -156,6 +183,7 @@ function App() {
             tmdbCredits={tmdbCredits}
             localData={localData}
             omdbData={omdbData}
+            imdbSpan={imdbSpan}
           />
         </div>
       </main>

@@ -7,7 +7,6 @@ import GodenHorseFilm from "../golden_horse_best_film.json";
 
 // TODO: change different film-list by json
 function MovieList(props) {
-  console.log(props);
   const MovieCards = (
     <div>
       {CannesFilm
@@ -21,6 +20,7 @@ function MovieList(props) {
             renewData={props.renewData}
             tmdbApi={props.tmdbApi}
             omdbApi={props.omdbApi}
+            imdbRating={props.imdbRating}
             key={data.movie_id}
             th={data.th}
             year={data.year}
@@ -47,6 +47,7 @@ function MovieList(props) {
             renewData={props.renewData}
             tmdbApi={props.tmdbApi}
             omdbApi={props.omdbApi}
+            imdbRating={props.imdbRating}
             key={data.movie_id}
             th={data.th}
             year={data.year}

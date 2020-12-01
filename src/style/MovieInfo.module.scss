@@ -7,7 +7,8 @@
   width: 350px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
     rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
-  padding: 20px;
+  //  padding: 20px;
+  overflow: scroll;
 
   .imageBox {
     width: 100%;
@@ -26,6 +27,19 @@
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+  }
+
+  .infoBox {
+    padding: 20px;
+
+    .castBox {
+      display: flex;
+      overflow: scroll;
+
+      div {
+        margin: 5px;
+      }
     }
   }
 }
