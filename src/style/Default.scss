@@ -1,0 +1,29 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  // font-family: "Noto Sans TC", sans-serif;
+}
+
+/* general css */
+
+.d-flex {
+  display: flex;
+}
+
+.d-block {
+  display: block;
+}
+
+.d-none {
+  display: none;
+}
+
+.align-item-center {
+  align-items: center;
+}
+
+/* theme color */
+$color-gray: rgb(139, 139, 139);
+$color-blue: rgb(70, 85, 84);
+$color-white: white;
