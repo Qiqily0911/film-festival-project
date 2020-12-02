@@ -109,8 +109,11 @@ function MovieInfo(props) {
 
         {/* --------------- rating -------------- */}
         <div className={styles.rating}>
-          <span>{props.imdbSpan[0]} /10</span>
-          <span>{props.imdbSpan[1]} votes</span>
+          {/* <span>{props.imdbSpan[0]} /10</span>
+               <span>{props.imdbSpan[1]} votes</span> */}
+
+          <span>{props.omdbData.imdbRating} /10</span>
+          <span>{props.omdbData.imdbVotes} votes</span>
         </div>
 
         {/* --------------- trailer -------------- */}

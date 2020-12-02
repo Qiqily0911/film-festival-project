@@ -2,80 +2,86 @@ import React from "react";
 import styles from "../style/YearList.module.scss";
 import MovieCard from "./MovieCard";
 import { nanoid } from "nanoid";
-import OscarFilm from "../oscar_best_film.json";
-import CannesFilm from "../CannesFilm.json";
-
-import GodenHorseFilm from "../golden_horse_best_film.json";
+import oscar from "../oscar_best_film.json";
+import cannes from "../CannesFilm.json";
+import goldenHorse from "../golden_horse_best_film.json";
 
 // TODO: change different film-list by json
 function YearList(props) {
   // create an empty year box (1920-2020)
-  let yearlist = [];
-  for (let i = 1920; i <= 2020; i++) {
-    let item = { year: i, list: [] };
-    yearlist.push(item);
-  }
+  //  let yearlist = [];
+  //  for (let i = 1920; i <= 2020; i++) {
+  //     let item = { year: i, list: [] };
+  //     yearlist.push(item);
+  //  }
 
-  // put movies to the correspondense year box
-  function fillYearList(fes, prize, order) {
-    let data = fes
-      .filter((obj) => obj.prize === prize)
-      .sort((a, b) => (a.year > b.year ? 1 : -1));
+  //  // put movies to the correspondense year box
+  //  function fillYearList(fes, prize, order) {
+  //     let data = fes.filter((obj) => obj.prize === prize).sort((a, b) => (a.year > b.year ? 1 : -1));
 
-    if (order === 0) {
-      yearlist.forEach((yearbox) => {
-        data.forEach((item) => {
-          if (item.year === yearbox.year) {
-            let filmPrize = [];
+  //     if (order === 0) {
+  //        yearlist.forEach((yearbox) => {
+  //           data.forEach((item) => {
+  //              if (item.year === yearbox.year) {
+  //                 let filmPrize = [];
 
-            // if one more movies won prize at the same year
-            if (yearbox.list.length !== 0) {
-              yearbox.list[0].push(item);
-            } else {
-              filmPrize.push(item);
-              yearbox.list.push(filmPrize);
-            }
-            // more than one prize
-          }
-        });
+  //                 // if one more movies won prize at the same year
+  //                 if (yearbox.list.length !== 0) {
+  //                    yearbox.list[0].push(item);
+  //                 } else {
+  //                    filmPrize.push(item);
+  //                    yearbox.list.push(filmPrize);
+  //                 }
+  //                 // more than one prize
+  //              }
+  //           });
 
-        // if the year don't have movie, set prize:null
-        if (yearbox.list.length === 0) {
-          let filmPrize = [{ prize: null }];
-          yearbox.list.push(filmPrize);
-        }
-      });
-    } else {
-      yearlist.forEach((yearbox) => {
-        data.forEach((item) => {
-          if (item.year === yearbox.year) {
-            let filmPrize = [];
+  //           // if the year don't have movie, set prize:null
+  //           if (yearbox.list.length === 0) {
+  //              let filmPrize = [{ prize: null }];
+  //              yearbox.list.push(filmPrize);
+  //           }
+  //        });
+  //     } else {
+  //        yearlist.forEach((yearbox) => {
+  //           data.forEach((item) => {
+  //              if (item.year === yearbox.year) {
+  //                 let filmPrize = [];
 
-            // if one more movies won prize at the same year
-            if (yearbox.list.length > order) {
-              yearbox.list[order].push(item);
-            } else {
-              filmPrize.push(item);
-              yearbox.list.push(filmPrize);
-            }
-            // more than one prize
-          }
-        });
+  //                 // if one more movies won prize at the same year
+  //                 if (yearbox.list.length > order) {
+  //                    yearbox.list[order].push(item);
+  //                 } else {
+  //                    filmPrize.push(item);
+  //                    yearbox.list.push(filmPrize);
+  //                 }
+  //                 // more than one prize
+  //              }
+  //           });
 
-        // if the year don't have movie, set prize:null
-        if (yearbox.list.length === order) {
-          let filmPrize = [{ prize: null }];
-          yearbox.list.push(filmPrize);
-        }
-      });
-    }
-  }
+  //           // if the year don't have movie, set prize:null
+  //           if (yearbox.list.length === order) {
+  //              let filmPrize = [{ prize: null }];
+  //              yearbox.list.push(filmPrize);
+  //           }
+  //        });
+  //     }
+  //  }
 
-  fillYearList(OscarFilm, "best_film", 0);
-  fillYearList(CannesFilm, "palme_d_or", 1);
-  fillYearList(GodenHorseFilm, "best_film", 2);
+  //  useEffect(() => {
+  //     console.log(props.yearlist);
+  //  }, [props.yearlist]);
+  //  console.log(props.yearlist);
 
-  const showYearList = yearlist.map((yearbox) => {
+  //  props.fillYearList(oscar, "best_film", 0);
+  //  console.log(props.yearlist[0].list.length);
+
+  //  props.fillYearList(cannes, "palme_d_or", 0);
+  //  props.fillYearList(goldenHorse, "best_film", 1);
+  //  props.fillYearList(cannes, "un_certain_regard", 2);
+  //  console.log(props.yearlist[0].list.length);
+
+  const showYearList = props.yearlist.map((yearbox) => {
     const moviePrize = yearbox.list.map((data) => data[0].prize);
     if (moviePrize.find((data) => data !== null) === undefined) {
       return null;
@@ -89,8 +95,8 @@ function YearList(props) {
                 <MovieCard
                   renewData={props.renewData}
                   tmdbApi={props.tmdbApi}
-                  //  omdbApi={props.omdbApi}
-                  imdbRating={props.imdbRating}
+                  omdbApi={props.omdbApi}
+                  //  imdbRating={props.imdbRating}
                   key={nanoid()}
                   th={data[0].th}
                   year={data[0].year}

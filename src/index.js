@@ -4,6 +4,12 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
+// const LISTSTATE = [
+//    { film_list: "cannes", prize: "palme_d_or", order: 0 },
+//    { film_list: "goldenHorse", prize: "best_film", order: 1 },
+//    { film_list: "cannes", prize: "un_certain_regard", order: 2 },
+// ];
+
 ReactDOM.render(
   <React.StrictMode>
     <App />

@@ -19,10 +19,11 @@ function MovieCard(props) {
           props.tmdbApi("/videos", movieId);
           props.tmdbApi("/images", movieId);
           props.tmdbApi("/credits", movieId);
-          // FIXME: can work but slow
-          props.imdbRating(movieId);
-          //  props.omdbApi(movieId);
+
+          props.omdbApi(movieId);
           props.renewData(props);
+          // FIXME: can work but slow
+          //  props.imdbRating(movieId);
         }}
       >
         <div className={styles.posterBox}>
