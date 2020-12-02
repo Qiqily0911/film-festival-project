@@ -40,7 +40,7 @@ function MovieInfo(props) {
             src={`http://image.tmdb.org/t/p/w780${path.file_path}`}
           />
         ));
-        console.log(images[0]);
+        // console.log(images[0]);
         setImageList(b);
       } else {
         const c = (
@@ -109,8 +109,8 @@ function MovieInfo(props) {
 
         {/* --------------- rating -------------- */}
         <div className={styles.rating}>
-          <span>{props.omdbData.imdbRating} /10</span>
-          <span>{props.omdbData.imdbVotes} votes</span>
+          <span>{props.imdbSpan[0]} /10</span>
+          <span>{props.imdbSpan[1]} votes</span>
         </div>
 
         {/* --------------- trailer -------------- */}

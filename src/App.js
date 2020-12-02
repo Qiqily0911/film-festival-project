@@ -20,8 +20,9 @@ function App() {
   const [tmdbImages, setImages] = useState("");
   const [tmdbCredits, setCredits] = useState("");
   const [localData, renewData] = useState("");
-  const [omdbData, setomdbData] = useState("");
+  //  const [omdbData, setomdbData] = useState("");
   const [imdbSpan, setRating] = useState("");
+  const [yearlist, setYearlist] = useState([]);
   //  const [filmList, setFilmList] = useState({ CannesFilm });
   //  const cannesFilm = { CannesFilm };
 
@@ -36,6 +37,69 @@ function App() {
     let btnValue = e.target.value;
     setPrize(btnValue);
     console.log(btnValue);
+  }
+
+  // create an empty year box (1920-2020)
+
+  for (let i = 1920; i <= 2020; i++) {
+    let item = { year: i, list: [] };
+    yearlist.push(item);
+  }
+  //  console.log(yearlist);
+
+  // put movies to the correspondense year box
+  function fillYearList(fes, prize, order) {
+    let data = fes
+      .filter((obj) => obj.prize === prize)
+      .sort((a, b) => (a.year > b.year ? 1 : -1));
+
+    if (order === 0) {
+      yearlist.forEach((yearbox) => {
+        data.forEach((item) => {
+          if (item.year === yearbox.year) {
+            let filmPrize = [];
+
+            // if one more movies won prize at the same year
+            if (yearbox.list.length !== 0) {
+              yearbox.list[0].push(item);
+            } else {
+              filmPrize.push(item);
+              yearbox.list.push(filmPrize);
+            }
+            // more than one prize
+          }
+        });
+
+        // if the year don't have movie, set prize:null
+        if (yearbox.list.length === 0) {
+          let filmPrize = [{ prize: null }];
+          yearbox.list.push(filmPrize);
+        }
+      });
+    } else {
+      yearlist.forEach((yearbox) => {
+        data.forEach((item) => {
+          if (item.year === yearbox.year) {
+            let filmPrize = [];
+
+            // if one more movies won prize at the same year
+            if (yearbox.list.length > order) {
+              yearbox.list[order].push(item);
+            } else {
+              filmPrize.push(item);
+              yearbox.list.push(filmPrize);
+            }
+            // more than one prize
+          }
+        });
+
+        // if the year don't have movie, set prize:null
+        if (yearbox.list.length === order) {
+          let filmPrize = [{ prize: null }];
+          yearbox.list.push(filmPrize);
+        }
+      });
+    }
   }
 
   //  get tmdb movie detail & video
@@ -66,21 +130,17 @@ function App() {
   }
 
   //  get get imdb rating from omdb APi
-  function omdbApi(movie_id) {
-    const xhr = new XMLHttpRequest();
-    xhr.open(
-      "GET",
-      `http://www.omdbApi.com/?apikey=${omdbKey}&i=${movie_id}`,
-      true
-    );
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-        let a = JSON.parse(xhr.responseText);
-        setomdbData(a);
-      }
-    };
-    xhr.send();
-  }
+  //  function omdbApi(movie_id) {
+  //     const xhr = new XMLHttpRequest();
+  //     xhr.open("GET", `http://www.omdbApi.com/?apikey=${omdbKey}&i=${movie_id}`, true);
+  //     xhr.onreadystatechange = function () {
+  //        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+  //           let a = JSON.parse(xhr.responseText);
+  //           setomdbData(a);
+  //        }
+  //     };
+  //     xhr.send();
+  //  }
 
   //  get get imdb rating from imdb page
   function imdbRating(movie_id) {
@@ -98,10 +158,7 @@ function App() {
         );
         let elements = [...doc.getElementsByTagName("span")];
         let a = elements.filter((x) => !!x.getAttribute("itemprop"));
-
-        setRating(a);
-        console.log(a[0].innerText);
-        console.log(a[2].innerText);
+        setRating([a[0].innerText, a[2].innerText]);
       }
     };
     xhr.send();
@@ -172,9 +229,10 @@ function App() {
             prize={prize}
             selectPrize={selectPrize}
             tmdbApi={tmdbApi}
-            omdbApi={omdbApi}
+            // omdbApi={omdbApi}
             imdbRating={imdbRating}
             renewData={renewData}
+            fillYearList={fillYearList}
           />
           <MovieInfo
             tmdbData={tmdbData}
@@ -182,7 +240,7 @@ function App() {
             tmdbImages={tmdbImages}
             tmdbCredits={tmdbCredits}
             localData={localData}
-            omdbData={omdbData}
+            // omdbData={omdbData}
             imdbSpan={imdbSpan}
           />
         </div>
