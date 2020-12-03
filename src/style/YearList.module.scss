@@ -1,12 +1,36 @@
 @import "./Default.scss";
 
+.titleBox {
+  display: flex;
+}
+.fesTitle {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  width: 180px;
+  margin: 10px 30px;
+  padding: 10px;
+  text-align: center;
+
+  .closeBox {
+    background-color: rgba(95, 95, 95, 0.3);
+    color: white;
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+}
+
 .YearListBox {
   display: flex;
-  width: calc(100% - 350px);
+  height: 100%;
+  width: 100%;
   overflow: scroll;
 
   .YearList {
-    // display: flex;
+    height: auto;
 
     .yearBox {
       display: flex;

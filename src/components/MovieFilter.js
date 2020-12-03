@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "../style/MovieFilter.module.scss";
 import { nanoid } from "nanoid";
 import oscar from "../oscar_best_film.json";
@@ -6,14 +6,7 @@ import cannes from "../CannesFilm.json";
 import goldenHorse from "../golden_horse_best_film.json";
 
 function MovieFilter(props) {
-  const [subBtn, setSubBtn] = useState("");
-  const [filmList, setFilmList] = useState("");
-  const [prize, setPrize] = useState("");
-
-  useEffect(() => {
-    console.log(filmList);
-    console.log(prize);
-  }, [filmList, prize]);
+  const [subBtnVal, setSubBtnVal] = useState("");
 
   // 主要按鈕
   const mainBtnData = [
@@ -46,6 +39,7 @@ function MovieFilter(props) {
   const subBtnData = {
     cannes: {
       source: cannes,
+      title: "坎城影展",
       arr: [
         { subBtnValue: "palme_d_or", subBtnText: "Palme d'Or 金棕櫚獎" },
         {
@@ -56,10 +50,12 @@ function MovieFilter(props) {
     },
     oscar: {
       source: oscar,
+      title: "奧斯卡金像獎",
       arr: [{ subBtnValue: "best_film", subBtnText: "Best Film 最佳影片" }],
     },
     goldenHorse: {
       source: goldenHorse,
+      title: "金馬獎",
       arr: [
         { subBtnValue: "best_film", subBtnText: "Best Film 最佳影片" },
         {
@@ -74,75 +70,82 @@ function MovieFilter(props) {
   function selectFilmList(e) {
     let btnValue = e.target.value;
 
-    // 開啟獎項按鈕
-    let btn = (x) =>
-      subBtnData[x].arr.map((data) => (
-        <button
-          key={nanoid()}
-          type="button"
-          onClick={selectPrize}
-          value={data.subBtnValue}
-        >
-          {data.subBtnText}
-        </button>
-      ));
+    //   console.log(btnValue);
 
     // 按鈕切換
     switch (btnValue) {
       case "cannes":
-        setSubBtn(btn("cannes"));
+        setSubBtnVal("cannes");
         break;
 
       case "oscar":
-        setSubBtn(btn("oscar"));
+        setSubBtnVal("oscar");
         break;
 
       case "goldenHorse":
-        setSubBtn(btn("goldenHorse"));
+        setSubBtnVal("goldenHorse");
         break;
 
       default:
-        setSubBtn("");
+        setSubBtnVal("");
     }
 
-    setFilmList(subBtnData[btnValue].source);
+    //   console.log(subBtnData[btnValue].source);
+    props.setFilmList(subBtnData[btnValue].source);
   }
 
   // 選擇獎項，並設定獎項值（prize）
   function selectPrize(e) {
     let btnValue = e.target.value;
-    setPrize(btnValue);
 
     // console.log(listState);
     // 若filmList、prize不為空值，將當前值傳入obj，並push進listState 裡
-    if (filmList !== "") {
+    console.log(props.filmList);
+    if (props.filmList !== "") {
       let btnSelect = {
-        film_list: filmList,
-        prize: prize,
+        title: e.target.dataset.title,
+        prize_name: e.target.innerText,
+        film_list: props.filmList,
+        prize: btnValue,
         order: props.yearlist[0].list.length,
       };
       //若 listState 中超過三個清單，則不加入 listState
       if (props.listState.length < 3) {
-        props.setlistState([...props.listState, btnSelect]);
-        console.log(props.listState);
+        const newListState = [...props.listState, btnSelect];
+        props.setlistState(newListState);
         // renderListState();
       } else {
         alert("!!");
       }
       // reset btn value
-      // setFilmList("");
-      // setPrize("");
+      props.setFilmList("");
     }
 
     // 關掉獎項按鈕
-    setSubBtn("");
+    setSubBtnVal("");
   }
 
   return (
     <div>
       <div className={styles.movieFilter}>
         {mainBtn}
-        <div>{subBtn}</div>
+        <div>
+          {subBtnVal === "" ? (
+            <div></div>
+          ) : (
+            subBtnData[subBtnVal].arr.map((data) => (
+              <button
+                key={nanoid()}
+                type="button"
+                onClick={selectPrize}
+                value={data.subBtnValue}
+                data-title={subBtnData[subBtnVal].title}
+              >
+                {data.subBtnText}
+              </button>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );
