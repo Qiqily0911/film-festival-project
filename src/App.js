@@ -1,10 +1,13 @@
 import "./App.scss";
 import styles from "./style/App.module.scss";
-// import CannesFilm from "./CannesFilm.json";
+// import oscar from "./oscar_best_film.json";
+// import cannes from "./CannesFilm.json";
+// import goldenHorse from "./golden_horse_best_film.json";
 // import MovieCard from "./components/MovieCard";
-import MovieList from "./components/MovieList";
+import YearList from "./components/YearList";
 import MovieInfo from "./components/MovieInfo";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import MovirFilter from "./components/MovieFilter";
 // import app from "firebase/app";
 import firebase from "firebase";
 import { config, apiKey, omdbKey } from "./config";
@@ -14,7 +17,11 @@ firebase.initializeApp(config);
 
 function App() {
   //  const db = firebase.firestore();
-  const [prize, setPrize] = useState("palme_d_or");
+  //  const initListState = [
+  //     { film_list: oscar, prize: "best_film", order: 0 },
+  //     { film_list: cannes, prize: "palme_d_or", order: 1 },
+  //     { film_list: goldenHorse, prize: "best_film", order: 2 },
+  //  ];
   const [tmdbData, setData] = useState("");
   const [tmdbVideo, setVideo] = useState("");
   const [tmdbImages, setImages] = useState("");
@@ -22,21 +29,85 @@ function App() {
   const [localData, renewData] = useState("");
   const [omdbData, setomdbData] = useState("");
   const [imdbSpan, setRating] = useState("");
-  //  const [filmList, setFilmList] = useState({ CannesFilm });
-  //  const cannesFilm = { CannesFilm };
+
+  const [listState, setlistState] = useState("");
+  const [yearlist, setYearlist] = useState([]); //預設為空的[]
+  const [prize, setPrize] = useState("");
 
   //  TODO: change different film list by JSON
-  function selectFilmList(e) {
-    let btnValue = e.target.value;
-    // setFilmList(btnValue);
-    console.log(btnValue);
-  }
 
-  function selectPrize(e) {
-    let btnValue = e.target.value;
-    setPrize(btnValue);
-    console.log(btnValue);
-  }
+  // create an empty year box (1920-2020)
+  useEffect(() => {
+    let initList = [];
+    for (let i = 1928; i <= 2020; i++) {
+      let item = { year: i, list: [] };
+      initList.push(item);
+    }
+    setYearlist(initList);
+    console.log(initList);
+  }, []);
+
+  //  function renderListState() {
+  //     // console.log(listState);
+  //     let a = listState.map((list) => fillYearList(list.film_list, list.prize, list.order));
+  //     setYearlist(a);
+  //     // console.log(yearlist);
+  //  }
+
+  //  // put movies to the correspondense year box
+  //  function fillYearList(fes, prize, order) {
+  //     console.log(listState);
+  //     console.log(fes, prize, order);
+  //     let data = fes.filter((obj) => obj.prize === prize).sort((a, b) => (a.year > b.year ? 1 : -1));
+
+  //     if (order === 0) {
+  //        yearlist.forEach((yearbox) => {
+  //           data.forEach((item) => {
+  //              if (item.year === yearbox.year) {
+  //                 let filmPrize = [];
+
+  //                 // if one more movies won prize at the same year
+  //                 if (yearbox.list.length !== 0) {
+  //                    yearbox.list[0].push(item);
+  //                 } else {
+  //                    filmPrize.push(item);
+  //                    yearbox.list.push(filmPrize);
+  //                 }
+  //              }
+  //           });
+
+  //           // if the year don't have movie, set prize:null
+  //           if (yearbox.list.length === 0) {
+  //              let filmPrize = [{ prize: null }];
+  //              yearbox.list.push(filmPrize);
+  //           }
+  //        });
+  //     } else {
+  //        yearlist.forEach((yearbox) => {
+  //           data.forEach((item) => {
+  //              if (item.year === yearbox.year) {
+  //                 let filmPrize = [];
+
+  //                 // if one more movies won prize at the same year
+  //                 if (yearbox.list.length > order) {
+  //                    yearbox.list[order].push(item);
+  //                 } else {
+  //                    filmPrize.push(item);
+  //                    yearbox.list.push(filmPrize);
+  //                 }
+  //                 // more than one prize
+  //              }
+  //           });
+
+  //           // if the year don't have movie, set prize:null
+  //           if (yearbox.list.length === order) {
+  //              let filmPrize = [{ prize: null }];
+  //              yearbox.list.push(filmPrize);
+  //           }
+  //        });
+  //     }
+  //  }
+  // console.log(yearlist);
 
   //  get tmdb movie detail & video
   function tmdbApi(type, movie_id) {
@@ -98,10 +169,7 @@ function App() {
         );
         let elements = [...doc.getElementsByTagName("span")];
         let a = elements.filter((x) => !!x.getAttribute("itemprop"));
-
-        setRating(a);
-        console.log(a[0].innerText);
-        console.log(a[2].innerText);
+        setRating([a[0].innerText, a[2].innerText]);
       }
     };
     xhr.send();
@@ -127,54 +195,26 @@ function App() {
     <div className={styles.outter}>
       <aside>
         <div>LOGO</div>
+        {listState.length}
         <div className={styles.timeLine}></div>
       </aside>
       <main>
-        <div className={styles.movieFilter}>
-          <div>
-            <button type="button" value="cannesFilm" onClick={selectFilmList}>
-              坎城影展
-            </button>
-            <button type="button" value="berlinFilm" onClick={selectFilmList}>
-              柏林影展
-            </button>
-            <button type="button" value="veniceFilm" onClick={selectFilmList}>
-              威尼斯影展
-            </button>
-            <button type="button" value="oscarFilm" onClick={selectFilmList}>
-              奧斯卡金像獎
-            </button>
-            <button
-              type="button"
-              value="goldenHorseFilm"
-              onClick={selectFilmList}
-            >
-              金馬影展
-            </button>
-          </div>
-
-          <div>
-            <button type="button" value="palme_d_or" onClick={selectPrize}>
-              Palme d'Or 金棕櫚獎
-            </button>
-            <button
-              type="button"
-              value="un_certain_regard"
-              onClick={selectPrize}
-            >
-              Un Certain Regard 一種注目
-            </button>
-          </div>
-        </div>
+        <MovirFilter
+          yearlist={yearlist}
+          listState={listState}
+          setlistState={setlistState}
+        />
 
         <div className={styles.container}>
-          <MovieList
+          <YearList
             prize={prize}
-            selectPrize={selectPrize}
+            // selectPrize={selectPrize}
             tmdbApi={tmdbApi}
             omdbApi={omdbApi}
             imdbRating={imdbRating}
             renewData={renewData}
+            // fillYearList={fillYearList}
+            yearlist={yearlist}
           />
           <MovieInfo
             tmdbData={tmdbData}

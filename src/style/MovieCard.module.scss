@@ -3,7 +3,7 @@
 .movieCard {
   cursor: pointer;
   width: 180px;
-  margin: 30px;
+  margin: 10px 30px;
   padding: 10px;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 
@@ -45,5 +45,20 @@
       font-size: 14px;
       color: $color-gray;
     }
+  }
+}
+
+.noData {
+  width: 180px;
+  margin: 10px 30px;
+  padding: 10px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+
+  .posterBox {
+    width: 160px;
+    height: 240px;
+    overflow: hidden;
+    background-color: rgb(219, 219, 219);
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
   }
 }
