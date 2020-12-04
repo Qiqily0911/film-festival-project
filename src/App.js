@@ -5,8 +5,9 @@ import cannes from "./CannesFilm.json";
 import goldenHorse from "./golden_horse_best_film.json";
 import YearList from "./components/YearList";
 import MovieInfo from "./components/MovieInfo";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MovirFilter from "./components/MovieFilter";
+import ControlSilder from "./components/ControlSlider";
 import firebase from "firebase";
 import { config, apiKey, omdbKey } from "./config";
 import "firebase/firestore";
@@ -46,22 +47,40 @@ function App() {
   const [omdbData, setomdbData] = useState("");
   const [imdbSpan, setRating] = useState("");
 
+  const [list, setList] = useState([]);
+  const [yearListRefs, setRefs] = useState("");
   const [listState, setlistState] = useState(initListState);
   const [filmList, setFilmList] = useState("");
   const [prize, setPrize] = useState("");
 
-  const yearList = [];
-  //  根據 listStae 去把 yearList 給做出來
-  for (let i = 2020; i >= 1928; i--) {
-    let item = { year: i, list: [] };
-    yearList.push(item);
-  }
-  //  console.log(yearList);
+  const [vertical, setVertical] = useState(99);
 
-  listState.map((list) => fillYearList(list.film_list, list.prize, list.order));
+  useEffect(() => {
+    const yearList = [];
+    //  根據 listStae 去把 yearList 給做出來
+    for (let i = 2020; i >= 1928; i--) {
+      let item = { year: i, list: [] };
+      yearList.push(item);
+    }
+
+    const refs = yearList.reduce((acc, value) => {
+      acc[value.year] = React.createRef();
+      return acc;
+    }, {});
+    console.log(refs);
+    setRefs(refs);
+
+    listState.map((list) =>
+      fillYearList(yearList, list.film_list, list.prize, list.order)
+    );
+
+    // console.log(yearList);
+    setList(yearList);
+    // console.log("123");
+  }, [listState]);
 
   // put movies to the correspondense year box
-  function fillYearList(fes, prize, order) {
+  function fillYearList(yearList, fes, prize, order) {
     let data = fes.filter((obj) => obj.prize === prize);
 
     if (order === 0) {
@@ -192,13 +211,14 @@ function App() {
   //        setTitleEn(posterData["film_name_en"]);
   //     });
   //  }
-  console.log(listState);
+  // console.log(listState);
 
   return (
     <div className={styles.outter}>
       <aside>
-        <div>LOGO</div>
-        <div className={styles.timeLine}></div>
+        <div className={styles.logo}>LOGO</div>
+
+        <ControlSilder vertical={vertical} setVertical={setVertical} />
       </aside>
       <main>
         <MovirFilter
@@ -206,7 +226,8 @@ function App() {
           setFilmList={setFilmList}
           prize={prize}
           setPrize={setPrize}
-          yearlist={yearList}
+          yearlist={list}
+          yearListRefs={yearListRefs}
           listState={listState}
           setlistState={setlistState}
         />
@@ -218,7 +239,8 @@ function App() {
             omdbApi={omdbApi}
             imdbRating={imdbRating}
             renewData={renewData}
-            yearlist={yearList}
+            yearlist={list}
+            yearListRefs={yearListRefs}
             listState={listState}
             setlistState={setlistState}
             // selectPrize={selectPrize}
