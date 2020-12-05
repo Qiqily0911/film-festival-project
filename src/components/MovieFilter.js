@@ -7,12 +7,8 @@ import goldenHorse from "../golden_horse_best_film.json";
 
 function MovieFilter(props) {
   const [subBtnVal, setSubBtnVal] = useState("");
-  //  const [ref, setRef] = useState("");
 
-  //  useEffect(() => {
-  //     setRef(props.yearListRefs);
-  //  }, [props.yearListRefs]);
-
+  //  useEffect(()=>{})
   // 主要按鈕
   const mainBtnData = [
     {
@@ -95,7 +91,6 @@ function MovieFilter(props) {
         setSubBtnVal("");
     }
 
-    //   console.log(subBtnData[btnValue].source);
     props.setFilmList(subBtnData[btnValue].source);
   }
 
@@ -105,7 +100,7 @@ function MovieFilter(props) {
 
     // console.log(listState);
     // 若filmList、prize不為空值，將當前值傳入obj，並push進listState 裡
-    console.log(props.filmList);
+
     if (props.filmList !== "") {
       let btnSelect = {
         title: e.target.dataset.title,
@@ -130,12 +125,6 @@ function MovieFilter(props) {
     setSubBtnVal("");
   }
 
-  //  function scrollTo() {
-  //     ref[2005].current.scrollIntoView({
-  //        behavior: "smooth",
-  //        block: "start",
-  //     });
-  //  }
   return (
     <div className={styles.movieFilter}>
       {mainBtn}

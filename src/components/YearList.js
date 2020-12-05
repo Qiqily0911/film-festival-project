@@ -7,7 +7,6 @@ function YearList(props) {
   const [showList, setShowList] = useState("");
   function close(e) {
     let order = Number(e.target.dataset.order);
-    console.log(order);
     let arr = [...props.listState];
 
     if (order === 0) {
@@ -42,7 +41,7 @@ function YearList(props) {
   ));
 
   useEffect(() => {
-    const showYearList = props.yearlist.map((yearbox, index) => {
+    const showYearList = props.yearlist.map((yearbox) => {
       const moviePrize = yearbox.list.map((data) => data[0].prize);
 
       if (moviePrize.find((data) => data !== null) === undefined) {
@@ -53,7 +52,7 @@ function YearList(props) {
             key={nanoid()}
             ref={props.yearListRefs[yearbox.year]}
             className={styles.yearBox}
-            data-index={index}
+            data-index={yearbox.year}
           >
             {yearbox.list.map((data) => {
               return (
@@ -79,8 +78,23 @@ function YearList(props) {
         );
       }
     });
+    // console.log(showYearList);
+    // console.log(props.listState.length);
 
-    console.log(props.yearListRefs);
+    // find the min year of yearList
+    if (props.listState.length !== 0) {
+      for (let i = showYearList.length; i > 0; i--) {
+        if (showYearList[i] !== undefined) {
+          if (showYearList[i] !== null) {
+            // console.log(i);
+            let min = showYearList[i].props["data-index"];
+            console.log(min);
+            props.setMin(min);
+            break;
+          }
+        }
+      }
+    }
 
     setShowList(showYearList);
   }, [props.yearlist]);
@@ -89,8 +103,8 @@ function YearList(props) {
     <div className={styles.subContainer}>
       <div className={styles.titleBox}>{title}</div>
 
-      <div className={styles.YearListBox}>
-        <div className={styles.YearList}>{showList}</div>
+      <div className={styles.yearListBox}>
+        <div className={styles.yearList}>{showList}</div>
       </div>
     </div>
   );

@@ -53,7 +53,8 @@ function App() {
   const [filmList, setFilmList] = useState("");
   const [prize, setPrize] = useState("");
 
-  const [vertical, setVertical] = useState(99);
+  const [vertical, setVertical] = useState(100);
+  const [minYear, setMin] = useState(1928);
 
   useEffect(() => {
     const yearList = [];
@@ -63,14 +64,11 @@ function App() {
       yearList.push(item);
     }
 
+    // 設定年份欄位的參考
     const refs = yearList.reduce((acc, value) => {
       acc[value.year] = React.createRef();
       return acc;
     }, {});
-
-    // if (refs !== undefined) {
-    //    console.log(refs.offsetWidth);
-    // }
 
     setRefs(refs);
 
@@ -80,7 +78,6 @@ function App() {
 
     // console.log(yearList);
     setList(yearList);
-    // console.log("123");
   }, [listState]);
 
   // put movies to the correspondense year box
@@ -226,6 +223,7 @@ function App() {
           vertical={vertical}
           setVertical={setVertical}
           yearListRefs={yearListRefs}
+          minYear={minYear}
         />
       </aside>
       <main>
@@ -251,6 +249,7 @@ function App() {
             yearListRefs={yearListRefs}
             listState={listState}
             setlistState={setlistState}
+            setMin={setMin}
           />
           <MovieInfo
             tmdbData={tmdbData}

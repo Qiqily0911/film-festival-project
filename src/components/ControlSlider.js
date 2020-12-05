@@ -16,8 +16,9 @@ function ControlSilder(props) {
   const [refs, setRefs] = useState("");
 
   useEffect(() => {
-    console.log(props.yearListRefs);
+    // console.log(props.yearListRefs);
     setRefs(props.yearListRefs);
+    console.log(props.minYear);
   }, [props.yearListRefs]);
 
   function handleChangeVertical(value) {
@@ -29,21 +30,25 @@ function ControlSilder(props) {
 
   function handleScroll() {
     let num = formatPc(props.vertical);
-    console.log(refs[num]);
-    refs[num].current.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
+
+    if (refs[num] !== null) {
+      console.log(refs[num]);
+      refs[num].current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      console.log(refs[num].current.offsetHeight);
+    }
   }
 
-  const a = 2020;
-  const b = 1928;
+  const max = 2020;
+  const min = props.minYear;
   const verticalLabels = {
-    0: b,
-    100: a,
+    0: min,
+    100: max,
   };
 
-  const formatPc = (p) => Math.floor(p * ((a - b) / 100) + b);
+  const formatPc = (p) => Math.floor(p * ((max - min) / 100) + min);
 
   return (
     <div className="slider">
