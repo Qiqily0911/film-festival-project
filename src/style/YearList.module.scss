@@ -1,20 +1,45 @@
 @import "./Default.scss";
 
-.YearListBox {
+.titleBox {
   display: flex;
-  width: calc(100% - 350px);
+}
+.fesTitle {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  width: 180px;
+  margin: 10px 30px;
+  padding: 10px;
+  text-align: center;
+
+  .closeBox {
+    background-color: rgba(95, 95, 95, 0.3);
+    color: white;
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+}
+.subContainer {
   overflow: scroll;
+  width: 100%;
+  .yearListBox {
+    display: flex;
+    //  height: 100%;
+    width: 100%;
 
-  .YearList {
-    // display: flex;
-
-    .yearBox {
-      display: flex;
-      //  height: 360px;
+    .yearList {
+      height: 100%;
+      .yearBox {
+        display: flex;
+        //  height: 360px;
+        // border: 1px solid red;
+      }
+      // flex-direction: column;
+      // justify-content: center;
       // border: 1px solid red;
     }
-    // flex-direction: column;
-    // justify-content: center;
-    // border: 1px solid red;
   }
 }

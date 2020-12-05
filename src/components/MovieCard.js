@@ -2,6 +2,21 @@ import React from "react";
 import styles from "../style/MovieCard.module.scss";
 
 function MovieCard(props) {
+  function ordinalSuffix(i) {
+    var j = i % 10,
+      k = i % 100;
+    if (j === 1 && k !== 11) {
+      return i + "st";
+    }
+    if (j === 2 && k !== 12) {
+      return i + "nd";
+    }
+    if (j === 3 && k !== 13) {
+      return i + "rd";
+    }
+    return i + "th";
+  }
+
   if (props.prize === null) {
     return (
       <div className={styles.noData}>
@@ -36,13 +51,13 @@ function MovieCard(props) {
             // if data has poster_path, then render the picture
             <img
               alt="poster"
-              src={`http://image.tmdb.org/t/p/w342${props.poster_path}`}
+              src={`https://image.tmdb.org/t/p/w342${props.poster_path}`}
             />
           )}
         </div>
 
         <div className={styles.basicInfo}>
-          <div>{props.year}</div>
+          <div>{ordinalSuffix(props.th)}</div>
           <div className={styles.titleEn}>{props.film_name_en}</div>
           <div className={styles.titleZh}>{props.film_name_zh}</div>
         </div>

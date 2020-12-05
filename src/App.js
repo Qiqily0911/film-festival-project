@@ -1,14 +1,13 @@
 import "./App.scss";
 import styles from "./style/App.module.scss";
-// import oscar from "./oscar_best_film.json";
-// import cannes from "./CannesFilm.json";
-// import goldenHorse from "./golden_horse_best_film.json";
-// import MovieCard from "./components/MovieCard";
+import oscar from "./oscar_best_film.json";
+import cannes from "./CannesFilm.json";
+import goldenHorse from "./golden_horse_best_film.json";
 import YearList from "./components/YearList";
 import MovieInfo from "./components/MovieInfo";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import MovirFilter from "./components/MovieFilter";
-// import app from "firebase/app";
+import ControlSilder from "./components/ControlSlider";
 import firebase from "firebase";
 import { config, apiKey, omdbKey } from "./config";
 import "firebase/firestore";
@@ -17,11 +16,29 @@ firebase.initializeApp(config);
 
 function App() {
   //  const db = firebase.firestore();
-  //  const initListState = [
-  //     { film_list: oscar, prize: "best_film", order: 0 },
-  //     { film_list: cannes, prize: "palme_d_or", order: 1 },
-  //     { film_list: goldenHorse, prize: "best_film", order: 2 },
-  //  ];
+  const initListState = [
+    {
+      title: "奧斯卡金像獎",
+      prize_name: "最佳影片獎 Best Film",
+      film_list: oscar,
+      prize: "best_film",
+      order: 0,
+    },
+    {
+      title: "坎城影展",
+      prize_name: "金棕櫚獎",
+      film_list: cannes,
+      prize: "palme_d_or",
+      order: 1,
+    },
+    {
+      title: "金馬獎",
+      prize_name: "最佳影片獎",
+      film_list: goldenHorse,
+      prize: "best_film",
+      order: 2,
+    },
+  ];
   const [tmdbData, setData] = useState("");
   const [tmdbVideo, setVideo] = useState("");
   const [tmdbImages, setImages] = useState("");
@@ -30,84 +47,89 @@ function App() {
   const [omdbData, setomdbData] = useState("");
   const [imdbSpan, setRating] = useState("");
 
-  const [listState, setlistState] = useState("");
-  const [yearlist, setYearlist] = useState([]); //預設為空的[]
+  const [list, setList] = useState([]);
+  const [yearListRefs, setRefs] = useState("");
+  const [listState, setlistState] = useState(initListState);
+  const [filmList, setFilmList] = useState("");
   const [prize, setPrize] = useState("");
 
-  //  TODO: change different film list by JSON
+  const [vertical, setVertical] = useState(100);
+  const [minYear, setMin] = useState(1928);
 
-  // create an empty year box (1920-2020)
   useEffect(() => {
-    let initList = [];
-    for (let i = 1928; i <= 2020; i++) {
+    const yearList = [];
+    //  根據 listStae 去把 yearList 給做出來
+    for (let i = 2020; i >= 1928; i--) {
       let item = { year: i, list: [] };
-      initList.push(item);
+      yearList.push(item);
     }
-    setYearlist(initList);
-    console.log(initList);
-  }, []);
 
-  //  function renderListState() {
-  //     // console.log(listState);
-  //     let a = listState.map((list) => fillYearList(list.film_list, list.prize, list.order));
-  //     setYearlist(a);
-  //     // console.log(yearlist);
-  //  }
+    // 設定年份欄位的參考
+    const refs = yearList.reduce((acc, value) => {
+      acc[value.year] = React.createRef();
+      return acc;
+    }, {});
 
-  //  // put movies to the correspondense year box
-  //  function fillYearList(fes, prize, order) {
-  //     console.log(listState);
-  //     console.log(fes, prize, order);
-  //     let data = fes.filter((obj) => obj.prize === prize).sort((a, b) => (a.year > b.year ? 1 : -1));
+    setRefs(refs);
 
-  //     if (order === 0) {
-  //        yearlist.forEach((yearbox) => {
-  //           data.forEach((item) => {
-  //              if (item.year === yearbox.year) {
-  //                 let filmPrize = [];
+    listState.map((list) =>
+      fillYearList(yearList, list.film_list, list.prize, list.order)
+    );
 
-  //                 // if one more movies won prize at the same year
-  //                 if (yearbox.list.length !== 0) {
-  //                    yearbox.list[0].push(item);
-  //                 } else {
-  //                    filmPrize.push(item);
-  //                    yearbox.list.push(filmPrize);
-  //                 }
-  //              }
-  //           });
+    // console.log(yearList);
+    setList(yearList);
+  }, [listState]);
 
-  //           // if the year don't have movie, set prize:null
-  //           if (yearbox.list.length === 0) {
-  //              let filmPrize = [{ prize: null }];
-  //              yearbox.list.push(filmPrize);
-  //           }
-  //        });
-  //     } else {
-  //        yearlist.forEach((yearbox) => {
-  //           data.forEach((item) => {
-  //              if (item.year === yearbox.year) {
-  //                 let filmPrize = [];
+  // put movies to the correspondense year box
+  function fillYearList(yearList, fes, prize, order) {
+    let data = fes.filter((obj) => obj.prize === prize);
 
-  //                 // if one more movies won prize at the same year
-  //                 if (yearbox.list.length > order) {
-  //                    yearbox.list[order].push(item);
-  //                 } else {
-  //                    filmPrize.push(item);
-  //                    yearbox.list.push(filmPrize);
-  //                 }
-  //                 // more than one prize
-  //              }
-  //           });
+    if (order === 0) {
+      yearList.forEach((yearbox) => {
+        data.forEach((item) => {
+          if (item.year === yearbox.year) {
+            let filmPrize = [];
 
-  //           // if the year don't have movie, set prize:null
-  //           if (yearbox.list.length === order) {
-  //              let filmPrize = [{ prize: null }];
-  //              yearbox.list.push(filmPrize);
-  //           }
-  //        });
-  //     }
-  //  }
-  // console.log(yearlist);
+            // if one more movies won prize at the same year
+            if (yearbox.list.length !== 0) {
+              yearbox.list[0].push(item);
+            } else {
+              filmPrize.push(item);
+              yearbox.list.push(filmPrize);
+            }
+          }
+        });
+
+        // if the year don't have movie, set prize:null
+        if (yearbox.list.length === 0) {
+          let filmPrize = [{ prize: null }];
+          yearbox.list.push(filmPrize);
+        }
+      });
+    } else {
+      yearList.forEach((yearbox) => {
+        data.forEach((item) => {
+          if (item.year === yearbox.year) {
+            let filmPrize = [];
+
+            // if one more movies won prize at the same year
+            if (yearbox.list.length > order) {
+              yearbox.list[order].push(item);
+            } else {
+              filmPrize.push(item);
+              yearbox.list.push(filmPrize);
+            }
+          }
+        });
+
+        // if the year don't have movie, set prize:null
+        if (yearbox.list.length === order) {
+          let filmPrize = [{ prize: null }];
+          yearbox.list.push(filmPrize);
+        }
+      });
+    }
+  }
 
   //  get tmdb movie detail & video
   function tmdbApi(type, movie_id) {
@@ -141,7 +163,7 @@ function App() {
     const xhr = new XMLHttpRequest();
     xhr.open(
       "GET",
-      `http://www.omdbApi.com/?apikey=${omdbKey}&i=${movie_id}`,
+      `https://www.omdbApi.com/?apikey=${omdbKey}&i=${movie_id}`,
       true
     );
     xhr.onreadystatechange = function () {
@@ -190,17 +212,28 @@ function App() {
   //        setTitleEn(posterData["film_name_en"]);
   //     });
   //  }
+  // console.log(listState);
 
   return (
     <div className={styles.outter}>
       <aside>
-        <div>LOGO</div>
-        {listState.length}
-        <div className={styles.timeLine}></div>
+        <div className={styles.logo}>LOGO</div>
+
+        <ControlSilder
+          vertical={vertical}
+          setVertical={setVertical}
+          yearListRefs={yearListRefs}
+          minYear={minYear}
+        />
       </aside>
       <main>
         <MovirFilter
-          yearlist={yearlist}
+          filmList={filmList}
+          setFilmList={setFilmList}
+          prize={prize}
+          setPrize={setPrize}
+          yearlist={list}
+          yearListRefs={yearListRefs}
           listState={listState}
           setlistState={setlistState}
         />
@@ -208,13 +241,15 @@ function App() {
         <div className={styles.container}>
           <YearList
             prize={prize}
-            // selectPrize={selectPrize}
             tmdbApi={tmdbApi}
             omdbApi={omdbApi}
             imdbRating={imdbRating}
             renewData={renewData}
-            // fillYearList={fillYearList}
-            yearlist={yearlist}
+            yearlist={list}
+            yearListRefs={yearListRefs}
+            listState={listState}
+            setlistState={setlistState}
+            setMin={setMin}
           />
           <MovieInfo
             tmdbData={tmdbData}
