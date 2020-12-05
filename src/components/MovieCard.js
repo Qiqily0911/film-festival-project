@@ -51,7 +51,7 @@ function MovieCard(props) {
             // if data has poster_path, then render the picture
             <img
               alt="poster"
-              src={`http://image.tmdb.org/t/p/w342${props.poster_path}`}
+              src={`https://image.tmdb.org/t/p/w342${props.poster_path}`}
             />
           )}
         </div>

@@ -37,7 +37,7 @@ function MovieInfo(props) {
           <img
             key={nanoid()}
             alt="backdrops"
-            src={`http://image.tmdb.org/t/p/w780${path.file_path}`}
+            src={`https://image.tmdb.org/t/p/w780${path.file_path}`}
           />
         ));
         // console.log(images[0]);
@@ -73,7 +73,7 @@ function MovieInfo(props) {
                 {person.profile_path ? (
                   <img
                     alt="profile"
-                    src={`http://image.tmdb.org/t/p/w154${person.profile_path}`}
+                    src={`https://image.tmdb.org/t/p/w154${person.profile_path}`}
                   />
                 ) : (
                   <div className={styles.noPic}>not found</div>

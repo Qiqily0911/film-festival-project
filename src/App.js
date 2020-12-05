@@ -163,7 +163,7 @@ function App() {
     const xhr = new XMLHttpRequest();
     xhr.open(
       "GET",
-      `http://www.omdbApi.com/?apikey=${omdbKey}&i=${movie_id}`,
+      `https://www.omdbApi.com/?apikey=${omdbKey}&i=${movie_id}`,
       true
     );
     xhr.onreadystatechange = function () {
