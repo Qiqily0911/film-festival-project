@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../style/MovieFilter.module.scss";
 import { nanoid } from "nanoid";
 import oscar from "../oscar_best_film.json";
@@ -7,6 +7,11 @@ import goldenHorse from "../golden_horse_best_film.json";
 
 function MovieFilter(props) {
   const [subBtnVal, setSubBtnVal] = useState("");
+  //  const [ref, setRef] = useState("");
+
+  //  useEffect(() => {
+  //     setRef(props.yearListRefs);
+  //  }, [props.yearListRefs]);
 
   // 主要按鈕
   const mainBtnData = [
@@ -125,28 +130,33 @@ function MovieFilter(props) {
     setSubBtnVal("");
   }
 
+  //  function scrollTo() {
+  //     ref[2005].current.scrollIntoView({
+  //        behavior: "smooth",
+  //        block: "start",
+  //     });
+  //  }
   return (
-    <div>
-      <div className={styles.movieFilter}>
-        {mainBtn}
-        <div>
-          {subBtnVal === "" ? (
-            <div></div>
-          ) : (
-            subBtnData[subBtnVal].arr.map((data) => (
-              <button
-                key={nanoid()}
-                type="button"
-                onClick={selectPrize}
-                value={data.subBtnValue}
-                data-title={subBtnData[subBtnVal].title}
-              >
-                {data.subBtnText}
-              </button>
-            ))
-          )}
-        </div>
+    <div className={styles.movieFilter}>
+      {mainBtn}
+      <div>
+        {subBtnVal === "" ? (
+          <div></div>
+        ) : (
+          subBtnData[subBtnVal].arr.map((data) => (
+            <button
+              key={nanoid()}
+              type="button"
+              onClick={selectPrize}
+              value={data.subBtnValue}
+              data-title={subBtnData[subBtnVal].title}
+            >
+              {data.subBtnText}
+            </button>
+          ))
+        )}
       </div>
+      {/* <button onClick={scrollTo}>click</button> */}
     </div>
   );
 }

@@ -67,7 +67,11 @@ function App() {
       acc[value.year] = React.createRef();
       return acc;
     }, {});
-    console.log(refs);
+
+    // if (refs !== undefined) {
+    //    console.log(refs.offsetWidth);
+    // }
+
     setRefs(refs);
 
     listState.map((list) =>
@@ -218,7 +222,11 @@ function App() {
       <aside>
         <div className={styles.logo}>LOGO</div>
 
-        <ControlSilder vertical={vertical} setVertical={setVertical} />
+        <ControlSilder
+          vertical={vertical}
+          setVertical={setVertical}
+          yearListRefs={yearListRefs}
+        />
       </aside>
       <main>
         <MovirFilter
@@ -243,8 +251,6 @@ function App() {
             yearListRefs={yearListRefs}
             listState={listState}
             setlistState={setlistState}
-            // selectPrize={selectPrize}
-            // fillYearList={fillYearList}
           />
           <MovieInfo
             tmdbData={tmdbData}

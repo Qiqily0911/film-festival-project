@@ -42,19 +42,18 @@ function YearList(props) {
   ));
 
   useEffect(() => {
-    const showYearList = props.yearlist.map((yearbox) => {
+    const showYearList = props.yearlist.map((yearbox, index) => {
       const moviePrize = yearbox.list.map((data) => data[0].prize);
 
       if (moviePrize.find((data) => data !== null) === undefined) {
         return null;
       } else {
-        //  console.log(yearbox.year);
         return (
           <div
             key={nanoid()}
             ref={props.yearListRefs[yearbox.year]}
             className={styles.yearBox}
-            data-year={yearbox.year}
+            data-index={index}
           >
             {yearbox.list.map((data) => {
               return (
@@ -86,9 +85,8 @@ function YearList(props) {
     setShowList(showYearList);
   }, [props.yearlist]);
 
-  console.log(props.yearListRefs);
   return (
-    <div>
+    <div className={styles.subContainer}>
       <div className={styles.titleBox}>{title}</div>
 
       <div className={styles.YearListBox}>
