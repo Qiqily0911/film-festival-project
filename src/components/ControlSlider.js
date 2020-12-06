@@ -7,12 +7,6 @@ import "react-rangeslider/lib/index.css";
 // import styles from "../style/App.module.scss";
 
 function ControlSilder(props) {
-  //  componentDidMount() {
-  //     console.log(this.props.yearListRefs);
-  //     console.log(this.myInput.current.offsetHeight);
-  //     console.log(typeof this.myInput);
-  //  }
-
   const [refs, setRefs] = useState("");
 
   useEffect(() => {
@@ -24,31 +18,41 @@ function ControlSilder(props) {
   function handleChangeVertical(value) {
     if (value !== props.vertical) {
       props.setVertical(value);
-      console.log(value);
+      //  console.log(value);
     }
+
+    // let num = formatPc(props.vertical);
+
+    // if (refs[num] !== null) {
+    //    //  console.log(refs[num]);
+    //    refs[num].current.scrollIntoView({
+    //       behavior: "smooth",
+    //       block: "center",
+    //    });
+    //    //  console.log(refs[num].current.offsetHeight);
+    // }
   }
 
   function handleScroll() {
     let num = formatPc(props.vertical);
 
     if (refs[num] !== null) {
-      console.log(refs[num]);
+      //  console.log(refs[num]);
       refs[num].current.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
-      console.log(refs[num].current.offsetHeight);
+      //  console.log(refs[num].current.offsetHeight);
     }
   }
 
-  const max = 2020;
-  const min = props.minYear;
   const verticalLabels = {
-    0: min,
-    100: max,
+    0: props.minYear,
+    100: 2020,
   };
 
-  const formatPc = (p) => Math.floor(p * ((max - min) / 100) + min);
+  const formatPc = (p) =>
+    Math.floor(p * ((2020 - props.minYear) / 100) + props.minYear).toString();
 
   return (
     <div className="slider">

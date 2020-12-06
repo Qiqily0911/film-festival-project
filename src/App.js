@@ -19,21 +19,21 @@ function App() {
   const initListState = [
     {
       title: "奧斯卡金像獎",
-      prize_name: "最佳影片獎 Best Film",
+      prize_name: "Best Film",
       film_list: oscar,
       prize: "best_film",
       order: 0,
     },
     {
       title: "坎城影展",
-      prize_name: "金棕櫚獎",
+      prize_name: "Palme d'Or",
       film_list: cannes,
       prize: "palme_d_or",
       order: 1,
     },
     {
       title: "金馬獎",
-      prize_name: "最佳影片獎",
+      prize_name: "Best Film",
       film_list: goldenHorse,
       prize: "best_film",
       order: 2,
@@ -227,30 +227,33 @@ function App() {
         />
       </aside>
       <main>
-        <MovirFilter
-          filmList={filmList}
-          setFilmList={setFilmList}
-          prize={prize}
-          setPrize={setPrize}
-          yearlist={list}
-          yearListRefs={yearListRefs}
-          listState={listState}
-          setlistState={setlistState}
-        />
-
         <div className={styles.container}>
-          <YearList
-            prize={prize}
-            tmdbApi={tmdbApi}
-            omdbApi={omdbApi}
-            imdbRating={imdbRating}
-            renewData={renewData}
-            yearlist={list}
-            yearListRefs={yearListRefs}
-            listState={listState}
-            setlistState={setlistState}
-            setMin={setMin}
-          />
+          <div className={styles.subContainer}>
+            <MovirFilter
+              filmList={filmList}
+              setFilmList={setFilmList}
+              prize={prize}
+              setPrize={setPrize}
+              yearlist={list}
+              yearListRefs={yearListRefs}
+              listState={listState}
+              setlistState={setlistState}
+            />
+
+            <YearList
+              prize={prize}
+              tmdbApi={tmdbApi}
+              omdbApi={omdbApi}
+              imdbRating={imdbRating}
+              renewData={renewData}
+              yearlist={list}
+              yearListRefs={yearListRefs}
+              listState={listState}
+              setlistState={setlistState}
+              setMin={setMin}
+              setVertical={setVertical}
+            />
+          </div>
           <MovieInfo
             tmdbData={tmdbData}
             tmdbVideo={tmdbVideo}

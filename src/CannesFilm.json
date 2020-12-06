@@ -476,12 +476,12 @@
     "th": 73,
     "year": 2020,
     "prize": "palme_d_or",
-    "film_name_zh": "null",
-    "film_name_en": "null",
+    "film_name_zh": null,
+    "film_name_en": null,
     "atmovie_link": "",
     "imdb_link": "",
-    "movie_id": "",
-    "poster_path": ""
+    "movie_id": null,
+    "poster_path": null
   },
   {
     "th": 72,
@@ -839,12 +839,12 @@
     "th": 73,
     "year": 2020,
     "prize": "un_certain_regard",
-    "film_name_zh": "null",
-    "film_name_en": "null",
+    "film_name_zh": null,
+    "film_name_en": null,
     "atmovie_link": "",
     "imdb_link": "",
-    "movie_id": "",
-    "poster_path": ""
+    "movie_id": null,
+    "poster_path": null
   },
   {
     "th": 72,

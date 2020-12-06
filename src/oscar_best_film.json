@@ -736,12 +736,12 @@
     "year": 2020,
     "film": "oscar",
     "prize": "best_film",
-    "film_name_zh": "null",
+    "film_name_zh": null,
     "film_name_en": "",
     "atmovie_link": "",
     "imdb_link": "",
-    "movie_id": "",
-    "poster_path": ""
+    "movie_id": null,
+    "poster_path": null
   },
   {
     "th": 92,
