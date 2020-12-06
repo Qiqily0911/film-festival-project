@@ -101,11 +101,15 @@ function MovieInfo(props) {
       <div className={styles.imageBox}>{imageList}</div>
 
       <div className={styles.infoBox}>
-        <span>
-          {props.localData.th}th {props.localData.prize}({props.localData.year})
+        <span className={styles.subtitle}>
+          {props.localData.th}th {props.localData.prize} ({props.localData.year}
+          )
         </span>
-        <h3>{props.tmdbData.title}</h3>
-        <h3>{props.localData.film_name_zh}</h3>
+
+        <div className={styles.title}>
+          <h3>{props.tmdbData.title}</h3>
+          <h3>{props.localData.film_name_zh}</h3>
+        </div>
 
         {/* --------------- rating -------------- */}
         <div className={styles.rating}>

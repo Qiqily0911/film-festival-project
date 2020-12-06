@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
-// Using an ES6 transpiler like Babel
 import Slider from "react-rangeslider";
-
-// To include the default styles
 import "react-rangeslider/lib/index.css";
-// import styles from "../style/App.module.scss";
+import styles from "../style/App.module.scss";
 
 function ControlSilder(props) {
   const [refs, setRefs] = useState("");
@@ -12,37 +9,22 @@ function ControlSilder(props) {
   useEffect(() => {
     // console.log(props.yearListRefs);
     setRefs(props.yearListRefs);
-    console.log(props.minYear);
   }, [props.yearListRefs]);
 
   function handleChangeVertical(value) {
     if (value !== props.vertical) {
       props.setVertical(value);
-      //  console.log(value);
     }
-
-    // let num = formatPc(props.vertical);
-
-    // if (refs[num] !== null) {
-    //    //  console.log(refs[num]);
-    //    refs[num].current.scrollIntoView({
-    //       behavior: "smooth",
-    //       block: "center",
-    //    });
-    //    //  console.log(refs[num].current.offsetHeight);
-    // }
   }
 
   function handleScroll() {
     let num = formatPc(props.vertical);
 
     if (refs[num] !== null) {
-      //  console.log(refs[num]);
       refs[num].current.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
-      //  console.log(refs[num].current.offsetHeight);
     }
   }
 
@@ -55,7 +37,8 @@ function ControlSilder(props) {
     Math.floor(p * ((2020 - props.minYear) / 100) + props.minYear).toString();
 
   return (
-    <div className="slider">
+    <div className={styles.slider}>
+      <div className={styles.yearText}>2020</div>
       <Slider
         value={props.vertical}
         orientation="vertical"
@@ -65,6 +48,7 @@ function ControlSilder(props) {
         onChange={handleChangeVertical}
         onChangeComplete={handleScroll}
       />
+      <div className={styles.yearText}>{props.minYear}</div>
     </div>
   );
 }

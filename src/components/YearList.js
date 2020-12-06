@@ -52,7 +52,7 @@ function YearList(props) {
           if (showYearList[i] !== null) {
             // console.log(i);
             let min = showYearList[i].props["data-index"];
-            console.log(min);
+
             props.setMin(min);
             break;
           }

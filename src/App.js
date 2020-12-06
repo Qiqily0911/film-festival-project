@@ -1,18 +1,21 @@
+// style
 import "./App.scss";
 import styles from "./style/App.module.scss";
+// data json
 import oscar from "./oscar_best_film.json";
 import cannes from "./CannesFilm.json";
 import goldenHorse from "./golden_horse_best_film.json";
+// components
 import YearList from "./components/YearList";
 import MovieInfo from "./components/MovieInfo";
-import React, { useState, useEffect } from "react";
-import MovirFilter from "./components/MovieFilter";
+import MovieFilter from "./components/MovieFilter";
 import ControlSilder from "./components/ControlSlider";
-import firebase from "firebase";
+import React, { useState, useEffect } from "react";
+// import firebase from "firebase";
 import { config, apiKey, omdbKey } from "./config";
 import "firebase/firestore";
 
-firebase.initializeApp(config);
+// firebase.initializeApp(config);
 
 function App() {
   //  const db = firebase.firestore();
@@ -228,18 +231,17 @@ function App() {
       </aside>
       <main>
         <div className={styles.container}>
+          <MovieFilter
+            filmList={filmList}
+            setFilmList={setFilmList}
+            prize={prize}
+            setPrize={setPrize}
+            yearlist={list}
+            yearListRefs={yearListRefs}
+            listState={listState}
+            setlistState={setlistState}
+          />
           <div className={styles.subContainer}>
-            <MovirFilter
-              filmList={filmList}
-              setFilmList={setFilmList}
-              prize={prize}
-              setPrize={setPrize}
-              yearlist={list}
-              yearListRefs={yearListRefs}
-              listState={listState}
-              setlistState={setlistState}
-            />
-
             <YearList
               prize={prize}
               tmdbApi={tmdbApi}
@@ -253,16 +255,16 @@ function App() {
               setMin={setMin}
               setVertical={setVertical}
             />
+            <MovieInfo
+              tmdbData={tmdbData}
+              tmdbVideo={tmdbVideo}
+              tmdbImages={tmdbImages}
+              tmdbCredits={tmdbCredits}
+              localData={localData}
+              omdbData={omdbData}
+              imdbSpan={imdbSpan}
+            />
           </div>
-          <MovieInfo
-            tmdbData={tmdbData}
-            tmdbVideo={tmdbVideo}
-            tmdbImages={tmdbImages}
-            tmdbCredits={tmdbCredits}
-            localData={localData}
-            omdbData={omdbData}
-            imdbSpan={imdbSpan}
-          />
         </div>
       </main>
     </div>

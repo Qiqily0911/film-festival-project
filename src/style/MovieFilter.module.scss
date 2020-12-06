@@ -1,12 +1,15 @@
 @import "./Default.scss";
 
 .movieFilter {
-  //  height: 7vh;
-  border: 1px solid red;
+  position: fixed;
+  top: 0;
+  // border: 1px solid red;
   width: 100%;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
+    rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
   //  height: 5%;
-  padding: 10px;
-  //  background-color: rgb(230, 230, 230);
+  //  padding: 10px;
+  background-color: white;
   .titleBox {
     display: flex;
   }
@@ -15,7 +18,7 @@
     display: flex;
     flex-direction: column;
     width: 180px;
-    margin: 10px 30px;
+    margin: 10px 20px;
     padding: 10px;
     text-align: center;
 
@@ -28,6 +31,10 @@
       border-radius: 50%;
       cursor: pointer;
     }
+  }
+
+  .subBtn {
+    border: 1px solid orange;
   }
 
   button {

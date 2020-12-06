@@ -57,9 +57,11 @@ function MovieCard(props) {
         </div>
 
         <div className={styles.basicInfo}>
-          <div>{ordinalSuffix(props.th)}</div>
-          <div className={styles.titleEn}>{props.film_name_en}</div>
-          <div className={styles.titleZh}>{props.film_name_zh}</div>
+          {/* <div className={styles.th}>{ordinalSuffix(props.th)}</div> */}
+          <div>
+            <div className={styles.titleEn}>{props.film_name_en}</div>
+            <div className={styles.titleZh}>{props.film_name_zh}</div>
+          </div>
         </div>
       </div>
     );
