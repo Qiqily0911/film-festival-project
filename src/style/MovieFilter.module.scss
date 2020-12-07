@@ -81,7 +81,9 @@
   }
 
   .loginBtn {
-    // margin-right: 20px;
+    position: fixed;
+    top: 30px;
+    right: 30px;
     display: flex;
     align-items: center;
     justify-content: center;

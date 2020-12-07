@@ -15,14 +15,13 @@ function ControlSilder(props) {
     if (value !== props.vertical) {
       props.setVertical(value);
     }
-
-    let a = refs[2020].current.getBoundingClientRect();
-    console.log(a);
+    // console.log(refs.current.getBoundingClientRect());
   }
 
   function handleScroll() {
     let num = formatPc(props.vertical);
-
+    // let a = refs[2020].current.getBoundingClientRect();
+    // console.log(a);
     if (refs[num] !== null) {
       //  console.log(refs[num].current);
       //  console.log(refs[num].current.getBoundingClientRect());

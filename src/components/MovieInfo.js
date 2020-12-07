@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "../style/MovieInfo.module.scss";
 import { nanoid } from "nanoid";
+import clock from "../image/clock.png";
 
 function MovieInfo(props) {
   const [videoSrc, setvideoSrc] = useState("");
@@ -112,7 +113,10 @@ function MovieInfo(props) {
 
           <span>{props.omdbData.imdbRating} /10</span>
           <span>{props.omdbData.imdbVotes} votes</span>
-          <div>{props.tmdbData.runtime} min</div>
+          <div>
+            <img src={clock} alt="clock" />
+            {props.tmdbData.runtime} min
+          </div>
         </div>
 
         <div className={styles.title}>

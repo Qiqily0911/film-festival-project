@@ -19,6 +19,7 @@ function YearList(props) {
             ref={props.yearListRefs[yearbox.year]}
             className={styles.yearBox}
             data-index={yearbox.year}
+            // onScroll={()=>}
           >
             {yearbox.list.map((data) => {
               return (
@@ -63,11 +64,27 @@ function YearList(props) {
     setShowList(showYearList);
   }, [props.yearlist]);
 
+  //  console.log(showList);
+
   return (
     <div className={styles.yearListBox}>
       <div className={styles.yearList}>{showList}</div>
     </div>
   );
 }
+
+// onScroll={() => console.log(document.documentElement.scrollHeight)}
+// class MyComponent extends React.Component{
+//   constructor(props){
+//     super(props);
+//     this.myRef=React.createRef();
+//   }
+
+//   render(){
+//     return  <div className={styles.yearListBox}>
+//          <div ref={this.myRef} className={styles.yearList}>{showList}</div>
+//       </div>
+//   }
+// }
 
 export default YearList;

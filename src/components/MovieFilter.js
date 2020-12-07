@@ -103,9 +103,9 @@ function MovieFilter(props) {
 
   // 選擇影展，並設定影展值（filmList）
   function selectFilmList(e) {
-    let btn = e.currentTarget;
-    btn.classList.add(styles.currentBtn);
-    console.log(btn);
+    // let btn = e.currentTarget;
+    // btn.classList.add(styles.currentBtn);
+    // console.log(btn);
     let btnValue = e.target.value;
     let subBtnBox = e.target.parentElement.lastChild;
     let name = subBtnBox.getAttribute("name");

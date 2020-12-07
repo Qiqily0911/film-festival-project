@@ -73,6 +73,7 @@ function App() {
       return acc;
     }, {});
 
+    // console.log(refs);
     setRefs(refs);
 
     listState.map((list) =>
@@ -219,6 +220,10 @@ function App() {
 
   return (
     <div className={styles.outter}>
+      {/* {window.addEventListener("scroll", () => {
+            const a = window.scrollY;
+            console.log(a);
+         })} */}
       <aside>
         <div className={styles.logo}>LOGO</div>
 
