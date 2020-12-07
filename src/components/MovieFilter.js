@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "../style/MovieFilter.module.scss";
 import { nanoid } from "nanoid";
 import oscar from "../oscar_best_film.json";
@@ -6,78 +6,27 @@ import cannes from "../CannesFilm.json";
 import goldenHorse from "../golden_horse_best_film.json";
 
 function MovieFilter(props) {
-  const [addList, setAddList] = useState([]);
   const [subBtnVal, setSubBtnVal] = useState({
     "index-1": "",
     "index-2": "",
     "index-3": "",
   });
 
-  useEffect(() => {
-    function addListBtn() {
-      // 主要按鈕
-      const mainBtnData = [
-        {
-          value: "cannes",
-          btnText: "坎城影展",
-        },
-        {
-          value: "oscar",
-          btnText: "奧斯卡金像獎",
-        },
-        {
-          value: "goldenHorse",
-          btnText: "金馬影展",
-        },
-      ];
-
-      //  render main button
-      const mainBtn = mainBtnData.map((data) => (
-        <button
-          key={nanoid()}
-          type="button"
-          value={data.value}
-          onClick={selectFilmList}
-        >
-          {data.btnText}
-        </button>
-      ));
-
-      const arr = [];
-      let count = 3 - props.listState.length;
-
-      for (let i = 1; i <= count; i++) {
-        let subBtn = subBtnVal["index-" + i];
-
-        arr.push(
-          <div className={styles.fesTitle}>
-            <div className={styles.closeBox}>+</div>
-
-            {mainBtn}
-            <div className={styles.subBtn} name={"index-" + i}>
-              {subBtn === ""
-                ? null
-                : subBtnData[subBtn].arr.map((data) => (
-                    <button
-                      key={nanoid()}
-                      type="button"
-                      onClick={selectPrize}
-                      value={data.subBtnValue}
-                      data-title={subBtnData[subBtn].title}
-                    >
-                      {data.subBtnText}
-                    </button>
-                  ))}
-            </div>
-          </div>
-        );
-      }
-
-      setAddList(arr);
-    }
-
-    addListBtn();
-  }, [props.listState, subBtnVal]);
+  // 主要按鈕
+  const mainBtnData = [
+    {
+      value: "cannes",
+      btnText: "坎城影展",
+    },
+    {
+      value: "oscar",
+      btnText: "奧斯卡金像獎",
+    },
+    {
+      value: "goldenHorse",
+      btnText: "金馬影展",
+    },
+  ];
 
   const subBtnData = {
     cannes: {
@@ -109,8 +58,54 @@ function MovieFilter(props) {
     },
   };
 
+  //  render main button
+  const mainBtn = mainBtnData.map((data) => (
+    <button
+      key={nanoid()}
+      type="button"
+      value={data.value}
+      onClick={selectFilmList}
+    >
+      {data.btnText}
+    </button>
+  ));
+
+  const arr = [];
+  let count = 3 - props.listState.length;
+  for (let i = 1; i <= count; i++) {
+    let subBtn = subBtnVal["index-" + i];
+
+    arr.push(
+      <div className={styles.fesTitle}>
+        <div className={styles.addBtn}>+</div>
+        <span>選擇影展及獎項</span>
+        <div className={styles.option}>
+          {mainBtn}
+          <div className={styles.subBtn} name={"index-" + i}>
+            {subBtn === ""
+              ? null
+              : subBtnData[subBtn].arr.map((data) => (
+                  <button
+                    key={nanoid()}
+                    type="button"
+                    onClick={selectPrize}
+                    value={data.subBtnValue}
+                    data-title={subBtnData[subBtn].title}
+                  >
+                    {data.subBtnText}
+                  </button>
+                ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // 選擇影展，並設定影展值（filmList）
   function selectFilmList(e) {
+    let btn = e.currentTarget;
+    btn.classList.add(styles.currentBtn);
+    console.log(btn);
     let btnValue = e.target.value;
     let subBtnBox = e.target.parentElement.lastChild;
     let name = subBtnBox.getAttribute("name");
@@ -208,10 +203,11 @@ function MovieFilter(props) {
 
   const title = props.listState.map((data) => (
     <div className={styles.fesTitle} key={nanoid()}>
-      <div className={styles.closeBox} onClick={close} data-order={data.order}>
-        X
+      <div className={styles.closeBtn} onClick={close} data-order={data.order}>
+        ×
       </div>
-      {data.title} <span>{data.prize_name}</span>
+      <span>{data.title}</span>
+      <span>{data.prize_name}</span>
     </div>
   ));
 
@@ -219,7 +215,20 @@ function MovieFilter(props) {
     <div className={styles.movieFilter}>
       <div className={styles.titleBox}>
         {title}
-        {addList}
+        {arr}
+      </div>
+      <div className={styles.loginBtn}>
+        <svg
+          id="login"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 100 100"
+          width="40"
+          height="40"
+        >
+          <path d="M0,50A49.91,49.91,0,0,1,50.35,0C77.4,0,99.93,22.48,99.94,49.52c0,28-22.16,50.42-49.8,50.42A49.92,49.92,0,0,1,0,50ZM85.11,78.25C99.39,61.11,99.26,33,79.43,15.71a45.05,45.05,0,0,0-65,6.35C-1,41.65,4.12,66.36,15,78.19l.37-1.38c3.28-11.83,10.62-20,22-24.55a3.66,3.66,0,0,1,2.58.15,22.38,22.38,0,0,0,19.88,0,3.17,3.17,0,0,1,2.78-.17A35.29,35.29,0,0,1,82.89,71.85C83.76,73.89,84.36,76.05,85.11,78.25Z" />
+          <path d="M67.81,32.09A17.84,17.84,0,1,1,50.09,14.3,17.8,17.8,0,0,1,67.81,32.09Z" />
+        </svg>
+        {/* <div>LOGIN</div> */}
       </div>
     </div>
   );

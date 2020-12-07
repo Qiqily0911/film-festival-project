@@ -1,56 +1,92 @@
 @import "./Default.scss";
 
+@mixin btnStyle {
+  background-color: rgba(95, 95, 95, 0.3);
+  color: white;
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
 .movieFilter {
+  display: flex;
+  //  justify-content: space-between;
   position: fixed;
   top: 0;
   // border: 1px solid red;
   width: 100%;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
     rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
-  //  height: 5%;
+  height: 100px;
   //  padding: 10px;
   background-color: white;
+
   .titleBox {
     display: flex;
   }
   .fesTitle {
-    align-items: center;
+    position: relative;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
     width: 180px;
     margin: 10px 20px;
     padding: 10px;
-    text-align: center;
 
-    .closeBox {
-      background-color: rgba(95, 95, 95, 0.3);
-      color: white;
-      width: 25px;
-      height: 25px;
-      line-height: 25px;
-      border-radius: 50%;
-      cursor: pointer;
+    // span {
+    //    margin: 10px 0;
+    // }
+    .currentBtn {
+      color: $color-blue;
+    }
+
+    .closeBtn {
+      @include btnStyle;
+    }
+
+    .addBtn {
+      @include btnStyle;
+    }
+
+    .option {
+      position: absolute;
+      top: 120px;
+      //  padding: 10px 0;
+      //  border: 1px solid orange;
+      .subBtn {
+        // border: 1px solid orange;
+        margin: 20px 0;
+      }
+
+      button {
+        border: 0;
+        border-radius: 0.25rem;
+        background: none;
+        color: $color-gray;
+        font-size: 16px;
+        line-height: 1.2;
+        // white-space: nowrap;
+        text-decoration: none;
+        padding: 0.25rem 0.5rem;
+        margin: 0.25rem;
+        cursor: pointer;
+      }
+      button:focus {
+        outline: none;
+      }
     }
   }
 
-  .subBtn {
-    border: 1px solid orange;
-  }
-
-  button {
-    border: 0;
-    border-radius: 0.25rem;
-    background: none;
-    // color: white;
-    font-size: 14px;
-    line-height: 1.2;
-    // white-space: nowrap;
-    text-decoration: none;
-    padding: 0.25rem 0.5rem;
-    margin: 0.25rem;
-    cursor: pointer;
-  }
-  button:focus {
-    outline: none;
+  .loginBtn {
+    // margin-right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    svg {
+      fill: $color-blue;
+    }
   }
 }

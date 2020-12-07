@@ -105,12 +105,6 @@ function MovieInfo(props) {
           {props.localData.th}th {props.localData.prize} ({props.localData.year}
           )
         </span>
-
-        <div className={styles.title}>
-          <h3>{props.tmdbData.title}</h3>
-          <h3>{props.localData.film_name_zh}</h3>
-        </div>
-
         {/* --------------- rating -------------- */}
         <div className={styles.rating}>
           {/* <span>{props.imdbSpan[0]} /10</span>
@@ -118,58 +112,74 @@ function MovieInfo(props) {
 
           <span>{props.omdbData.imdbRating} /10</span>
           <span>{props.omdbData.imdbVotes} votes</span>
+          <div>{props.tmdbData.runtime} min</div>
         </div>
 
-        {/* --------------- trailer -------------- */}
-        <div
-          className={styles.videoBtn}
-          onClick={() => {
-            if (props.tmdbVideo.results[0] !== undefined) {
-              setOpen(true);
-            }
-          }}
-        >
-          Trailer
+        <div className={styles.title}>
+          <p>{props.tmdbData.title}</p>
+          <p>{props.localData.film_name_zh}</p>
         </div>
 
-        {/* --------------- trailer iframe -------------- */}
-        {isOpen ? (
-          <div className={styles.videoDiv}>
-            <div>
-              <div className={styles.closeBtn} onClick={() => setOpen(false)}>
-                x
-              </div>
-              <iframe
-                title="trailer"
-                id="ytplayer"
-                type="text/html"
-                width="640"
-                height="360"
-                frameBorder="0"
-                src={videoSrc}
-              ></iframe>
-            </div>
+        <div className={styles.linkBox}>
+          {/* --------------- trailer -------------- */}
+          <div
+            className={styles.videoBtn}
+            onClick={() => {
+              if (props.tmdbVideo.results[0] !== undefined) {
+                setOpen(true);
+              }
+            }}
+          >
+            Trailer
           </div>
-        ) : (
-          ""
-        )}
 
-        {/* --------------- movie link -------------- */}
-        <a href={props.localData.imdb_link} target="_blank" rel="noreferrer">
-          IMDb
-        </a>
-        <a href={props.localData.atmovie_link} target="_blank" rel="noreferrer">
-          開眼電影
-        </a>
+          {/* --------------- trailer iframe -------------- */}
+          {isOpen ? (
+            <div className={styles.videoDiv}>
+              <div>
+                <div className={styles.closeBtn} onClick={() => setOpen(false)}>
+                  x
+                </div>
+                <iframe
+                  title="trailer"
+                  id="ytplayer"
+                  type="text/html"
+                  width="640"
+                  height="360"
+                  frameBorder="0"
+                  src={videoSrc}
+                ></iframe>
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
 
-        <div>{props.tmdbData.runtime} min</div>
-        <div>{props.tmdbData.overview} </div>
-
-        {/* --------------- casts -------------- */}
-        <div>
-          <span>Cast:</span>
-          {castBox}
+          {/* --------------- movie link -------------- */}
+          <a
+            className={styles.videoBtn}
+            href={props.localData.imdb_link}
+            target="_blank"
+            rel="noreferrer"
+          >
+            IMDb
+          </a>
+          <a
+            className={styles.videoBtn}
+            href={props.localData.atmovie_link}
+            target="_blank"
+            rel="noreferrer"
+          >
+            開眼電影
+          </a>
         </div>
+
+        <div className={styles.overview}>{props.tmdbData.overview} </div>
+      </div>
+      {/* --------------- casts -------------- */}
+      <div className={styles.castOutter}>
+        <span className={styles.title}>Cast</span>
+        {castBox}
       </div>
     </div>
   );
