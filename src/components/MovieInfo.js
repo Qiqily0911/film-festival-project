@@ -12,7 +12,7 @@ function MovieInfo(props) {
 
   let movieId = props.localData.movie_id;
   let videoPath = props.tmdbVideo.results;
-  let images = props.tmdbImages.backdrops;
+  let images = props.tmdbImages;
   let casts = props.tmdbCredits.cast;
 
   useEffect(() => {
@@ -33,26 +33,17 @@ function MovieInfo(props) {
         setCastList(casts);
       }
 
-      if (images[0] !== undefined) {
-        const b = images.map((path) => (
-          <img
-            key={nanoid()}
-            alt="backdrops"
-            src={`https://image.tmdb.org/t/p/w780${path.file_path}`}
-          />
-        ));
-        // console.log(images[0]);
-        setImageList(b);
-      } else {
-        const c = (
-          <div className={styles.notFound}>
-            <p>poster not found</p>
-          </div>
-        );
-
-        setImageList(c);
+      if (images.backdrops[0] !== undefined) {
+        const arr = [];
+        images.backdrops.forEach((obj) => arr.push(obj.file_path));
+        setImageList(arr);
       }
+      //  if (images.posters[0] !== undefined) {
+      //     images.posters.forEach((obj) => arr.push(obj.file_path));
+      //     setImageList(arr);
+      //  }
     }
+    // FIXME run 4 times; it works but want to ty=ry a better way
   }, [
     props.tmdbVideo,
     props.tmdbImages,
@@ -72,6 +63,7 @@ function MovieInfo(props) {
             .map((person) => (
               <div className={styles.castPic} key={person.credit_id}>
                 {person.profile_path ? (
+                  // <a href={`https://api.themoviedb.org/3/person/${person.id}/movie_credits?api_key=5c27dca1cd4fca2cefc5c8945cfb1974`} >
                   <img
                     alt="profile"
                     src={`https://image.tmdb.org/t/p/w154${person.profile_path}`}
@@ -99,7 +91,21 @@ function MovieInfo(props) {
 
   const content = (
     <div>
-      <div className={styles.imageBox}>{imageList}</div>
+      <div className={styles.imageBox}>
+        {imageList !== "" ? (
+          imageList.map((path) => (
+            <img
+              key={nanoid()}
+              alt="images"
+              src={`https://image.tmdb.org/t/p/w780${path}`}
+            />
+          ))
+        ) : (
+          <div className={styles.notFound}>
+            <p>poster not found</p>
+          </div>
+        )}
+      </div>
 
       <div className={styles.infoBox}>
         <span className={styles.subtitle}>
