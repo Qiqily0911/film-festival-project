@@ -57,7 +57,8 @@
     .option {
       position: absolute;
       top: 120px;
-      //  padding: 10px 0;
+      z-index: 5;
+
       //  border: 1px solid orange;
       .subBtn {
         // border: 1px solid orange;
@@ -88,6 +89,7 @@
     margin-right: 30px;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 
     svg {
       fill: $color-blue;

@@ -11,14 +11,21 @@ import MovieInfo from "./components/MovieInfo";
 import MovieFilter from "./components/MovieFilter";
 import ControlSilder from "./components/ControlSlider";
 import React, { useState, useEffect } from "react";
-// import firebase from "firebase";
-import { config, apiKey, omdbKey } from "./config";
-import "firebase/firestore";
-
-// firebase.initializeApp(config);
+//config and firebase
+import { apiKey, omdbKey, googleSignIn, firestore } from "./config";
+// import * as firebase from "firebase";
+// import "firebase/auth";
+// import "firebase/firestore";
 
 function App() {
-  //  const db = firebase.firestore();
+  // if (!firebase.apps.length) {
+  //    firebase.initializeApp(config);
+  // } else {
+  //    firebase.app();
+  // }
+  // const db = firebase.firestore();
+
+  // init movie list
   const initListState = [
     {
       title: "奧斯卡金像獎",
@@ -56,6 +63,7 @@ function App() {
   const [filmList, setFilmList] = useState("");
   const [prize, setPrize] = useState("");
 
+  // init control-slider
   const [vertical, setVertical] = useState(100);
   const [minYear, setMin] = useState(1928);
   const [isScroll, setScroll] = useState(true);
@@ -202,27 +210,21 @@ function App() {
     xhr.send();
   }
 
-  //  get movie id & data
-  //  function readData() {
-  //     console.log(value);
-  //     let ref = db.collection("cannes_film").doc("palme_d_or");
+  // TODO: user login and Firebase
+  function readData() {
+    let ref = firestore.collection("cannes_film").doc("palme_d_or");
 
-  //     ref.get().then((doc) => {
-  //        setData(doc.data()[value]);
-  //        let movieId = posterData["movie_id"];
-  //        console.log(movieId);
-  //        tmdbApi(movieId);
-  //        console.log("OK");
-  //        setTitleZh(posterData["film_name_zh"]);
-  //        setTitleEn(posterData["film_name_en"]);
-  //     });
-  //  }
-  // console.log(listState);
+    ref.get().then((doc) => {
+      console.log(doc.data()["1957"]);
+    });
+  }
 
   return (
     <div className={styles.outter}>
       <aside>
-        <div className={styles.logo}>LOGO</div>
+        <div className={styles.logo} onClick={readData}>
+          LOGO
+        </div>
 
         <ControlSilder
           vertical={vertical}
@@ -245,6 +247,7 @@ function App() {
             listState={listState}
             setlistState={setlistState}
             setVertical={setVertical}
+            googleSignIn={googleSignIn}
           />
           <div className={styles.subContainer}>
             <YearList

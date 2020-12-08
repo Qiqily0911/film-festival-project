@@ -1,7 +1,7 @@
 @import "./Default.scss";
 
 .movieCard {
-  //  position: relative;
+  position: relative;
 
   cursor: pointer;
   width: 180px;
@@ -61,6 +61,16 @@
       font-size: 14px;
       color: $color-gray;
     }
+  }
+
+  .keepTag {
+    position: absolute;
+    width: 25px;
+    height: 30px;
+    top: -6px;
+    right: 6px;
+    background-color: $color-gray;
+    opacity: 0.3;
   }
 }
 

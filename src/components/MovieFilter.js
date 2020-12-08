@@ -201,6 +201,10 @@ function MovieFilter(props) {
     props.setlistState(arr);
   }
 
+  function login() {
+    console.log("login");
+  }
+
   const title = props.listState.map((data) => (
     <div className={styles.fesTitle} key={nanoid()}>
       <div className={styles.closeBtn} onClick={close} data-order={data.order}>
@@ -214,10 +218,9 @@ function MovieFilter(props) {
   return (
     <div className={styles.movieFilter}>
       <div className={styles.titleBox}>
-        {title}
-        {arr}
+        {title} {arr}
       </div>
-      <div className={styles.loginBtn}>
+      <div className={styles.loginBtn} onClick={login}>
         <svg
           id="login"
           xmlns="http://www.w3.org/2000/svg"
@@ -228,8 +231,8 @@ function MovieFilter(props) {
           <path d="M0,50A49.91,49.91,0,0,1,50.35,0C77.4,0,99.93,22.48,99.94,49.52c0,28-22.16,50.42-49.8,50.42A49.92,49.92,0,0,1,0,50ZM85.11,78.25C99.39,61.11,99.26,33,79.43,15.71a45.05,45.05,0,0,0-65,6.35C-1,41.65,4.12,66.36,15,78.19l.37-1.38c3.28-11.83,10.62-20,22-24.55a3.66,3.66,0,0,1,2.58.15,22.38,22.38,0,0,0,19.88,0,3.17,3.17,0,0,1,2.78-.17A35.29,35.29,0,0,1,82.89,71.85C83.76,73.89,84.36,76.05,85.11,78.25Z" />
           <path d="M67.81,32.09A17.84,17.84,0,1,1,50.09,14.3,17.8,17.8,0,0,1,67.81,32.09Z" />
         </svg>
-        {/* <div>LOGIN</div> */}
       </div>
+      <div>LOGIN</div>
     </div>
   );
 }

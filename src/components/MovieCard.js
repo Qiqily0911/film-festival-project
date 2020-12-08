@@ -28,7 +28,8 @@ function MovieCard(props) {
       <div
         className={styles.movieCard}
         key={props.movie_id}
-        onClick={() => {
+        data-id={props.movie_id}
+        onClick={(e) => {
           let movieId = props.movie_id;
           props.tmdbApi("", movieId);
           props.tmdbApi("/videos", movieId);
@@ -37,10 +38,12 @@ function MovieCard(props) {
 
           props.omdbApi(movieId);
           props.renewData(props);
+          //  console.log(e.currentTarget.dataset.id);
           // FIXME: can work but slow
           //  props.imdbRating(movieId);
         }}
       >
+        <div className={styles.keepTag}></div>
         <div className={styles.posterBox}>
           {props.poster_path === null ? (
             // if poster_path was null

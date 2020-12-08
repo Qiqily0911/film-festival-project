@@ -33,7 +33,7 @@ function MovieInfo(props) {
         setCastList(casts);
       }
 
-      if (images.backdrops[0] !== undefined) {
+      if (images.backdrops !== undefined) {
         const arr = [];
         images.backdrops.forEach((obj) => arr.push(obj.file_path));
         setImageList(arr);
