@@ -43,7 +43,7 @@ function MovieInfo(props) {
       //     setImageList(arr);
       //  }
     }
-    // FIXME run 4 times; it works but want to ty=ry a better way
+    // FIXME run 4 times; it works but want to try a better way
   }, [
     props.tmdbVideo,
     props.tmdbImages,
@@ -183,7 +183,12 @@ function MovieInfo(props) {
             開眼電影
           </a>
         </div>
-
+        {props.tmdbData
+          ? props.tmdbData.production_countries[0].iso_3166_1
+          : ""}
+        <div>
+          {props.tmdbData ? props.tmdbData.production_countries[0].name : ""}
+        </div>
         <div className={styles.overview}>{props.tmdbData.overview} </div>
       </div>
       {/* --------------- casts -------------- */}

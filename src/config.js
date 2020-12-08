@@ -18,15 +18,15 @@ const firebaseSet = firebase.initializeApp(config);
 export const firebaseAuth = firebase.auth();
 export const firestore = firebaseSet.firestore();
 
+// Google login
 const providerGoogle = new firebase.auth.GoogleAuthProvider();
 providerGoogle.setCustomParameters({
   prompt: "select_account",
 });
-
 export const googleSignIn = () => firebaseAuth.signInWithPopup(providerGoogle);
 
+// FaceBook login
 var providerFb = new firebase.auth.FacebookAuthProvider();
-
 export const faceBookSignIn = () => firebaseAuth.signInWithPopup(providerFb);
 
 // TMDb api key

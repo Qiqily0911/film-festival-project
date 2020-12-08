@@ -12,7 +12,13 @@ import MovieFilter from "./components/MovieFilter";
 import ControlSilder from "./components/ControlSlider";
 import React, { useState, useEffect } from "react";
 //config and firebase
-import { apiKey, omdbKey, googleSignIn, firestore } from "./config";
+import {
+  apiKey,
+  omdbKey,
+  googleSignIn,
+  faceBookSignIn,
+  firestore,
+} from "./config";
 // import * as firebase from "firebase";
 // import "firebase/auth";
 // import "firebase/firestore";
@@ -248,6 +254,7 @@ function App() {
             setlistState={setlistState}
             setVertical={setVertical}
             googleSignIn={googleSignIn}
+            faceBookSignIn={faceBookSignIn}
           />
           <div className={styles.subContainer}>
             <YearList

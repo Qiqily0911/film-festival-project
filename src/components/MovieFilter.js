@@ -4,8 +4,11 @@ import { nanoid } from "nanoid";
 import oscar from "../oscar_best_film.json";
 import cannes from "../CannesFilm.json";
 import goldenHorse from "../golden_horse_best_film.json";
+import googleIcon from "../image/btn_google_light_normal_ios.svg";
+import facebookIcon from "../image/f_logo_RGB-Blue_114.png";
 
 function MovieFilter(props) {
+  const [isOpen, setOpen] = useState(false);
   const [subBtnVal, setSubBtnVal] = useState({
     "index-1": "",
     "index-2": "",
@@ -100,6 +103,29 @@ function MovieFilter(props) {
       </div>
     );
   }
+
+  const loginDiv = (
+    <div className={styles.loginDiv}>
+      <div className={styles.loginBox}>
+        <div className={styles.loginClose} onClick={() => setOpen(false)}>
+          ×
+        </div>
+        <span>請選擇登入方式</span>
+        <div>
+          <div className={styles.googleLogin} onClick={props.googleSignIn}>
+            <img alt="google-log-in" src={googleIcon} />
+            <p>Sign in with Google</p>
+          </div>
+          <div className={styles.facebookLogin} onClick={props.faceBookSignIn}>
+            <div>
+              <img alt="Facebook-log-in" src={facebookIcon} />
+            </div>
+            <p>Sign in with FaceBook</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   // 選擇影展，並設定影展值（filmList）
   function selectFilmList(e) {
@@ -220,7 +246,7 @@ function MovieFilter(props) {
       <div className={styles.titleBox}>
         {title} {arr}
       </div>
-      <div className={styles.loginBtn} onClick={login}>
+      <div className={styles.loginBtn} onClick={() => setOpen(true)}>
         <svg
           id="login"
           xmlns="http://www.w3.org/2000/svg"
@@ -232,7 +258,7 @@ function MovieFilter(props) {
           <path d="M67.81,32.09A17.84,17.84,0,1,1,50.09,14.3,17.8,17.8,0,0,1,67.81,32.09Z" />
         </svg>
       </div>
-      <div>LOGIN</div>
+      {isOpen ? loginDiv : ""}
     </div>
   );
 }
