@@ -19,7 +19,6 @@ function YearList(props) {
             ref={props.yearListRefs[yearbox.year]}
             className={styles.yearBox}
             data-index={yearbox.year}
-            // onScroll={()=>}
           >
             {yearbox.list.map((data) => {
               return (
@@ -64,27 +63,22 @@ function YearList(props) {
     setShowList(showYearList);
   }, [props.yearlist]);
 
-  //  console.log(showList);
+  function detect() {
+    if (props.isScroll) {
+      // console.log(props.isScroll);
+      let a = 2020 - props.minYear + 1;
+      let b = props.yearListRefs[props.minYear].current.getBoundingClientRect();
+      let c = a * b.height;
+      let d = Math.floor(((b.bottom - 100) / c) * 100);
+      props.setVertical(d);
+    }
+  }
 
   return (
-    <div className={styles.yearListBox}>
+    <div className={styles.yearListBox} onWheel={detect}>
       <div className={styles.yearList}>{showList}</div>
     </div>
   );
 }
-
-// onScroll={() => console.log(document.documentElement.scrollHeight)}
-// class MyComponent extends React.Component{
-//   constructor(props){
-//     super(props);
-//     this.myRef=React.createRef();
-//   }
-
-//   render(){
-//     return  <div className={styles.yearListBox}>
-//          <div ref={this.myRef} className={styles.yearList}>{showList}</div>
-//       </div>
-//   }
-// }
 
 export default YearList;

@@ -7,29 +7,27 @@ function ControlSilder(props) {
   const [refs, setRefs] = useState("");
 
   useEffect(() => {
-    // console.log(props.yearListRefs);
     setRefs(props.yearListRefs);
   }, [props.yearListRefs]);
 
+  function abc() {
+    props.setScroll(false);
+  }
   function handleChangeVertical(value) {
     if (value !== props.vertical) {
       props.setVertical(value);
     }
-    // console.log(refs.current.getBoundingClientRect());
-  }
-
-  function handleScroll() {
     let num = formatPc(props.vertical);
-    // let a = refs[2020].current.getBoundingClientRect();
-    // console.log(a);
     if (refs[num] !== null) {
-      //  console.log(refs[num].current);
-      //  console.log(refs[num].current.getBoundingClientRect());
       refs[num].current.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
     }
+  }
+
+  function handleScroll() {
+    props.setScroll(true);
   }
 
   const verticalLabels = {
@@ -49,6 +47,7 @@ function ControlSilder(props) {
         labels={verticalLabels}
         handleLabel={formatPc(props.vertical)}
         format={formatPc}
+        onChangeStart={abc}
         onChange={handleChangeVertical}
         onChangeComplete={handleScroll}
       />

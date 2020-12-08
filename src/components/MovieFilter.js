@@ -196,7 +196,7 @@ function MovieFilter(props) {
         arr[2].order = 1;
       }
     }
-
+    props.setVertical(100);
     arr.splice(order, 1);
     props.setlistState(arr);
   }

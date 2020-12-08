@@ -58,6 +58,7 @@ function App() {
 
   const [vertical, setVertical] = useState(100);
   const [minYear, setMin] = useState(1928);
+  const [isScroll, setScroll] = useState(true);
 
   useEffect(() => {
     const yearList = [];
@@ -220,10 +221,6 @@ function App() {
 
   return (
     <div className={styles.outter}>
-      {/* {window.addEventListener("scroll", () => {
-            const a = window.scrollY;
-            console.log(a);
-         })} */}
       <aside>
         <div className={styles.logo}>LOGO</div>
 
@@ -232,6 +229,8 @@ function App() {
           setVertical={setVertical}
           yearListRefs={yearListRefs}
           minYear={minYear}
+          setScroll={setScroll}
+          isScroll={isScroll}
         />
       </aside>
       <main>
@@ -245,6 +244,7 @@ function App() {
             yearListRefs={yearListRefs}
             listState={listState}
             setlistState={setlistState}
+            setVertical={setVertical}
           />
           <div className={styles.subContainer}>
             <YearList
@@ -258,7 +258,10 @@ function App() {
               listState={listState}
               setlistState={setlistState}
               setMin={setMin}
+              minYear={minYear}
               setVertical={setVertical}
+              vertical={vertical}
+              isScroll={isScroll}
             />
             <MovieInfo
               tmdbData={tmdbData}
