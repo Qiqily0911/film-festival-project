@@ -18,12 +18,16 @@ const firebaseSet = firebase.initializeApp(config);
 export const firebaseAuth = firebase.auth();
 export const firestore = firebaseSet.firestore();
 
-const provider = new firebase.auth.GoogleAuthProvider();
-provider.setCustomParameters({
+const providerGoogle = new firebase.auth.GoogleAuthProvider();
+providerGoogle.setCustomParameters({
   prompt: "select_account",
 });
 
-export const googleSignIn = () => firebaseAuth.signInWithPopup(provider);
+export const googleSignIn = () => firebaseAuth.signInWithPopup(providerGoogle);
+
+var providerFb = new firebase.auth.FacebookAuthProvider();
+
+export const faceBookSignIn = () => firebaseAuth.signInWithPopup(providerFb);
 
 // TMDb api key
 export const apiKey = "5c27dca1cd4fca2cefc5c8945cfb1974";
