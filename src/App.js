@@ -1,39 +1,42 @@
+// style
 import "./App.scss";
 import styles from "./style/App.module.scss";
+// data json
 import oscar from "./oscar_best_film.json";
 import cannes from "./CannesFilm.json";
 import goldenHorse from "./golden_horse_best_film.json";
+// components
 import YearList from "./components/YearList";
 import MovieInfo from "./components/MovieInfo";
-import React, { useState, useEffect } from "react";
-import MovirFilter from "./components/MovieFilter";
+import MovieFilter from "./components/MovieFilter";
 import ControlSilder from "./components/ControlSlider";
-import firebase from "firebase";
+import React, { useState, useEffect } from "react";
+// import firebase from "firebase";
 import { config, apiKey, omdbKey } from "./config";
 import "firebase/firestore";
 
-firebase.initializeApp(config);
+// firebase.initializeApp(config);
 
 function App() {
   //  const db = firebase.firestore();
   const initListState = [
     {
       title: "奧斯卡金像獎",
-      prize_name: "最佳影片獎 Best Film",
+      prize_name: "Best Film",
       film_list: oscar,
       prize: "best_film",
       order: 0,
     },
     {
       title: "坎城影展",
-      prize_name: "金棕櫚獎",
+      prize_name: "Palme d'Or",
       film_list: cannes,
       prize: "palme_d_or",
       order: 1,
     },
     {
       title: "金馬獎",
-      prize_name: "最佳影片獎",
+      prize_name: "Best Film",
       film_list: goldenHorse,
       prize: "best_film",
       order: 2,
@@ -55,6 +58,7 @@ function App() {
 
   const [vertical, setVertical] = useState(100);
   const [minYear, setMin] = useState(1928);
+  const [isScroll, setScroll] = useState(true);
 
   useEffect(() => {
     const yearList = [];
@@ -70,6 +74,7 @@ function App() {
       return acc;
     }, {});
 
+    // console.log(refs);
     setRefs(refs);
 
     listState.map((list) =>
@@ -224,42 +229,50 @@ function App() {
           setVertical={setVertical}
           yearListRefs={yearListRefs}
           minYear={minYear}
+          setScroll={setScroll}
+          isScroll={isScroll}
         />
       </aside>
       <main>
-        <MovirFilter
-          filmList={filmList}
-          setFilmList={setFilmList}
-          prize={prize}
-          setPrize={setPrize}
-          yearlist={list}
-          yearListRefs={yearListRefs}
-          listState={listState}
-          setlistState={setlistState}
-        />
-
         <div className={styles.container}>
-          <YearList
+          <MovieFilter
+            filmList={filmList}
+            setFilmList={setFilmList}
             prize={prize}
-            tmdbApi={tmdbApi}
-            omdbApi={omdbApi}
-            imdbRating={imdbRating}
-            renewData={renewData}
+            setPrize={setPrize}
             yearlist={list}
             yearListRefs={yearListRefs}
             listState={listState}
             setlistState={setlistState}
-            setMin={setMin}
+            setVertical={setVertical}
           />
-          <MovieInfo
-            tmdbData={tmdbData}
-            tmdbVideo={tmdbVideo}
-            tmdbImages={tmdbImages}
-            tmdbCredits={tmdbCredits}
-            localData={localData}
-            omdbData={omdbData}
-            imdbSpan={imdbSpan}
-          />
+          <div className={styles.subContainer}>
+            <YearList
+              prize={prize}
+              tmdbApi={tmdbApi}
+              omdbApi={omdbApi}
+              imdbRating={imdbRating}
+              renewData={renewData}
+              yearlist={list}
+              yearListRefs={yearListRefs}
+              listState={listState}
+              setlistState={setlistState}
+              setMin={setMin}
+              minYear={minYear}
+              setVertical={setVertical}
+              vertical={vertical}
+              isScroll={isScroll}
+            />
+            <MovieInfo
+              tmdbData={tmdbData}
+              tmdbVideo={tmdbVideo}
+              tmdbImages={tmdbImages}
+              tmdbCredits={tmdbCredits}
+              localData={localData}
+              omdbData={omdbData}
+              imdbSpan={imdbSpan}
+            />
+          </div>
         </div>
       </main>
     </div>

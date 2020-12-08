@@ -5,40 +5,6 @@ import { nanoid } from "nanoid";
 
 function YearList(props) {
   const [showList, setShowList] = useState("");
-  function close(e) {
-    let order = Number(e.target.dataset.order);
-    let arr = [...props.listState];
-
-    if (order === 0) {
-      if (arr.length === 1) {
-        arr.splice(order, 1);
-        props.setlistState(arr);
-        return;
-      } else {
-        arr[1].order = 0;
-        if (arr.length === 3) {
-          arr[2].order = 1;
-        }
-      }
-    } else if (order === 1) {
-      if (arr.length === 3) {
-        arr[2].order = 1;
-      }
-    }
-
-    arr.splice(order, 1);
-    console.log(arr);
-    props.setlistState(arr);
-  }
-
-  const title = props.listState.map((data) => (
-    <div className={styles.fesTitle}>
-      <div className={styles.closeBox} onClick={close} data-order={data.order}>
-        X
-      </div>
-      {data.title} <span>{data.prize_name}</span>
-    </div>
-  ));
 
   useEffect(() => {
     const showYearList = props.yearlist.map((yearbox) => {
@@ -78,8 +44,6 @@ function YearList(props) {
         );
       }
     });
-    // console.log(showYearList);
-    // console.log(props.listState.length);
 
     // find the min year of yearList
     if (props.listState.length !== 0) {
@@ -88,7 +52,7 @@ function YearList(props) {
           if (showYearList[i] !== null) {
             // console.log(i);
             let min = showYearList[i].props["data-index"];
-            console.log(min);
+
             props.setMin(min);
             break;
           }
@@ -99,13 +63,20 @@ function YearList(props) {
     setShowList(showYearList);
   }, [props.yearlist]);
 
-  return (
-    <div className={styles.subContainer}>
-      <div className={styles.titleBox}>{title}</div>
+  function detect() {
+    if (props.isScroll) {
+      // console.log(props.isScroll);
+      let a = 2020 - props.minYear + 1;
+      let b = props.yearListRefs[props.minYear].current.getBoundingClientRect();
+      let c = a * b.height;
+      let d = Math.floor(((b.bottom - 100) / c) * 100);
+      props.setVertical(d);
+    }
+  }
 
-      <div className={styles.yearListBox}>
-        <div className={styles.yearList}>{showList}</div>
-      </div>
+  return (
+    <div className={styles.yearListBox} onWheel={detect}>
+      <div className={styles.yearList}>{showList}</div>
     </div>
   );
 }
