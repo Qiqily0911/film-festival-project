@@ -59,7 +59,7 @@ function MovieInfo(props) {
     <div className={styles.castBox}>
       {castList
         ? castList
-            .filter((person) => person.order <= 4)
+            .filter((person) => person.order <= 6)
             .map((person) => (
               <div className={styles.castPic} key={person.credit_id}>
                 {person.profile_path ? (
@@ -89,6 +89,20 @@ function MovieInfo(props) {
   //     btn.classList.add(`${styles.noVideo}`);
   //  }
 
+  function ordinalSuffix(i) {
+    var j = i % 10,
+      k = i % 100;
+    if (j === 1 && k !== 11) {
+      return i + "st";
+    }
+    if (j === 2 && k !== 12) {
+      return i + "nd";
+    }
+    if (j === 3 && k !== 13) {
+      return i + "rd";
+    }
+    return i + "th";
+  }
   const content = (
     <div>
       <div className={styles.imageBox}>
@@ -108,21 +122,27 @@ function MovieInfo(props) {
       </div>
 
       <div className={styles.infoBox}>
-        <span className={styles.subtitle}>
-          {props.localData.th}th {props.localData.prize} ({props.localData.year}
-          )
-        </span>
-        {/* --------------- rating -------------- */}
-        <div className={styles.rating}>
-          {/* <span>{props.imdbSpan[0]} /10</span>
+        <div className={styles.upper}>
+          <div>
+            <span className={styles.subtitle}>
+              {ordinalSuffix(props.localData.th)} {props.localData.prize} (
+              {props.localData.year})
+            </span>
+            {/* --------------- rating -------------- */}
+            <div className={styles.rating}>
+              {/* <span>{props.imdbSpan[0]} /10</span>
                <span>{props.imdbSpan[1]} votes</span> */}
 
-          <span>{props.omdbData.imdbRating} /10</span>
-          <span>{props.omdbData.imdbVotes} votes</span>
-          <div>
-            <img src={clock} alt="clock" />
-            {props.tmdbData.runtime} min
+              <span>{props.omdbData.imdbRating} /10</span>
+              <span>{props.omdbData.imdbVotes} votes</span>
+              <div>
+                <img src={clock} alt="clock" />
+                {props.tmdbData.runtime} min
+              </div>
+            </div>
           </div>
+
+          <div className={styles.keep}>加入清單</div>
         </div>
 
         <div className={styles.title}>

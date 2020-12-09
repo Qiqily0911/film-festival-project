@@ -1,5 +1,5 @@
 // style
-import "./App.scss";
+// import "./App.scss";
 import styles from "./style/App.module.scss";
 // data json
 import oscar from "./data/oscar_best_film.json";
@@ -9,6 +9,7 @@ import goldenHorse from "./data/golden_horse_best_film.json";
 import YearList from "./components/YearList";
 import MovieInfo from "./components/MovieInfo";
 import MovieFilter from "./components/MovieFilter";
+import MemberBtn from "./components/MemberBtn";
 import ControlSilder from "./components/ControlSlider";
 import React, { useState, useEffect } from "react";
 //config and firebase
@@ -19,19 +20,14 @@ import {
   faceBookSignIn,
   firestore,
 } from "./config";
+import { AuthProvider } from "./contexts/AuthContexts";
+
+// import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 // import * as firebase from "firebase";
 // import "firebase/auth";
 // import "firebase/firestore";
 
 function App() {
-  // if (!firebase.apps.length) {
-  //    firebase.initializeApp(config);
-  // } else {
-  //    firebase.app();
-  // }
-  // const db = firebase.firestore();
-
-  // init movie list
   const initListState = [
     {
       title: "奧斯卡金像獎",
@@ -243,19 +239,32 @@ function App() {
       </aside>
       <main>
         <div className={styles.container}>
-          <MovieFilter
-            filmList={filmList}
-            setFilmList={setFilmList}
-            prize={prize}
-            setPrize={setPrize}
-            yearlist={list}
-            yearListRefs={yearListRefs}
-            listState={listState}
-            setlistState={setlistState}
-            setVertical={setVertical}
-            googleSignIn={googleSignIn}
-            faceBookSignIn={faceBookSignIn}
-          />
+          <div className={styles.navbar}>
+            <MovieFilter
+              filmList={filmList}
+              setFilmList={setFilmList}
+              prize={prize}
+              setPrize={setPrize}
+              yearlist={list}
+              yearListRefs={yearListRefs}
+              listState={listState}
+              setlistState={setlistState}
+              setVertical={setVertical}
+            />
+
+            {/* <Router> */}
+            <AuthProvider>
+              <MemberBtn
+                googleSignIn={googleSignIn}
+                faceBookSignIn={faceBookSignIn}
+              />
+              {/* <Switch>
+                           <Route path="./signup" component={MemberBtn} />
+                        </Switch> */}
+            </AuthProvider>
+            {/* </Router> */}
+          </div>
+
           <div className={styles.subContainer}>
             <YearList
               prize={prize}

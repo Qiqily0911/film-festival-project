@@ -27,7 +27,26 @@ export const googleSignIn = () => firebaseAuth.signInWithPopup(providerGoogle);
 
 // FaceBook login
 var providerFb = new firebase.auth.FacebookAuthProvider();
-export const faceBookSignIn = () => firebaseAuth.signInWithPopup(providerFb);
+export const faceBookSignIn = () =>
+  firebaseAuth
+    .signInWithPopup(providerFb)
+    .then(function (result) {
+      // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+      var token = result.credential.accessToken;
+      // The signed-in user info.
+      var user = result.user;
+      console.log(token, user.displayName, user.email, user.photoURL);
+    })
+    .catch(function (error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      // The email of the user's account used.
+      var email = error.email;
+      // The firebase.auth.AuthCredential type that was used.
+      var credential = error.credential;
+      console.log(errorCode, errorMessage, email, credential);
+    });
 
 // TMDb api key
 export const apiKey = "5c27dca1cd4fca2cefc5c8945cfb1974";

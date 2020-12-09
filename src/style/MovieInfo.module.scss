@@ -42,8 +42,30 @@
   .infoBox {
     padding: 20px;
 
-    .subtitle {
-      color: $color-gray;
+    .upper {
+      display: flex;
+      justify-content: space-between;
+      .subtitle {
+        color: $color-gray;
+      }
+      .rating {
+        display: flex;
+        span {
+          color: rgba(212, 156, 0, 0.876);
+          margin-right: 10px;
+          font-weight: 500;
+        }
+        img {
+          height: 15px;
+          width: 15px;
+        }
+      }
+      .keep {
+        height: 30px;
+        // line-height: 30px;
+        padding: 5px;
+        background-color: rgb(221, 221, 221);
+      }
     }
 
     .title {
@@ -55,18 +77,6 @@
       font-weight: 600;
       :nth-child(2) {
         font-size: 20px;
-      }
-    }
-    .rating {
-      display: flex;
-      span {
-        color: rgba(212, 156, 0, 0.876);
-        margin-right: 10px;
-        font-weight: 500;
-      }
-      img {
-        height: 15px;
-        width: 15px;
       }
     }
 

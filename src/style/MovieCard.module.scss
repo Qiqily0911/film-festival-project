@@ -16,13 +16,12 @@
     box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
 
     .notFound {
-      // border: 1px solid $color-gray;
-      color: $color-gray;
+      //  border: 1px solid red;
+      background-color: $color-gray;
+      opacity: 0.3;
       width: 100%;
       height: 100%;
       display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     img {

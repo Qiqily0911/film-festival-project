@@ -4,11 +4,8 @@ import { nanoid } from "nanoid";
 import oscar from "../data/oscar_best_film.json";
 import cannes from "../data/CannesFilm.json";
 import goldenHorse from "../data/golden_horse_best_film.json";
-import googleIcon from "../image/Google__G__Logo.svg";
-import facebookIcon from "../image/f_logo_RGB-Blue_114.png";
 
 function MovieFilter(props) {
-  const [isOpen, setOpen] = useState(false);
   const [subBtnVal, setSubBtnVal] = useState({
     "index-1": "",
     "index-2": "",
@@ -103,31 +100,6 @@ function MovieFilter(props) {
       </div>
     );
   }
-
-  const loginDiv = (
-    <div className={styles.loginDiv}>
-      <div className={styles.loginBox}>
-        <div className={styles.loginClose} onClick={() => setOpen(false)}>
-          ×
-        </div>
-        <span>請選擇登入方式</span>
-        <div>
-          <div className={styles.googleLogin} onClick={props.googleSignIn}>
-            <div>
-              <img alt="Google-log-in" src={googleIcon} />
-            </div>
-            <p>Sign in with Google</p>
-          </div>
-          <div className={styles.facebookLogin} onClick={props.faceBookSignIn}>
-            <div>
-              <img alt="Facebook-log-in" src={facebookIcon} />
-            </div>
-            <p>Sign in with FaceBook</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
 
   // 選擇影展，並設定影展值（filmList）
   function selectFilmList(e) {
@@ -229,10 +201,6 @@ function MovieFilter(props) {
     props.setlistState(arr);
   }
 
-  function login() {
-    console.log("login");
-  }
-
   const title = props.listState.map((data) => (
     <div className={styles.fesTitle} key={nanoid()}>
       <div className={styles.closeBtn} onClick={close} data-order={data.order}>
@@ -248,19 +216,6 @@ function MovieFilter(props) {
       <div className={styles.titleBox}>
         {title} {arr}
       </div>
-      <div className={styles.loginBtn} onClick={() => setOpen(true)}>
-        <svg
-          id="login"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 100 100"
-          width="40"
-          height="40"
-        >
-          <path d="M0,50A49.91,49.91,0,0,1,50.35,0C77.4,0,99.93,22.48,99.94,49.52c0,28-22.16,50.42-49.8,50.42A49.92,49.92,0,0,1,0,50ZM85.11,78.25C99.39,61.11,99.26,33,79.43,15.71a45.05,45.05,0,0,0-65,6.35C-1,41.65,4.12,66.36,15,78.19l.37-1.38c3.28-11.83,10.62-20,22-24.55a3.66,3.66,0,0,1,2.58.15,22.38,22.38,0,0,0,19.88,0,3.17,3.17,0,0,1,2.78-.17A35.29,35.29,0,0,1,82.89,71.85C83.76,73.89,84.36,76.05,85.11,78.25Z" />
-          <path d="M67.81,32.09A17.84,17.84,0,1,1,50.09,14.3,17.8,17.8,0,0,1,67.81,32.09Z" />
-        </svg>
-      </div>
-      {isOpen ? loginDiv : ""}
     </div>
   );
 }

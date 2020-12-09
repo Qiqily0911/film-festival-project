@@ -1,0 +1,85 @@
+@import "./Default.scss";
+.loginOutter {
+  display: flex;
+  margin-right: 30px;
+  align-items: center;
+  justify-content: center;
+  .loginIcon {
+    cursor: pointer;
+    svg {
+      fill: $color-blue;
+    }
+  }
+}
+
+.loginDiv {
+  position: fixed;
+  display: flex;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  span {
+    font-size: 20px;
+    font-weight: 500;
+    color: $color-blue;
+  }
+  .abc {
+    font-size: 10px;
+    width: 100%;
+  }
+  .loginBox {
+    position: relative;
+    width: 50%;
+    height: 50%;
+    background-color: white;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .loginBtn {
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px;
+      margin: 20px;
+      width: 280px;
+      padding: 10px 25px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+
+      .loginLogo {
+        // border: 1px solid blue;
+        height: 40px;
+        display: flex;
+        align-items: center;
+
+        img {
+          height: 35px;
+        }
+      }
+
+      p {
+        margin-left: 20px;
+        color: $color-gray;
+        font-weight: 500;
+      }
+    }
+    .loginClose {
+      position: absolute;
+      z-index: 15;
+      top: -35px;
+      right: -35px;
+      background-color: white;
+      color: $color-blue;
+      text-align: center;
+      width: 30px;
+      height: 30px;
+      line-height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+  }
+}
