@@ -20,6 +20,7 @@ function MemberBtn(props) {
 
   useEffect(() => {
     if (currentUser) {
+      props.setUser(currentUser);
       setLogin(true);
     } else {
       setLogin(false);

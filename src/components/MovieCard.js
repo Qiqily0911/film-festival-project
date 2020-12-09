@@ -1,7 +1,15 @@
 import React from "react";
 import styles from "../style/MovieCard.module.scss";
+// import { firestore } from "../config";
 
 function MovieCard(props) {
+  function addList(e) {
+    e.preventDefault();
+    console.log(props.user);
+    // let users = firestore.collection("users");
+    // users.where("uid", "==");
+  }
+
   if (props.prize === null) {
     return (
       <div className={styles.movieCard}>
@@ -35,7 +43,8 @@ function MovieCard(props) {
           //  props.imdbRating(movieId);
         }}
       >
-        <div className={styles.keepTag}></div>
+        {/* add to movie list */}
+        <div className={styles.keepTag} onClick={addList}></div>
         <div className={styles.posterBox}>
           {props.poster_path === null ? (
             // if poster_path was null

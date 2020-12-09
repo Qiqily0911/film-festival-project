@@ -62,6 +62,7 @@ function App() {
   const [vertical, setVertical] = useState(100);
   const [minYear, setMin] = useState(1928);
   const [isScroll, setScroll] = useState(true);
+  const [user, setUser] = useState("");
 
   useEffect(() => {
     const yearList = [];
@@ -247,7 +248,7 @@ function App() {
 
             {/* <Router> */}
             <AuthProvider>
-              <MemberBtn />
+              <MemberBtn setUser={setUser} />
               {/* <Switch>
                   <Route path="./signup" component={MemberBtn} />
                      </Switch> */}
@@ -271,6 +272,7 @@ function App() {
               setVertical={setVertical}
               vertical={vertical}
               isScroll={isScroll}
+              user={user}
             />
             <MovieInfo
               tmdbData={tmdbData}

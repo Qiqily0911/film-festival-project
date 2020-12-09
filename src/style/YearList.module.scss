@@ -3,11 +3,12 @@
 .yearListBox {
   display: flex;
   height: 100%;
-  // width: 70%;
+  width: 100%;
   overflow: scroll;
 
   .yearList {
     height: 100%;
+    width: 100%;
     .yearBox {
       scroll-margin-top: 120px;
       display: flex;
