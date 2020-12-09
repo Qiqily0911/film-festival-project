@@ -135,7 +135,7 @@ function MovieInfo(props) {
           <div
             className={styles.videoBtn}
             onClick={() => {
-              if (props.tmdbVideo.results[0] !== undefined) {
+              if (props.tmdbVideo.results !== undefined) {
                 setOpen(true);
               }
             }}

@@ -2,9 +2,9 @@
 import "./App.scss";
 import styles from "./style/App.module.scss";
 // data json
-import oscar from "./oscar_best_film.json";
-import cannes from "./CannesFilm.json";
-import goldenHorse from "./golden_horse_best_film.json";
+import oscar from "./data/oscar_best_film.json";
+import cannes from "./data/CannesFilm.json";
+import goldenHorse from "./data/golden_horse_best_film.json";
 // components
 import YearList from "./components/YearList";
 import MovieInfo from "./components/MovieInfo";

@@ -737,9 +737,9 @@
     "film": "oscar",
     "prize": "best_film",
     "film_name_zh": null,
-    "film_name_en": "",
-    "atmovie_link": "",
-    "imdb_link": "",
+    "film_name_en": null,
+    "atmovie_link": null,
+    "imdb_link": null,
     "movie_id": null,
     "poster_path": null
   },

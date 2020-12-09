@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import styles from "../style/MovieFilter.module.scss";
 import { nanoid } from "nanoid";
-import oscar from "../oscar_best_film.json";
-import cannes from "../CannesFilm.json";
-import goldenHorse from "../golden_horse_best_film.json";
-import googleIcon from "../image/btn_google_light_normal_ios.svg";
+import oscar from "../data/oscar_best_film.json";
+import cannes from "../data/CannesFilm.json";
+import goldenHorse from "../data/golden_horse_best_film.json";
+import googleIcon from "../image/Google__G__Logo.svg";
 import facebookIcon from "../image/f_logo_RGB-Blue_114.png";
 
 function MovieFilter(props) {
@@ -113,7 +113,9 @@ function MovieFilter(props) {
         <span>請選擇登入方式</span>
         <div>
           <div className={styles.googleLogin} onClick={props.googleSignIn}>
-            <img alt="google-log-in" src={googleIcon} />
+            <div>
+              <img alt="Google-log-in" src={googleIcon} />
+            </div>
             <p>Sign in with Google</p>
           </div>
           <div className={styles.facebookLogin} onClick={props.faceBookSignIn}>
