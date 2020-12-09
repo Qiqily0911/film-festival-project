@@ -30,7 +30,7 @@ function MovieCard(props) {
 
           props.omdbApi(movieId);
           props.renewData(props);
-          //  console.log(e.currentTarget.dataset.id);
+          console.log(e.currentTarget.dataset.id);
           // FIXME: can work but slow
           //  props.imdbRating(movieId);
         }}

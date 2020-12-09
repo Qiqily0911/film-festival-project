@@ -3,6 +3,13 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 
+// TMDb api key
+export const apiKey = "5c27dca1cd4fca2cefc5c8945cfb1974";
+
+// OMDb api key
+export const omdbKey = "1bd03df3";
+
+// firebase config
 const config = {
   apiKey: "AIzaSyBmbHqONy7XHhbAJgi7XI8Zb6xrKcDQ9NM",
   authDomain: "film-db-9936d.firebaseapp.com",
@@ -18,24 +25,43 @@ const firebaseSet = firebase.initializeApp(config);
 export const firebaseAuth = firebase.auth();
 export const firestore = firebaseSet.firestore();
 
+export function createUser(user) {
+  let users = firestore.collection("users");
+
+  users
+    .doc(user.uid)
+    .set(
+      {
+        name: user.displayName,
+        email: user.email,
+        uid: user.uid,
+        like: [],
+        list: "",
+      },
+      { merge: true }
+    )
+    .then(() => {
+      console.log("set data successful");
+    });
+}
+// let ref = firestore.collection("cannes_film").doc("palme_d_or");
+
+// ref.get().then((doc) => {
+//    console.log(doc.data()["1957"]);
+// });
+
 // Google login
 const providerGoogle = new firebase.auth.GoogleAuthProvider();
 providerGoogle.setCustomParameters({
   prompt: "select_account",
 });
-export const googleSignIn = () => firebaseAuth.signInWithPopup(providerGoogle);
-
-// FaceBook login
-var providerFb = new firebase.auth.FacebookAuthProvider();
-export const faceBookSignIn = () =>
+export const googleSignIn = () =>
   firebaseAuth
-    .signInWithPopup(providerFb)
+    .signInWithPopup(providerGoogle)
     .then(function (result) {
-      // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-      var token = result.credential.accessToken;
-      // The signed-in user info.
-      var user = result.user;
-      console.log(token, user.displayName, user.email, user.photoURL);
+      //  var token = result.credential.accessToken; //  Google Access Token
+      var user = result.user; // The signed-in user info.
+      createUser(user);
     })
     .catch(function (error) {
       // Handle Errors here.
@@ -48,8 +74,23 @@ export const faceBookSignIn = () =>
       console.log(errorCode, errorMessage, email, credential);
     });
 
-// TMDb api key
-export const apiKey = "5c27dca1cd4fca2cefc5c8945cfb1974";
-
-// OMDb api key
-export const omdbKey = "1bd03df3";
+// FaceBook login
+var providerFb = new firebase.auth.FacebookAuthProvider();
+export const faceBookSignIn = () =>
+  firebaseAuth
+    .signInWithPopup(providerFb)
+    .then(function (result) {
+      //  var token = result.credential.accessToken; // Facebook Access Token
+      var user = result.user; // The signed-in user info.
+      createUser(user);
+    })
+    .catch(function (error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      // The email of the user's account used.
+      var email = error.email;
+      // The firebase.auth.AuthCredential type that was used.
+      var credential = error.credential;
+      console.log(errorCode, errorMessage, email, credential);
+    });

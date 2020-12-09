@@ -1,5 +1,4 @@
 // style
-// import "./App.scss";
 import styles from "./style/App.module.scss";
 // data json
 import oscar from "./data/oscar_best_film.json";
@@ -13,13 +12,7 @@ import MemberBtn from "./components/MemberBtn";
 import ControlSilder from "./components/ControlSlider";
 import React, { useState, useEffect } from "react";
 //config and firebase
-import {
-  apiKey,
-  omdbKey,
-  googleSignIn,
-  faceBookSignIn,
-  firestore,
-} from "./config";
+import { apiKey, omdbKey, firestore } from "./config";
 import { AuthProvider } from "./contexts/AuthContexts";
 
 // import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
@@ -254,13 +247,10 @@ function App() {
 
             {/* <Router> */}
             <AuthProvider>
-              <MemberBtn
-                googleSignIn={googleSignIn}
-                faceBookSignIn={faceBookSignIn}
-              />
+              <MemberBtn />
               {/* <Switch>
-                           <Route path="./signup" component={MemberBtn} />
-                        </Switch> */}
+                  <Route path="./signup" component={MemberBtn} />
+                     </Switch> */}
             </AuthProvider>
             {/* </Router> */}
           </div>

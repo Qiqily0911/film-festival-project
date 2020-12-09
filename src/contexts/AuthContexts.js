@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { firebaseAuth } from "../config";
+import { firebaseAuth, firestore } from "../config";
 
 const AuthContext = React.createContext();
 export function useAuth() {
@@ -10,7 +10,26 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   function signup(email, password) {
-    return firebaseAuth.createUserWithEmailAndPassword(email, password);
+    return firebaseAuth
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        firestore
+          .collection("users")
+          .doc(firebaseAuth.currentUser.uid)
+          .set(
+            {
+              name: "",
+              email: firebaseAuth.currentUser.email,
+              uid: firebaseAuth.currentUser.uid,
+              like: [],
+              list: "",
+            },
+            { merge: true }
+          )
+          .then(() => {
+            console.log("set data successful");
+          });
+      });
   }
 
   function login(email, password) {

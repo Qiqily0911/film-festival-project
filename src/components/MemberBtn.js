@@ -1,11 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../style/MemberBtn.module.scss";
-import Signup from "./Signup";
 import Login from "./Login";
+import { useAuth } from "../contexts/AuthContexts";
 
 function MemberBtn(props) {
+  const { logout, currentUser } = useAuth();
   const [isOpen, setOpen] = useState(false);
-  const [isLogin, setLogin] = useState(true);
+  const [isLogin, setLogin] = useState(false);
+  const [error, setError] = useState("");
+
+  async function handleLogout() {
+    setError("");
+    try {
+      await logout();
+    } catch {
+      setError("Failed to log out");
+    }
+  }
+
+  useEffect(() => {
+    if (currentUser) {
+      setLogin(true);
+    } else {
+      setLogin(false);
+    }
+  }, [currentUser]);
+
+  const logedIn = (
+    <div>
+      {currentUser && currentUser.email}
+      {error && <div>{error}</div>}
+      <button onClick={handleLogout}>Log Out</button>
+    </div>
+  );
 
   const loginDiv = (
     <div className={styles.loginDiv}>
@@ -13,13 +40,10 @@ function MemberBtn(props) {
         <div className={styles.loginClose} onClick={() => setOpen(false)}>
           ×
         </div>
-        <span>想收藏喜歡的電影嗎？</span>
-        <span> 請選擇登入方式</span>
         {isLogin ? (
-          <Login setLogin={setLogin} />
+          logedIn
         ) : (
-          <Signup
-            setLogin={setLogin}
+          <Login
             googleSignIn={props.googleSignIn}
             faceBookSignIn={props.faceBookSignIn}
           />

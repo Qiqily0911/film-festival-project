@@ -6,20 +6,21 @@ import clock from "../image/clock.png";
 function MovieInfo(props) {
   const [videoSrc, setvideoSrc] = useState("");
 
-  const [castList, setCastList] = useState("");
+  const [creditsList, setCreditsList] = useState("");
   const [isOpen, setOpen] = useState(false);
   const [imageList, setImageList] = useState("");
 
   let movieId = props.localData.movie_id;
   let videoPath = props.tmdbVideo.results;
   let images = props.tmdbImages;
-  let casts = props.tmdbCredits.cast;
+  let credits = props.tmdbCredits;
+  // let crews = props.tmdbCredits.crew;
 
   useEffect(() => {
     if (
       videoPath !== undefined &&
       images !== undefined &&
-      casts !== undefined
+      credits !== undefined
     ) {
       if (videoPath[0] !== undefined) {
         // FIXME: content_security_policy setting
@@ -29,8 +30,8 @@ function MovieInfo(props) {
         setvideoSrc(" ");
       }
 
-      if (casts[0] !== undefined) {
-        setCastList(casts);
+      if (credits.id !== undefined) {
+        setCreditsList(credits);
       }
 
       if (images.backdrops !== undefined) {
@@ -49,19 +50,50 @@ function MovieInfo(props) {
     props.tmdbImages,
     props.tmdbCredits,
     movieId,
-    casts,
+    credits,
     images,
     videoPath,
   ]);
 
+  function director() {
+    let arr = creditsList["crew"].filter((person) => person.job === "Director");
+    let person = arr[0];
+
+    return (
+      <div
+        className={styles.castPic}
+        key={person.credit_id}
+        data-creditid={person.id}
+        onClick={(e) => console.log(e.currentTarget.dataset.creditid)}
+      >
+        {person.profile_path ? (
+          <img
+            alt="profile"
+            src={`https://image.tmdb.org/t/p/w154${person.profile_path}`}
+          />
+        ) : (
+          <div className={styles.noPic}>not found</div>
+        )}
+
+        <p> {person.name}</p>
+      </div>
+    );
+  }
+
   // show casts
   const castBox = (
     <div className={styles.castBox}>
-      {castList
-        ? castList
-            .filter((person) => person.order <= 6)
+      {creditsList ? director() : ""}
+      {creditsList
+        ? creditsList["cast"]
+            .filter((person) => person.order <= 5)
             .map((person) => (
-              <div className={styles.castPic} key={person.credit_id}>
+              <div
+                className={styles.castPic}
+                key={person.credit_id}
+                data-creditid={person.id}
+                onClick={(e) => console.log(e.currentTarget.dataset.creditid)}
+              >
                 {person.profile_path ? (
                   // <a href={`https://api.themoviedb.org/3/person/${person.id}/movie_credits?api_key=5c27dca1cd4fca2cefc5c8945cfb1974`} >
                   <img
@@ -204,16 +236,17 @@ function MovieInfo(props) {
           </a>
         </div>
         {props.tmdbData
-          ? props.tmdbData.production_countries[0].iso_3166_1
+          ? props.tmdbData.production_countries.map((country) => (
+              <div key={nanoid()}>{country.iso_3166_1}</div>
+            ))
           : ""}
-        <div>
-          {props.tmdbData ? props.tmdbData.production_countries[0].name : ""}
-        </div>
+        {/* <div>{props.tmdbData ? props.tmdbData.production_countries[0].name : ""}</div> */}
         <div className={styles.overview}>{props.tmdbData.overview} </div>
       </div>
       {/* --------------- casts -------------- */}
       <div className={styles.castOutter}>
         <span className={styles.title}>Cast</span>
+
         {castBox}
       </div>
     </div>
