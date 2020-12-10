@@ -1,26 +1,26 @@
 import React from "react";
 import styles from "../style/MovieCard.module.scss";
+// import { firestore } from "../config";
 
 function MovieCard(props) {
-  function ordinalSuffix(i) {
-    var j = i % 10,
-      k = i % 100;
-    if (j === 1 && k !== 11) {
-      return i + "st";
-    }
-    if (j === 2 && k !== 12) {
-      return i + "nd";
-    }
-    if (j === 3 && k !== 13) {
-      return i + "rd";
-    }
-    return i + "th";
+  function addList(e) {
+    e.preventDefault();
+    console.log(props.user);
+    // let users = firestore.collection("users");
+    // users.where("uid", "==");
   }
 
   if (props.prize === null) {
     return (
-      <div className={styles.noData}>
-        <div className={styles.posterBox}></div>not found
+      <div className={styles.movieCard}>
+        <div className={styles.posterBox}>
+          <div className={styles.notFound}></div>
+        </div>
+        <div className={styles.basicInfo}>
+          <div>
+            <div className={styles.titleZh}>No Data</div>
+          </div>
+        </div>
       </div>
     );
   } else {
@@ -28,7 +28,8 @@ function MovieCard(props) {
       <div
         className={styles.movieCard}
         key={props.movie_id}
-        onClick={() => {
+        data-id={props.movie_id}
+        onClick={(e) => {
           let movieId = props.movie_id;
           props.tmdbApi("", movieId);
           props.tmdbApi("/videos", movieId);
@@ -37,10 +38,13 @@ function MovieCard(props) {
 
           props.omdbApi(movieId);
           props.renewData(props);
+          console.log(e.currentTarget.dataset.id);
           // FIXME: can work but slow
           //  props.imdbRating(movieId);
         }}
       >
+        {/* add to movie list */}
+        <div className={styles.keepTag} onClick={addList}></div>
         <div className={styles.posterBox}>
           {props.poster_path === null ? (
             // if poster_path was null

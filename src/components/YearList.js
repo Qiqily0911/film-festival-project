@@ -23,6 +23,7 @@ function YearList(props) {
             {yearbox.list.map((data) => {
               return (
                 <MovieCard
+                  user={props.user}
                   renewData={props.renewData}
                   tmdbApi={props.tmdbApi}
                   omdbApi={props.omdbApi}

@@ -1,24 +1,26 @@
 // style
-import "./App.scss";
 import styles from "./style/App.module.scss";
 // data json
-import oscar from "./oscar_best_film.json";
-import cannes from "./CannesFilm.json";
-import goldenHorse from "./golden_horse_best_film.json";
+import oscar from "./data/oscar_best_film.json";
+import cannes from "./data/CannesFilm.json";
+import goldenHorse from "./data/golden_horse_best_film.json";
 // components
 import YearList from "./components/YearList";
 import MovieInfo from "./components/MovieInfo";
 import MovieFilter from "./components/MovieFilter";
+import MemberBtn from "./components/MemberBtn";
 import ControlSilder from "./components/ControlSlider";
 import React, { useState, useEffect } from "react";
-// import firebase from "firebase";
-import { config, apiKey, omdbKey } from "./config";
-import "firebase/firestore";
+//config and firebase
+import { apiKey, omdbKey, firestore } from "./config";
+import { AuthProvider } from "./contexts/AuthContexts";
 
-// firebase.initializeApp(config);
+// import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+// import * as firebase from "firebase";
+// import "firebase/auth";
+// import "firebase/firestore";
 
 function App() {
-  //  const db = firebase.firestore();
   const initListState = [
     {
       title: "奧斯卡金像獎",
@@ -56,9 +58,11 @@ function App() {
   const [filmList, setFilmList] = useState("");
   const [prize, setPrize] = useState("");
 
+  // init control-slider
   const [vertical, setVertical] = useState(100);
   const [minYear, setMin] = useState(1928);
   const [isScroll, setScroll] = useState(true);
+  const [user, setUser] = useState("");
 
   useEffect(() => {
     const yearList = [];
@@ -202,27 +206,21 @@ function App() {
     xhr.send();
   }
 
-  //  get movie id & data
-  //  function readData() {
-  //     console.log(value);
-  //     let ref = db.collection("cannes_film").doc("palme_d_or");
+  // TODO: user login and Firebase
+  function readData() {
+    let ref = firestore.collection("cannes_film").doc("palme_d_or");
 
-  //     ref.get().then((doc) => {
-  //        setData(doc.data()[value]);
-  //        let movieId = posterData["movie_id"];
-  //        console.log(movieId);
-  //        tmdbApi(movieId);
-  //        console.log("OK");
-  //        setTitleZh(posterData["film_name_zh"]);
-  //        setTitleEn(posterData["film_name_en"]);
-  //     });
-  //  }
-  // console.log(listState);
+    ref.get().then((doc) => {
+      console.log(doc.data()["1957"]);
+    });
+  }
 
   return (
     <div className={styles.outter}>
       <aside>
-        <div className={styles.logo}>LOGO</div>
+        <div className={styles.logo} onClick={readData}>
+          LOGO
+        </div>
 
         <ControlSilder
           vertical={vertical}
@@ -235,17 +233,29 @@ function App() {
       </aside>
       <main>
         <div className={styles.container}>
-          <MovieFilter
-            filmList={filmList}
-            setFilmList={setFilmList}
-            prize={prize}
-            setPrize={setPrize}
-            yearlist={list}
-            yearListRefs={yearListRefs}
-            listState={listState}
-            setlistState={setlistState}
-            setVertical={setVertical}
-          />
+          <div className={styles.navbar}>
+            <MovieFilter
+              filmList={filmList}
+              setFilmList={setFilmList}
+              prize={prize}
+              setPrize={setPrize}
+              yearlist={list}
+              yearListRefs={yearListRefs}
+              listState={listState}
+              setlistState={setlistState}
+              setVertical={setVertical}
+            />
+
+            {/* <Router> */}
+            <AuthProvider>
+              <MemberBtn setUser={setUser} />
+              {/* <Switch>
+                  <Route path="./signup" component={MemberBtn} />
+                     </Switch> */}
+            </AuthProvider>
+            {/* </Router> */}
+          </div>
+
           <div className={styles.subContainer}>
             <YearList
               prize={prize}
@@ -262,6 +272,7 @@ function App() {
               setVertical={setVertical}
               vertical={vertical}
               isScroll={isScroll}
+              user={user}
             />
             <MovieInfo
               tmdbData={tmdbData}

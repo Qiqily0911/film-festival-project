@@ -11,20 +11,23 @@
 }
 
 .movieFilter {
-  display: flex;
-  //  justify-content: space-between;
-  position: fixed;
-  top: 0;
-  // border: 1px solid red;
-  width: 100%;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
-    rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
-  height: 100px;
-  //  padding: 10px;
-  background-color: white;
+  // display: flex;
+  // justify-content: space-between;
+  // //  position: fixed;
+  // //  top: 0;
+  // //  right: 0;
+  // width: 100%;
+  // box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
+  //   rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+  // height: 100px;
+  // //  padding: 10px;
+  // background-color: white;
+  // //  border: 1px solid purple;
 
   .titleBox {
+    margin: 0 20px;
     display: flex;
+    // border: 1px solid red;
   }
   .fesTitle {
     position: relative;
@@ -54,7 +57,8 @@
     .option {
       position: absolute;
       top: 120px;
-      //  padding: 10px 0;
+      z-index: 5;
+
       //  border: 1px solid orange;
       .subBtn {
         // border: 1px solid orange;
@@ -77,18 +81,6 @@
       button:focus {
         outline: none;
       }
-    }
-  }
-
-  .loginBtn {
-    position: fixed;
-    top: 30px;
-    right: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    svg {
-      fill: $color-blue;
     }
   }
 }
