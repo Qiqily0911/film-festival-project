@@ -62,7 +62,9 @@ function App() {
   const [vertical, setVertical] = useState(100);
   const [minYear, setMin] = useState(1928);
   const [isScroll, setScroll] = useState(true);
-  const [user, setUser] = useState("");
+
+  // get uid
+  const [userId, setUserId] = useState();
 
   useEffect(() => {
     const yearList = [];
@@ -77,10 +79,7 @@ function App() {
       acc[value.year] = React.createRef();
       return acc;
     }, {});
-
-    // console.log(refs);
     setRefs(refs);
-
     listState.map((list) =>
       fillYearList(yearList, list.film_list, list.prize, list.order)
     );
@@ -230,6 +229,8 @@ function App() {
           setScroll={setScroll}
           isScroll={isScroll}
         />
+        {/* {console.log("=========== [01] control slider")} */}
+        {/* {console.log(userId)} */}
       </aside>
       <main>
         <div className={styles.container}>
@@ -245,18 +246,20 @@ function App() {
               setlistState={setlistState}
               setVertical={setVertical}
             />
+            {/* {console.log("[02] filter")} */}
 
             {/* <Router> */}
             <AuthProvider>
-              <MemberBtn setUser={setUser} />
-              {/* <Switch>
+              <MemberBtn setUserId={setUserId} />
+            </AuthProvider>
+            {/* <Switch>
                   <Route path="./signup" component={MemberBtn} />
                      </Switch> */}
-            </AuthProvider>
+
             {/* </Router> */}
           </div>
-
           <div className={styles.subContainer}>
+            {/* {console.log("------- [03] year list start------")} */}
             <YearList
               prize={prize}
               tmdbApi={tmdbApi}
@@ -272,8 +275,9 @@ function App() {
               setVertical={setVertical}
               vertical={vertical}
               isScroll={isScroll}
-              user={user}
+              userId={userId}
             />
+            {/* {console.log("------- [03] year list end------")} */}
             <MovieInfo
               tmdbData={tmdbData}
               tmdbVideo={tmdbVideo}
