@@ -35,8 +35,7 @@ export function createUser(user) {
         name: user.displayName,
         email: user.email,
         uid: user.uid,
-        like: [],
-        list: "",
+        list: [],
       },
       { merge: true }
     )

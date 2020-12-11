@@ -21,7 +21,6 @@ export function AuthProvider({ children }) {
               name: "",
               email: firebaseAuth.currentUser.email,
               uid: firebaseAuth.currentUser.uid,
-              like: [],
               list: "",
             },
             { merge: true }
@@ -44,6 +43,7 @@ export function AuthProvider({ children }) {
     const unsubscribe = firebaseAuth.onAuthStateChanged((user) => {
       setCurrentUser(user);
       setLoading(false);
+      console.log("-- [06] set current user--");
     });
 
     return unsubscribe;

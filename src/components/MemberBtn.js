@@ -13,6 +13,7 @@ function MemberBtn(props) {
     setError("");
     try {
       await logout();
+      props.setUserId("");
     } catch {
       setError("Failed to log out");
     }
@@ -20,16 +21,16 @@ function MemberBtn(props) {
 
   useEffect(() => {
     if (currentUser) {
-      props.setUser(currentUser);
       setLogin(true);
     } else {
       setLogin(false);
     }
-  }, [currentUser]);
+  }, [currentUser, props]);
 
   const logedIn = (
     <div>
-      {currentUser && currentUser.email}
+      {currentUser && props.setUserId(currentUser.uid)}
+      {currentUser && <div>{currentUser.email}</div>}
       {error && <div>{error}</div>}
       <button onClick={handleLogout}>Log Out</button>
     </div>
@@ -41,6 +42,10 @@ function MemberBtn(props) {
         <div className={styles.loginClose} onClick={() => setOpen(false)}>
           ×
         </div>
+        {/* index.js:1 Warning: Cannot update a component (`App`) while rendering a different component 
+            (`MemberBtn`). To locate the bad setState() call inside `MemberBtn`, follow the stack trace 
+            as described in https://reactjs.org/link/setstate-in-render */}
+
         {isLogin ? (
           logedIn
         ) : (
@@ -55,6 +60,7 @@ function MemberBtn(props) {
 
   return (
     <div className={styles.loginOutter}>
+      {/* {console.log("[05] memberBtn")} */}
       <div className={styles.loginIcon} onClick={() => setOpen(true)}>
         <svg
           id="login"

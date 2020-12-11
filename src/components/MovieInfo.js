@@ -14,7 +14,6 @@ function MovieInfo(props) {
   let videoPath = props.tmdbVideo.results;
   let images = props.tmdbImages;
   let credits = props.tmdbCredits;
-  // let crews = props.tmdbCredits.crew;
 
   useEffect(() => {
     if (
@@ -137,6 +136,7 @@ function MovieInfo(props) {
   }
   const content = (
     <div>
+      {/* {console.log("[04] movie info")} */}
       <div className={styles.imageBox}>
         {imageList !== "" ? (
           imageList.map((path) => (

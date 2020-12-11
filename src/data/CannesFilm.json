@@ -472,17 +472,7 @@
     "movie_id": "tt0055601",
     "poster_path": "/yFnUCrPY3ffjkqOkOupLro3sO7X.jpg"
   },
-  {
-    "th": 73,
-    "year": 2020,
-    "prize": "palme_d_or",
-    "film_name_zh": null,
-    "film_name_en": null,
-    "atmovie_link": "",
-    "imdb_link": "",
-    "movie_id": null,
-    "poster_path": null
-  },
+
   {
     "th": 72,
     "year": 2019,
@@ -834,17 +824,6 @@
     "imdb_link": "https://www.imdb.com/title/tt0456149",
     "movie_id": "tt0456149",
     "poster_path": "/3AUpoPT3y4SjzAJRTdXEwDbS0FA.jpg"
-  },
-  {
-    "th": 73,
-    "year": 2020,
-    "prize": "un_certain_regard",
-    "film_name_zh": null,
-    "film_name_en": null,
-    "atmovie_link": "",
-    "imdb_link": "",
-    "movie_id": null,
-    "poster_path": null
   },
   {
     "th": 72,
