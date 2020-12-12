@@ -1,4 +1,4 @@
-import oscar from "./golden_horse_best_film.json";
+import oscar from "./oscar_best_film.json";
 import cannes from "./CannesFilm.json";
 import goldenHorse from "./golden_horse_best_film.json";
 

@@ -10,7 +10,7 @@ function ControlSilder(props) {
     setRefs(props.yearListRefs);
   }, [props.yearListRefs]);
 
-  function abc() {
+  function handleChangeStart() {
     props.setScroll(false);
   }
   function handleChangeVertical(value) {
@@ -47,7 +47,7 @@ function ControlSilder(props) {
         labels={verticalLabels}
         handleLabel={formatPc(props.vertical)}
         format={formatPc}
-        onChangeStart={abc}
+        onChangeStart={handleChangeStart}
         onChange={handleChangeVertical}
         onChangeComplete={handleScroll}
       />
