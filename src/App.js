@@ -1,9 +1,8 @@
 // style
 import styles from "./style/App.module.scss";
 // data json
-import oscar from "./data/oscar_best_film.json";
-import cannes from "./data/CannesFilm.json";
-import goldenHorse from "./data/golden_horse_best_film.json";
+import { InitListState } from "./data/BtnData";
+
 // components
 import YearList from "./components/YearList";
 import MovieInfo from "./components/MovieInfo";
@@ -21,29 +20,6 @@ import { AuthProvider } from "./contexts/AuthContexts";
 // import "firebase/firestore";
 
 function App() {
-  const initListState = [
-    {
-      title: "奧斯卡金像獎",
-      prize_name: "Best Film",
-      film_list: oscar,
-      prize: "best_film",
-      order: 0,
-    },
-    {
-      title: "坎城影展",
-      prize_name: "Palme d'Or",
-      film_list: cannes,
-      prize: "palme_d_or",
-      order: 1,
-    },
-    {
-      title: "金馬影展",
-      prize_name: "Best Film",
-      film_list: goldenHorse,
-      prize: "best_film",
-      order: 2,
-    },
-  ];
   const [tmdbData, setData] = useState("");
   const [tmdbVideo, setVideo] = useState("");
   const [tmdbImages, setImages] = useState("");
@@ -54,7 +30,7 @@ function App() {
 
   const [list, setList] = useState([]);
   const [yearListRefs, setRefs] = useState("");
-  const [listState, setlistState] = useState(initListState);
+  const [listState, setlistState] = useState(InitListState);
   const [filmList, setFilmList] = useState("");
   const [prize, setPrize] = useState("");
 
@@ -239,15 +215,15 @@ function App() {
               userId={userId}
             />
             {/* {console.log("------- [03] year list end------")} */}
-            {/* <MovieInfo
-                     tmdbData={tmdbData}
-                     tmdbVideo={tmdbVideo}
-                     tmdbImages={tmdbImages}
-                     tmdbCredits={tmdbCredits}
-                     localData={localData}
-                     omdbData={omdbData}
-                     imdbSpan={imdbSpan}
-                  /> */}
+            <MovieInfo
+              tmdbData={tmdbData}
+              tmdbVideo={tmdbVideo}
+              tmdbImages={tmdbImages}
+              tmdbCredits={tmdbCredits}
+              localData={localData}
+              omdbData={omdbData}
+              imdbSpan={imdbSpan}
+            />
           </div>
         </div>
       </main>

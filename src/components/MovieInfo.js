@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "../style/MovieInfo.module.scss";
 import { nanoid } from "nanoid";
 import clock from "../image/clock.png";
+// import Flags from "svg-country-flags";
 
 function MovieInfo(props) {
   const [videoSrc, setvideoSrc] = useState("");
@@ -176,12 +177,10 @@ function MovieInfo(props) {
 
           <div className={styles.keep}>加入清單</div>
         </div>
-
         <div className={styles.title}>
           <p>{props.tmdbData.title}</p>
           <p>{props.localData.film_name_zh}</p>
         </div>
-
         <div className={styles.linkBox}>
           {/* --------------- trailer -------------- */}
           <div
@@ -235,12 +234,22 @@ function MovieInfo(props) {
             開眼電影
           </a>
         </div>
-        {props.tmdbData
-          ? props.tmdbData.production_countries.map((country) => (
-              <div key={nanoid()}>{country.iso_3166_1}</div>
-            ))
-          : ""}
-        {/* <div>{props.tmdbData ? props.tmdbData.production_countries[0].name : ""}</div> */}
+        <div className={styles.flag}>
+          {props.tmdbData
+            ? props.tmdbData.production_countries.slice(0, 5).map((country) => (
+                <div key={nanoid()}>
+                  <img
+                    alt="flag"
+                    src={
+                      require(`../data/png100px/${country.iso_3166_1.toLowerCase()}.png`)
+                        .default
+                    }
+                  />
+                </div>
+              ))
+            : ""}
+          {/* <div>{props.tmdbData ? props.tmdbData.production_countries[0].name : ""}</div> */}
+        </div>{" "}
         <div className={styles.overview}>{props.tmdbData.overview} </div>
       </div>
       {/* --------------- casts -------------- */}
