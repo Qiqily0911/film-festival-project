@@ -58,48 +58,35 @@ function MovieFilter(props) {
     },
   };
 
-  //  render main button
-  const mainBtn = mainBtnData.map((data) => (
-    <button
-      key={nanoid()}
-      type="button"
-      value={data.value}
-      onClick={selectFilmList}
-    >
-      {data.btnText}
-    </button>
-  ));
-
-  const arr = [];
-  let count = 3 - props.listState.length;
-  for (let i = 1; i <= count; i++) {
-    let subBtn = subBtnVal["index-" + i];
-
-    arr.push(
-      <div className={styles.fesTitle}>
-        <div className={styles.addBtn}>+</div>
-        <span>選擇影展及獎項</span>
-        <div className={styles.option}>
-          {mainBtn}
-          <div className={styles.subBtn} name={"index-" + i}>
-            {subBtn === ""
-              ? null
-              : subBtnData[subBtn].arr.map((data) => (
-                  <button
-                    key={nanoid()}
-                    type="button"
-                    onClick={selectPrize}
-                    value={data.subBtnValue}
-                    data-title={subBtnData[subBtn].title}
-                  >
-                    {data.subBtnText}
-                  </button>
-                ))}
-          </div>
+  const selection = (
+    <div className={styles.option}>
+      {mainBtnData.map((data, i) => (
+        <div key={i}>
+          <button type="button" value={data.value} onClick={selectFilmList}>
+            {data.btnText}
+          </button>
+          <div data-sub={data.value}></div>
         </div>
-      </div>
-    );
-  }
+      ))}
+      {/* <div className={styles.subBtn}> */}
+      {/* FIXME 改寫filter btn */}
+      {/* <div className={styles.subBtn} name={"index-" + i}> */}
+      {/* {subBtn === ""
+               ? null
+               : subBtnData[subBtn].arr.map((data) => (
+                    <button
+                       key={nanoid()}
+                       type="button"
+                       onClick={selectPrize}
+                       value={data.subBtnValue}
+                       data-title={subBtnData[subBtn].title}
+                    >
+                       {data.subBtnText}
+                    </button>
+                 ))} */}
+      {/* </div> */}
+    </div>
+  );
 
   // 選擇影展，並設定影展值（filmList）
   function selectFilmList(e) {
@@ -180,42 +167,42 @@ function MovieFilter(props) {
     let order = Number(e.target.dataset.order);
     let arr = [...props.listState];
 
-    if (order === 0) {
-      if (arr.length === 1) {
-        arr.splice(order, 1);
-        props.setlistState(arr);
-        return;
-      } else {
-        arr[1].order = 0;
-        if (arr.length === 3) {
-          arr[2].order = 1;
-        }
-      }
-    } else if (order === 1) {
-      if (arr.length === 3) {
-        arr[2].order = 1;
-      }
-    }
-    props.setVertical(100);
-    arr.splice(order, 1);
+    arr[order] = { film_list: undefined, order: order };
+
+    // props.setVertical(100);
     props.setlistState(arr);
+    console.log(props.listState);
   }
 
-  const title = props.listState.map((data) => (
-    <div className={styles.fesTitle} key={nanoid()}>
-      <div className={styles.closeBtn} onClick={close} data-order={data.order}>
-        ×
-      </div>
-      <span>{data.title}</span>
-      <span>{data.prize_name}</span>
+  const title = props.listState.map((data, i) => (
+    <div className={styles.fesTitle} key={i}>
+      {data.film_list !== undefined ? (
+        <div>
+          <div
+            className={styles.closeBtn}
+            onClick={close}
+            data-order={data.order}
+          >
+            ×
+          </div>
+          <span>{data.title}</span>
+          <span>{data.prize_name}</span>
+        </div>
+      ) : (
+        <div>
+          <div className={styles.closeBtn} data-order={data.order}>
+            ×
+          </div>
+          <span>選擇影展及獎項</span>
+          {selection}
+        </div>
+      )}
     </div>
   ));
 
   return (
     <div className={styles.movieFilter}>
-      <div className={styles.titleBox}>
-        {title} {arr}
-      </div>
+      <div className={styles.titleBox}>{title}</div>
     </div>
   );
 }

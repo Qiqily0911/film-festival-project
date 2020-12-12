@@ -68,9 +68,9 @@ function App() {
 
   useEffect(() => {
     const yearList = [];
-    //  根據 listStae 去把 yearList 給做出來
+    //  根據 listState 去把 yearList 給做出來
     for (let i = 2020; i >= 1928; i--) {
-      let item = { year: i, list: [] };
+      let item = { year: i, list: [[], [], []] };
       yearList.push(item);
     }
 
@@ -79,62 +79,34 @@ function App() {
       acc[value.year] = React.createRef();
       return acc;
     }, {});
+
     setRefs(refs);
     listState.map((list) =>
       fillYearList(yearList, list.film_list, list.prize, list.order)
     );
-
-    // console.log(yearList);
     setList(yearList);
   }, [listState]);
 
   // put movies to the correspondense year box
   function fillYearList(yearList, fes, prize, order) {
-    let data = fes.filter((obj) => obj.prize === prize);
+    if (fes !== undefined) {
+      let data = fes.filter((obj) => obj.prize === prize);
 
-    if (order === 0) {
       yearList.forEach((yearbox) => {
+        let box = yearbox.list[order];
+
         data.forEach((item) => {
           if (item.year === yearbox.year) {
-            let filmPrize = [];
-
-            // if one more movies won prize at the same year
-            if (yearbox.list.length !== 0) {
-              yearbox.list[0].push(item);
-            } else {
-              filmPrize.push(item);
-              yearbox.list.push(filmPrize);
-            }
+            box.push(item);
           }
         });
-
-        // if the year don't have movie, set prize:null
-        if (yearbox.list.length === 0) {
-          let filmPrize = [{ prize: null }];
-          yearbox.list.push(filmPrize);
+        if (box.length === 0) {
+          box.push({ prize: null });
         }
       });
     } else {
       yearList.forEach((yearbox) => {
-        data.forEach((item) => {
-          if (item.year === yearbox.year) {
-            let filmPrize = [];
-
-            // if one more movies won prize at the same year
-            if (yearbox.list.length > order) {
-              yearbox.list[order].push(item);
-            } else {
-              filmPrize.push(item);
-              yearbox.list.push(filmPrize);
-            }
-          }
-        });
-
-        // if the year don't have movie, set prize:null
-        if (yearbox.list.length === order) {
-          let filmPrize = [{ prize: null }];
-          yearbox.list.push(filmPrize);
-        }
+        yearbox.list[order].push({ prize: null });
       });
     }
   }
@@ -205,21 +177,10 @@ function App() {
     xhr.send();
   }
 
-  // TODO: user login and Firebase
-  function readData() {
-    let ref = firestore.collection("cannes_film").doc("palme_d_or");
-
-    ref.get().then((doc) => {
-      console.log(doc.data()["1957"]);
-    });
-  }
-
   return (
     <div className={styles.outter}>
       <aside>
-        <div className={styles.logo} onClick={readData}>
-          LOGO
-        </div>
+        <div className={styles.logo}>LOGO</div>
 
         <ControlSilder
           vertical={vertical}
@@ -230,7 +191,6 @@ function App() {
           isScroll={isScroll}
         />
         {/* {console.log("=========== [01] control slider")} */}
-        {/* {console.log(userId)} */}
       </aside>
       <main>
         <div className={styles.container}>
@@ -246,7 +206,6 @@ function App() {
               setlistState={setlistState}
               setVertical={setVertical}
             />
-            {/* {console.log("[02] filter")} */}
 
             {/* <Router> */}
             <AuthProvider>
@@ -278,15 +237,15 @@ function App() {
               userId={userId}
             />
             {/* {console.log("------- [03] year list end------")} */}
-            <MovieInfo
-              tmdbData={tmdbData}
-              tmdbVideo={tmdbVideo}
-              tmdbImages={tmdbImages}
-              tmdbCredits={tmdbCredits}
-              localData={localData}
-              omdbData={omdbData}
-              imdbSpan={imdbSpan}
-            />
+            {/* <MovieInfo
+                     tmdbData={tmdbData}
+                     tmdbVideo={tmdbVideo}
+                     tmdbImages={tmdbImages}
+                     tmdbCredits={tmdbCredits}
+                     localData={localData}
+                     omdbData={omdbData}
+                     imdbSpan={imdbSpan}
+                  /> */}
           </div>
         </div>
       </main>

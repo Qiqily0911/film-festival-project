@@ -4,24 +4,6 @@ import { firestore } from "../config";
 const movieLiked = firestore.collection("movie_liked");
 
 function MovieCard(props) {
-  // console.log(props.likedList);
-
-  // 讀取該使用者已收藏的電影，並放入陣列 arr
-  // let arr = [];
-  // movieLiked
-  //    .where("user", "==", props.userId)
-  //    .get()
-  //    .then((movie) => {
-  //       movie.forEach((doc) => {
-  //          arr.push(doc.data());
-  //          console.log(doc.data());
-  //       });
-  //    })
-  //    .then(() => {
-  //       cancelLiked(e, arr);
-  //       console.log("OK");
-  //    });
-
   // 加入收藏，在firestore加入資料
   function addLiked(e) {
     console.log(e.currentTarget.dataset["id"]);
