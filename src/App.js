@@ -37,7 +37,7 @@ function App() {
       order: 1,
     },
     {
-      title: "金馬獎",
+      title: "金馬影展",
       prize_name: "Best Film",
       film_list: goldenHorse,
       prize: "best_film",
@@ -85,6 +85,8 @@ function App() {
       fillYearList(yearList, list.film_list, list.prize, list.order)
     );
     setList(yearList);
+
+    console.log(listState);
   }, [listState]);
 
   // put movies to the correspondense year box

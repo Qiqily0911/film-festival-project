@@ -1,166 +1,82 @@
 import React, { useState } from "react";
 import styles from "../style/MovieFilter.module.scss";
-import { nanoid } from "nanoid";
-import oscar from "../data/oscar_best_film.json";
-import cannes from "../data/CannesFilm.json";
-import goldenHorse from "../data/golden_horse_best_film.json";
+import { BtnData } from "../data/BtnData";
 
 function MovieFilter(props) {
-  const [subBtnVal, setSubBtnVal] = useState({
-    "index-1": "",
-    "index-2": "",
-    "index-3": "",
-  });
+  // const [subBtnVal, setSubBtnVal] = useState({
+  //    "index-1": "",
+  //    "index-2": "",
+  //    "index-3": "",
+  // });
 
-  // 主要按鈕
-  const mainBtnData = [
-    {
-      value: "cannes",
-      btnText: "坎城影展",
-    },
-    {
-      value: "oscar",
-      btnText: "奧斯卡金像獎",
-    },
-    {
-      value: "goldenHorse",
-      btnText: "金馬影展",
-    },
-  ];
-
-  const subBtnData = {
-    cannes: {
-      source: cannes,
-      title: "坎城影展",
-      arr: [
-        { subBtnValue: "palme_d_or", subBtnText: "Palme d'Or" },
-        {
-          subBtnValue: "un_certain_regard",
-          subBtnText: "Un Certain Regard",
-        },
-      ],
-    },
-    oscar: {
-      source: oscar,
-      title: "奧斯卡金像獎",
-      arr: [{ subBtnValue: "best_film", subBtnText: "Best Film" }],
-    },
-    goldenHorse: {
-      source: goldenHorse,
-      title: "金馬獎",
-      arr: [
-        { subBtnValue: "best_film", subBtnText: "Best Film" },
-        {
-          subBtnValue: "best_actress",
-          subBtnText: "Best actress",
-        },
-      ],
-    },
-  };
+  // const [isSubOpen, setSubOpen] = useState({
+  //    "order-0": "",
+  //    "order-1": "",
+  //    "order-2": "",
+  // });
 
   const selection = (
     <div className={styles.option}>
-      {mainBtnData.map((data, i) => (
-        <div key={i}>
-          <button type="button" value={data.value} onClick={selectFilmList}>
+      {BtnData.map((data, i) => (
+        <div key={i} name={"index-" + i}>
+          <button type="button" onClick={selectFilmList}>
             {data.btnText}
           </button>
-          <div data-sub={data.value}></div>
+
+          <div className={styles.subBtn} data-order={i}>
+            {data.arr.map((subBtn, j) => (
+              <button
+                key={j}
+                type="button"
+                onClick={selectPrize}
+                data-order={j}
+              >
+                {subBtn.subBtnText}
+              </button>
+            ))}
+          </div>
         </div>
       ))}
-      {/* <div className={styles.subBtn}> */}
-      {/* FIXME 改寫filter btn */}
-      {/* <div className={styles.subBtn} name={"index-" + i}> */}
-      {/* {subBtn === ""
-               ? null
-               : subBtnData[subBtn].arr.map((data) => (
-                    <button
-                       key={nanoid()}
-                       type="button"
-                       onClick={selectPrize}
-                       value={data.subBtnValue}
-                       data-title={subBtnData[subBtn].title}
-                    >
-                       {data.subBtnText}
-                    </button>
-                 ))} */}
-      {/* </div> */}
     </div>
   );
 
-  // 選擇影展，並設定影展值（filmList）
+  // TODO: 選擇影展，展開subBtn選項
   function selectFilmList(e) {
-    // let btn = e.currentTarget;
-    // btn.classList.add(styles.currentBtn);
-    // console.log(btn);
-    let btnValue = e.target.value;
-    let subBtnBox = e.target.parentElement.lastChild;
-    let name = subBtnBox.getAttribute("name");
-
-    // 按鈕切換
-    switch (btnValue) {
-      case "cannes":
-        setSubBtnVal({
-          ...subBtnVal,
-          [name]: "cannes",
-        });
-        break;
-
-      case "oscar":
-        setSubBtnVal({
-          ...subBtnVal,
-          [name]: "oscar",
-        });
-        break;
-
-      case "goldenHorse":
-        setSubBtnVal({
-          ...subBtnVal,
-          [name]: "goldenHorse",
-        });
-        break;
-
-      default:
-        setSubBtnVal({
-          ...subBtnVal,
-          [name]: "",
-        });
-    }
-
-    props.setFilmList(subBtnData[btnValue].source);
+    let btnValue = e.target;
+    console.log(btnValue);
   }
 
-  // 選擇獎項，並設定獎項值（prize）
+  // 設定影展和獎項
   function selectPrize(e) {
-    let btnValue = e.target.value;
+    let num1 = Number(e.target.parentNode.dataset.order);
+    let num2 = Number(e.target.dataset.order);
+    let order = Number(e.nativeEvent.path[4].dataset.order);
 
-    // 若filmList、prize不為空值，將當前值傳入obj，並push進listState 裡
-    if (props.filmList !== "") {
-      let btnSelect = {
-        title: e.target.dataset.title,
-        prize_name: e.target.innerText,
-        film_list: props.filmList,
-        prize: btnValue,
-        order: props.yearlist[0].list.length,
-      };
+    let btnSelect = {
+      title: BtnData[num1].btnText,
+      prize_name: BtnData[num1].arr[num2].subBtnText,
+      film_list: BtnData[num1].value,
+      prize: BtnData[num1].arr[num2].subBtnValue,
+      order: order,
+    };
 
-      //若 listState 中超過三個清單，則不加入 listState
-      if (props.listState.length < 3) {
-        const newListState = [...props.listState, btnSelect];
-        props.setlistState(newListState);
+    let arr = [...props.listState];
+
+    // 選不同獎項
+    for (let i = 0; i < props.listState.length; i++) {
+      if (props.listState[i].film_list !== undefined) {
+        if (btnSelect.title === props.listState[i].title) {
+          if (btnSelect.prize === props.listState[i].prize) {
+            alert("選過囉");
+            return;
+          }
+        }
       }
-      // reset btn value
-      props.setFilmList("");
     }
 
-    let subBtnBox = e.target.parentElement;
-    let name = subBtnBox.getAttribute("name");
-
-    // 關掉獎項按鈕
-    setSubBtnVal({
-      ...subBtnVal,
-      [name]: "",
-    });
+    arr[order] = btnSelect;
+    props.setlistState(arr);
+    props.setVertical(100);
   }
 
   function close(e) {
@@ -169,9 +85,8 @@ function MovieFilter(props) {
 
     arr[order] = { film_list: undefined, order: order };
 
-    // props.setVertical(100);
     props.setlistState(arr);
-    console.log(props.listState);
+    props.setVertical(100);
   }
 
   const title = props.listState.map((data, i) => (
@@ -189,10 +104,8 @@ function MovieFilter(props) {
           <span>{data.prize_name}</span>
         </div>
       ) : (
-        <div>
-          <div className={styles.closeBtn} data-order={data.order}>
-            ×
-          </div>
+        <div data-order={data.order}>
+          <div className={styles.closeBtn}>×</div>
           <span>選擇影展及獎項</span>
           {selection}
         </div>
@@ -208,3 +121,36 @@ function MovieFilter(props) {
 }
 
 export default MovieFilter;
+
+//  let name = subBtnBox.getAttribute("name");
+
+//  switch (btnValue) {
+//    case "cannes":
+//      setSubBtnVal({
+//        ...subBtnVal,
+//        [name]: "cannes",
+//      });
+//      break;
+
+//    case "oscar":
+//      setSubBtnVal({
+//        ...subBtnVal,
+//        [name]: "oscar",
+//      });
+//      break;
+
+//    case "goldenHorse":
+//      setSubBtnVal({
+//        ...subBtnVal,
+//        [name]: "goldenHorse",
+//      });
+//      break;
+
+//    default:
+//      setSubBtnVal({
+//        ...subBtnVal,
+//        [name]: "",
+//      });
+//  }
+
+//  props.setFilmList(subBtnData[btnValue].source);

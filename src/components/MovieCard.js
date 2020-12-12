@@ -54,14 +54,7 @@ function MovieCard(props) {
   console.log("--render all movie cards--");
   const notFound = (
     <div className={styles.movieCard}>
-      <div className={styles.posterBox}>
-        <div className={styles.notFound}></div>
-      </div>
-      <div className={styles.basicInfo}>
-        <div>
-          <div className={styles.titleZh}>No Data</div>
-        </div>
-      </div>
+      <div className={styles.notFound}></div>
     </div>
   );
 
