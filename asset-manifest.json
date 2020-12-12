@@ -1,25 +1,26 @@
 {
   "files": {
-    "main.css": "/film-festival-project/static/css/main.933d7b36.chunk.css",
-    "main.js": "/film-festival-project/static/js/main.da22a902.chunk.js",
-    "main.js.map": "/film-festival-project/static/js/main.da22a902.chunk.js.map",
-    "runtime-main.js": "/film-festival-project/static/js/runtime-main.75ae104e.js",
-    "runtime-main.js.map": "/film-festival-project/static/js/runtime-main.75ae104e.js.map",
-    "static/css/2.c38e9a40.chunk.css": "/film-festival-project/static/css/2.c38e9a40.chunk.css",
-    "static/js/2.f72195fc.chunk.js": "/film-festival-project/static/js/2.f72195fc.chunk.js",
-    "static/js/2.f72195fc.chunk.js.map": "/film-festival-project/static/js/2.f72195fc.chunk.js.map",
-    "static/js/3.13eba717.chunk.js": "/film-festival-project/static/js/3.13eba717.chunk.js",
-    "static/js/3.13eba717.chunk.js.map": "/film-festival-project/static/js/3.13eba717.chunk.js.map",
+    "main.css": "/film-festival-project/static/css/main.e4fe2f14.chunk.css",
+    "main.js": "/film-festival-project/static/js/main.2957f447.chunk.js",
+    "main.js.map": "/film-festival-project/static/js/main.2957f447.chunk.js.map",
+    "runtime-main.js": "/film-festival-project/static/js/runtime-main.907c9543.js",
+    "runtime-main.js.map": "/film-festival-project/static/js/runtime-main.907c9543.js.map",
+    "static/css/2.ecb290ec.chunk.css": "/film-festival-project/static/css/2.ecb290ec.chunk.css",
+    "static/js/2.71a48ef9.chunk.js": "/film-festival-project/static/js/2.71a48ef9.chunk.js",
+    "static/js/2.71a48ef9.chunk.js.map": "/film-festival-project/static/js/2.71a48ef9.chunk.js.map",
+    "static/js/3.6e4beae6.chunk.js": "/film-festival-project/static/js/3.6e4beae6.chunk.js",
+    "static/js/3.6e4beae6.chunk.js.map": "/film-festival-project/static/js/3.6e4beae6.chunk.js.map",
     "index.html": "/film-festival-project/index.html",
-    "static/css/2.c38e9a40.chunk.css.map": "/film-festival-project/static/css/2.c38e9a40.chunk.css.map",
-    "static/css/main.933d7b36.chunk.css.map": "/film-festival-project/static/css/main.933d7b36.chunk.css.map",
-    "static/js/2.f72195fc.chunk.js.LICENSE.txt": "/film-festival-project/static/js/2.f72195fc.chunk.js.LICENSE.txt"
+    "static/css/2.ecb290ec.chunk.css.map": "/film-festival-project/static/css/2.ecb290ec.chunk.css.map",
+    "static/css/main.e4fe2f14.chunk.css.map": "/film-festival-project/static/css/main.e4fe2f14.chunk.css.map",
+    "static/js/2.71a48ef9.chunk.js.LICENSE.txt": "/film-festival-project/static/js/2.71a48ef9.chunk.js.LICENSE.txt",
+    "static/media/Google__G__Logo.3cec7ff9.svg": "/film-festival-project/static/media/Google__G__Logo.3cec7ff9.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.75ae104e.js",
-    "static/css/2.c38e9a40.chunk.css",
-    "static/js/2.f72195fc.chunk.js",
-    "static/css/main.933d7b36.chunk.css",
-    "static/js/main.da22a902.chunk.js"
+    "static/js/runtime-main.907c9543.js",
+    "static/css/2.ecb290ec.chunk.css",
+    "static/js/2.71a48ef9.chunk.js",
+    "static/css/main.e4fe2f14.chunk.css",
+    "static/js/main.2957f447.chunk.js"
   ]
 }
