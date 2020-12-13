@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import styles from "../style/MovieInfo.module.scss";
 import { nanoid } from "nanoid";
 import clock from "../image/clock.png";
-// import Flags from "svg-country-flags";
+// import countryName from "../data/countries.json";
 
 function MovieInfo(props) {
   const [videoSrc, setvideoSrc] = useState("");
-
   const [creditsList, setCreditsList] = useState("");
   const [isOpen, setOpen] = useState(false);
   const [imageList, setImageList] = useState("");
@@ -234,10 +233,12 @@ function MovieInfo(props) {
             開眼電影
           </a>
         </div>
+        {/* --------- flags -------------- */}
         <div className={styles.flag}>
           {props.tmdbData
             ? props.tmdbData.production_countries.slice(0, 5).map((country) => (
-                <div key={nanoid()}>
+                <div className={styles.tooltip} key={nanoid()}>
+                  <span className={styles.tooltiptext}>{country.name}</span>
                   <img
                     alt="flag"
                     src={
@@ -250,6 +251,7 @@ function MovieInfo(props) {
             : ""}
           {/* <div>{props.tmdbData ? props.tmdbData.production_countries[0].name : ""}</div> */}
         </div>{" "}
+        {/* --------- flags -------------- */}
         <div className={styles.overview}>{props.tmdbData.overview} </div>
       </div>
       {/* --------------- casts -------------- */}

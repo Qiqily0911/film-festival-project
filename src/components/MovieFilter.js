@@ -3,22 +3,12 @@ import styles from "../style/MovieFilter.module.scss";
 import { BtnData } from "../data/BtnData";
 
 function MovieFilter(props) {
-  const [pressedPrize, setPressed] = useState(false);
   const [subBtnVal, setSubBtnVal] = useState({
     "index-1": "",
     "index-2": "",
     "index-3": "",
   });
 
-  // const [isSubOpen, setSubOpen] = useState({
-  //    "order-0": "",
-  //    "order-1": "",
-  //    "order-2": "",
-  // });
-
-  // getAttribute("name"
-
-  // TODO: 選擇影展，展開subBtn選項
   function selectFilmList(e) {
     let btnValue = e.target.value;
     let name = e.nativeEvent.path[3].getAttribute("name");
@@ -30,8 +20,6 @@ function MovieFilter(props) {
     });
 
     console.log(subBtnVal);
-
-    // setSubBtnVal(btnValue);
   }
 
   // 設定影展和獎項
