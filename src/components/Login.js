@@ -44,44 +44,51 @@ function Login() {
   }
 
   const loginDiv = (
-    <div>
-      <span>想收藏喜歡的電影嗎？ 登入會員</span>
-      <div className={styles.loginBtn} onClick={googleSignIn}>
-        <div className={styles.loginLogo}>
-          <img alt="Google-log-in" src={googleIcon} />
-        </div>
-        <p>Log in with Google</p>
+    <div className={styles.container}>
+      <div className={styles.side}>
+        <span>會員登入</span>
       </div>
-      <div className={styles.loginBtn} onClick={faceBookSignIn}>
-        <div className={styles.loginLogo}>
-          <img alt="Facebook-log-in" src={facebookIcon} />
-        </div>
-        <p>Log in with FaceBook</p>
-      </div>
-      <div>
-        {/* ======== native sign-in ========*/}
-        <div className={styles.abc}>
-          {error && <div>{error}</div>}
-          <p>{currentUser && currentUser.email}</p>
-        </div>
-        <form onSubmit={handleSubmit}>
-          <div id="email">
-            <label>Email</label>
-            <input type="email" ref={emailRef} required />
-          </div>
-          <div id="password">
-            <label>Password</label>
-            <input type="password" ref={passwordRef} required />
-          </div>
 
-          <button disabled={loading} type={"submit"}>
-            Log In
-          </button>
-        </form>
+      <div className={styles.main}>
+        <div className={styles.loginBtn} onClick={googleSignIn}>
+          <div className={styles.loginLogo}>
+            <img alt="Google-log-in" src={googleIcon} />
+          </div>
+          <p>Log in with Google</p>
+        </div>
+        <div className={styles.loginBtn} onClick={faceBookSignIn}>
+          <div className={styles.loginLogo}>
+            <img alt="Facebook-log-in" src={facebookIcon} />
+          </div>
+          <p>Log in with FaceBook</p>
+        </div>
+        <div className={styles.nativeSignIn}>
+          {/* ======== native sign-in ========*/}
+          <div className={styles.abc}>
+            {error && <div>{error}</div>}
+            <p>{currentUser && currentUser.email}</p>
+          </div>
+          <form onSubmit={handleSubmit}>
+            <div id="email">
+              <label>Email</label>
+              <br />
+              <input type="email" ref={emailRef} required />
+            </div>
+            <div id="password">
+              <label>Password</label>
+              <br />
+              <input type="password" ref={passwordRef} required />
+            </div>
 
-        {/* ======== native sign-in ========*/}
+            <button disabled={loading} type={"submit"}>
+              Log In
+            </button>
+          </form>
+
+          {/* ======== native sign-in ========*/}
+        </div>
+        <button onClick={() => setSignup(false)}> 沒有帳號？註冊會員</button>
       </div>
-      <button onClick={() => setSignup(false)}> 沒有帳號？註冊會員</button>
     </div>
   );
 
@@ -114,7 +121,11 @@ function Login() {
     </div>
   );
 
-  return <div>{!currentUser && isSignup ? loginDiv : nativeSignUp}</div>;
+  return (
+    <div className={styles.inner}>
+      {!currentUser && isSignup ? loginDiv : nativeSignUp}
+    </div>
+  );
 }
 
 export default Login;

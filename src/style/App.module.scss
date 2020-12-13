@@ -46,6 +46,7 @@
   main {
     width: 100%;
     .navbar {
+      padding: 0 40px;
       display: flex;
       justify-content: space-between;
       width: 100%;
@@ -61,7 +62,7 @@
       overflow: hidden;
 
       .subContainer {
-        margin: 0 20px;
+        padding: 0 40px;
         // padding: 20px 10px;
         overflow: hidden;
         width: 100%;

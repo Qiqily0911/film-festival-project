@@ -1,13 +1,14 @@
 @import "./Default.scss";
-
-.movieCard {
-  position: relative;
-
-  cursor: pointer;
+@mixin card {
   width: 180px;
   margin: 15px 20px;
-  // padding: 10px;
+}
+
+.movieCard {
+  cursor: pointer;
+  position: relative;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  @include card;
 
   .posterBox {
     width: 180px;
@@ -15,33 +16,27 @@
     overflow: hidden;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
 
-    .notFound {
-      //  border: 1px solid red;
-      background-color: $color-gray;
-      opacity: 0.3;
-      width: 100%;
-      height: 100%;
-      display: flex;
-    }
-
     img {
       width: 100%;
       height: 100%;
     }
+    .noPoster {
+      @include centerPosition;
+      width: 100%;
+      height: 100%;
+      background-color: rgb(240, 240, 240);
+      p {
+        color: white;
+      }
+    }
   }
 
   .basicInfo {
+    @include centerPosition;
     padding: 10px;
     height: 90px;
     width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     text-align: center;
-
-    // div {
-    //    margin-bottom: 5px;
-    // }
 
     .th {
       position: absolute;
@@ -63,23 +58,19 @@
   }
 
   .keepTag {
+    // @include shadow;
+    filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.3));
     position: absolute;
     width: 0;
     height: 0;
     border-style: solid;
-    border-width: 0 30px 30px 0;
+    border-width: 0 35px 35px 0;
     border-color: transparent #00000050 transparent transparent;
-    // width: 30px;
-    // height: 25px;
-    top: -5px;
-    right: -5px;
+    top: 0px;
+    right: 0px;
     // border-radius: 50%;
     // background-color: rgba(0, 0, 0, 0.3);
     // opacity: 0.3;
-  }
-
-  .keepTag:hover {
-    border-color: transparent #d6c80150 transparent transparent;
   }
 
   .noData {
@@ -96,4 +87,11 @@
       box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
     }
   }
+}
+
+.notFound {
+  @include card;
+  border: 2px dashed rgb(224, 224, 224);
+  background-color: rgb(240, 240, 240);
+  //  padding: 10px;
 }

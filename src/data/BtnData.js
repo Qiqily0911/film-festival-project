@@ -1,6 +1,17 @@
+// import React, { Component } from "react";
 import oscar from "./oscar_best_film.json";
 import cannes from "./CannesFilm.json";
 import goldenHorse from "./golden_horse_best_film.json";
+
+// import { ReactComponent as OscarLogo } from "./logo/oscar_logo.svg";
+// import { ReactComponent as CannesLogo } from "./logo/Cannes_logo.svg";
+// import { ReactComponent as BerlinLogo } from "./logo/Berlin_logo.svg";
+// import { ReactComponent as GoldenHorseLogo } from "./logo/Golden_Horse.svg";
+
+import OscarLogo from "./logo/oscar_logo.png";
+import CannesLogo from "./logo/Cannes_logo.png";
+import BerlinLogo from "./logo/Berlin_logo.png";
+import GoldenHorseLogo from "./logo/Golden_Horse.png";
 
 export const InitListState = [
   {
@@ -8,6 +19,7 @@ export const InitListState = [
     prize_name: "Best Film",
     film_list: oscar,
     prize: "best_film",
+    logo: OscarLogo,
     order: 0,
   },
   {
@@ -15,6 +27,7 @@ export const InitListState = [
     prize_name: "Palme d'Or",
     film_list: cannes,
     prize: "palme_d_or",
+    logo: CannesLogo,
     order: 1,
   },
   {
@@ -22,6 +35,7 @@ export const InitListState = [
     prize_name: "Best Film",
     film_list: goldenHorse,
     prize: "best_film",
+    logo: GoldenHorseLogo,
     order: 2,
   },
 ];
@@ -30,11 +44,11 @@ export const BtnData = [
   {
     btnText: "坎城影展",
     value: cannes,
+    logo: CannesLogo,
     arr: [
       { subBtnValue: "palme_d_or", subBtnText: "Palme d'Or" },
       {
         subBtnValue: "un_certain_regard",
-
         subBtnText: "Un Certain Regard",
       },
     ],
@@ -42,14 +56,22 @@ export const BtnData = [
   {
     btnText: "奧斯卡金像獎",
     value: oscar,
+    logo: OscarLogo,
     arr: [{ subBtnValue: "best_film", subBtnText: "Best Film" }],
   },
   {
     btnText: "金馬影展",
     value: goldenHorse,
+    logo: GoldenHorseLogo,
     arr: [
       { subBtnValue: "best_film", subBtnText: "Best Film" },
       { subBtnValue: "best_actress", subBtnText: "Best Actress" },
     ],
+  },
+  {
+    btnText: "柏林影展",
+    value: "",
+    logo: BerlinLogo,
+    arr: [{ subBtnValue: "best_film", subBtnText: "Best Film" }],
   },
 ];

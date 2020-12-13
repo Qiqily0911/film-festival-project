@@ -24,6 +24,8 @@ function App() {
   const [tmdbVideo, setVideo] = useState("");
   const [tmdbImages, setImages] = useState("");
   const [tmdbCredits, setCredits] = useState("");
+  const [tmdbCrew, setCrew] = useState("");
+  const [tmdbPerson, setPerson] = useState("");
   const [localData, renewData] = useState("");
   const [omdbData, setomdbData] = useState("");
   const [imdbSpan, setRating] = useState("");
@@ -37,6 +39,7 @@ function App() {
   // init control-slider
   const [vertical, setVertical] = useState(100);
   const [minYear, setMin] = useState(1928);
+  const [maxYear, setMax] = useState(2020);
   const [isScroll, setScroll] = useState(true);
 
   // get uid
@@ -63,6 +66,17 @@ function App() {
     setList(yearList);
 
     console.log(listState);
+    // prevent scroll event when no film list
+    for (let i = 0; i < listState.length; i++) {
+      if (listState[i].film_list !== undefined) {
+        console.log("scroll");
+        setScroll(true);
+        return;
+      }
+    }
+
+    setScroll(false);
+    console.log("can't scroll");
   }, [listState]);
 
   // put movies to the correspondense year box
@@ -116,6 +130,30 @@ function App() {
       });
   }
 
+  //  get tmdb crew detail
+  function tmdbCrewApi(type, personId) {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open(
+        "GET",
+        `https://api.themoviedb.org/3/person/${personId}${type}?api_key=${apiKey}`
+      );
+
+      xhr.onload = () => resolve(xhr.responseText);
+      xhr.onerror = () => reject(xhr.statusText);
+      xhr.send();
+    })
+      .then((response) => JSON.parse(response))
+      .then((data) => {
+        if (type === "") {
+          console.log(data);
+          setPerson(data);
+        } else if (type === "/movie_credits") {
+          setCrew(data);
+        }
+      });
+  }
+
   //  get get imdb rating from omdb APi
   function omdbApi(movie_id) {
     const xhr = new XMLHttpRequest();
@@ -165,6 +203,7 @@ function App() {
           setVertical={setVertical}
           yearListRefs={yearListRefs}
           minYear={minYear}
+          maxYear={maxYear}
           setScroll={setScroll}
           isScroll={isScroll}
         />
@@ -183,6 +222,7 @@ function App() {
               listState={listState}
               setlistState={setlistState}
               setVertical={setVertical}
+              setScroll={setScroll}
             />
 
             {/* <Router> */}
@@ -209,6 +249,8 @@ function App() {
               setlistState={setlistState}
               setMin={setMin}
               minYear={minYear}
+              setMax={setMax}
+              maxYear={maxYear}
               setVertical={setVertical}
               vertical={vertical}
               isScroll={isScroll}
@@ -223,6 +265,10 @@ function App() {
               localData={localData}
               omdbData={omdbData}
               imdbSpan={imdbSpan}
+              tmdbCrewApi={tmdbCrewApi}
+              setCrew={setCrew}
+              tmdbCrew={tmdbCrew}
+              tmdbPerson={tmdbPerson}
             />
           </div>
         </div>

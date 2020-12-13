@@ -77,24 +77,32 @@ function YearList(props) {
     // find the min year of yearList
     if (props.listState.length !== 0) {
       for (let i = showYearList.length; i > 0; i--) {
-        if (showYearList[i] !== undefined) {
-          if (showYearList[i] !== null) {
-            let min = showYearList[i].props["data-index"];
-
-            props.setMin(min);
-            break;
-          }
+        if (showYearList[i] !== undefined && showYearList[i] !== null) {
+          let min = showYearList[i].props["data-index"];
+          props.setMin(min);
+          break;
         }
       }
     }
+
+    // find the max year of yearList
+    if (props.listState.length !== 0) {
+      for (let i = 0; i < showYearList.length; i++) {
+        if (showYearList[i] !== undefined && showYearList[i] !== null) {
+          let max = showYearList[i].props["data-index"];
+          props.setMax(max);
+          break;
+        }
+      }
+    }
+
     setShowList(showYearList);
   }, [props.yearlist, props.userId, likedList]);
 
   // 偵測滾動事件，並改變滑桿數值
   function detect() {
     if (props.isScroll) {
-      // console.log(props.isScroll);
-      let a = 2020 - props.minYear + 1;
+      let a = props.maxYear - props.minYear + 1;
       let b = props.yearListRefs[props.minYear].current.getBoundingClientRect();
       let c = a * b.height;
       let d = Math.floor(((b.bottom - 100) / c) * 100);

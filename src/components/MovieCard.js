@@ -52,11 +52,7 @@ function MovieCard(props) {
   }
 
   console.log("--render all movie cards--");
-  const notFound = (
-    <div className={styles.movieCard}>
-      <div className={styles.notFound}></div>
-    </div>
-  );
+  const notFound = <div className={styles.notFound}></div>;
 
   const hasCard = (
     <div
@@ -93,10 +89,10 @@ function MovieCard(props) {
       )}
 
       <div className={styles.posterBox}>
-        {props.poster_path === null ? (
+        {props.poster_path === null || props.poster_path === undefined ? (
           // if poster_path was null
-          <div className={styles.notFound}>
-            <p>poster not found</p>
+          <div className={styles.noPoster}>
+            <p>Poster not found</p>
           </div>
         ) : (
           // if data has poster_path, then render the picture

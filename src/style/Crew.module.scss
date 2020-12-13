@@ -1,0 +1,20 @@
+@import "./Default.scss";
+.crewDiv {
+  @include blackMask;
+  .crewBox {
+    position: relative;
+    width: 70%;
+    height: 70%;
+    background-color: white;
+    margin: auto;
+    flex-direction: column;
+    @include centerPosition;
+    .closeBtn {
+      @include closeBtnStyle;
+    }
+    .text {
+      color: gray;
+      overflow: scroll;
+    }
+  }
+}

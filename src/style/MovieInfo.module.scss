@@ -3,7 +3,7 @@
 .movieInfo {
   position: fixed;
   top: 120px;
-  bottom: 10px;
+  bottom: 20px;
   right: 0;
   width: 450px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
@@ -33,9 +33,7 @@
       width: 100%;
       margin: auto 0;
       //  height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      @include centerPosition;
     }
   }
 
@@ -101,38 +99,20 @@
         opacity: 0.3;
       }
       .videoDiv {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        @include blackMask;
 
         div {
           position: relative;
 
           .closeBtn {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            color: $color-white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 24px;
-            background-color: rgb(0, 0, 0);
-            cursor: pointer;
+            @include closeBtnStyle;
           }
         }
       }
     }
 
     .flag {
-      margin: 10px;
+      margin: 10px 10px 10px 0;
       display: flex;
 
       .tooltip:hover .tooltiptext {
@@ -178,29 +158,33 @@
       color: $color-gray;
     }
   }
-  .castOutter {
+  .crew {
     background-color: $color-blue;
     padding: 20px;
     color: white;
-    .title {
-      font-size: 18px;
-      font-weight: 500;
-      //  margin: 10px 0;
-    }
-    .castBox {
-      margin-top: 10px;
+
+    .outter {
       display: flex;
       overflow: scroll;
+      .title {
+        font-size: 18px;
+        font-weight: 500;
+        //  margin: 10px 0;
+      }
+      .castBox {
+        margin-top: 10px;
+        display: flex;
 
-      //  .castPic {
-      //     // margin: 5px;
-      //     // width: 100px;
-      //  }
+        //  .castPic {
+        //     // margin: 5px;
+        //     // width: 100px;
+        //  }
 
-      p {
-        margin: 5px;
-        text-align: center;
-        font-size: 14px;
+        p {
+          margin: 5px;
+          text-align: center;
+          font-size: 14px;
+        }
       }
     }
   }

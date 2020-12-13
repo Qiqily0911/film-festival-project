@@ -32,16 +32,19 @@ function ControlSilder(props) {
 
   const verticalLabels = {
     0: props.minYear,
-    100: 2020,
+    100: props.maxYear,
   };
 
   const formatPc = (p) =>
-    Math.floor(p * ((2020 - props.minYear) / 100) + props.minYear).toString();
+    Math.floor(
+      p * ((props.maxYear - props.minYear) / 100) + props.minYear
+    ).toString();
 
   return (
     <div className={styles.slider}>
-      <div className={styles.yearText}>2020</div>
+      <div className={styles.yearText}>{props.maxYear}</div>
       <Slider
+        //   FIXME: fix when listState===undefined can't grab the slider
         value={props.vertical}
         orientation="vertical"
         labels={verticalLabels}

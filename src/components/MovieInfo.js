@@ -2,13 +2,16 @@ import React, { useState, useEffect } from "react";
 import styles from "../style/MovieInfo.module.scss";
 import { nanoid } from "nanoid";
 import clock from "../image/clock.png";
+import Crew from "./Crew";
 // import countryName from "../data/countries.json";
 
 function MovieInfo(props) {
   const [videoSrc, setvideoSrc] = useState("");
   const [creditsList, setCreditsList] = useState("");
-  const [isOpen, setOpen] = useState(false);
+
   const [imageList, setImageList] = useState("");
+  const [isVideoOpen, setVideoOpen] = useState(false);
+  const [isCrewOpen, setCrewOpen] = useState(false);
 
   let movieId = props.localData.movie_id;
   let videoPath = props.tmdbVideo.results;
@@ -54,35 +57,44 @@ function MovieInfo(props) {
     videoPath,
   ]);
 
-  function director() {
+  const director = () => {
     let arr = creditsList["crew"].filter((person) => person.job === "Director");
     let person = arr[0];
+    let id = person.id;
 
     return (
-      <div
-        className={styles.castPic}
-        key={person.credit_id}
-        data-creditid={person.id}
-        onClick={(e) => console.log(e.currentTarget.dataset.creditid)}
-      >
-        {person.profile_path ? (
-          <img
-            alt="profile"
-            src={`https://image.tmdb.org/t/p/w154${person.profile_path}`}
-          />
-        ) : (
-          <div className={styles.noPic}>not found</div>
-        )}
+      <div className={styles.castBox}>
+        <div
+          className={styles.castPic}
+          key={person.credit_id}
+          data-creditid={id}
+          onClick={() => {
+            //  console.log(person.credit_id);
+            console.log(id);
+            props.tmdbCrewApi("/movie_credits", id);
+            props.tmdbCrewApi("", id);
+            setCrewOpen(true);
+          }}
+        >
+          {person.profile_path ? (
+            <img
+              alt="profile"
+              src={`https://image.tmdb.org/t/p/w154${person.profile_path}`}
+            />
+          ) : (
+            <div className={styles.noPic}>not found</div>
+          )}
 
-        <p> {person.name}</p>
+          <p> {person.name}</p>
+        </div>
       </div>
     );
-  }
+  };
 
   // show casts
   const castBox = (
     <div className={styles.castBox}>
-      {creditsList ? director() : ""}
+      {/* {creditsList ? director() : ""} */}
       {creditsList
         ? creditsList["cast"]
             .filter((person) => person.order <= 5)
@@ -91,7 +103,13 @@ function MovieInfo(props) {
                 className={styles.castPic}
                 key={person.credit_id}
                 data-creditid={person.id}
-                onClick={(e) => console.log(e.currentTarget.dataset.creditid)}
+                onClick={() => {
+                  console.log(person);
+                  console.log(person.id);
+                  props.tmdbCrewApi("/movie_credits", person.id);
+                  props.tmdbCrewApi("", person.id);
+                  setCrewOpen(true);
+                }}
               >
                 {person.profile_path ? (
                   // <a href={`https://api.themoviedb.org/3/person/${person.id}/movie_credits?api_key=5c27dca1cd4fca2cefc5c8945cfb1974`} >
@@ -112,7 +130,7 @@ function MovieInfo(props) {
 
   //  let btn = e.currentTarget;
   //  if (props.tmdbVideo.results[0] !== undefined) {
-  //     setOpen(true);
+  //     setVideoOpen(true);
   //     if (btn.className.includes(`${styles.noVideo}`)) {
   //        btn.classList.toggle(`${styles.noVideo}`);
   //     }
@@ -148,7 +166,7 @@ function MovieInfo(props) {
           ))
         ) : (
           <div className={styles.notFound}>
-            <p>poster not found</p>
+            <p>Poster not found</p>
           </div>
         )}
       </div>
@@ -163,15 +181,17 @@ function MovieInfo(props) {
             {/* --------------- rating -------------- */}
             <div className={styles.rating}>
               {/* <span>{props.imdbSpan[0]} /10</span>
-               <span>{props.imdbSpan[1]} votes</span> */}
+                      <span>{props.imdbSpan[1]} votes</span> */}
 
               <span>{props.omdbData.imdbRating} /10</span>
               <span>{props.omdbData.imdbVotes} votes</span>
+
               <div>
                 <img src={clock} alt="clock" />
                 {props.tmdbData.runtime} min
               </div>
             </div>
+            {/* --------------- rating -------------- */}
           </div>
 
           <div className={styles.keep}>加入清單</div>
@@ -186,7 +206,7 @@ function MovieInfo(props) {
             className={styles.videoBtn}
             onClick={() => {
               if (props.tmdbVideo.results !== undefined) {
-                setOpen(true);
+                setVideoOpen(true);
               }
             }}
           >
@@ -194,11 +214,14 @@ function MovieInfo(props) {
           </div>
 
           {/* --------------- trailer iframe -------------- */}
-          {isOpen ? (
+          {isVideoOpen ? (
             <div className={styles.videoDiv}>
               <div>
-                <div className={styles.closeBtn} onClick={() => setOpen(false)}>
-                  x
+                <div
+                  className={styles.closeBtn}
+                  onClick={() => setVideoOpen(false)}
+                >
+                  ×
                 </div>
                 <iframe
                   title="trailer"
@@ -235,7 +258,7 @@ function MovieInfo(props) {
         </div>
         {/* --------- flags -------------- */}
         <div className={styles.flag}>
-          {props.tmdbData
+          {props.tmdbData && props.tmdbData.production_countries !== undefined
             ? props.tmdbData.production_countries.slice(0, 5).map((country) => (
                 <div className={styles.tooltip} key={nanoid()}>
                   <span className={styles.tooltiptext}>{country.name}</span>
@@ -255,10 +278,26 @@ function MovieInfo(props) {
         <div className={styles.overview}>{props.tmdbData.overview} </div>
       </div>
       {/* --------------- casts -------------- */}
-      <div className={styles.castOutter}>
-        <span className={styles.title}>Cast</span>
-
-        {castBox}
+      <div className={styles.crew}>
+        <div className={styles.outter}>
+          <div>
+            <span className={styles.title}>Director</span>
+            {creditsList ? director() : ""}
+          </div>
+          <div>
+            <span className={styles.title}>Cast</span>
+            {castBox}
+          </div>
+          {isCrewOpen ? (
+            <Crew
+              setCrewOpen={setCrewOpen}
+              tmdbCrew={props.tmdbCrew}
+              tmdbPerson={props.tmdbPerson}
+            />
+          ) : (
+            ""
+          )}
+        </div>
       </div>
     </div>
   );
