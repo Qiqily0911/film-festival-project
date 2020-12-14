@@ -27,8 +27,8 @@
   }
   .loginBox {
     position: relative;
-    width: 50%;
-    height: 50%;
+    width: 800px;
+    height: 500px;
     background-color: white;
     margin: auto;
     flex-direction: column;
@@ -60,7 +60,7 @@
           .loginBtn {
             box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px;
             margin: 10px;
-            width: 280px;
+            width: 300px;
             padding: 10px 25px;
             display: flex;
             align-items: center;
@@ -86,8 +86,37 @@
           .nativeSignIn {
             box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px;
             margin: 10px;
-            width: 280px;
+            width: 300px;
             padding: 10px 25px;
+
+            form {
+              //  display: flex;
+              //  flex-direction: column;
+              label {
+                color: $color-gray;
+                font-size: 14px;
+              }
+              input {
+                width: 100%;
+                height: 30px;
+                outline: 0;
+                border-width: 0 0 1px;
+                border-color: $color-gray;
+                margin-bottom: 10px;
+              }
+              input:focus {
+                border-color: $color-gold;
+              }
+            }
+          }
+
+          .switchBtn {
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px;
+            margin: 10px;
+            width: 300px;
+            padding: 10px 25px;
+            background-color: $color-blue;
+            color: white;
           }
         }
       }
@@ -100,8 +129,9 @@
 }
 
 button {
+  width: 100%;
   border: 0;
-  border-radius: 0.25rem;
+  //  border-radius: 0.25rem;
   background: none;
   color: $color-blue;
   font-size: 16px;

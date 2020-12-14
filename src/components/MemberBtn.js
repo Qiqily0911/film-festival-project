@@ -60,7 +60,8 @@ function MemberBtn(props) {
 
   return (
     <div className={styles.loginOutter}>
-      {/* {console.log("[05] memberBtn")} */}
+      {console.log(currentUser)}
+      {currentUser && <div>{currentUser.email}</div>}
       <div className={styles.loginIcon} onClick={() => setOpen(true)}>
         <svg
           id="login"

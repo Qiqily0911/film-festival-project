@@ -6,6 +6,7 @@ import { useAuth } from "../contexts/AuthContexts";
 import { googleSignIn, faceBookSignIn } from "../config";
 
 function Login() {
+  const nameRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
@@ -36,7 +37,11 @@ function Login() {
     try {
       setError("");
       setLoading(true);
-      await signup(emailRef.current.value, passwordRef.current.value);
+      await signup(
+        emailRef.current.value,
+        passwordRef.current.value,
+        nameRef.current.value
+      );
     } catch {
       return setError("Failed to create an account");
     }
@@ -87,37 +92,57 @@ function Login() {
 
           {/* ======== native sign-in ========*/}
         </div>
-        <button onClick={() => setSignup(false)}> 沒有帳號？註冊會員</button>
+        <button className={styles.switchBtn} onClick={() => setSignup(false)}>
+          {" "}
+          沒有帳號？註冊會員
+        </button>
       </div>
     </div>
   );
 
   const nativeSignUp = (
-    <div>
-      <span>註冊會員</span>
+    <div className={styles.container}>
+      <div className={styles.side}>
+        <span>註冊會員</span>
+      </div>
       {/* ======== native sign-up ========*/}
-      {error && <div>{error}</div>}
-      <form onSubmit={handleSignUp}>
-        <div id="email">
-          <label>Email</label>
-          <input type="email" ref={emailRef} required />
+      {/* {error && <div>{error}</div>} */}
+      <div className={styles.main}>
+        <div className={styles.nativeSignIn}>
+          <form onSubmit={handleSignUp}>
+            <div id="name">
+              <label>Name</label>
+              <br />
+              <input type="text" ref={nameRef} required />
+            </div>
+            <div id="email">
+              <label>Email</label>
+              <br />
+              <input type="email" ref={emailRef} required />
+            </div>
+            {/* TODO set remind: passwords must over 6 charactors */}
+            <div id="password">
+              <label>Password</label>
+              <br />
+              <input type="password" ref={passwordRef} required />
+            </div>
+            <div id="password-confirm">
+              <label>Password Confirmatiom:</label>
+              <br />
+              <input type="password" ref={passwordConfirmRef} required />
+            </div>
+            <button disabled={loading} type={"submit"}>
+              Sign up
+            </button>
+          </form>
         </div>
-        {/* TODO set remind: passwords must over 6 charactors */}
-        <div id="password">
-          <label>Password</label>
-          <input type="password" ref={passwordRef} required />
-        </div>
-        <div id="password-confirm">
-          <label>Password Confirmatiom:</label>
-          <input type="password" ref={passwordConfirmRef} required />
-        </div>
-        <button disabled={loading} type={"submit"}>
-          Sign up
-        </button>
-      </form>
-      {/* ======== native sign-up ========*/}
+        {/* ======== native sign-up ========*/}
 
-      <button onClick={() => setSignup(true)}> 已經有帳號了嗎？登入會員</button>
+        <button className={styles.switchBtn} onClick={() => setSignup(true)}>
+          {" "}
+          已經有帳號了嗎？登入會員
+        </button>
+      </div>
     </div>
   );
 

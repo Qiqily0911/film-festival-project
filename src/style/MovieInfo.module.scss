@@ -49,7 +49,7 @@
       .rating {
         display: flex;
         span {
-          color: rgba(212, 156, 0, 0.876);
+          color: $color-gold;
           margin-right: 10px;
           font-weight: 500;
         }
@@ -175,10 +175,16 @@
         margin-top: 10px;
         display: flex;
 
-        //  .castPic {
-        //     // margin: 5px;
-        //     // width: 100px;
-        //  }
+        .castPic {
+          margin: 5px;
+          width: 120px;
+          img {
+            width: 100%;
+          }
+        }
+        // .noPic {
+        //    width: 120px;
+        // }
 
         p {
           margin: 5px;
