@@ -69,7 +69,7 @@ function App() {
     );
     setList(yearList);
 
-    abc();
+    setSilderValue();
 
     // prevent scroll event when no film list
     for (let i = 0; i < listState.length; i++) {
@@ -80,9 +80,8 @@ function App() {
       }
     }
 
-    function abc() {
+    function setSilderValue() {
       if (yearListRefs !== null) {
-        console.log(yearListRefs);
         if (yearListRefs[minYear] !== undefined) {
           console.log(yearListRefs[minYear]);
           let a = maxYear - minYear + 1;
