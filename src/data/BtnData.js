@@ -1,6 +1,8 @@
 // import React, { Component } from "react";
 import oscar from "./oscar_best_film.json";
 import cannes from "./CannesFilm.json";
+import berlin from "./BerlinFilm.json";
+import venice from "./VeniceFilm.json";
 import goldenHorse from "./golden_horse_best_film.json";
 
 // import { ReactComponent as OscarLogo } from "./logo/oscar_logo.svg";
@@ -70,8 +72,14 @@ export const BtnData = [
   },
   {
     btnText: "柏林影展",
-    value: "",
+    value: berlin,
     logo: BerlinLogo,
-    arr: [{ subBtnValue: "best_film", subBtnText: "Best Film" }],
+    arr: [{ subBtnValue: "golden_bear", subBtnText: "Golden Bear" }],
+  },
+  {
+    btnText: "威尼斯影展",
+    value: venice,
+    logo: "",
+    arr: [{ subBtnValue: "golden_lion", subBtnText: "Golden Lion" }],
   },
 ];
