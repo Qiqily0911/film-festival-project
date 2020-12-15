@@ -10,7 +10,7 @@ function ControlSilder(props) {
     setRefs(props.yearListRefs);
   }, [props.yearListRefs]);
 
-  function abc() {
+  function handleChangeStart() {
     props.setScroll(false);
   }
   function handleChangeVertical(value) {
@@ -21,7 +21,7 @@ function ControlSilder(props) {
     if (refs[num] !== null) {
       refs[num].current.scrollIntoView({
         behavior: "smooth",
-        block: "center",
+        block: "start",
       });
     }
   }
@@ -32,22 +32,25 @@ function ControlSilder(props) {
 
   const verticalLabels = {
     0: props.minYear,
-    100: 2020,
+    100: props.maxYear,
   };
 
   const formatPc = (p) =>
-    Math.floor(p * ((2020 - props.minYear) / 100) + props.minYear).toString();
+    Math.floor(
+      p * ((props.maxYear - props.minYear) / 100) + props.minYear
+    ).toString();
 
   return (
     <div className={styles.slider}>
-      <div className={styles.yearText}>2020</div>
+      <div className={styles.yearText}>{props.maxYear}</div>
       <Slider
+        //   FIXME: fix when listState===undefined can't grab the slider
         value={props.vertical}
         orientation="vertical"
         labels={verticalLabels}
         handleLabel={formatPc(props.vertical)}
         format={formatPc}
-        onChangeStart={abc}
+        onChangeStart={handleChangeStart}
         onChange={handleChangeVertical}
         onChangeComplete={handleScroll}
       />

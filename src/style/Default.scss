@@ -5,6 +5,54 @@
   padding: 0;
   margin: 0;
   font-family: "Noto Sans TC", sans-serif;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* theme color */
+$color-gray: rgb(139, 139, 139);
+$color-blue: rgb(6, 70, 107);
+$color-white: white;
+$color-gold: rgba(212, 156, 0, 0.876);
+
+@mixin centerPosition {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin shadow {
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+}
+
+@mixin blackMask {
+  position: fixed;
+  display: flex;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin closeBtnStyle {
+  position: absolute;
+  z-index: 15;
+  top: -35px;
+  right: -35px;
+  background-color: white;
+  color: $color-blue;
+  text-align: center;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
 }
 
 /* general css */
@@ -24,8 +72,3 @@
 .align-item-center {
   align-items: center;
 }
-
-/* theme color */
-$color-gray: rgb(139, 139, 139);
-$color-blue: rgb(6, 70, 107);
-$color-white: white;

@@ -4,24 +4,6 @@ import { firestore } from "../config";
 const movieLiked = firestore.collection("movie_liked");
 
 function MovieCard(props) {
-  // console.log(props.likedList);
-
-  // 讀取該使用者已收藏的電影，並放入陣列 arr
-  // let arr = [];
-  // movieLiked
-  //    .where("user", "==", props.userId)
-  //    .get()
-  //    .then((movie) => {
-  //       movie.forEach((doc) => {
-  //          arr.push(doc.data());
-  //          console.log(doc.data());
-  //       });
-  //    })
-  //    .then(() => {
-  //       cancelLiked(e, arr);
-  //       console.log("OK");
-  //    });
-
   // 加入收藏，在firestore加入資料
   function addLiked(e) {
     console.log(e.currentTarget.dataset["id"]);
@@ -70,18 +52,7 @@ function MovieCard(props) {
   }
 
   console.log("--render all movie cards--");
-  const notFound = (
-    <div className={styles.movieCard}>
-      <div className={styles.posterBox}>
-        <div className={styles.notFound}></div>
-      </div>
-      <div className={styles.basicInfo}>
-        <div>
-          <div className={styles.titleZh}>No Data</div>
-        </div>
-      </div>
-    </div>
-  );
+  const notFound = <div className={styles.notFound}></div>;
 
   const hasCard = (
     <div
@@ -118,10 +89,10 @@ function MovieCard(props) {
       )}
 
       <div className={styles.posterBox}>
-        {props.poster_path === null ? (
+        {props.poster_path === null || props.poster_path === undefined ? (
           // if poster_path was null
-          <div className={styles.notFound}>
-            <p>poster not found</p>
+          <div className={styles.noPoster}>
+            <p>Poster not found</p>
           </div>
         ) : (
           // if data has poster_path, then render the picture

@@ -1,9 +1,14 @@
 @import "./Default.scss";
 .loginOutter {
   display: flex;
-  margin-right: 30px;
+  // border: 1px solid red;
+  // margin-right: 30px;
   align-items: center;
   justify-content: center;
+
+  .signInDiv {
+    display: flex;
+  }
   .loginIcon {
     cursor: pointer;
     svg {
@@ -13,14 +18,8 @@
 }
 
 .loginDiv {
-  position: fixed;
-  display: flex;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 10;
+  @include blackMask;
+
   span {
     font-size: 20px;
     font-weight: 500;
@@ -32,54 +31,120 @@
   }
   .loginBox {
     position: relative;
-    width: 50%;
-    height: 50%;
+    width: 800px;
+    height: 500px;
     background-color: white;
     margin: auto;
-    display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    @include centerPosition;
 
-    .loginBtn {
-      box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px;
-      margin: 20px;
-      width: 280px;
-      padding: 10px 25px;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-
-      .loginLogo {
-        // border: 1px solid blue;
-        height: 40px;
+    .inner {
+      width: 100%;
+      height: 100%;
+      .container {
         display: flex;
-        align-items: center;
+        width: 100%;
+        height: 100%;
+        .side {
+          width: 30%;
+          height: 100%;
+          background-color: $color-blue;
+          // border: 1px solid red;
+          @include centerPosition;
+          span {
+            color: white;
+          }
+        }
+        .main {
+          width: 70%;
+          height: 100%;
+          padding: 20px;
+          @include centerPosition;
+          flex-direction: column;
+          .loginBtn {
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px;
+            margin: 10px;
+            width: 300px;
+            padding: 10px 25px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
 
-        img {
-          height: 35px;
+            .loginLogo {
+              // border: 1px solid blue;
+              height: 40px;
+              display: flex;
+              align-items: center;
+
+              img {
+                height: 35px;
+              }
+            }
+
+            p {
+              margin-left: 20px;
+              color: $color-gray;
+              font-weight: 500;
+            }
+          }
+          .nativeSignIn {
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px;
+            margin: 10px;
+            width: 300px;
+            padding: 10px 25px;
+
+            form {
+              //  display: flex;
+              //  flex-direction: column;
+              label {
+                color: $color-gray;
+                font-size: 14px;
+              }
+              input {
+                width: 100%;
+                height: 30px;
+                outline: 0;
+                border-width: 0 0 1px;
+                border-color: $color-gray;
+                margin-bottom: 10px;
+              }
+              input:focus {
+                border-color: $color-gold;
+              }
+            }
+          }
+
+          .switchBtn {
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px;
+            margin: 10px;
+            width: 300px;
+            padding: 10px 25px;
+            background-color: $color-blue;
+            color: white;
+          }
         }
       }
-
-      p {
-        margin-left: 20px;
-        color: $color-gray;
-        font-weight: 500;
-      }
-    }
-    .loginClose {
-      position: absolute;
-      z-index: 15;
-      top: -35px;
-      right: -35px;
-      background-color: white;
-      color: $color-blue;
-      text-align: center;
-      width: 30px;
-      height: 30px;
-      line-height: 30px;
-      border-radius: 50%;
-      cursor: pointer;
     }
   }
+
+  .loginClose {
+    @include closeBtnStyle;
+  }
+}
+
+button {
+  width: 100%;
+  border: 0;
+  //  border-radius: 0.25rem;
+  background: none;
+  color: $color-blue;
+  font-size: 16px;
+  line-height: 1.2;
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+  margin: 0.25rem;
+  cursor: pointer;
+}
+button:focus {
+  outline: none;
 }

@@ -6,6 +6,7 @@ import { useAuth } from "../contexts/AuthContexts";
 import { googleSignIn, faceBookSignIn } from "../config";
 
 function Login() {
+  const nameRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
@@ -36,7 +37,11 @@ function Login() {
     try {
       setError("");
       setLoading(true);
-      await signup(emailRef.current.value, passwordRef.current.value);
+      await signup(
+        emailRef.current.value,
+        passwordRef.current.value,
+        nameRef.current.value
+      );
     } catch {
       return setError("Failed to create an account");
     }
@@ -44,77 +49,108 @@ function Login() {
   }
 
   const loginDiv = (
-    <div>
-      <span>想收藏喜歡的電影嗎？ 登入會員</span>
-      <div className={styles.loginBtn} onClick={googleSignIn}>
-        <div className={styles.loginLogo}>
-          <img alt="Google-log-in" src={googleIcon} />
-        </div>
-        <p>Log in with Google</p>
+    <div className={styles.container}>
+      <div className={styles.side}>
+        <span>會員登入</span>
       </div>
-      <div className={styles.loginBtn} onClick={faceBookSignIn}>
-        <div className={styles.loginLogo}>
-          <img alt="Facebook-log-in" src={facebookIcon} />
-        </div>
-        <p>Log in with FaceBook</p>
-      </div>
-      <div>
-        {/* ======== native sign-in ========*/}
-        <div className={styles.abc}>
-          {error && <div>{error}</div>}
-          <p>{currentUser && currentUser.email}</p>
-        </div>
-        <form onSubmit={handleSubmit}>
-          <div id="email">
-            <label>Email</label>
-            <input type="email" ref={emailRef} required />
-          </div>
-          <div id="password">
-            <label>Password</label>
-            <input type="password" ref={passwordRef} required />
-          </div>
 
-          <button disabled={loading} type={"submit"}>
-            Log In
-          </button>
-        </form>
+      <div className={styles.main}>
+        <div className={styles.loginBtn} onClick={googleSignIn}>
+          <div className={styles.loginLogo}>
+            <img alt="Google-log-in" src={googleIcon} />
+          </div>
+          <p>Log in with Google</p>
+        </div>
+        <div className={styles.loginBtn} onClick={faceBookSignIn}>
+          <div className={styles.loginLogo}>
+            <img alt="Facebook-log-in" src={facebookIcon} />
+          </div>
+          <p>Log in with FaceBook</p>
+        </div>
+        <div className={styles.nativeSignIn}>
+          {/* ======== native sign-in ========*/}
+          <div className={styles.abc}>
+            {error && <div>{error}</div>}
+            <p>{currentUser && currentUser.email}</p>
+          </div>
+          <form onSubmit={handleSubmit}>
+            <div id="email">
+              <label>Email</label>
+              <br />
+              <input type="email" ref={emailRef} required />
+            </div>
+            <div id="password">
+              <label>Password</label>
+              <br />
+              <input type="password" ref={passwordRef} required />
+            </div>
 
-        {/* ======== native sign-in ========*/}
+            <button disabled={loading} type={"submit"}>
+              Log In
+            </button>
+          </form>
+
+          {/* ======== native sign-in ========*/}
+        </div>
+        <button className={styles.switchBtn} onClick={() => setSignup(false)}>
+          {" "}
+          沒有帳號？註冊會員
+        </button>
       </div>
-      <button onClick={() => setSignup(false)}> 沒有帳號？註冊會員</button>
     </div>
   );
 
   const nativeSignUp = (
-    <div>
-      <span>註冊會員</span>
+    <div className={styles.container}>
+      <div className={styles.side}>
+        <span>註冊會員</span>
+      </div>
       {/* ======== native sign-up ========*/}
-      {error && <div>{error}</div>}
-      <form onSubmit={handleSignUp}>
-        <div id="email">
-          <label>Email</label>
-          <input type="email" ref={emailRef} required />
+      {/* {error && <div>{error}</div>} */}
+      <div className={styles.main}>
+        <div className={styles.nativeSignIn}>
+          <form onSubmit={handleSignUp}>
+            <div id="name">
+              <label>Name</label>
+              <br />
+              <input type="text" ref={nameRef} required />
+            </div>
+            <div id="email">
+              <label>Email</label>
+              <br />
+              <input type="email" ref={emailRef} required />
+            </div>
+            {/* TODO set remind: passwords must over 6 charactors */}
+            <div id="password">
+              <label>Password</label>
+              <br />
+              <input type="password" ref={passwordRef} required />
+            </div>
+            <div id="password-confirm">
+              <label>Password Confirmatiom:</label>
+              <br />
+              <input type="password" ref={passwordConfirmRef} required />
+            </div>
+            <button disabled={loading} type={"submit"}>
+              Sign up
+            </button>
+          </form>
         </div>
-        {/* TODO set remind: passwords must over 6 charactors */}
-        <div id="password">
-          <label>Password</label>
-          <input type="password" ref={passwordRef} required />
-        </div>
-        <div id="password-confirm">
-          <label>Password Confirmatiom:</label>
-          <input type="password" ref={passwordConfirmRef} required />
-        </div>
-        <button disabled={loading} type={"submit"}>
-          Sign up
-        </button>
-      </form>
-      {/* ======== native sign-up ========*/}
+        {/* ======== native sign-up ========*/}
 
-      <button onClick={() => setSignup(true)}> 已經有帳號了嗎？登入會員</button>
+        <button className={styles.switchBtn} onClick={() => setSignup(true)}>
+          {" "}
+          已經有帳號了嗎？登入會員
+        </button>
+      </div>
     </div>
   );
 
-  return <div>{!currentUser && isSignup ? loginDiv : nativeSignUp}</div>;
+  return (
+    <div className={styles.inner}>
+      {!currentUser && isSignup ? loginDiv : nativeSignUp}
+    </div>
+  );
 }
 
 export default Login;

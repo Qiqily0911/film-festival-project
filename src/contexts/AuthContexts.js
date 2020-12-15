@@ -9,7 +9,7 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
 
-  function signup(email, password) {
+  function signup(email, password, name) {
     return firebaseAuth
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
@@ -18,7 +18,7 @@ export function AuthProvider({ children }) {
           .doc(firebaseAuth.currentUser.uid)
           .set(
             {
-              name: "",
+              name: name,
               email: firebaseAuth.currentUser.email,
               uid: firebaseAuth.currentUser.uid,
               list: "",

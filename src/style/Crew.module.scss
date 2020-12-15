@@ -1,0 +1,68 @@
+@import "./Default.scss";
+.crewDiv {
+  @include blackMask;
+  .crewBox {
+    position: relative;
+    width: 70%;
+    height: 70%;
+    background-color: white;
+    margin: auto;
+    flex-direction: column;
+    @include centerPosition;
+    .closeBtn {
+      @include closeBtnStyle;
+    }
+    .container {
+      padding: 20px;
+      width: 100%;
+      color: gray;
+      overflow: scroll;
+      display: flex;
+      .profile {
+        margin-right: 10px;
+        display: flex;
+        flex-direction: column;
+        .name {
+          font-size: 20px;
+          font-weight: 600;
+          color: $color-blue;
+        }
+        a {
+          text-decoration: none;
+          color: $color-gray;
+          text-align: center;
+          padding: 3px 5px;
+          margin: 5px;
+          border: 1px solid $color-gray;
+          cursor: pointer;
+        }
+      }
+      .movieBox {
+        // border: 1px solid red;
+        width: 100%;
+        display: flex;
+        flex-flow: row wrap;
+        overflow: scroll;
+        text-align: center;
+        .movieCard {
+          margin: 10px;
+          width: 120px;
+          .poster {
+            width: 120px;
+            height: 180px;
+            overflow: hidden;
+            img {
+              width: 100%;
+            }
+            .noPic {
+              // border: 1px solid red;
+              width: 100%;
+              height: 100%;
+              background-color: rgb(226, 226, 226);
+            }
+          }
+        }
+      }
+    }
+  }
+}

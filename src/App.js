@@ -1,16 +1,15 @@
 // style
 import styles from "./style/App.module.scss";
 // data json
-import oscar from "./data/oscar_best_film.json";
-import cannes from "./data/CannesFilm.json";
-import goldenHorse from "./data/golden_horse_best_film.json";
+import { InitListState } from "./data/BtnData";
+
 // components
 import YearList from "./components/YearList";
 import MovieInfo from "./components/MovieInfo";
 import MovieFilter from "./components/MovieFilter";
 import MemberBtn from "./components/MemberBtn";
 import ControlSilder from "./components/ControlSlider";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 //config and firebase
 import { apiKey, omdbKey, firestore } from "./config";
 import { AuthProvider } from "./contexts/AuthContexts";
@@ -21,56 +20,40 @@ import { AuthProvider } from "./contexts/AuthContexts";
 // import "firebase/firestore";
 
 function App() {
-  const initListState = [
-    {
-      title: "奧斯卡金像獎",
-      prize_name: "Best Film",
-      film_list: oscar,
-      prize: "best_film",
-      order: 0,
-    },
-    {
-      title: "坎城影展",
-      prize_name: "Palme d'Or",
-      film_list: cannes,
-      prize: "palme_d_or",
-      order: 1,
-    },
-    {
-      title: "金馬獎",
-      prize_name: "Best Film",
-      film_list: goldenHorse,
-      prize: "best_film",
-      order: 2,
-    },
-  ];
   const [tmdbData, setData] = useState("");
   const [tmdbVideo, setVideo] = useState("");
   const [tmdbImages, setImages] = useState("");
   const [tmdbCredits, setCredits] = useState("");
+  const [tmdbCrew, setCrew] = useState("");
+  const [tmdbPerson, setPerson] = useState("");
   const [localData, renewData] = useState("");
   const [omdbData, setomdbData] = useState("");
   const [imdbSpan, setRating] = useState("");
 
   const [list, setList] = useState([]);
   const [yearListRefs, setRefs] = useState("");
-  const [listState, setlistState] = useState(initListState);
+  const [listState, setlistState] = useState(InitListState);
   const [filmList, setFilmList] = useState("");
   const [prize, setPrize] = useState("");
 
   // init control-slider
   const [vertical, setVertical] = useState(100);
   const [minYear, setMin] = useState(1928);
+  const [maxYear, setMax] = useState(2020);
   const [isScroll, setScroll] = useState(true);
 
   // get uid
   const [userId, setUserId] = useState();
 
+  //  set ref of infoBox
+  const movieInfoEl = useRef(null);
+  const crewsEl = useRef(null);
+
   useEffect(() => {
     const yearList = [];
-    //  根據 listStae 去把 yearList 給做出來
+    //  根據 listState 去把 yearList 給做出來
     for (let i = 2020; i >= 1928; i--) {
-      let item = { year: i, list: [] };
+      let item = { year: i, list: [[], [], []] };
       yearList.push(item);
     }
 
@@ -79,62 +62,61 @@ function App() {
       acc[value.year] = React.createRef();
       return acc;
     }, {});
+
     setRefs(refs);
     listState.map((list) =>
       fillYearList(yearList, list.film_list, list.prize, list.order)
     );
-
-    // console.log(yearList);
     setList(yearList);
+
+    setSilderValue();
+
+    // prevent scroll event when no film list
+    for (let i = 0; i < listState.length; i++) {
+      if (listState[i].film_list !== undefined) {
+        console.log("scroll");
+        setScroll(true);
+        return;
+      }
+    }
+
+    function setSilderValue() {
+      if (yearListRefs !== null) {
+        if (yearListRefs[minYear] !== undefined) {
+          console.log(yearListRefs[minYear]);
+          let a = maxYear - minYear + 1;
+          let b = yearListRefs[minYear].current.getBoundingClientRect();
+          let c = a * b.height;
+          let d = Math.floor(((b.bottom - 100) / c) * 100);
+          setVertical(d);
+        }
+      }
+    }
+
+    setScroll(false);
+    console.log("can't scroll");
   }, [listState]);
 
   // put movies to the correspondense year box
   function fillYearList(yearList, fes, prize, order) {
-    let data = fes.filter((obj) => obj.prize === prize);
+    if (fes !== undefined) {
+      let data = fes.filter((obj) => obj.prize === prize);
 
-    if (order === 0) {
       yearList.forEach((yearbox) => {
+        let box = yearbox.list[order];
+
         data.forEach((item) => {
           if (item.year === yearbox.year) {
-            let filmPrize = [];
-
-            // if one more movies won prize at the same year
-            if (yearbox.list.length !== 0) {
-              yearbox.list[0].push(item);
-            } else {
-              filmPrize.push(item);
-              yearbox.list.push(filmPrize);
-            }
+            box.push(item);
           }
         });
-
-        // if the year don't have movie, set prize:null
-        if (yearbox.list.length === 0) {
-          let filmPrize = [{ prize: null }];
-          yearbox.list.push(filmPrize);
+        if (box.length === 0) {
+          box.push({ prize: null });
         }
       });
     } else {
       yearList.forEach((yearbox) => {
-        data.forEach((item) => {
-          if (item.year === yearbox.year) {
-            let filmPrize = [];
-
-            // if one more movies won prize at the same year
-            if (yearbox.list.length > order) {
-              yearbox.list[order].push(item);
-            } else {
-              filmPrize.push(item);
-              yearbox.list.push(filmPrize);
-            }
-          }
-        });
-
-        // if the year don't have movie, set prize:null
-        if (yearbox.list.length === order) {
-          let filmPrize = [{ prize: null }];
-          yearbox.list.push(filmPrize);
-        }
+        yearbox.list[order].push({ prize: null });
       });
     }
   }
@@ -162,6 +144,30 @@ function App() {
           setImages(data);
         } else if (type === "/credits") {
           setCredits(data);
+        }
+      });
+  }
+
+  //  get tmdb crew detail
+  function tmdbCrewApi(type, personId) {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open(
+        "GET",
+        `https://api.themoviedb.org/3/person/${personId}${type}?api_key=${apiKey}`
+      );
+
+      xhr.onload = () => resolve(xhr.responseText);
+      xhr.onerror = () => reject(xhr.statusText);
+      xhr.send();
+    })
+      .then((response) => JSON.parse(response))
+      .then((data) => {
+        if (type === "") {
+          console.log(data);
+          setPerson(data);
+        } else if (type === "/movie_credits") {
+          setCrew(data);
         }
       });
   }
@@ -205,32 +211,21 @@ function App() {
     xhr.send();
   }
 
-  // TODO: user login and Firebase
-  function readData() {
-    let ref = firestore.collection("cannes_film").doc("palme_d_or");
-
-    ref.get().then((doc) => {
-      console.log(doc.data()["1957"]);
-    });
-  }
-
   return (
     <div className={styles.outter}>
       <aside>
-        <div className={styles.logo} onClick={readData}>
-          LOGO
-        </div>
+        <div className={styles.logo}>LOGO</div>
 
         <ControlSilder
           vertical={vertical}
           setVertical={setVertical}
           yearListRefs={yearListRefs}
           minYear={minYear}
+          maxYear={maxYear}
           setScroll={setScroll}
           isScroll={isScroll}
         />
         {/* {console.log("=========== [01] control slider")} */}
-        {/* {console.log(userId)} */}
       </aside>
       <main>
         <div className={styles.container}>
@@ -245,8 +240,8 @@ function App() {
               listState={listState}
               setlistState={setlistState}
               setVertical={setVertical}
+              setScroll={setScroll}
             />
-            {/* {console.log("[02] filter")} */}
 
             {/* <Router> */}
             <AuthProvider>
@@ -259,7 +254,6 @@ function App() {
             {/* </Router> */}
           </div>
           <div className={styles.subContainer}>
-            {/* {console.log("------- [03] year list start------")} */}
             <YearList
               prize={prize}
               tmdbApi={tmdbApi}
@@ -272,13 +266,18 @@ function App() {
               setlistState={setlistState}
               setMin={setMin}
               minYear={minYear}
+              setMax={setMax}
+              maxYear={maxYear}
               setVertical={setVertical}
               vertical={vertical}
               isScroll={isScroll}
               userId={userId}
+              movieInfoEl={movieInfoEl}
             />
-            {/* {console.log("------- [03] year list end------")} */}
+
             <MovieInfo
+              movieInfoEl={movieInfoEl}
+              crewsEl={crewsEl}
               tmdbData={tmdbData}
               tmdbVideo={tmdbVideo}
               tmdbImages={tmdbImages}
@@ -286,6 +285,10 @@ function App() {
               localData={localData}
               omdbData={omdbData}
               imdbSpan={imdbSpan}
+              tmdbCrewApi={tmdbCrewApi}
+              setCrew={setCrew}
+              tmdbCrew={tmdbCrew}
+              tmdbPerson={tmdbPerson}
             />
           </div>
         </div>

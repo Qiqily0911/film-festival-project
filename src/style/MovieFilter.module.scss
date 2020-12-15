@@ -1,75 +1,128 @@
 @import "./Default.scss";
 
 @mixin btnStyle {
+  user-select: none;
   background-color: rgba(95, 95, 95, 0.3);
   color: white;
   width: 25px;
   height: 25px;
   line-height: 25px;
   border-radius: 50%;
-  cursor: pointer;
 }
 
 .movieFilter {
-  // display: flex;
-  // justify-content: space-between;
-  // //  position: fixed;
-  // //  top: 0;
-  // //  right: 0;
-  // width: 100%;
-  // box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
-  //   rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
-  // height: 100px;
-  // //  padding: 10px;
-  // background-color: white;
-  // //  border: 1px solid purple;
-
+  margin: auto 0;
   .titleBox {
-    margin: 0 20px;
+    // margin: 0 20px;
     display: flex;
-    // border: 1px solid red;
+    // border: 1px solid blue;
   }
   .fesTitle {
-    position: relative;
-    display: flex;
+    @include centerPosition;
+    // border: 1px solid red;
+
     flex-direction: column;
-    align-items: center;
     text-align: center;
     width: 180px;
     margin: 10px 20px;
     padding: 10px;
 
-    // span {
-    //    margin: 10px 0;
-    // }
-    .currentBtn {
-      color: $color-blue;
-    }
+    .inner {
+      @include centerPosition;
+      .icon {
+        position: absolute;
+        // border: 1px solid green;
+        width: 30px;
+        height: 30px;
+        img {
+          // width: 100%;
+          max-height: 30px;
+        }
+      }
 
+      .title {
+        position: relative;
+        color: $color-blue;
+        font-weight: 500;
+        font-size: 16px;
+      }
+
+      span {
+        color: $color-gray;
+      }
+    }
     .closeBtn {
       @include btnStyle;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.3s;
+      position: absolute;
+      top: -3px;
+      right: -40px;
     }
-
     .addBtn {
       @include btnStyle;
     }
 
     .option {
+      // border: 1px solid red;
+      width: 200px;
       position: absolute;
-      top: 120px;
+      top: 100px;
+      bottom: 0;
       z-index: 5;
+      padding: 30px 0;
+      background-color: rgba(255, 255, 255, 0.5);
+      // right: -30%;
+      // left: -30%;
 
-      //  border: 1px solid orange;
+      // FIXME: subBtn animation
       .subBtn {
-        // border: 1px solid orange;
-        margin: 20px 0;
+        @include centerPosition;
+        flex-direction: column;
+        margin: 10px 0 20px 0;
+        // border: 1px solid red;
+
+        button {
+          color: $color-gray;
+          font-weight: 300;
+        }
       }
+      .subBtnAnimate-enter {
+        opacity: 0;
+        border: 1px solid red;
+      }
+
+      .subBtnAnimate-enter-active {
+        border: 1px solid blue;
+        opacity: 0;
+        transition: all ease 0.3s;
+      }
+      // .subBtnAnimate-enter-done {
+      //    border: 1px solid rgb(0, 247, 255);
+      //    opacity: 1;
+      // }
+
+      .subBtnAnimate-exit {
+        border: 1px solid rgb(0, 255, 13);
+        opacity: 1;
+      }
+
+      .subBtnAnimate-exit-active {
+        border: 1px solid rgb(38, 121, 5);
+        opacity: 1;
+        transition: all ease 0.1s;
+      }
+      // .subBtnAnimate-exit-done {
+      //    border: 1px solid rgb(255, 242, 53);
+      //    opacity: 0;
+      // }
 
       button {
         border: 0;
         border-radius: 0.25rem;
         background: none;
-        color: $color-gray;
+        color: $color-blue;
         font-size: 16px;
         line-height: 1.2;
         // white-space: nowrap;
@@ -82,5 +135,10 @@
         outline: none;
       }
     }
+  }
+
+  .fesTitle:hover .closeBtn {
+    opacity: 1;
+    transition: opacity 0.3s;
   }
 }
