@@ -18,12 +18,10 @@ function YearList(props) {
           arr.push(doc.data());
         });
         setLikedList(arr);
-        console.log("-------------------------");
+        // console.log("-------------------------");
       });
     }
   }, [props.userId]);
-
-  // console.log(props.yearlist);
 
   // render 電影卡片（無狀態）
   useEffect(() => {
@@ -48,7 +46,6 @@ function YearList(props) {
 
               return (
                 <MovieCard
-                  //  user={props.user}
                   renewData={props.renewData}
                   tmdbApi={props.tmdbApi}
                   omdbApi={props.omdbApi}

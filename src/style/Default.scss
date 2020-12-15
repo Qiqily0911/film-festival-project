@@ -5,6 +5,9 @@
   padding: 0;
   margin: 0;
   font-family: "Noto Sans TC", sans-serif;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 /* theme color */

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styles from "../style/MovieFilter.module.scss";
 import { BtnData } from "../data/BtnData";
+import { CSSTransition } from "react-transition-group";
 
 function MovieFilter(props) {
   const [subBtnVal, setSubBtnVal] = useState({
@@ -12,14 +13,28 @@ function MovieFilter(props) {
   function selectFilmList(e) {
     let btnValue = e.target.value;
     let name = e.nativeEvent.path[4].getAttribute("name");
-    // console.log(btnValue);
-    console.log(name);
+
+    //  reset button
+    // let a = document.getElementsByClassName(`${styles.subBtnAfter}`);
+    // if (a.length !== 0) {
+    //    a[0].className = a[0].className.replace(`${styles.subBtnAfter}`, `${styles.subBtnBefore}`);
+    // }
+
+    // let b = document.getElementsByClassName(`${styles.subBtnBefore}`);
+    // for (let i = 0; i < b.length; i++) {
+    //    b[i].style.marginTop = "-10px";
+    // }
+
+    // e.target.nextSibling.style.visibility = "visible";
+    // e.target.nextSibling.className = e.target.nextSibling.className.replace(
+    //    `${styles.subBtnBefore}`,
+    //    `${styles.subBtnAfter}`
+    // );
+
     setSubBtnVal({
       ...subBtnVal,
       [name]: btnValue,
     });
-
-    // console.log(subBtnVal);
   }
 
   // 設定影展和獎項
@@ -70,7 +85,7 @@ function MovieFilter(props) {
     arr[order] = { film_list: undefined, order: order };
 
     props.setlistState(arr);
-    props.setVertical(100);
+    // props.setVertical(100);
   }
 
   const title = props.listState.map((data, i) => (
@@ -107,6 +122,7 @@ function MovieFilter(props) {
               <br />
               影展及獎項
             </span>
+
             <div className={styles.option}>
               {BtnData.map((data, j) => (
                 <div key={j}>
@@ -117,14 +133,17 @@ function MovieFilter(props) {
                   >
                     {data.btnText}
                   </button>
-
+                  {/* FIXME make btn close smoothly */}
+                  {/* <CSSTransition
+                              in={subBtnVal[`index-${i}`] === data.btnText}
+                              timeout={300}
+                              unmountOnExit
+                              classNames={styles.subBtnAnimate}
+                           > */}
                   <div
                     className={styles.subBtn}
                     data-order={j}
-                    style={{
-                      display:
-                        subBtnVal[`index-${i}`] === data.btnText ? "" : "none",
-                    }}
+                    // style={{ visibility: subBtnVal[`index-${i}`] === data.btnText ? "visible" : "hidden" }}
                   >
                     {data.arr.map((subBtn, k) => (
                       <button
@@ -137,6 +156,7 @@ function MovieFilter(props) {
                       </button>
                     ))}
                   </div>
+                  {/* </CSSTransition> */}
                 </div>
               ))}
             </div>

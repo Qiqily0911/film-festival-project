@@ -9,7 +9,7 @@ import MovieInfo from "./components/MovieInfo";
 import MovieFilter from "./components/MovieFilter";
 import MemberBtn from "./components/MemberBtn";
 import ControlSilder from "./components/ControlSlider";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 //config and firebase
 import { apiKey, omdbKey, firestore } from "./config";
 import { AuthProvider } from "./contexts/AuthContexts";
@@ -45,6 +45,10 @@ function App() {
   // get uid
   const [userId, setUserId] = useState();
 
+  //  set ref of infoBox
+  const movieInfoEl = useRef(null);
+  const crewsEl = useRef(null);
+
   useEffect(() => {
     const yearList = [];
     //  根據 listState 去把 yearList 給做出來
@@ -65,13 +69,28 @@ function App() {
     );
     setList(yearList);
 
-    console.log(listState);
+    abc();
+
     // prevent scroll event when no film list
     for (let i = 0; i < listState.length; i++) {
       if (listState[i].film_list !== undefined) {
         console.log("scroll");
         setScroll(true);
         return;
+      }
+    }
+
+    function abc() {
+      if (yearListRefs !== null) {
+        console.log(yearListRefs);
+        if (yearListRefs[minYear] !== undefined) {
+          console.log(yearListRefs[minYear]);
+          let a = maxYear - minYear + 1;
+          let b = yearListRefs[minYear].current.getBoundingClientRect();
+          let c = a * b.height;
+          let d = Math.floor(((b.bottom - 100) / c) * 100);
+          setVertical(d);
+        }
       }
     }
 
@@ -236,7 +255,6 @@ function App() {
             {/* </Router> */}
           </div>
           <div className={styles.subContainer}>
-            {/* {console.log("------- [03] year list start------")} */}
             <YearList
               prize={prize}
               tmdbApi={tmdbApi}
@@ -255,9 +273,12 @@ function App() {
               vertical={vertical}
               isScroll={isScroll}
               userId={userId}
+              movieInfoEl={movieInfoEl}
             />
-            {/* {console.log("------- [03] year list end------")} */}
+
             <MovieInfo
+              movieInfoEl={movieInfoEl}
+              crewsEl={crewsEl}
               tmdbData={tmdbData}
               tmdbVideo={tmdbVideo}
               tmdbImages={tmdbImages}

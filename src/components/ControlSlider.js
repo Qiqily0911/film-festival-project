@@ -21,7 +21,7 @@ function ControlSilder(props) {
     if (refs[num] !== null) {
       refs[num].current.scrollIntoView({
         behavior: "smooth",
-        block: "center",
+        block: "start",
       });
     }
   }

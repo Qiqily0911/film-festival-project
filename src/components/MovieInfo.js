@@ -19,6 +19,20 @@ function MovieInfo(props) {
   let credits = props.tmdbCredits;
 
   useEffect(() => {
+    if (props.movieInfoEl.current && props.crewsEl.current !== null) {
+      // console.log(props.movieInfoEl);
+
+      props.crewsEl.current.scrollLeft = 0;
+
+      props.movieInfoEl.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+        // inline: "start",
+      });
+    }
+  }, [movieId]);
+
+  useEffect(() => {
     if (
       videoPath !== undefined &&
       images !== undefined &&
@@ -41,6 +55,7 @@ function MovieInfo(props) {
         images.backdrops.forEach((obj) => arr.push(obj.file_path));
         setImageList(arr);
       }
+
       //  if (images.posters[0] !== undefined) {
       //     images.posters.forEach((obj) => arr.push(obj.file_path));
       //     setImageList(arr);
@@ -155,7 +170,7 @@ function MovieInfo(props) {
   const content = (
     <div>
       {/* {console.log("[04] movie info")} */}
-      <div className={styles.imageBox}>
+      <div className={styles.imageBox} ref={props.movieInfoEl}>
         {imageList !== "" ? (
           imageList.map((path) => (
             <img
@@ -279,7 +294,7 @@ function MovieInfo(props) {
       </div>
       {/* --------------- casts -------------- */}
       <div className={styles.crew}>
-        <div className={styles.outter}>
+        <div className={styles.outter} ref={props.crewsEl}>
           <div>
             <span className={styles.title}>Director</span>
             {creditsList ? director() : ""}
@@ -302,7 +317,12 @@ function MovieInfo(props) {
     </div>
   );
 
-  return <div className={styles.movieInfo}>{movieId ? content : ""}</div>;
+  return (
+    <div className={styles.movieInfo}>
+      {/* {console.log(props.movieInfoEl)} */}
+      {movieId ? content : ""}
+    </div>
+  );
 }
 
 export default MovieInfo;

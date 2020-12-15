@@ -5,6 +5,10 @@
   // margin-right: 30px;
   align-items: center;
   justify-content: center;
+
+  .signInDiv {
+    display: flex;
+  }
   .loginIcon {
     cursor: pointer;
     svg {
