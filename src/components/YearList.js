@@ -6,7 +6,7 @@ import MovieCard from "./MovieCard";
 
 function YearList(props) {
   const [showList, setShowList] = useState("");
-
+  //  console.log(props.yearlist);
   // render 電影卡片（無狀態）
   useEffect(() => {
     const showYearList = props.yearlist.map((yearbox, i) => {

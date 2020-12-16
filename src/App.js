@@ -61,6 +61,8 @@ function App() {
   const movieLiked = firestore.collection("movie_liked");
   const [likedList, setLikedList] = useState();
 
+  //  console.log(listState);
+
   useEffect(() => {
     const yearList = [];
     //  根據 listState 去把 yearList 給做出來

@@ -53,6 +53,14 @@ export const BtnData = [
         subBtnValue: "un_certain_regard",
         subBtnText: "Un Certain Regard",
       },
+      {
+        subBtnValue: "grand_prix",
+        subBtnText: "Grand Prix",
+      },
+      {
+        subBtnValue: "prix_du_jury",
+        subBtnText: "Prix du Jury",
+      },
     ],
   },
   {
