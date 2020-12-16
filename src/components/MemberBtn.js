@@ -49,6 +49,22 @@ function MemberBtn(props) {
 
   const logedIn = (
     <div className={styles.signInDiv}>
+      <div
+        className={styles.switchBtn}
+        onClick={() => {
+          props.setMemberPage(true);
+        }}
+      >
+        會員專區
+      </div>
+      <div
+        className={styles.switchBtn}
+        onClick={() => {
+          props.setMemberPage(false);
+        }}
+      >
+        找電影
+      </div>
       {/* {currentUser && <div>{currentUser.email}</div>} */}
       <div className={styles.userName}>Hi, {userName}</div>
       {error && <div>{error}</div>}

@@ -60,9 +60,9 @@
       top: -3px;
       right: -40px;
     }
-    .addBtn {
-      @include btnStyle;
-    }
+    // .addBtn {
+    //    @include btnStyle;
+    // }
 
     .option {
       // border: 1px solid red;
@@ -89,14 +89,14 @@
         }
       }
       .subBtnAnimate-enter {
-        opacity: 0;
+        //   opacity: 0;
         border: 1px solid red;
       }
 
       .subBtnAnimate-enter-active {
         border: 1px solid blue;
-        opacity: 0;
-        transition: all ease 0.3s;
+        //   opacity: 0;
+        // transition: all ease 0.3s;
       }
       // .subBtnAnimate-enter-done {
       //    border: 1px solid rgb(0, 247, 255);
@@ -105,13 +105,13 @@
 
       .subBtnAnimate-exit {
         border: 1px solid rgb(0, 255, 13);
-        opacity: 1;
+        //   opacity: 1;
       }
 
       .subBtnAnimate-exit-active {
         border: 1px solid rgb(38, 121, 5);
-        opacity: 1;
-        transition: all ease 0.1s;
+        //   opacity: 1;
+        // transition: all ease 0.1s;
       }
       // .subBtnAnimate-exit-done {
       //    border: 1px solid rgb(255, 242, 53);

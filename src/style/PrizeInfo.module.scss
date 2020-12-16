@@ -1,0 +1,61 @@
+@import "./Default.scss";
+
+.prizeInfo {
+  position: fixed;
+  //    right: 20px;
+  top: 120px;
+  bottom: 20px;
+  width: 450px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
+    rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+  display: flex;
+  //  overflow: scroll;
+  background-color: white;
+  transition: right 0.5s ease;
+  .handleBar {
+    cursor: pointer;
+    writing-mode: vertical-rl;
+    min-width: 20px;
+    line-height: 1rem;
+    height: 100%;
+    padding: 20px 5px 0 5px;
+    font-size: 0.5rem;
+    font-weight: 500;
+    color: white;
+    background-color: $color-gray;
+  }
+  .outterBox {
+    overflow: scroll;
+
+    width: 430px;
+
+    .innerBox {
+      width: 100%;
+      height: 100%;
+      .prizeData {
+        height: 33%;
+        // border: 1px solid red;
+        padding: 20px;
+        overflow: scroll;
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
+          rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+
+        .logo {
+          width: 100px;
+          max-height: 100px;
+          overflow: hidden;
+          img {
+            height: 100%;
+          }
+        }
+        .filmName {
+          display: flex;
+        }
+
+        // .winner {
+        //    border: 1px solid green;
+        // }
+      }
+    }
+  }
+}

@@ -15,6 +15,7 @@ function Crew(props) {
       setCastData(crewDetial.cast);
       setCrewData(crewDetial.crew);
       setPersonData(personDetail);
+      console.log(crewDetial, personDetail);
     }
   }, [crewDetial, personDetail]);
 
@@ -51,7 +52,12 @@ function Crew(props) {
                     a["release_date"] > b["release_date"] ? 1 : -1
                   )
                   .map((data) => (
-                    <div className={styles.movieCard}>
+                    <div
+                      className={styles.movieCard}
+                      key={data.credit_id}
+                      value={data.id}
+                      onClick={() => console.log(data.id)}
+                    >
                       <div className={styles.poster}>
                         {data.poster_path !== null ? (
                           <img
@@ -75,7 +81,12 @@ function Crew(props) {
                     a["release_date"] > b["release_date"] ? 1 : -1
                   )
                   .map((data) => (
-                    <div className={styles.movieCard}>
+                    <div
+                      className={styles.movieCard}
+                      key={data.credit_id}
+                      value={data.id}
+                      onClick={() => console.log(data.id)}
+                    >
                       <div className={styles.poster}>
                         {data.poster_path !== null ? (
                           <img
@@ -92,8 +103,6 @@ function Crew(props) {
                   ))
               : ""}
           </div>
-
-          <br />
         </div>
       </div>
     </div>

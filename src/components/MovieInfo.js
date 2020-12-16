@@ -18,16 +18,13 @@ function MovieInfo(props) {
   let images = props.tmdbImages;
   let credits = props.tmdbCredits;
 
+  //  reset infoBox position
   useEffect(() => {
     if (props.movieInfoEl.current && props.crewsEl.current !== null) {
-      // console.log(props.movieInfoEl);
-
       props.crewsEl.current.scrollLeft = 0;
-
       props.movieInfoEl.current.scrollIntoView({
         behavior: "smooth",
         block: "start",
-        // inline: "start",
       });
     }
   }, [movieId]);
@@ -153,23 +150,8 @@ function MovieInfo(props) {
   //     btn.classList.add(`${styles.noVideo}`);
   //  }
 
-  function ordinalSuffix(i) {
-    var j = i % 10,
-      k = i % 100;
-    if (j === 1 && k !== 11) {
-      return i + "st";
-    }
-    if (j === 2 && k !== 12) {
-      return i + "nd";
-    }
-    if (j === 3 && k !== 13) {
-      return i + "rd";
-    }
-    return i + "th";
-  }
   const content = (
-    <div>
-      {/* {console.log("[04] movie info")} */}
+    <div className={styles.innerBox}>
       <div className={styles.imageBox} ref={props.movieInfoEl}>
         {imageList !== "" ? (
           imageList.map((path) => (
@@ -190,8 +172,8 @@ function MovieInfo(props) {
         <div className={styles.upper}>
           <div>
             <span className={styles.subtitle}>
-              {ordinalSuffix(props.localData.th)} {props.localData.prize} (
-              {props.localData.year})
+              {props.ordinalSuffix(props.localData.th)} {props.localData.prize}{" "}
+              ({props.localData.year})
             </span>
             {/* --------------- rating -------------- */}
             <div className={styles.rating}>
@@ -277,18 +259,21 @@ function MovieInfo(props) {
             ? props.tmdbData.production_countries.slice(0, 5).map((country) => (
                 <div className={styles.tooltip} key={nanoid()}>
                   <span className={styles.tooltiptext}>{country.name}</span>
+                  {/* {console.log(
+                             typeof require(`../data/png100px/${country.iso_3166_1.toLowerCase()}.png`).default
+                          )} */}
                   <img
                     alt="flag"
                     src={
                       require(`../data/png100px/${country.iso_3166_1.toLowerCase()}.png`)
-                        .default
+                        .default || ""
                     }
                   />
                 </div>
               ))
             : ""}
           {/* <div>{props.tmdbData ? props.tmdbData.production_countries[0].name : ""}</div> */}
-        </div>{" "}
+        </div>
         {/* --------- flags -------------- */}
         <div className={styles.overview}>{props.tmdbData.overview} </div>
       </div>
@@ -318,9 +303,19 @@ function MovieInfo(props) {
   );
 
   return (
-    <div className={styles.movieInfo}>
-      {/* {console.log(props.movieInfoEl)} */}
-      {movieId ? content : ""}
+    <div
+      className={styles.movieInfo}
+      style={{ right: props.infoBoxState ? "0" : "-430px" }}
+    >
+      <div
+        className={styles.handleBar}
+        onClick={() =>
+          props.infoBoxState ? props.setInfoBox(false) : props.setInfoBox(true)
+        }
+      >
+        About this Movie
+      </div>
+      <div className={styles.outterBox}>{movieId ? content : ""}</div>
     </div>
   );
 }

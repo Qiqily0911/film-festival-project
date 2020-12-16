@@ -8,6 +8,10 @@
 
   .signInDiv {
     display: flex;
+    width: 100%;
+    .switchBtn {
+      border: 1px solid red;
+    }
   }
   .loginIcon {
     cursor: pointer;

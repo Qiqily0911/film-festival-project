@@ -5,10 +5,10 @@ import berlin from "./BerlinFilm.json";
 import venice from "./VeniceFilm.json";
 import goldenHorse from "./golden_horse_best_film.json";
 
-// import { ReactComponent as OscarLogo } from "./logo/oscar_logo.svg";
-// import { ReactComponent as CannesLogo } from "./logo/Cannes_logo.svg";
-// import { ReactComponent as BerlinLogo } from "./logo/Berlin_logo.svg";
-// import { ReactComponent as GoldenHorseLogo } from "./logo/Golden_Horse.svg";
+// import OscarLogo from "./logo/oscar_logo.svg";
+// import CannesLogo from "./logo/Cannes_logo.svg";
+// import BerlinLogo from "./logo/Berlin_logo.svg";
+// import GoldenHorseLogo from "./logo/Golden_Horse.svg";
 
 import OscarLogo from "./logo/oscar_logo.png";
 import CannesLogo from "./logo/Cannes_logo.png";

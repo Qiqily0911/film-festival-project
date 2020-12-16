@@ -68,6 +68,7 @@ function MovieCard(props) {
 
         props.omdbApi(movieId);
         props.renewData(props);
+        props.setInfoBox(true);
         // FIXME: can work but slow
         //  props.imdbRating(movieId);
       }}

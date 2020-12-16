@@ -6,8 +6,10 @@ import { InitListState } from "./data/BtnData";
 // components
 import YearList from "./components/YearList";
 import MovieInfo from "./components/MovieInfo";
+import PrizeInfo from "./components/PrizeInfo";
 import MovieFilter from "./components/MovieFilter";
 import MemberBtn from "./components/MemberBtn";
+import MemberPage from "./components/MemberPage";
 import ControlSilder from "./components/ControlSlider";
 import React, { useState, useEffect, useRef } from "react";
 //config and firebase
@@ -49,6 +51,12 @@ function App() {
   const movieInfoEl = useRef(null);
   const crewsEl = useRef(null);
 
+  // switch of infoBox
+  const [infoBoxState, setInfoBox] = useState(false);
+  const [prizeBoxState, setprizeBox] = useState(true);
+
+  const [memberPage, setMemberPage] = useState(false);
+
   useEffect(() => {
     const yearList = [];
     //  根據 listState 去把 yearList 給做出來
@@ -74,7 +82,7 @@ function App() {
     // prevent scroll event when no film list
     for (let i = 0; i < listState.length; i++) {
       if (listState[i].film_list !== undefined) {
-        console.log("scroll");
+        // console.log("scroll");
         setScroll(true);
         return;
       }
@@ -83,7 +91,7 @@ function App() {
     function setSilderValue() {
       if (yearListRefs !== null) {
         if (yearListRefs[minYear] !== undefined) {
-          console.log(yearListRefs[minYear]);
+          // console.log(yearListRefs[minYear]);
           let a = maxYear - minYear + 1;
           let b = yearListRefs[minYear].current.getBoundingClientRect();
           let c = a * b.height;
@@ -148,6 +156,7 @@ function App() {
       });
   }
 
+  // TODO: 精簡傳輸資料的方式
   //  get tmdb crew detail
   function tmdbCrewApi(type, personId) {
     return new Promise((resolve, reject) => {
@@ -211,6 +220,21 @@ function App() {
     xhr.send();
   }
 
+  function ordinalSuffix(i) {
+    var j = i % 10,
+      k = i % 100;
+    if (j === 1 && k !== 11) {
+      return i + "st";
+    }
+    if (j === 2 && k !== 12) {
+      return i + "nd";
+    }
+    if (j === 3 && k !== 13) {
+      return i + "rd";
+    }
+    return i + "th";
+  }
+
   return (
     <div className={styles.outter}>
       <aside>
@@ -230,22 +254,29 @@ function App() {
       <main>
         <div className={styles.container}>
           <div className={styles.navbar}>
-            <MovieFilter
-              filmList={filmList}
-              setFilmList={setFilmList}
-              prize={prize}
-              setPrize={setPrize}
-              yearlist={list}
-              yearListRefs={yearListRefs}
-              listState={listState}
-              setlistState={setlistState}
-              setVertical={setVertical}
-              setScroll={setScroll}
-            />
-
+            {memberPage ? (
+              <div>123</div>
+            ) : (
+              <MovieFilter
+                filmList={filmList}
+                setFilmList={setFilmList}
+                prize={prize}
+                setPrize={setPrize}
+                yearlist={list}
+                yearListRefs={yearListRefs}
+                listState={listState}
+                setlistState={setlistState}
+                setVertical={setVertical}
+                setScroll={setScroll}
+              />
+            )}
             {/* <Router> */}
             <AuthProvider>
-              <MemberBtn setUserId={setUserId} />
+              <MemberBtn
+                setUserId={setUserId}
+                memberPage={memberPage}
+                setMemberPage={setMemberPage}
+              />
             </AuthProvider>
             {/* <Switch>
                   <Route path="./signup" component={MemberBtn} />
@@ -254,27 +285,42 @@ function App() {
             {/* </Router> */}
           </div>
           <div className={styles.subContainer}>
-            <YearList
-              prize={prize}
-              tmdbApi={tmdbApi}
-              omdbApi={omdbApi}
-              imdbRating={imdbRating}
-              renewData={renewData}
-              yearlist={list}
-              yearListRefs={yearListRefs}
-              listState={listState}
-              setlistState={setlistState}
-              setMin={setMin}
-              minYear={minYear}
-              setMax={setMax}
-              maxYear={maxYear}
-              setVertical={setVertical}
-              vertical={vertical}
-              isScroll={isScroll}
-              userId={userId}
-              movieInfoEl={movieInfoEl}
-            />
-
+            {memberPage ? (
+              <MemberPage />
+            ) : (
+              <>
+                <YearList
+                  prize={prize}
+                  tmdbApi={tmdbApi}
+                  omdbApi={omdbApi}
+                  imdbRating={imdbRating}
+                  renewData={renewData}
+                  yearlist={list}
+                  yearListRefs={yearListRefs}
+                  listState={listState}
+                  setlistState={setlistState}
+                  setMin={setMin}
+                  minYear={minYear}
+                  setMax={setMax}
+                  maxYear={maxYear}
+                  setVertical={setVertical}
+                  vertical={vertical}
+                  isScroll={isScroll}
+                  userId={userId}
+                  movieInfoEl={movieInfoEl}
+                  setInfoBox={setInfoBox}
+                />
+                <PrizeInfo
+                  listState={listState}
+                  minYear={minYear}
+                  maxYear={maxYear}
+                  vertical={vertical}
+                  prizeBoxState={prizeBoxState}
+                  setprizeBox={setprizeBox}
+                  ordinalSuffix={ordinalSuffix}
+                />
+              </>
+            )}
             <MovieInfo
               movieInfoEl={movieInfoEl}
               crewsEl={crewsEl}
@@ -289,6 +335,9 @@ function App() {
               setCrew={setCrew}
               tmdbCrew={tmdbCrew}
               tmdbPerson={tmdbPerson}
+              ordinalSuffix={ordinalSuffix}
+              infoBoxState={infoBoxState}
+              setInfoBox={setInfoBox}
             />
           </div>
         </div>

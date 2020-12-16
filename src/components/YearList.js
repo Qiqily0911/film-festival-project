@@ -63,6 +63,7 @@ function YearList(props) {
                   isLiked={Boolean(isLiked)}
                   userId={props.userId}
                   likedList={likedList}
+                  setInfoBox={props.setInfoBox}
                 />
               );
             })}
