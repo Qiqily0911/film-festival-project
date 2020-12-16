@@ -1,55 +1,18 @@
 import React, { useEffect, useState } from "react";
 import styles from "../style/MovieCard.module.scss";
-import { firestore } from "../config";
-const movieLiked = firestore.collection("movie_liked");
+// import { firestore } from "../config";
+// const movieLiked = firestore.collection("movie_liked");
 
 function MovieCard(props) {
   // 加入收藏，在firestore加入資料
-  function addLiked(e) {
-    console.log(e.currentTarget.dataset["id"]);
-
-    let obj = {
-      user: props.userId,
-      movie_id: props.movie_id,
-      poster_path: props.poster_path,
-      film_name_en: props.film_name_en,
-      film_name_zh: props.film_name_zh,
-    };
-    console.log(obj);
-
-    movieLiked
-      .add(obj)
-      .then((res) => {
-        movieLiked.doc(res.id).set({ id: res.id }, { merge: true });
-      })
-      .then(() => {
-        console.log("add movie success!");
-      });
-
-    e.stopPropagation();
-    console.log("===========");
-  }
-
-  // 取消收藏，並恢復原本 keepTag 樣式
-  function cancelLiked(e) {
-    console.log(props.likedList);
-    console.log(e.currentTarget);
-    for (let i = 0; i < props.likedList.length; i++) {
-      let a = props.movie_id;
-      if (a === props.likedList[i].movie_id) {
-        console.log(222);
-        console.log(props.likedList[i].id);
-        movieLiked
-          .doc(props.likedList[i].id)
-          .delete()
-          .then(() => {
-            console.log("delete data successful");
-            e.stopPropagation();
-          });
-      }
-    }
-    e.stopPropagation();
-  }
+  let obj = {
+    user: props.userId,
+    movie_id: props.movie_id,
+    tmdb_id: props.tmdb_id,
+    poster_path: props.poster_path,
+    film_name_en: props.film_name_en,
+    film_name_zh: props.film_name_zh,
+  };
 
   console.log("--render all movie cards--");
   const notFound = <div className={styles.notFound}></div>;
@@ -83,7 +46,11 @@ function MovieCard(props) {
           }}
           className={styles.keepTag}
           data-id={props.movie_id}
-          onClick={props.isLiked ? cancelLiked : addLiked}
+          onClick={(e) =>
+            props.isLiked
+              ? props.cancelLiked(e, props.movie_id)
+              : props.addLiked(e, obj)
+          }
         ></div>
       ) : (
         ""

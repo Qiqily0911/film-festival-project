@@ -32,11 +32,11 @@ function PrizeInfo(props) {
 
   const content = (
     <div className={styles.innerBox}>
-      {props.listState.map((list) => {
+      {props.listState.map((list, i) => {
         let templist = list.film_list || [];
         // console.log(templist);
         return (
-          <div className={styles.prizeData}>
+          <div className={styles.prizeData} key={i}>
             <div className={styles.logo}>
               <img src={list.logo} alt="logo" />
             </div>
@@ -46,8 +46,12 @@ function PrizeInfo(props) {
               {/* {list.prize_name!==null} */}
               {templist
                 .filter((film) => film.year === year)
-                .map((data) => (
-                  <div data-id={data.movie_id} className={styles.winner}>
+                .map((data, j) => (
+                  <div
+                    data-id={data.movie_id}
+                    className={styles.winner}
+                    key={j}
+                  >
                     <span>{props.ordinalSuffix(data.th)}</span>
                     <div>{data.prize}</div>
                     <div
@@ -79,7 +83,7 @@ function PrizeInfo(props) {
             : props.setprizeBox(true)
         }
       >
-        About the Film Festival
+        {year} Film Festival
       </div>
       <div className={styles.outterBox}>{content}</div>
     </div>

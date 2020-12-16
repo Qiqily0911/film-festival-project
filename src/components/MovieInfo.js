@@ -14,6 +14,7 @@ function MovieInfo(props) {
   const [isCrewOpen, setCrewOpen] = useState(false);
 
   let movieId = props.localData.movie_id;
+  let tmdbId = props.localData.tmdb_id;
   let videoPath = props.tmdbVideo.results;
   let images = props.tmdbImages;
   let credits = props.tmdbCredits;
@@ -69,6 +70,10 @@ function MovieInfo(props) {
     videoPath,
   ]);
 
+  const isLiked = Boolean(
+    props.likedList && props.likedList.find((item) => item.tmdb_id === tmdbId)
+  );
+  console.log(isLiked);
   const director = () => {
     let arr = creditsList["crew"].filter((person) => person.job === "Director");
     let person = arr[0];
@@ -149,6 +154,14 @@ function MovieInfo(props) {
   //  } else {
   //     btn.classList.add(`${styles.noVideo}`);
   //  }
+  let obj = {
+    user: props.userId,
+    movie_id: movieId,
+    tmdb_id: tmdbId,
+    poster_path: props.tmdbData.poster_path,
+    film_name_en: props.tmdbData.title,
+    film_name_zh: props.localData.film_name_zh,
+  };
 
   const content = (
     <div className={styles.innerBox}>
@@ -191,7 +204,21 @@ function MovieInfo(props) {
             {/* --------------- rating -------------- */}
           </div>
 
-          <div className={styles.keep}>加入清單</div>
+          {isLiked ? (
+            <div
+              className={styles.cancelBtn}
+              onClick={(e) => props.cancelLiked(e, tmdbId)}
+            >
+              取消收藏
+            </div>
+          ) : (
+            <div
+              className={styles.addBtn}
+              onClick={(e) => props.addLiked(e, obj)}
+            >
+              加入收藏
+            </div>
+          )}
         </div>
         <div className={styles.title}>
           <p>{props.tmdbData.title}</p>
@@ -293,6 +320,9 @@ function MovieInfo(props) {
               setCrewOpen={setCrewOpen}
               tmdbCrew={props.tmdbCrew}
               tmdbPerson={props.tmdbPerson}
+              likedList={props.likedList}
+              addLiked={props.addLiked}
+              cancelLiked={props.cancelLiked}
             />
           ) : (
             ""

@@ -9,7 +9,7 @@ import MovieInfo from "./components/MovieInfo";
 import PrizeInfo from "./components/PrizeInfo";
 import MovieFilter from "./components/MovieFilter";
 import MemberBtn from "./components/MemberBtn";
-import MemberPage from "./components/MemberPage";
+import { MemberNav, MemberPage } from "./components/MemberPage";
 import ControlSilder from "./components/ControlSlider";
 import React, { useState, useEffect, useRef } from "react";
 //config and firebase
@@ -45,6 +45,7 @@ function App() {
   const [isScroll, setScroll] = useState(true);
 
   // get uid
+  const [userData, setUserData] = useState("");
   const [userId, setUserId] = useState();
 
   //  set ref of infoBox
@@ -56,6 +57,9 @@ function App() {
   const [prizeBoxState, setprizeBox] = useState(true);
 
   const [memberPage, setMemberPage] = useState(false);
+
+  const movieLiked = firestore.collection("movie_liked");
+  const [likedList, setLikedList] = useState();
 
   useEffect(() => {
     const yearList = [];
@@ -105,6 +109,20 @@ function App() {
     console.log("can't scroll");
   }, [listState]);
 
+  // 取得使用者收藏清單，並設訂變數 likedList
+  useEffect(() => {
+    if (userId) {
+      movieLiked.where("user", "==", userId).onSnapshot((onSnapshot) => {
+        let arr = [];
+        onSnapshot.forEach((doc) => {
+          arr.push(doc.data());
+        });
+        setLikedList(arr);
+        // console.log("-------------------------");
+      });
+    }
+  }, [userId]);
+
   // put movies to the correspondense year box
   function fillYearList(yearList, fes, prize, order) {
     if (fes !== undefined) {
@@ -129,6 +147,45 @@ function App() {
     }
   }
 
+  function addLiked(e, obj) {
+    // console.log(e.currentTarget.dataset["id"]);
+    console.log(obj);
+
+    movieLiked
+      .add(obj)
+      .then((res) => {
+        movieLiked.doc(res.id).set({ id: res.id }, { merge: true });
+      })
+      .then(() => {
+        console.log("add movie success!");
+      });
+
+    e.stopPropagation();
+    console.log("===========");
+  }
+
+  // 取消收藏，並恢復原本 keepTag 樣式
+  function cancelLiked(e, movieId) {
+    // console.log(props.likedList);
+    console.log(e.currentTarget);
+    console.log(movieId);
+
+    for (let i = 0; i < likedList.length; i++) {
+      // let a = props.movie_id;
+      if (movieId === likedList[i].movie_id) {
+        // console.log(props.likedList[i].id);
+        movieLiked
+          .doc(likedList[i].id)
+          .delete()
+          .then(() => {
+            console.log("delete data successful");
+            e.stopPropagation();
+          });
+      }
+    }
+
+    e.stopPropagation();
+  }
   //  get tmdb movie detail & video
   function tmdbApi(type, movie_id) {
     return new Promise((resolve, reject) => {
@@ -255,7 +312,7 @@ function App() {
         <div className={styles.container}>
           <div className={styles.navbar}>
             {memberPage ? (
-              <div>123</div>
+              <MemberNav />
             ) : (
               <MovieFilter
                 filmList={filmList}
@@ -273,6 +330,8 @@ function App() {
             {/* <Router> */}
             <AuthProvider>
               <MemberBtn
+                setUserData={setUserData}
+                userData={userData}
                 setUserId={setUserId}
                 memberPage={memberPage}
                 setMemberPage={setMemberPage}
@@ -284,11 +343,18 @@ function App() {
 
             {/* </Router> */}
           </div>
-          <div className={styles.subContainer}>
-            {memberPage ? (
-              <MemberPage />
-            ) : (
-              <>
+
+          {memberPage ? (
+            <MemberPage
+              userId={userId}
+              userData={userData}
+              memberPage={memberPage}
+              likedList={likedList}
+              cancelLiked={cancelLiked}
+            />
+          ) : (
+            <>
+              <div className={styles.subContainer}>
                 <YearList
                   prize={prize}
                   tmdbApi={tmdbApi}
@@ -309,6 +375,11 @@ function App() {
                   userId={userId}
                   movieInfoEl={movieInfoEl}
                   setInfoBox={setInfoBox}
+                  likedList={likedList}
+                  addLiked={addLiked}
+                  cancelLiked={cancelLiked}
+
+                  // memberPage={memberPage}
                 />
                 <PrizeInfo
                   listState={listState}
@@ -319,27 +390,31 @@ function App() {
                   setprizeBox={setprizeBox}
                   ordinalSuffix={ordinalSuffix}
                 />
-              </>
-            )}
-            <MovieInfo
-              movieInfoEl={movieInfoEl}
-              crewsEl={crewsEl}
-              tmdbData={tmdbData}
-              tmdbVideo={tmdbVideo}
-              tmdbImages={tmdbImages}
-              tmdbCredits={tmdbCredits}
-              localData={localData}
-              omdbData={omdbData}
-              imdbSpan={imdbSpan}
-              tmdbCrewApi={tmdbCrewApi}
-              setCrew={setCrew}
-              tmdbCrew={tmdbCrew}
-              tmdbPerson={tmdbPerson}
-              ordinalSuffix={ordinalSuffix}
-              infoBoxState={infoBoxState}
-              setInfoBox={setInfoBox}
-            />
-          </div>
+              </div>
+            </>
+          )}
+          <MovieInfo
+            movieInfoEl={movieInfoEl}
+            crewsEl={crewsEl}
+            tmdbData={tmdbData}
+            tmdbVideo={tmdbVideo}
+            tmdbImages={tmdbImages}
+            tmdbCredits={tmdbCredits}
+            localData={localData}
+            omdbData={omdbData}
+            imdbSpan={imdbSpan}
+            tmdbCrewApi={tmdbCrewApi}
+            setCrew={setCrew}
+            tmdbCrew={tmdbCrew}
+            tmdbPerson={tmdbPerson}
+            ordinalSuffix={ordinalSuffix}
+            infoBoxState={infoBoxState}
+            setInfoBox={setInfoBox}
+            userId={userId}
+            likedList={likedList}
+            addLiked={addLiked}
+            cancelLiked={cancelLiked}
+          />
         </div>
       </main>
     </div>

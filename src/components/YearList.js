@@ -2,26 +2,10 @@ import React, { useState, useEffect } from "react";
 import styles from "../style/YearList.module.scss";
 import MovieCard from "./MovieCard";
 // import { nanoid } from "nanoid";
-import { firestore } from "../config";
+// import { firestore } from "../config";
 
 function YearList(props) {
   const [showList, setShowList] = useState("");
-  const movieLiked = firestore.collection("movie_liked");
-  const [likedList, setLikedList] = useState();
-
-  // 取得使用者收藏清單，並設訂變數 likedList
-  useEffect(() => {
-    if (props.userId) {
-      movieLiked.where("user", "==", props.userId).onSnapshot((onSnapshot) => {
-        let arr = [];
-        onSnapshot.forEach((doc) => {
-          arr.push(doc.data());
-        });
-        setLikedList(arr);
-        // console.log("-------------------------");
-      });
-    }
-  }, [props.userId]);
 
   // render 電影卡片（無狀態）
   useEffect(() => {
@@ -41,8 +25,10 @@ function YearList(props) {
             {/* {console.log(likedList)} */}
             {yearbox.list.map((data, j) => {
               const isLiked =
-                likedList &&
-                likedList.find((item) => item.movie_id === data[0].movie_id);
+                props.likedList &&
+                props.likedList.find(
+                  (item) => item.movie_id === data[0].movie_id
+                );
 
               return (
                 <MovieCard
@@ -57,13 +43,18 @@ function YearList(props) {
                   atmovie_link={data[0].atmovie_link}
                   imdb_link={data[0].imdb_link}
                   movie_id={data[0].movie_id}
+                  tmdb_id={data[0].tmdb_id}
                   film_name_zh={data[0].film_name_zh}
                   film_name_en={data[0].film_name_en}
                   poster_path={data[0].poster_path}
                   isLiked={Boolean(isLiked)}
                   userId={props.userId}
-                  likedList={likedList}
                   setInfoBox={props.setInfoBox}
+                  likedList={props.likedList}
+                  addLiked={props.addLiked}
+                  cancelLiked={props.cancelLiked}
+
+                  // memberPage={props.memberPage}
                 />
               );
             })}
@@ -95,7 +86,7 @@ function YearList(props) {
     }
 
     setShowList(showYearList);
-  }, [props.yearlist, props.userId, likedList]);
+  }, [props.yearlist, props.likedList]);
 
   // 偵測滾動事件，並改變滑桿數值
   function detect() {

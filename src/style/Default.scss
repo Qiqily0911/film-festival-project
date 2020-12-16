@@ -56,6 +56,15 @@ $color-gold: rgba(212, 156, 0, 0.876);
   cursor: pointer;
 }
 
+@mixin navBtn {
+  @include centerPosition;
+  flex-direction: column;
+  text-align: center;
+  width: 180px;
+  margin: 10px 20px;
+  padding: 10px;
+}
+
 /* general css */
 
 .d-flex {

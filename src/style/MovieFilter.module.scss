@@ -18,14 +18,8 @@
     // border: 1px solid blue;
   }
   .fesTitle {
-    @include centerPosition;
+    @include navBtn;
     // border: 1px solid red;
-
-    flex-direction: column;
-    text-align: center;
-    width: 180px;
-    margin: 10px 20px;
-    padding: 10px;
 
     .inner {
       @include centerPosition;
