@@ -23,14 +23,16 @@ function MovieCard(props) {
       key={props.movie_id}
       // data-id={props.movie_id}
       onClick={() => {
-        let movieId = props.movie_id;
+        let movieId = props.tmdb_id;
         props.tmdbApi("", movieId);
         props.tmdbApi("/videos", movieId);
         props.tmdbApi("/images", movieId);
         props.tmdbApi("/credits", movieId);
 
-        props.omdbApi(movieId);
+        props.omdbApi(props.movie_id);
         props.renewData(props);
+        // console.log(props);
+
         props.setInfoBox(true);
         // FIXME: can work but slow
         //  props.imdbRating(movieId);
@@ -48,7 +50,7 @@ function MovieCard(props) {
           data-id={props.movie_id}
           onClick={(e) =>
             props.isLiked
-              ? props.cancelLiked(e, props.movie_id)
+              ? props.cancelLiked(e, props.tmdb_id)
               : props.addLiked(e, obj)
           }
         ></div>

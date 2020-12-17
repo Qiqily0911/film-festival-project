@@ -14,6 +14,7 @@ function MovieInfo(props) {
   const [isCrewOpen, setCrewOpen] = useState(false);
 
   let movieId = props.localData.movie_id;
+  //  console.log(movieId);
   let tmdbId = props.localData.tmdb_id;
   let videoPath = props.tmdbVideo.results;
   let images = props.tmdbImages;
@@ -28,7 +29,7 @@ function MovieInfo(props) {
         block: "start",
       });
     }
-  }, [movieId]);
+  }, [tmdbId]);
 
   useEffect(() => {
     if (
@@ -64,7 +65,7 @@ function MovieInfo(props) {
     props.tmdbVideo,
     props.tmdbImages,
     props.tmdbCredits,
-    movieId,
+    tmdbId,
     credits,
     images,
     videoPath,
@@ -73,7 +74,7 @@ function MovieInfo(props) {
   const isLiked = Boolean(
     props.likedList && props.likedList.find((item) => item.tmdb_id === tmdbId)
   );
-  console.log(isLiked);
+  //  console.log(isLiked);
   const director = () => {
     let arr = creditsList["crew"].filter((person) => person.job === "Director");
     let person = arr[0];
@@ -121,8 +122,8 @@ function MovieInfo(props) {
                 key={person.credit_id}
                 data-creditid={person.id}
                 onClick={() => {
-                  console.log(person);
-                  console.log(person.id);
+                  // console.log(person);
+                  // console.log(person.id);
                   props.tmdbCrewApi("/movie_credits", person.id);
                   props.tmdbCrewApi("", person.id);
                   setCrewOpen(true);
@@ -184,17 +185,32 @@ function MovieInfo(props) {
       <div className={styles.infoBox}>
         <div className={styles.upper}>
           <div>
-            <span className={styles.subtitle}>
-              {props.ordinalSuffix(props.localData.th)} {props.localData.prize}{" "}
-              ({props.localData.year})
-            </span>
+            {/* {console.log(props.localData)} */}
+            {props.localData.th !== undefined ? (
+              <span className={styles.subtitle}>
+                {props.ordinalSuffix(props.localData.th)}{" "}
+                {props.localData.prize} ({props.localData.year})
+              </span>
+            ) : (
+              ""
+            )}
+            <br />
             {/* --------------- rating -------------- */}
             <div className={styles.rating}>
               {/* <span>{props.imdbSpan[0]} /10</span>
                       <span>{props.imdbSpan[1]} votes</span> */}
 
-              <span>{props.omdbData.imdbRating} /10</span>
-              <span>{props.omdbData.imdbVotes} votes</span>
+              {props.omdbData.Response !== "False" ? (
+                <div>
+                  <span>{props.omdbData.imdbRating} /10</span>
+                  <span>{props.omdbData.imdbVotes} votes</span>
+                  <div>{props.omdbData.Awards}</div>
+                </div>
+              ) : (
+                ""
+              )}
+
+              {/* {console.log(props.omdbData)} */}
 
               <div>
                 <img src={clock} alt="clock" />
@@ -271,14 +287,18 @@ function MovieInfo(props) {
           >
             IMDb
           </a>
-          <a
-            className={styles.videoBtn}
-            href={props.localData.atmovie_link}
-            target="_blank"
-            rel="noreferrer"
-          >
-            開眼電影
-          </a>
+          {props.localData.atmovie_link ? (
+            <a
+              className={styles.videoBtn}
+              href={props.localData.atmovie_link}
+              target="_blank"
+              rel="noreferrer"
+            >
+              開眼電影
+            </a>
+          ) : (
+            ""
+          )}
         </div>
         {/* --------- flags -------------- */}
         <div className={styles.flag}>
@@ -317,12 +337,18 @@ function MovieInfo(props) {
           </div>
           {isCrewOpen ? (
             <Crew
+              userId={props.userId}
               setCrewOpen={setCrewOpen}
               tmdbCrew={props.tmdbCrew}
               tmdbPerson={props.tmdbPerson}
+              //  isLiked={props.isLiked}
               likedList={props.likedList}
               addLiked={props.addLiked}
               cancelLiked={props.cancelLiked}
+              tmdbApi={props.tmdbApi}
+              tmdbData2={props.tmdbData2}
+              //  renewData={props.renewData}
+              addPerson={props.addPerson}
             />
           ) : (
             ""
@@ -345,7 +371,7 @@ function MovieInfo(props) {
       >
         About this Movie
       </div>
-      <div className={styles.outterBox}>{movieId ? content : ""}</div>
+      <div className={styles.outterBox}>{tmdbId ? content : ""}</div>
     </div>
   );
 }

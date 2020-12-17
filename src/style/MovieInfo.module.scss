@@ -98,6 +98,13 @@
           }
         }
 
+        .addBtn {
+          border: 1px solid rgb(0, 255, 21);
+        }
+        .cancelBtn {
+          border: 1px solid blue;
+        }
+
         .linkBox {
           display: flex;
           color: $color-gray;

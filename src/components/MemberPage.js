@@ -14,32 +14,6 @@ export function MemberNav() {
   );
 }
 export function MemberPage(props) {
-  //    const [showList, setShowList] = useState("");
-  //    const [likedList, setLikedList] = useState();
-  //    const movieLiked = firestore.collection("movie_liked");
-  //    const users = firestore.collection("users");
-
-  //    console.log(props.userData);
-  // 取得使用者收藏清單，並設訂變數 likedList
-
-  //    useEffect(() => {
-  //       if (props.userId && props.memberPage) {
-  //          movieLiked.where("user", "==", props.userId).onSnapshot((onSnapshot) => {
-  //             let arr = [];
-  //             onSnapshot.forEach((doc) => {
-  //                arr.push(doc.data());
-  //             });
-  //             setLikedList(arr);
-  //             console.log(arr);
-  //          });
-  //       }
-  //    }, [props.userId]);
-
-  //    console.log(likedList);
-  //    if (likedList !== undefined) {
-  //       console.log(likedList[0].film_name_zh);
-  //    }
-
   return (
     <>
       <div className={styles.movieCardBox}>
@@ -58,6 +32,10 @@ export function MemberPage(props) {
                 memberPage={props.memberPage}
                 likedList={props.likedList}
                 cancelLiked={props.cancelLiked}
+                tmdbApi={props.tmdbApi}
+                omdbApi={props.omdbApi}
+                setInfoBox={props.setInfoBox}
+                renewData={props.renewData}
               />
             ))}
         </div>

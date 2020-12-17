@@ -27,6 +27,7 @@ function App() {
   const [tmdbImages, setImages] = useState("");
   const [tmdbCredits, setCredits] = useState("");
   const [tmdbCrew, setCrew] = useState("");
+  const [tmdbData2, setData2] = useState("");
   const [tmdbPerson, setPerson] = useState("");
   const [localData, renewData] = useState("");
   const [omdbData, setomdbData] = useState("");
@@ -60,6 +61,8 @@ function App() {
 
   const movieLiked = firestore.collection("movie_liked");
   const [likedList, setLikedList] = useState();
+
+  const personLiked = firestore.collection("person_liked");
 
   //  console.log(listState);
 
@@ -150,9 +153,6 @@ function App() {
   }
 
   function addLiked(e, obj) {
-    // console.log(e.currentTarget.dataset["id"]);
-    console.log(obj);
-
     movieLiked
       .add(obj)
       .then((res) => {
@@ -166,15 +166,28 @@ function App() {
     console.log("===========");
   }
 
+  function addPerson(e, obj) {
+    personLiked
+      .add(obj)
+      .then((res) => {
+        personLiked.doc(res.id).set({ id: res.id }, { merge: true });
+      })
+      .then(() => {
+        console.log("add person success!");
+      });
+
+    e.stopPropagation();
+    console.log("===========");
+  }
+
   // 取消收藏，並恢復原本 keepTag 樣式
   function cancelLiked(e, movieId) {
     // console.log(props.likedList);
-    console.log(e.currentTarget);
     console.log(movieId);
 
     for (let i = 0; i < likedList.length; i++) {
       // let a = props.movie_id;
-      if (movieId === likedList[i].movie_id) {
+      if (movieId === likedList[i].tmdb_id) {
         // console.log(props.likedList[i].id);
         movieLiked
           .doc(likedList[i].id)
@@ -189,7 +202,7 @@ function App() {
     e.stopPropagation();
   }
   //  get tmdb movie detail & video
-  function tmdbApi(type, movie_id) {
+  function tmdbApi(type, movie_id, inCrewDiv) {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open(
@@ -204,7 +217,12 @@ function App() {
       .then((response) => JSON.parse(response))
       .then((data) => {
         if (type === "") {
-          setData(data);
+          if (inCrewDiv) {
+            console.log("inCrewDiv");
+            setData2(data);
+          } else {
+            setData(data);
+          }
         } else if (type === "/videos") {
           setVideo(data);
         } else if (type === "/images") {
@@ -232,7 +250,7 @@ function App() {
       .then((response) => JSON.parse(response))
       .then((data) => {
         if (type === "") {
-          console.log(data);
+          //  console.log(data);
           setPerson(data);
         } else if (type === "/movie_credits") {
           setCrew(data);
@@ -298,16 +316,20 @@ function App() {
     <div className={styles.outter}>
       <aside>
         <div className={styles.logo}>LOGO</div>
+        {memberPage ? (
+          ""
+        ) : (
+          <ControlSilder
+            vertical={vertical}
+            setVertical={setVertical}
+            yearListRefs={yearListRefs}
+            minYear={minYear}
+            maxYear={maxYear}
+            setScroll={setScroll}
+            isScroll={isScroll}
+          />
+        )}
 
-        <ControlSilder
-          vertical={vertical}
-          setVertical={setVertical}
-          yearListRefs={yearListRefs}
-          minYear={minYear}
-          maxYear={maxYear}
-          setScroll={setScroll}
-          isScroll={isScroll}
-        />
         {/* {console.log("=========== [01] control slider")} */}
       </aside>
       <main>
@@ -353,6 +375,10 @@ function App() {
               memberPage={memberPage}
               likedList={likedList}
               cancelLiked={cancelLiked}
+              tmdbApi={tmdbApi}
+              omdbApi={omdbApi}
+              setInfoBox={setInfoBox}
+              renewData={renewData}
             />
           ) : (
             <>
@@ -403,6 +429,7 @@ function App() {
             tmdbImages={tmdbImages}
             tmdbCredits={tmdbCredits}
             localData={localData}
+            renewData={renewData}
             omdbData={omdbData}
             imdbSpan={imdbSpan}
             tmdbCrewApi={tmdbCrewApi}
@@ -416,6 +443,9 @@ function App() {
             likedList={likedList}
             addLiked={addLiked}
             cancelLiked={cancelLiked}
+            tmdbApi={tmdbApi}
+            tmdbData2={tmdbData2}
+            addPerson={addPerson}
           />
         </div>
       </main>

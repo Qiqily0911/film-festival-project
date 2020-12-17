@@ -56,7 +56,7 @@ function PrizeInfo(props) {
                     <div>{data.prize}</div>
                     <div
                       className={styles.filmName}
-                      onClick={() => console.log(data.movie_id)}
+                      onClick={() => console.log(data.tmdb_id)}
                     >
                       <div>{data.film_name_en}</div>
                       <div>{data.film_name_zh}</div>
