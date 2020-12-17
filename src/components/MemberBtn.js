@@ -59,6 +59,8 @@ function MemberBtn(props) {
         className={styles.switchBtn}
         onClick={() => {
           props.setMemberPage(false);
+          props.setInfoBox(false);
+          props.setprizeBox(false);
         }}
       >
         找電影

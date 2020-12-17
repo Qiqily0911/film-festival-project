@@ -52,11 +52,27 @@ function PrizeInfo(props) {
                     className={styles.winner}
                     key={j}
                   >
-                    <span>{props.ordinalSuffix(data.th)}</span>
-                    <div>{data.prize}</div>
+                    <span>
+                      {props.ordinalSuffix(data.th)}
+                      {data.prize}
+                    </span>
+
                     <div
                       className={styles.filmName}
-                      onClick={() => console.log(data.tmdb_id)}
+                      onClick={() => {
+                        let movieId = data.tmdb_id;
+                        props.tmdbApi("", movieId);
+                        props.tmdbApi("/videos", movieId);
+                        props.tmdbApi("/images", movieId);
+                        props.tmdbApi("/credits", movieId);
+
+                        props.omdbApi(data.movie_id);
+                        props.renewData(data);
+                        // console.log(props);
+
+                        props.setInfoBox(true);
+                        console.log(data.tmdb_id);
+                      }}
                     >
                       <div>{data.film_name_en}</div>
                       <div>{data.film_name_zh}</div>
@@ -73,15 +89,17 @@ function PrizeInfo(props) {
   return (
     <div
       className={styles.prizeInfo}
-      style={{ right: props.prizeBoxState ? "20px" : "-410px" }}
+      style={{ right: props.prizeBoxState ? "450px" : "30px" }}
     >
       <div
         className={styles.handleBar}
-        onClick={() =>
-          props.prizeBoxState
-            ? props.setprizeBox(false)
-            : props.setprizeBox(true)
-        }
+        onClick={() => {
+          if (props.infoBoxState === true) {
+            props.prizeBoxState
+              ? props.setprizeBox(false)
+              : props.setprizeBox(true);
+          }
+        }}
       >
         {year} Film Festival
       </div>

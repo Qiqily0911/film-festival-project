@@ -55,7 +55,7 @@ function App() {
 
   // switch of infoBox
   const [infoBoxState, setInfoBox] = useState(false);
-  const [prizeBoxState, setprizeBox] = useState(true);
+  const [prizeBoxState, setprizeBox] = useState(false);
 
   const [memberPage, setMemberPage] = useState(false);
 
@@ -63,6 +63,7 @@ function App() {
   const [likedList, setLikedList] = useState();
 
   const personLiked = firestore.collection("person_liked");
+  const [personList, setPersonList] = useState();
 
   //  console.log(listState);
 
@@ -123,7 +124,15 @@ function App() {
           arr.push(doc.data());
         });
         setLikedList(arr);
-        // console.log("-------------------------");
+      });
+
+      //  喜歡的演員或導演清單
+      personLiked.where("user", "==", userId).onSnapshot((onSnapshot) => {
+        let arr = [];
+        onSnapshot.forEach((doc) => {
+          arr.push(doc.data());
+        });
+        setPersonList(arr);
       });
     }
   }, [userId]);
@@ -359,6 +368,8 @@ function App() {
                 setUserId={setUserId}
                 memberPage={memberPage}
                 setMemberPage={setMemberPage}
+                setInfoBox={setInfoBox}
+                setprizeBox={setprizeBox}
               />
             </AuthProvider>
             {/* <Switch>
@@ -379,6 +390,7 @@ function App() {
               omdbApi={omdbApi}
               setInfoBox={setInfoBox}
               renewData={renewData}
+              personList={personList}
             />
           ) : (
             <>
@@ -410,10 +422,15 @@ function App() {
                   // memberPage={memberPage}
                 />
                 <PrizeInfo
+                  renewData={renewData}
+                  tmdbApi={tmdbApi}
+                  omdbApi={omdbApi}
                   listState={listState}
                   minYear={minYear}
                   maxYear={maxYear}
                   vertical={vertical}
+                  infoBoxState={infoBoxState}
+                  setInfoBox={setInfoBox}
                   prizeBoxState={prizeBoxState}
                   setprizeBox={setprizeBox}
                   ordinalSuffix={ordinalSuffix}
@@ -439,6 +456,8 @@ function App() {
             ordinalSuffix={ordinalSuffix}
             infoBoxState={infoBoxState}
             setInfoBox={setInfoBox}
+            prizeBoxState={prizeBoxState}
+            setprizeBox={setprizeBox}
             userId={userId}
             likedList={likedList}
             addLiked={addLiked}
@@ -446,6 +465,7 @@ function App() {
             tmdbApi={tmdbApi}
             tmdbData2={tmdbData2}
             addPerson={addPerson}
+            memberPage={memberPage}
           />
         </div>
       </main>

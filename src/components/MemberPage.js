@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import styles from "../style/MemberPage.module.scss";
-import { firestore } from "../config";
 import MovieCard from "./MovieCard";
 
 // import { nanoid } from "nanoid";
@@ -38,6 +37,23 @@ export function MemberPage(props) {
                 renewData={props.renewData}
               />
             ))}
+
+          {props.personList.map((data, i) => (
+            <div key={i}>
+              <img
+                alt="poster"
+                src={`https://image.tmdb.org/t/p/w154${data.profile_path}`}
+              />
+              <a
+                href={`https://www.imdb.com/name/${data.person_imdb_id}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <div>IMDB</div>
+              </a>
+              <div>{data.person_name}</div>
+            </div>
+          ))}
         </div>
       </div>
     </>

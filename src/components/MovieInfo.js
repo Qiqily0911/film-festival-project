@@ -31,6 +31,10 @@ function MovieInfo(props) {
     }
   }, [tmdbId]);
 
+  // if (props.infoBoxState === false) {
+  //    props.setprizeBox(true);
+  // }
+
   useEffect(() => {
     if (
       videoPath !== undefined &&
@@ -361,13 +365,27 @@ function MovieInfo(props) {
   return (
     <div
       className={styles.movieInfo}
-      style={{ right: props.infoBoxState ? "0" : "-430px" }}
+      style={{ right: props.infoBoxState ? "0" : "-420px" }}
     >
       <div
         className={styles.handleBar}
-        onClick={() =>
-          props.infoBoxState ? props.setInfoBox(false) : props.setInfoBox(true)
-        }
+        onClick={() => {
+          if (props.memberPage === true) {
+            props.infoBoxState
+              ? props.setInfoBox(false)
+              : props.setInfoBox(true);
+          } else {
+            if (props.prizeBoxState === false && props.infoBoxState === false) {
+              props.setInfoBox(true);
+              props.setprizeBox(true);
+            }
+
+            if (props.prizeBoxState === true && props.infoBoxState === true) {
+              props.setInfoBox(false);
+              props.setprizeBox(false);
+            }
+          }
+        }}
       >
         About this Movie
       </div>
