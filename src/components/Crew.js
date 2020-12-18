@@ -50,6 +50,7 @@ function Crew(props) {
     profile_path: personData.profile_path,
     department: personData.known_for_department,
     user: props.userId,
+    time: new Date(),
   };
 
   return (

@@ -1,90 +1,93 @@
 import React, { useState, useEffect } from "react";
+import { BtnData } from "../data/BtnData";
 import styles from "../style/PrizeInfo.module.scss";
-// import OscarLogo from "../data/logo/oscar_logo.png";
-// import CannesLogo from "../data/logo/Cannes_logo.png";
-// import BerlinLogo from "../data/logo/Berlin_logo.png";
-// import GoldenHorseLogo from "../data/logo/Golden_Horse.png";
 
 function PrizeInfo(props) {
-  // {
-  //     title: "奧斯卡金像獎",
-  //     prize_name: "Best Film",
-  //     film_list: oscar,
-  //     prize: "best_film",
-  //     logo: OscarLogo,
-  //     order: 0,
-  //   },
-
-  //    "th": 62,
-  //    "year": 2009,
-  //    "prize": "un_certain_regard",
-  //    "film_name_zh": "非普通教慾",
-  //    "film_name_en": "Canine",
-  //    "atmovie_link": "http://app2.atmovies.com.tw/film/fdel21379182/",
-  //    "imdb_link": "https://www.imdb.com/title/tt1379182",
-  //    "movie_id": "tt1379182",
-  //    "poster_path": "/xUnbL2Uoh4zoc1hJvIV6MDDJpka.jpg"
-
   const year = Math.floor(
     props.vertical * ((props.maxYear - props.minYear) / 100) + props.minYear
   );
-  // console.log(year);
+  const [infoHeight, setHeight] = useState({
+    "index-1": "calc(100% / 3)",
+    "index-2": "calc(100% / 3)",
+    "index-3": "calc(100% / 3)",
+  });
 
-  const content = (
-    <div className={styles.innerBox}>
-      {props.listState.map((list, i) => {
-        let templist = list.film_list || [];
-        // console.log(templist);
+  const content = (list, index) => {
+    let templist = list.film_list || [];
+
+    function openCard(i) {
+      //  setHeight("100px");
+      setHeight({
+        ...infoHeight,
+        [`index-${i + 1}`]: "100px",
+      });
+    }
+
+    // 依據每筆資料的 data_id 找對應名稱
+    let prizeId = (dataId) => dataId.substring(dataId.length - 1) - 1;
+    let prizeName = (i, data) => BtnData[i].arr[prizeId(data.data_id)];
+
+    for (let i = 0; i < BtnData.length; i++) {
+      if (BtnData[i].list_name === list.list_name) {
         return (
-          <div className={styles.prizeData} key={i}>
+          <div
+            className={styles.prizeData}
+            key={index}
+            style={{ height: infoHeight[`index-${index + 1}`] }}
+            onClick={() => openCard(index)}
+          >
             <div className={styles.logo}>
               <img src={list.logo} alt="logo" />
             </div>
 
-            <div className={styles.title}>{list.title}</div>
-            <div>
-              {/* {list.prize_name!==null} */}
-              {templist
-                .filter((film) => film.year === year)
-                .map((data, j) => (
-                  <div
-                    data-id={data.movie_id}
-                    className={styles.winner}
-                    key={j}
-                  >
-                    <span>
-                      {props.ordinalSuffix(data.th)}
-                      {data.prize}
-                    </span>
-
+            <div className={styles.title}>
+              <div>{BtnData[i].btnText}</div>
+              <div>{BtnData[i].official_name}</div>
+              <div>
+                {templist
+                  .filter((film) => film.year === year)
+                  .map((data, j) => (
                     <div
-                      className={styles.filmName}
-                      onClick={() => {
-                        let movieId = data.tmdb_id;
-                        props.tmdbApi("", movieId);
-                        props.tmdbApi("/videos", movieId);
-                        props.tmdbApi("/images", movieId);
-                        props.tmdbApi("/credits", movieId);
-
-                        props.omdbApi(data.movie_id);
-                        props.renewData(data);
-                        // console.log(props);
-
-                        props.setInfoBox(true);
-                        console.log(data.tmdb_id);
-                      }}
+                      data-id={data.movie_id}
+                      className={styles.winner}
+                      key={j}
                     >
-                      <div>{data.film_name_en}</div>
-                      <div>{data.film_name_zh}</div>
+                      <span>
+                        {props.ordinalSuffix(data.th)}
+
+                        <div>{prizeName(i, data).subBtnName}</div>
+                        <div>{prizeName(i, data).subBtnText}</div>
+                      </span>
+
+                      <div
+                        className={styles.filmName}
+                        onClick={() => {
+                          let movieId = data.tmdb_id;
+                          props.tmdbApi("", movieId);
+                          props.tmdbApi("/videos", movieId);
+                          props.tmdbApi("/images", movieId);
+                          props.tmdbApi("/credits", movieId);
+
+                          props.omdbApi(data.movie_id);
+                          props.renewData(data);
+                          // console.log(props);
+
+                          props.setInfoBox(true);
+                          console.log(data.tmdb_id);
+                        }}
+                      >
+                        <div>{data.film_name_en}</div>
+                        <div>{data.film_name_zh}</div>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+              </div>
             </div>
           </div>
         );
-      })}
-    </div>
-  );
+      }
+    }
+  };
 
   return (
     <div
@@ -103,7 +106,11 @@ function PrizeInfo(props) {
       >
         {year} Film Festival
       </div>
-      <div className={styles.outterBox}>{content}</div>
+      <div className={styles.outterBox}>
+        <div className={styles.innerBox}>
+          {props.listState.map((list, i) => content(list, i))}
+        </div>
+      </div>
     </div>
   );
 }

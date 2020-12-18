@@ -47,7 +47,9 @@ function MovieFilter(props) {
 
     let btnSelect = {
       title: BtnData[num1].btnText,
+      prize_zh: BtnData[num1].arr[num2].subBtnName,
       prize_name: BtnData[num1].arr[num2].subBtnText,
+      list_name: BtnData[num1].list_name,
       film_list: BtnData[num1].value,
       prize: BtnData[num1].arr[num2].subBtnValue,
       logo: BtnData[num1].logo,
@@ -84,11 +86,8 @@ function MovieFilter(props) {
   function close(e) {
     let order = Number(e.target.dataset.order);
     let arr = [...props.listState];
-
     arr[order] = { film_list: undefined, order: order };
-
     props.setlistState(arr);
-    // props.setVertical(100);
   }
 
   const title = props.listState.map((data, i) => (
@@ -96,10 +95,6 @@ function MovieFilter(props) {
       {data.film_list !== undefined ? (
         <div>
           <div className={styles.inner}>
-            {/* <div className={styles.icon}>
-                     <img alt="festival-logo" src={data.logo} />
-                  </div> */}
-
             <div>
               <span className={styles.title}>
                 <div
@@ -112,7 +107,7 @@ function MovieFilter(props) {
                 {data.title}
               </span>
               <br />
-              <span className={styles.prize}>{data.prize_name}</span>
+              <span className={styles.prize}>{data.prize_zh}</span>
             </div>
           </div>
         </div>
@@ -155,7 +150,7 @@ function MovieFilter(props) {
                           onClick={selectPrize}
                           data-order={k}
                         >
-                          {subBtn.subBtnText}
+                          {subBtn.subBtnName}
                         </button>
                       ))}
                     </div>

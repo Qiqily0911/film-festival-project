@@ -180,6 +180,19 @@
             }
           }
         }
+
+        .mediaSource {
+          display: flex;
+          a {
+            display: flex;
+          }
+
+          svg {
+            width: 30px;
+            height: 30px;
+            fill: $color-lightgray;
+          }
+        }
         .overview {
           margin: 10px 0;
           font-size: 14px;

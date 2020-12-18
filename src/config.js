@@ -25,24 +25,24 @@ const firebaseSet = firebase.initializeApp(config);
 export const firebaseAuth = firebase.auth();
 export const firestore = firebaseSet.firestore();
 
-export function createUser(user) {
-  let users = firestore.collection("users");
+// export function createUser(user) {
+//   let users = firestore.collection("users");
 
-  users
-    .doc(user.uid)
-    .set(
-      {
-        name: user.displayName,
-        email: user.email,
-        uid: user.uid,
-        list: [],
-      },
-      { merge: true }
-    )
-    .then(() => {
-      console.log("set data successful");
-    });
-}
+//   users
+//     .doc(user.uid)
+//     .set(
+//       {
+//         name: user.displayName,
+//         email: user.email,
+//         uid: user.uid,
+//         list: [],
+//       },
+//       { merge: true }
+//     )
+//     .then(() => {
+//       console.log("set data successful");
+//     });
+// }
 // let ref = firestore.collection("cannes_film").doc("palme_d_or");
 
 // ref.get().then((doc) => {
@@ -58,9 +58,10 @@ export const googleSignIn = () =>
   firebaseAuth
     .signInWithPopup(providerGoogle)
     .then(function (result) {
+      console.log(result);
       //  var token = result.credential.accessToken; //  Google Access Token
-      var user = result.user; // The signed-in user info.
-      createUser(user);
+      // var user = result.user; // The signed-in user info.
+      // createUser(user);
     })
     .catch(function (error) {
       // Handle Errors here.
@@ -79,9 +80,10 @@ export const faceBookSignIn = () =>
   firebaseAuth
     .signInWithPopup(providerFb)
     .then(function (result) {
+      console.log(result);
       //  var token = result.credential.accessToken; // Facebook Access Token
-      var user = result.user; // The signed-in user info.
-      createUser(user);
+      // var user = result.user; // The signed-in user info.
+      // createUser(user);
     })
     .catch(function (error) {
       // Handle Errors here.

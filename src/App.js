@@ -81,6 +81,8 @@ function App() {
       return acc;
     }, {});
 
+    console.log(listState);
+
     setRefs(refs);
     listState.map((list) =>
       fillYearList(yearList, list.film_list, list.prize, list.order)

@@ -6,6 +6,7 @@ export default function CrewCard(props) {
     user: props.userId,
     movie_id: "",
     tmdb_id: props.data.id,
+    data_id: "",
     poster_path: props.data.poster_path,
     film_name_en: props.data.title,
     film_name_zh: "",

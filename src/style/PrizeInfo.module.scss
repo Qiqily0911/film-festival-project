@@ -33,7 +33,8 @@
       width: 100%;
       height: 100%;
       .prizeData {
-        height: 33%;
+        // height: calc(100% / 3);
+        transition: all 1s ease;
         // border: 1px solid red;
         padding: 20px;
         overflow: scroll;

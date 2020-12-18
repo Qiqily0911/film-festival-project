@@ -44,6 +44,7 @@ function YearList(props) {
                   imdb_link={data[0].imdb_link}
                   movie_id={data[0].movie_id}
                   tmdb_id={data[0].tmdb_id}
+                  data_id={data[0].data_id}
                   film_name_zh={data[0].film_name_zh}
                   film_name_en={data[0].film_name_en}
                   poster_path={data[0].poster_path}

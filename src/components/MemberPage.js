@@ -25,6 +25,7 @@ export function MemberPage(props) {
                 tmdb_id={data.tmdb_id}
                 film_name_zh={data.film_name_zh}
                 film_name_en={data.film_name_en}
+                data_id={data.data_id}
                 poster_path={data.poster_path}
                 userId={props.userId}
                 isLiked={true}

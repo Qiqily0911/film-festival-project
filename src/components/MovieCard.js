@@ -9,11 +9,13 @@ function MovieCard(props) {
     user: props.userId,
     movie_id: props.movie_id,
     tmdb_id: props.tmdb_id,
+    data_id: props.data_id,
     poster_path: props.poster_path,
     film_name_en: props.film_name_en,
     film_name_zh: props.film_name_zh,
+    time: new Date(),
   };
-
+  //  console.log(props);
   console.log("--render all movie cards--");
   const notFound = <div className={styles.notFound}></div>;
 
@@ -34,6 +36,7 @@ function MovieCard(props) {
         // console.log(props);
 
         props.setInfoBox(true);
+
         // FIXME: can work but slow
         //  props.imdbRating(movieId);
       }}
@@ -74,6 +77,7 @@ function MovieCard(props) {
       </div>
 
       <div className={styles.basicInfo}>
+        {/* {console.log(props.data_id)} */}
         {/* <div className={styles.th}>{ordinalSuffix(props.th)}</div> */}
         <div>
           <div className={styles.titleEn}>{props.film_name_en}</div>

@@ -66,7 +66,9 @@ function MemberBtn(props) {
         找電影
       </div>
       {/* {currentUser && <div>{currentUser.email}</div>} */}
-      <div className={styles.userName}>Hi, {props.userData.name}</div>
+      <div className={styles.userName}>
+        Hi, {props.userData.name ? props.userData.name : "小明"}
+      </div>
       {error && <div>{error}</div>}
       <button onClick={handleLogout}>Log Out</button>
     </div>

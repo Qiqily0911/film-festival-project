@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import styles from "../style/MovieInfo.module.scss";
 import { nanoid } from "nanoid";
 import clock from "../image/clock.png";
+import { ReactComponent as Taipeilibrary } from "../image/TaipeiCity_library.svg";
+import { ReactComponent as NewTaipeilibrary } from "../image/newTaipeiCity_library.svg";
 import Crew from "./Crew";
+import { BtnData } from "../data/BtnData";
 // import countryName from "../data/countries.json";
 
 function MovieInfo(props) {
@@ -15,6 +18,7 @@ function MovieInfo(props) {
 
   let movieId = props.localData.movie_id;
   //  console.log(movieId);
+  console.log(props.localData.data_id);
   let tmdbId = props.localData.tmdb_id;
   let videoPath = props.tmdbVideo.results;
   let images = props.tmdbImages;
@@ -30,10 +34,6 @@ function MovieInfo(props) {
       });
     }
   }, [tmdbId]);
-
-  // if (props.infoBoxState === false) {
-  //    props.setprizeBox(true);
-  // }
 
   useEffect(() => {
     if (
@@ -163,9 +163,35 @@ function MovieInfo(props) {
     user: props.userId,
     movie_id: movieId,
     tmdb_id: tmdbId,
+    data_id: props.localData.data_id,
     poster_path: props.tmdbData.poster_path,
     film_name_en: props.tmdbData.title,
     film_name_zh: props.localData.film_name_zh,
+  };
+
+  const prizeTitle = () => {
+    let dataId = props.localData.data_id;
+    if (dataId !== undefined) {
+      let filmFes = dataId.slice(0, dataId.lastIndexOf("_"));
+      let prizeId = dataId.substring(dataId.length - 1);
+
+      // console.log(prizeId);
+      for (let i = 0; i < BtnData.length; i++) {
+        if (BtnData[i].list_name === filmFes) {
+          return (
+            <>
+              <div>
+                {BtnData[i].official_name}{" "}
+                {BtnData[i].arr[prizeId - 1].subBtnText}
+              </div>
+              <div>
+                {BtnData[i].btnText} {BtnData[i].arr[prizeId - 1].subBtnName}
+              </div>
+            </>
+          );
+        }
+      }
+    }
   };
 
   const content = (
@@ -189,16 +215,16 @@ function MovieInfo(props) {
       <div className={styles.infoBox}>
         <div className={styles.upper}>
           <div>
-            {/* {console.log(props.localData)} */}
             {props.localData.th !== undefined ? (
               <span className={styles.subtitle}>
-                {props.ordinalSuffix(props.localData.th)}{" "}
-                {props.localData.prize} ({props.localData.year})
+                {props.ordinalSuffix(props.localData.th)} (
+                {props.localData.year})
               </span>
             ) : (
               ""
             )}
-            <br />
+            {prizeTitle()}
+
             {/* --------------- rating -------------- */}
             <div className={styles.rating}>
               {/* <span>{props.imdbSpan[0]} /10</span>
@@ -326,6 +352,57 @@ function MovieInfo(props) {
           {/* <div>{props.tmdbData ? props.tmdbData.production_countries[0].name : ""}</div> */}
         </div>
         {/* --------- flags -------------- */}
+        {/* ---------- media source ---------- */}
+        <div className={styles.mediaSource}>
+          <a
+            href={`https://book.tpml.edu.tw/webpac/bookSearchList.do?searchtype=simplesearch&search_field=TI&search_input=${
+              props.localData.film_name_zh
+                ? props.localData.film_name_zh
+                : props.localData.film_name_en
+            }&execodehidden=true&execode=webpac.dataType.media&ebook=#searchtype=simplesearch&search_field=TI&search_input=${
+              props.localData.film_name_zh
+                ? props.localData.film_name_zh
+                : props.localData.film_name_en
+            }`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Taipeilibrary />
+            <div>
+              台北市立圖書館
+              <br />
+              影視資料
+            </div>
+          </a>
+          <a
+            href={`https://webpac.tphcc.gov.tw/webpac/search.cfm?m=as&k0=${
+              props.localData.film_name_zh
+                ? props.localData.film_name_zh
+                : props.localData.film_name_en
+            }&t0=t&c0=and&y10=&y20=&cat0=&dt0=%E8%A6%96%E8%81%BD%E8%B3%87%E6%96%99&l0=&lv0=&lc0=`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <NewTaipeilibrary />
+            <div>
+              新北市立圖書館
+              <br />
+              影視資料
+            </div>
+          </a>
+          <a
+            href={`https://www.catchplay.com/tw/search?keyword=${
+              props.localData.film_name_zh
+                ? props.localData.film_name_zh
+                : props.localData.film_name_en
+            }`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            CatchPlay+
+          </a>
+        </div>
+        {/* ---------- media source ---------- */}
         <div className={styles.overview}>{props.tmdbData.overview} </div>
       </div>
       {/* --------------- casts -------------- */}
@@ -384,6 +461,10 @@ function MovieInfo(props) {
               props.setInfoBox(false);
               props.setprizeBox(false);
             }
+
+            // if (props.prizeBoxState === false) {
+            //    props.infoBoxState ? props.setInfoBox(false) : props.setInfoBox(true);
+            // }
           }
         }}
       >

@@ -9,25 +9,11 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
 
-  function signup(email, password, name) {
+  function signup(email, password) {
     return firebaseAuth
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
-        firestore
-          .collection("users")
-          .doc(firebaseAuth.currentUser.uid)
-          .set(
-            {
-              name: name,
-              email: firebaseAuth.currentUser.email,
-              uid: firebaseAuth.currentUser.uid,
-              list: "",
-            },
-            { merge: true }
-          )
-          .then(() => {
-            console.log("set data successful");
-          });
+        console.log("set data successful");
       });
   }
 
