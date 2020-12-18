@@ -15,12 +15,20 @@ function PrizeInfo(props) {
   const content = (list, index) => {
     let templist = list.film_list || [];
 
+    // open prize info card and change card height
     function openCard(i) {
-      //  setHeight("100px");
-      setHeight({
-        ...infoHeight,
-        [`index-${i + 1}`]: "100px",
-      });
+      let a = { ...infoHeight };
+      if (
+        infoHeight[`index-${i + 1}`] === "calc(100% / 3)" ||
+        infoHeight[`index-${i + 1}`] === "60px"
+      ) {
+        Object.keys(a).forEach((key) => (a[key] = "60px"));
+        a[`index-${i + 1}`] = "calc(100% - 120px)";
+        setHeight(a);
+      } else {
+        Object.keys(a).forEach((key) => (a[key] = "calc(100% / 3)"));
+        setHeight(a);
+      }
     }
 
     // 依據每筆資料的 data_id 找對應名稱
