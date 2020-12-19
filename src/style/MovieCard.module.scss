@@ -2,22 +2,33 @@
 @mixin card {
   max-height: 360px;
   width: 180px;
-  margin: 15px 20px;
+  margin: 20px;
 }
 
 .movieCard {
   cursor: pointer;
   position: relative;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  //  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   @include card;
 
+  //  .posterBox:hover {
+  //     transform: scale(1.03);
+  //     transition: all 0.3s ease;
+  //  }
   .posterBox {
+    // transition: all 0.3s ease;
     width: 180px;
     height: 270px;
     overflow: hidden;
-    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+    // box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    // box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
 
+    img:hover {
+      transform: scale(1.08);
+      transition: all 0.7s ease;
+    }
     img {
+      transition: all 0.7s ease;
       width: 100%;
       height: 100%;
     }
@@ -34,18 +45,30 @@
 
   .basicInfo {
     @include centerPosition;
-    padding: 10px;
+
     height: 90px;
     width: 100%;
     text-align: center;
 
-    .th {
-      position: absolute;
-      top: 5px;
-      left: 8px;
-      font-weight: 500;
-      color: white;
-    }
+    // display: flex;
+    // justify-content: center;
+    // align-items: flex-end;
+    // padding: 10px 10px 20px 10px;
+    // position: absolute;
+    // bottom: 0;
+    // padding: 10px;
+    // background: linear-gradient(rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 100%);
+    // color: white;
+    // opacity: 0;
+    // transition: opacity 0.3s ease;
+
+    // .th {
+    //    position: absolute;
+    //    top: 5px;
+    //    left: 8px;
+    //    font-weight: 500;
+    //    color: white;
+    // }
     .titleEn {
       margin-bottom: 5px;
       font-size: 16px;
@@ -57,11 +80,15 @@
       color: $color-gray;
     }
   }
-
+  //  .basicInfo:hover {
+  //     transition: opacity 0.3s ease;
+  //     opacity: 1;
+  //  }
   .keepTag {
     // @include shadow;
     filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.3));
     position: absolute;
+    z-index: 3;
     width: 0;
     height: 0;
     border-style: solid;
@@ -91,7 +118,9 @@
 }
 
 .notFound {
-  @include card;
+  //  @include card;
+  width: 180px;
+  height: 270px;
   border: 2px dashed rgb(224, 224, 224);
   background-color: rgb(240, 240, 240);
   //  padding: 10px;

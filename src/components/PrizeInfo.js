@@ -20,10 +20,10 @@ function PrizeInfo(props) {
       let a = { ...infoHeight };
       if (
         infoHeight[`index-${i + 1}`] === "calc(100% / 3)" ||
-        infoHeight[`index-${i + 1}`] === "60px"
+        infoHeight[`index-${i + 1}`] === "40px"
       ) {
-        Object.keys(a).forEach((key) => (a[key] = "60px"));
-        a[`index-${i + 1}`] = "calc(100% - 120px)";
+        Object.keys(a).forEach((key) => (a[key] = "40px"));
+        a[`index-${i + 1}`] = "calc(100% - 80px)";
         setHeight(a);
       } else {
         Object.keys(a).forEach((key) => (a[key] = "calc(100% / 3)"));
@@ -112,7 +112,7 @@ function PrizeInfo(props) {
           }
         }}
       >
-        {year} Film Festival
+        <span>{year}</span> Film Festival
       </div>
       <div className={styles.outterBox}>
         <div className={styles.innerBox}>

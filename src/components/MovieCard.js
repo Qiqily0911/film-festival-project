@@ -17,7 +17,16 @@ function MovieCard(props) {
   };
   //  console.log(props);
   console.log("--render all movie cards--");
-  const notFound = <div className={styles.notFound}></div>;
+  const notFound = (
+    <div className={styles.movieCard}>
+      <div className={styles.notFound}></div>
+      <div className={styles.basicInfo}>
+        <div>
+          <div className={styles.titleZh}>無資料</div>
+        </div>
+      </div>
+    </div>
+  );
 
   const hasCard = (
     <div
