@@ -13,13 +13,16 @@
       @include closeBtnStyle;
     }
     .container {
-      padding: 20px;
+      //  padding: 20px;
       width: 100%;
+      height: 100%;
       color: gray;
-      overflow: scroll;
+      overflow: hidden;
       display: flex;
+      position: relative;
       .profile {
-        margin-right: 10px;
+        margin: 20px;
+        // width: 300px;
         display: flex;
         flex-direction: column;
         .name {
@@ -36,32 +39,79 @@
           border: 1px solid $color-gray;
           cursor: pointer;
         }
+
+        .likeBtn {
+          color: $color-gray;
+          text-align: center;
+          padding: 3px 5px;
+          margin: 5px;
+          border: 1px solid $color-gray;
+          cursor: pointer;
+        }
+        .biography {
+          width: 200px;
+          overflow: scroll;
+        }
       }
       .movieBox {
-        // border: 1px solid red;
+        margin: 20px;
+        border: 1px solid red;
         width: 100%;
+        // padding-left: 30px;
         display: flex;
         flex-flow: row wrap;
         overflow: scroll;
         text-align: center;
-        .movieCard {
-          margin: 10px;
-          width: 120px;
-          .poster {
-            width: 120px;
-            height: 180px;
-            overflow: hidden;
-            img {
-              width: 100%;
-            }
-            .noPic {
-              // border: 1px solid red;
-              width: 100%;
-              height: 100%;
-              background-color: rgb(226, 226, 226);
+
+        .outter {
+          .title {
+            text-align: start;
+          }
+          .inner {
+            display: flex;
+            flex-flow: row wrap;
+            .movieCard {
+              border: 1px solid blue;
+              margin: 5px;
+              width: 120px;
+              position: relative;
+              overflow: hidden;
+              .keepTag {
+                filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.3));
+                position: absolute;
+                width: 0;
+                height: 0;
+                border-style: solid;
+                border-width: 0 35px 35px 0;
+                border-color: transparent #00000050 transparent transparent;
+                top: 0px;
+                right: 0px;
+              }
+              .poster {
+                width: 120px;
+                height: 180px;
+                overflow: hidden;
+                img {
+                  width: 100%;
+                }
+                .noPic {
+                  // border: 1px solid red;
+                  width: 100%;
+                  height: 100%;
+                  background-color: rgb(226, 226, 226);
+                }
+              }
             }
           }
         }
+      }
+      .infoBox {
+        position: absolute;
+        right: 0;
+        height: 100%;
+        width: 400px;
+        padding: 20px;
+        background-color: $color-blue;
       }
     }
   }

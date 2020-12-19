@@ -37,11 +37,8 @@ function Login() {
     try {
       setError("");
       setLoading(true);
-      await signup(
-        emailRef.current.value,
-        passwordRef.current.value,
-        nameRef.current.value
-      );
+      await signup(emailRef.current.value, passwordRef.current.value);
+      console.log(nameRef.current.value);
     } catch {
       return setError("Failed to create an account");
     }
@@ -93,7 +90,6 @@ function Login() {
           {/* ======== native sign-in ========*/}
         </div>
         <button className={styles.switchBtn} onClick={() => setSignup(false)}>
-          {" "}
           沒有帳號？註冊會員
         </button>
       </div>
@@ -139,7 +135,6 @@ function Login() {
         {/* ======== native sign-up ========*/}
 
         <button className={styles.switchBtn} onClick={() => setSignup(true)}>
-          {" "}
           已經有帳號了嗎？登入會員
         </button>
       </div>

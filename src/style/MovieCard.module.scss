@@ -1,5 +1,6 @@
 @import "./Default.scss";
 @mixin card {
+  max-height: 360px;
   width: 180px;
   margin: 15px 20px;
 }

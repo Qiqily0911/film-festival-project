@@ -9,13 +9,14 @@ function MemberBtn(props) {
   const [isOpen, setOpen] = useState(false);
   const [isLogin, setLogin] = useState(false);
   const [error, setError] = useState("");
-  const [userName, setUserName] = useState("");
+  // const [userName, setUserName] = useState("");
   const users = firestore.collection("users");
 
   async function handleLogout() {
     setError("");
     try {
       await logout();
+      props.setMemberPage(false);
       props.setUserId("");
     } catch {
       setError("Failed to log out");
@@ -31,26 +32,43 @@ function MemberBtn(props) {
     }
   }, [currentUser, props]);
 
-  //  show user name
+  //  show user data
   useEffect(() => {
     if (currentUser) {
       currentUser && props.setUserId(currentUser.uid);
       //  console.log(currentUser.uid);
-      users
-        .where("uid", "==", currentUser.uid)
-        .get()
-        .then((data) => {
-          data.forEach((user) => {
-            setUserName(user.data().name);
-          });
+      users.get().then((data) => {
+        data.forEach((user) => {
+          props.setUserData(user.data());
         });
+      });
     }
   }, [currentUser]);
 
   const logedIn = (
     <div className={styles.signInDiv}>
+      <div
+        className={styles.switchBtn}
+        onClick={() => {
+          props.setMemberPage(true);
+        }}
+      >
+        會員專區
+      </div>
+      <div
+        className={styles.switchBtn}
+        onClick={() => {
+          props.setMemberPage(false);
+          props.setInfoBox(false);
+          props.setprizeBox(false);
+        }}
+      >
+        找電影
+      </div>
       {/* {currentUser && <div>{currentUser.email}</div>} */}
-      <div className={styles.userName}>Hi, {userName}</div>
+      <div className={styles.userName}>
+        Hi, {props.userData.name ? props.userData.name : "小明"}
+      </div>
       {error && <div>{error}</div>}
       <button onClick={handleLogout}>Log Out</button>
     </div>

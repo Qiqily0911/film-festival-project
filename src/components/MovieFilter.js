@@ -10,6 +10,8 @@ function MovieFilter(props) {
     "index-3": "",
   });
 
+  // const [subBtnOpen, setOpen] = useState(false);
+
   function selectFilmList(e) {
     let btnValue = e.target.value;
     let name = e.nativeEvent.path[4].getAttribute("name");
@@ -45,9 +47,12 @@ function MovieFilter(props) {
 
     let btnSelect = {
       title: BtnData[num1].btnText,
+      prize_zh: BtnData[num1].arr[num2].subBtnName,
       prize_name: BtnData[num1].arr[num2].subBtnText,
+      list_name: BtnData[num1].list_name,
       film_list: BtnData[num1].value,
       prize: BtnData[num1].arr[num2].subBtnValue,
+      logo: BtnData[num1].logo,
       order: order,
     };
 
@@ -81,11 +86,8 @@ function MovieFilter(props) {
   function close(e) {
     let order = Number(e.target.dataset.order);
     let arr = [...props.listState];
-
     arr[order] = { film_list: undefined, order: order };
-
     props.setlistState(arr);
-    // props.setVertical(100);
   }
 
   const title = props.listState.map((data, i) => (
@@ -93,10 +95,6 @@ function MovieFilter(props) {
       {data.film_list !== undefined ? (
         <div>
           <div className={styles.inner}>
-            {/* <div className={styles.icon}>
-                     <img alt="festival-logo" src={data.logo} />
-                  </div> */}
-
             <div>
               <span className={styles.title}>
                 <div
@@ -109,7 +107,7 @@ function MovieFilter(props) {
                 {data.title}
               </span>
               <br />
-              <span className={styles.prize}>{data.prize_name}</span>
+              <span className={styles.prize}>{data.prize_zh}</span>
             </div>
           </div>
         </div>
@@ -134,29 +132,29 @@ function MovieFilter(props) {
                     {data.btnText}
                   </button>
                   {/* FIXME make btn close smoothly */}
-                  {/* <CSSTransition
-                              in={subBtnVal[`index-${i}`] === data.btnText}
-                              timeout={300}
-                              unmountOnExit
-                              classNames={styles.subBtnAnimate}
-                           > */}
-                  <div
-                    className={styles.subBtn}
-                    data-order={j}
-                    // style={{ visibility: subBtnVal[`index-${i}`] === data.btnText ? "visible" : "hidden" }}
+                  <CSSTransition
+                    in={subBtnVal[`index-${i}`] === data.btnText}
+                    timeout={300}
+                    // unmountOnExit
+                    classNames={styles.subBtnAnimate}
                   >
-                    {data.arr.map((subBtn, k) => (
-                      <button
-                        key={k}
-                        type="button"
-                        onClick={selectPrize}
-                        data-order={k}
-                      >
-                        {subBtn.subBtnText}
-                      </button>
-                    ))}
-                  </div>
-                  {/* </CSSTransition> */}
+                    <div
+                      className={styles.subBtn}
+                      data-order={j}
+                      // style={{ visibility: subBtnVal[`index-${i}`] === data.btnText ? "visible" : "hidden" }}
+                    >
+                      {data.arr.map((subBtn, k) => (
+                        <button
+                          key={k}
+                          type="button"
+                          onClick={selectPrize}
+                          data-order={k}
+                        >
+                          {subBtn.subBtnName}
+                        </button>
+                      ))}
+                    </div>
+                  </CSSTransition>
                 </div>
               ))}
             </div>
