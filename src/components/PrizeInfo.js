@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BtnData } from "../data/BtnData";
+import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
 import styles from "../style/PrizeInfo.module.scss";
 
 function PrizeInfo(props) {
@@ -20,10 +21,10 @@ function PrizeInfo(props) {
       let a = { ...infoHeight };
       if (
         infoHeight[`index-${i + 1}`] === "calc(100% / 3)" ||
-        infoHeight[`index-${i + 1}`] === "40px"
+        infoHeight[`index-${i + 1}`] === "30px"
       ) {
-        Object.keys(a).forEach((key) => (a[key] = "40px"));
-        a[`index-${i + 1}`] = "calc(100% - 80px)";
+        Object.keys(a).forEach((key) => (a[key] = "30px"));
+        a[`index-${i + 1}`] = "calc(100% - 60px)";
         setHeight(a);
       } else {
         Object.keys(a).forEach((key) => (a[key] = "calc(100% / 3)"));
@@ -48,7 +49,7 @@ function PrizeInfo(props) {
               className={styles.prizeBlock}
               style={{
                 top:
-                  infoHeight[`index-${index + 1}`] === "40px" ? "0" : "-40px",
+                  infoHeight[`index-${index + 1}`] === "30px" ? "0" : "-30px",
               }}
             >
               <div>{BtnData[i].btnText}</div>
@@ -134,6 +135,12 @@ function PrizeInfo(props) {
           }
         }}
       >
+        <Arrow
+          className={styles.arrow}
+          style={{
+            transform: props.prizeBoxState ? "rotate(0deg)" : "rotate(180deg)",
+          }}
+        />
         <span>{year}</span> Film Festival
       </div>
       <div className={styles.outterBox}>

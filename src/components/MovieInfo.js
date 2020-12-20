@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styles from "../style/MovieInfo.module.scss";
 import { nanoid } from "nanoid";
-import clock from "../image/clock.png";
+// import clock from "../image/clock.png";
 import { ReactComponent as Taipeilibrary } from "../image/TaipeiCity_library.svg";
 import { ReactComponent as NewTaipeilibrary } from "../image/newTaipeiCity_library.svg";
+import { ReactComponent as Bookmark } from "../image/icon/add.svg";
+import { ReactComponent as Star } from "../image/icon/star.svg";
+import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
+import { ReactComponent as Clock } from "../image/icon/clock.svg";
 import Crew from "./Crew";
 import { BtnData } from "../data/BtnData";
 // import countryName from "../data/countries.json";
@@ -232,6 +236,7 @@ function MovieInfo(props) {
 
               {props.omdbData.Response !== "False" ? (
                 <div>
+                  <Star className={styles.star} />
                   <span>{props.omdbData.imdbRating} /10</span>
                   <span>{props.omdbData.imdbVotes} votes</span>
                   <div>{props.omdbData.Awards}</div>
@@ -243,33 +248,28 @@ function MovieInfo(props) {
               {/* {console.log(props.omdbData)} */}
 
               <div>
-                <img src={clock} alt="clock" />
+                {/* <img src={clock} alt="clock" /> */}
+                <Clock className={styles.clock} />
                 {props.tmdbData.runtime} min
               </div>
             </div>
             {/* --------------- rating -------------- */}
           </div>
 
-          {isLiked ? (
-            <div
-              className={styles.cancelBtn}
-              onClick={(e) => props.cancelLiked(e, tmdbId)}
-            >
-              取消收藏
-            </div>
-          ) : (
-            <div
-              className={styles.addBtn}
-              onClick={(e) => props.addLiked(e, obj)}
-            >
-              加入收藏
-            </div>
-          )}
+          <div
+            className={isLiked ? styles.addBtn : styles.cancelBtn}
+            onClick={(e) =>
+              isLiked ? props.cancelLiked(e, tmdbId) : props.addLiked(e, obj)
+            }
+          >
+            <Bookmark />
+          </div>
         </div>
         <div className={styles.title}>
           <p>{props.tmdbData.title}</p>
           <p>{props.localData.film_name_zh}</p>
         </div>
+
         <div className={styles.linkBox}>
           {/* --------------- trailer -------------- */}
           <div
@@ -329,6 +329,57 @@ function MovieInfo(props) {
           ) : (
             ""
           )}
+          {/* ---------- media source ---------- */}
+          <div className={styles.mediaSource}>
+            <a
+              href={`https://book.tpml.edu.tw/webpac/bookSearchList.do?searchtype=simplesearch&search_field=TI&search_input=${
+                props.localData.film_name_zh
+                  ? props.localData.film_name_zh
+                  : props.localData.film_name_en
+              }&execodehidden=true&execode=webpac.dataType.media&ebook=#searchtype=simplesearch&search_field=TI&search_input=${
+                props.localData.film_name_zh
+                  ? props.localData.film_name_zh
+                  : props.localData.film_name_en
+              }`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Taipeilibrary />
+              {/* <div>
+                     台北市立圖書館
+                     <br />
+                     影視資料
+                  </div> */}
+            </a>
+            <a
+              href={`https://webpac.tphcc.gov.tw/webpac/search.cfm?m=as&k0=${
+                props.localData.film_name_zh
+                  ? props.localData.film_name_zh
+                  : props.localData.film_name_en
+              }&t0=t&c0=and&y10=&y20=&cat0=&dt0=%E8%A6%96%E8%81%BD%E8%B3%87%E6%96%99&l0=&lv0=&lc0=`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <NewTaipeilibrary />
+              {/* <div>
+                     新北市立圖書館
+                     <br />
+                     影視資料
+                  </div> */}
+            </a>
+            <a
+              href={`https://www.catchplay.com/tw/search?keyword=${
+                props.localData.film_name_zh
+                  ? props.localData.film_name_zh
+                  : props.localData.film_name_en
+              }`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              CatchPlay+
+            </a>
+          </div>
+          {/* ---------- media source ---------- */}
         </div>
         {/* --------- flags -------------- */}
         <div className={styles.flag}>
@@ -352,57 +403,7 @@ function MovieInfo(props) {
           {/* <div>{props.tmdbData ? props.tmdbData.production_countries[0].name : ""}</div> */}
         </div>
         {/* --------- flags -------------- */}
-        {/* ---------- media source ---------- */}
-        <div className={styles.mediaSource}>
-          <a
-            href={`https://book.tpml.edu.tw/webpac/bookSearchList.do?searchtype=simplesearch&search_field=TI&search_input=${
-              props.localData.film_name_zh
-                ? props.localData.film_name_zh
-                : props.localData.film_name_en
-            }&execodehidden=true&execode=webpac.dataType.media&ebook=#searchtype=simplesearch&search_field=TI&search_input=${
-              props.localData.film_name_zh
-                ? props.localData.film_name_zh
-                : props.localData.film_name_en
-            }`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <Taipeilibrary />
-            <div>
-              台北市立圖書館
-              <br />
-              影視資料
-            </div>
-          </a>
-          <a
-            href={`https://webpac.tphcc.gov.tw/webpac/search.cfm?m=as&k0=${
-              props.localData.film_name_zh
-                ? props.localData.film_name_zh
-                : props.localData.film_name_en
-            }&t0=t&c0=and&y10=&y20=&cat0=&dt0=%E8%A6%96%E8%81%BD%E8%B3%87%E6%96%99&l0=&lv0=&lc0=`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <NewTaipeilibrary />
-            <div>
-              新北市立圖書館
-              <br />
-              影視資料
-            </div>
-          </a>
-          <a
-            href={`https://www.catchplay.com/tw/search?keyword=${
-              props.localData.film_name_zh
-                ? props.localData.film_name_zh
-                : props.localData.film_name_en
-            }`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            CatchPlay+
-          </a>
-        </div>
-        {/* ---------- media source ---------- */}
+
         <div className={styles.overview}>{props.tmdbData.overview} </div>
       </div>
       {/* --------------- casts -------------- */}
@@ -468,7 +469,13 @@ function MovieInfo(props) {
           }
         }}
       >
-        About this Movie
+        <Arrow
+          className={styles.arrow}
+          style={{
+            transform: props.infoBoxState ? "rotate(0deg)" : "rotate(180deg)",
+          }}
+        />
+        <p> About this Movie</p>
       </div>
       <div className={styles.outterBox}>{tmdbId ? content : ""}</div>
     </div>

@@ -69,7 +69,7 @@ function MemberBtn(props) {
       </div>
       {/* {currentUser && <div>{currentUser.email}</div>} */}
       <div className={styles.userName}>
-        Hi, {props.userData.name ? props.userData.name : "小明"}
+        <p>Hi, {props.userData.name ? props.userData.name : "小明"}</p>
       </div>
       {error && <div>{error}</div>}
 

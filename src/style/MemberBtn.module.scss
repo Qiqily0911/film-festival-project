@@ -10,10 +10,20 @@
     display: flex;
     width: 100%;
     .switchBtn {
-      border: 1px solid red;
+      @include centerPosition;
+      width: 80px;
+      margin: 10px;
+      //  border: 1px solid red;
+    }
+    .userName {
+      @include centerPosition;
+      width: 80px;
+      margin: 10px;
+      // padding: 10px 25px;
     }
   }
   .loginIcon {
+    margin: 10px;
     cursor: pointer;
     width: 40px;
     height: 40px;
@@ -120,14 +130,14 @@
             }
           }
 
-          .switchBtn {
-            box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px;
-            margin: 10px;
-            width: 300px;
-            padding: 10px 25px;
-            background-color: $color-blue;
-            color: white;
-          }
+          //  .switchBtn {
+          //     box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px;
+          //     margin: 10px;
+          //     width: 300px;
+          //     padding: 10px 25px;
+          //     background-color: $color-blue;
+          //     color: white;
+          //  }
         }
       }
     }
