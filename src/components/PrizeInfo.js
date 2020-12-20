@@ -44,51 +44,73 @@ function PrizeInfo(props) {
             style={{ height: infoHeight[`index-${index + 1}`] }}
             onClick={() => openCard(index)}
           >
-            <div className={styles.logo}>
-              <img src={list.logo} alt="logo" />
-            </div>
-
-            <div className={styles.title}>
+            <div
+              className={styles.prizeBlock}
+              style={{
+                top:
+                  infoHeight[`index-${index + 1}`] === "40px" ? "0" : "-40px",
+              }}
+            >
               <div>{BtnData[i].btnText}</div>
               <div>{BtnData[i].official_name}</div>
+            </div>
+            {/* {infoHeight[`index-${index + 1}`] === "40px" ?  : ""} */}
+
+            <div className={styles.inner}>
+              <div className={styles.logo}>
+                <a href={BtnData[i].web_link} target="_blank" rel="noreferrer">
+                  <img src={list.logo} alt="logo" />
+                </a>
+              </div>
+              <div className={styles.title}>
+                <div>{BtnData[i].btnText}</div>
+                <div>{BtnData[i].official_name}</div>
+              </div>
+
+              {/* <div>{BtnData[i].description}</div> */}
               <div>
-                {templist
-                  .filter((film) => film.year === year)
-                  .map((data, j) => (
-                    <div
-                      data-id={data.movie_id}
-                      className={styles.winner}
-                      key={j}
-                    >
-                      <span>
-                        {props.ordinalSuffix(data.th)}
-
-                        <div>{prizeName(i, data).subBtnName}</div>
-                        <div>{prizeName(i, data).subBtnText}</div>
-                      </span>
-
+                <div>
+                  {templist
+                    .filter((film) => film.year === year)
+                    .map((data, j) => (
                       <div
-                        className={styles.filmName}
-                        onClick={() => {
-                          let movieId = data.tmdb_id;
-                          props.tmdbApi("", movieId);
-                          props.tmdbApi("/videos", movieId);
-                          props.tmdbApi("/images", movieId);
-                          props.tmdbApi("/credits", movieId);
-
-                          props.omdbApi(data.movie_id);
-                          props.renewData(data);
-                          // console.log(props);
-
-                          props.setInfoBox(true);
-                          console.log(data.tmdb_id);
-                        }}
+                        data-id={data.movie_id}
+                        className={styles.winner}
+                        key={j}
                       >
-                        <div>{data.film_name_en}</div>
-                        <div>{data.film_name_zh}</div>
+                        <div className={styles.prizeName}>
+                          <div className={styles.th}>
+                            {" "}
+                            {props.ordinalSuffix(data.th)}
+                          </div>
+                          <div>{prizeName(i, data).subBtnName}</div>
+                          <div>{prizeName(i, data).subBtnText}</div>
+                        </div>
+
+                        <div
+                          className={styles.filmName}
+                          onClick={(e) => {
+                            let movieId = data.tmdb_id;
+                            props.tmdbApi("", movieId);
+                            props.tmdbApi("/videos", movieId);
+                            props.tmdbApi("/images", movieId);
+                            props.tmdbApi("/credits", movieId);
+
+                            props.omdbApi(data.movie_id);
+                            props.renewData(data);
+                            // console.log(props);
+
+                            props.setInfoBox(true);
+                            console.log(data.tmdb_id);
+                            e.stopPropagation();
+                          }}
+                        >
+                          <div>{data.film_name_zh}</div>
+                          <div>{data.film_name_en}</div>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                </div>
               </div>
             </div>
           </div>

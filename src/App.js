@@ -15,6 +15,7 @@ import React, { useState, useEffect, useRef } from "react";
 //config and firebase
 import { apiKey, omdbKey, firestore } from "./config";
 import { AuthProvider } from "./contexts/AuthContexts";
+import { ReactComponent as Logo } from "./image/logo.svg";
 
 // import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 // import * as firebase from "firebase";
@@ -324,7 +325,9 @@ function App() {
   return (
     <div className={styles.outter}>
       <aside>
-        <div className={styles.logo}>LOGO</div>
+        <div className={styles.logo}>
+          <Logo />
+        </div>
         {memberPage ? (
           ""
         ) : (

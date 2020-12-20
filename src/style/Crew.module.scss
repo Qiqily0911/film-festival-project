@@ -107,11 +107,12 @@
       }
       .infoBox {
         position: absolute;
-        right: 0;
+        // right: 0;
         height: 100%;
         width: 400px;
         padding: 20px;
         background-color: $color-blue;
+        transition: all 0.5s ease;
       }
     }
   }

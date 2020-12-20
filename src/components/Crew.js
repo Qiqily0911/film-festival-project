@@ -24,7 +24,10 @@ function Crew(props) {
   }, [crewDetial, personDetail]);
 
   const infoBox = (
-    <div className={styles.infoBox}>
+    <div
+      className={styles.infoBox}
+      style={{ right: infoOpen ? "0" : "-400px" }}
+    >
       <div onClick={() => setInfoOpen(false)}>return</div>
       <img
         alt="poster"
@@ -148,8 +151,9 @@ function Crew(props) {
               </div>
             </div>
           </div>
+          {infoBox}
 
-          {infoOpen ? infoBox : ""}
+          {/* {infoOpen ? infoBox : ""} */}
         </div>
       </div>
     </div>

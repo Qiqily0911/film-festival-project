@@ -90,9 +90,10 @@ function MovieFilter(props) {
     props.setlistState(arr);
   }
 
-  const title = props.listState.map((data, i) => (
+  const title = props.listState.map((list, i) => (
     <div className={styles.fesTitle} key={i}>
-      {data.film_list !== undefined ? (
+      {/* {console.log(props.listState)} */}
+      {list.film_list !== undefined ? (
         <div>
           <div className={styles.inner}>
             <div>
@@ -100,19 +101,19 @@ function MovieFilter(props) {
                 <div
                   className={styles.closeBtn}
                   onClick={close}
-                  data-order={data.order}
+                  data-order={list.order}
                 >
                   ×
                 </div>
-                {data.title}
+                {list.title}
               </span>
               <br />
-              <span className={styles.prize}>{data.prize_zh}</span>
+              <span className={styles.prize}>{list.prize_zh}</span>
             </div>
           </div>
         </div>
       ) : (
-        <div data-order={data.order} name={"index-" + i}>
+        <div data-order={list.order} name={"index-" + i}>
           <div className={styles.inner}>
             {/* <div className={styles.addBtn}>×</div> */}
             <span>
@@ -144,14 +145,19 @@ function MovieFilter(props) {
                       // style={{ visibility: subBtnVal[`index-${i}`] === data.btnText ? "visible" : "hidden" }}
                     >
                       {data.arr.map((subBtn, k) => (
-                        <button
-                          key={k}
-                          type="button"
-                          onClick={selectPrize}
-                          data-order={k}
-                        >
-                          {subBtn.subBtnName}
-                        </button>
+                        <>
+                          {/* {list.list_name === data.list_name && list.prize === subBtn.subBtnValue
+                                          ? console.log("selected")
+                                          : console.log(list.list_name, data.list_name, list.prize, subBtn.subBtnValue)} */}
+                          <button
+                            key={k}
+                            type="button"
+                            onClick={selectPrize}
+                            data-order={k}
+                          >
+                            {subBtn.subBtnName}
+                          </button>
+                        </>
                       ))}
                     </div>
                   </CSSTransition>

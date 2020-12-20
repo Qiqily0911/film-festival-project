@@ -191,7 +191,12 @@
           svg {
             width: 30px;
             height: 30px;
+            transition: all 0.3s ease;
             fill: $color-lightgray;
+          }
+          svg:hover {
+            transition: all 0.3s ease;
+            fill: $color-blue;
           }
         }
         .overview {

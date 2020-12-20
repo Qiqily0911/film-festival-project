@@ -59,6 +59,7 @@
     // }
 
     .option {
+      @include showUp;
       // border: 1px solid red;
       width: 200px;
       position: absolute;

@@ -18,7 +18,7 @@ function MovieInfo(props) {
 
   let movieId = props.localData.movie_id;
   //  console.log(movieId);
-  console.log(props.localData.data_id);
+  // console.log(props.localData.data_id);
   let tmdbId = props.localData.tmdb_id;
   let videoPath = props.tmdbVideo.results;
   let images = props.tmdbImages;

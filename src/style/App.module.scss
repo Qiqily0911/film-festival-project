@@ -10,22 +10,24 @@
     background-color: $color-blue;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    // justify-content: center;
+    // align-items: center;
 
     .logo {
       //  position: fixed;
-      //  right: 0;
-      height: 50px;
-      margin: 10px;
-      color: white;
-      text-align: center;
+      // top: 0;
+      width: 80px;
+      height: 80px;
+      margin: 20px auto;
+      // color: white;
+      // text-align: center;
     }
 
     .slider {
       user-select: none;
       height: 80%;
       width: 50px;
+      margin: 10px auto;
 
       .yearText {
         text-align: center;
@@ -35,7 +37,7 @@
         color: white;
         list-style-type: none;
         padding: 0;
-        margin: 10px 0;
+        margin: 15px 0;
         opacity: 0.5;
       }
 
