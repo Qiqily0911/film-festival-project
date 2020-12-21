@@ -9,9 +9,13 @@
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
     rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
   display: flex;
-  //  overflow: scroll;
+  overflow: hidden;
   background-color: white;
   transition: right 0.5s ease;
+  .handleBar:hover {
+    transition: 1s ease;
+    background: rgb(165, 165, 165);
+  }
   .handleBar {
     cursor: pointer;
     writing-mode: vertical-rl;
@@ -19,20 +23,28 @@
     line-height: 1rem;
     height: 100%;
     padding: 10px 5px 0 5px;
+    font-size: 1rem;
+    font-weight: 300;
     display: flex;
     background-color: $color-lightgray;
+    transition: 1s ease;
     .arrow {
+      margin-top: -30px;
       width: 20px;
       height: 20px;
       fill: white;
-      // margin-bottom: 20px;
+      transition: 0.5s ease;
     }
     p {
       margin: 20px 0 10px 0;
-      font-size: 0.5rem;
-      font-weight: 500;
       letter-spacing: 0.3rem;
       color: white;
+    }
+  }
+  .handleBar:hover {
+    .arrow {
+      transition: 0.5s ease;
+      margin-top: 0;
     }
   }
   .outterBox {
@@ -124,7 +136,7 @@
         .addBtn {
           width: 30px;
           transition: 0.3s ease;
-          fill: $color-blue;
+          fill: $color-gold;
         }
         .cancelBtn {
           width: 30px;
@@ -255,18 +267,43 @@
         .castPic {
           margin: 5px;
           width: 120px;
+          overflow: hidden;
+          height: 180px;
+          position: relative;
+
           img {
+            filter: grayscale(100%);
             width: 100%;
+            transition: 0.3s ease;
+          }
+
+          img:hover {
+            transform: scale(1.1);
+            filter: grayscale(0%);
+            cursor: pointer;
+            transition: 0.3s ease;
           }
         }
         // .noPic {
         //    width: 120px;
         // }
 
-        p {
-          margin: 5px;
+        .personName {
+          height: 50px;
+          width: 100%;
+          position: absolute;
+          bottom: 0;
+          //  padding: 5px;
           text-align: center;
+          vertical-align: bottom;
           font-size: 14px;
+          display: flex;
+          align-items: flex-end;
+          background: linear-gradient(#00000000, #000000);
+          p {
+            width: 100%;
+            margin: 5px;
+          }
         }
       }
     }

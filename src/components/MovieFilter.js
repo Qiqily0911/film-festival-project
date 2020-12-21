@@ -132,35 +132,37 @@ function MovieFilter(props) {
                   >
                     {data.btnText}
                   </button>
-                  {/* FIXME make btn close smoothly */}
-                  <CSSTransition
-                    in={subBtnVal[`index-${i}`] === data.btnText}
-                    timeout={300}
-                    // unmountOnExit
-                    classNames={styles.subBtnAnimate}
+
+                  <div
+                    className={styles.subBtn}
+                    data-order={j}
+                    style={{
+                      // FIXME: 消除殘影
+                      visibility:
+                        subBtnVal[`index-${i}`] === data.btnText
+                          ? "visible"
+                          : "hidden",
+                      opacity:
+                        subBtnVal[`index-${i}`] === data.btnText ? "1" : "0",
+                      marginTop:
+                        subBtnVal[`index-${i}`] === data.btnText
+                          ? "0"
+                          : `-${data.arr.length * 36 + 20}px`,
+                    }}
                   >
-                    <div
-                      className={styles.subBtn}
-                      data-order={j}
-                      // style={{ visibility: subBtnVal[`index-${i}`] === data.btnText ? "visible" : "hidden" }}
-                    >
-                      {data.arr.map((subBtn, k) => (
-                        <>
-                          {/* {list.list_name === data.list_name && list.prize === subBtn.subBtnValue
-                                          ? console.log("selected")
-                                          : console.log(list.list_name, data.list_name, list.prize, subBtn.subBtnValue)} */}
-                          <button
-                            key={k}
-                            type="button"
-                            onClick={selectPrize}
-                            data-order={k}
-                          >
-                            {subBtn.subBtnName}
-                          </button>
-                        </>
-                      ))}
-                    </div>
-                  </CSSTransition>
+                    {data.arr.map((subBtn, k) => (
+                      <>
+                        <button
+                          key={k}
+                          type="button"
+                          onClick={selectPrize}
+                          data-order={k}
+                        >
+                          {subBtn.subBtnName}
+                        </button>
+                      </>
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>

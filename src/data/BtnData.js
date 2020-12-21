@@ -5,16 +5,17 @@ import berlin from "./BerlinFilm.json";
 import venice from "./VeniceFilm.json";
 import goldenHorse from "./Golden_horse.json";
 
-import OscarLogo from "../image/fes/oscar.svg";
-import CannesLogo from "../image/fes/cannes-festival.svg";
-import BerlinLogo from "../image/fes/berlin-festival.svg";
-import GoldenHorseLogo from "../image/fes/golden-horse.svg";
-import VeniceLogo from "../image/fes/venice-festival.svg";
+import { ReactComponent as OscarLogo } from "../image/fes/oscar.svg";
+import { ReactComponent as CannesLogo } from "../image/fes/cannes-festival.svg";
+import { ReactComponent as BerlinLogo } from "../image/fes/berlin-festival.svg";
+import { ReactComponent as GoldenHorseLogo } from "../image/fes/golden-horse.svg";
+import { ReactComponent as VeniceLogo } from "../image/fes/venice-festival.svg";
 
-// import OscarLogo from "./logo/oscar_logo.png";
-// import CannesLogo from "./logo/Cannes_logo.png";
-// import BerlinLogo from "./logo/Berlin_logo.png";
-// import GoldenHorseLogo from "./logo/Golden_Horse.png";
+// import  OscarLogo  from "../image/fes/oscar.svg";
+// import  CannesLogo  from "../image/fes/cannes-festival.svg";
+// import  BerlinLogo  from "../image/fes/berlin-festival.svg";
+// import  GoldenHorseLogo  from "../image/fes/golden-horse.svg";
+// import  VeniceLogo  from "../image/fes/venice-festival.svg";
 
 export const InitListState = [
   {

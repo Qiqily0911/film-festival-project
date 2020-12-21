@@ -7,26 +7,42 @@
   justify-content: center;
 
   .signInDiv {
+    border: 1px solid red;
     display: flex;
-    width: 100%;
+    text-align: center;
     .switchBtn {
       @include centerPosition;
-      width: 80px;
-      margin: 10px;
-      //  border: 1px solid red;
+      position: relative;
+      height: 40px;
+      overflow: hidden;
+      color: $color-blue;
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px;
+      .brick {
+        position: absolute;
+        @include centerPosition;
+        width: 160px;
+        height: 40px;
+        display: flex;
+        top: 0;
+        transition: 0.3s ease;
+        background-color: $color-blue;
+        color: white;
+      }
+      div {
+        width: 80px;
+      }
     }
     .userName {
       @include centerPosition;
-      width: 80px;
+      width: 200px;
       margin: 10px;
-      // padding: 10px 25px;
     }
   }
   .loginIcon {
     margin: 10px;
     cursor: pointer;
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     svg {
       fill: $color-blue;
     }
@@ -129,15 +145,6 @@
               }
             }
           }
-
-          //  .switchBtn {
-          //     box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px;
-          //     margin: 10px;
-          //     width: 300px;
-          //     padding: 10px 25px;
-          //     background-color: $color-blue;
-          //     color: white;
-          //  }
         }
       }
     }
@@ -148,19 +155,19 @@
   }
 }
 
-button {
-  width: 100%;
-  border: 0;
-  //  border-radius: 0.25rem;
-  background: none;
-  color: $color-blue;
-  font-size: 16px;
-  line-height: 1.2;
-  text-decoration: none;
-  padding: 0.25rem 0.5rem;
-  margin: 0.25rem;
-  cursor: pointer;
-}
-button:focus {
-  outline: none;
-}
+// button {
+//    width: 100%;
+//    border: 0;
+//    //  border-radius: 0.25rem;
+//    background: none;
+//    color: $color-blue;
+//    font-size: 16px;
+//    line-height: 1.2;
+//    text-decoration: none;
+//    // padding: 0.25rem 0.5rem;
+//    margin: 0.5rem 0;
+//    cursor: pointer;
+// }
+// button:focus {
+//    outline: none;
+// }

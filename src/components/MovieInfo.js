@@ -8,6 +8,7 @@ import { ReactComponent as Bookmark } from "../image/icon/add.svg";
 import { ReactComponent as Star } from "../image/icon/star.svg";
 import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
 import { ReactComponent as Clock } from "../image/icon/clock.svg";
+import Loading from "./Loading";
 import Crew from "./Crew";
 import { BtnData } from "../data/BtnData";
 // import countryName from "../data/countries.json";
@@ -111,7 +112,10 @@ function MovieInfo(props) {
             <div className={styles.noPic}>not found</div>
           )}
 
-          <p> {person.name}</p>
+          <div className={styles.personName}>
+            {" "}
+            <p>{person.name}</p>{" "}
+          </div>
         </div>
       </div>
     );
@@ -147,7 +151,9 @@ function MovieInfo(props) {
                   <div className={styles.noPic}>not found</div>
                 )}
 
-                <p> {person.name}</p>
+                <div className={styles.personName}>
+                  <p>{person.name}</p>
+                </div>
               </div>
             ))
         : ""}
@@ -200,6 +206,8 @@ function MovieInfo(props) {
 
   const content = (
     <div className={styles.innerBox}>
+      {/* TODO: loading animation */}
+      {/* <Loading /> */}
       <div className={styles.imageBox} ref={props.movieInfoEl}>
         {imageList !== "" ? (
           imageList.map((path) => (
@@ -463,9 +471,11 @@ function MovieInfo(props) {
               props.setprizeBox(false);
             }
 
-            // if (props.prizeBoxState === false) {
-            //    props.infoBoxState ? props.setInfoBox(false) : props.setInfoBox(true);
-            // }
+            if (props.prizeBoxState === false) {
+              props.infoBoxState
+                ? props.setInfoBox(false)
+                : props.setInfoBox(true);
+            }
           }
         }}
       >
@@ -475,7 +485,7 @@ function MovieInfo(props) {
             transform: props.infoBoxState ? "rotate(0deg)" : "rotate(180deg)",
           }}
         />
-        <p> About this Movie</p>
+        <p> ABOUT</p>
       </div>
       <div className={styles.outterBox}>{tmdbId ? content : ""}</div>
     </div>

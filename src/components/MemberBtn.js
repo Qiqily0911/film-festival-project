@@ -11,8 +11,6 @@ function MemberBtn(props) {
   const [isOpen, setOpen] = useState(false);
   const [isLogin, setLogin] = useState(false);
   const [error, setError] = useState("");
-  // const [userName, setUserName] = useState("");
-  const users = firestore.collection("users");
 
   async function handleLogout() {
     setError("");
@@ -38,38 +36,45 @@ function MemberBtn(props) {
   useEffect(() => {
     if (currentUser) {
       currentUser && props.setUserId(currentUser.uid);
-      //  console.log(currentUser.uid);
-      users.get().then((data) => {
-        data.forEach((user) => {
-          props.setUserData(user.data());
-        });
-      });
     }
   }, [currentUser]);
 
   const logedIn = (
     <div className={styles.signInDiv}>
-      <div
-        className={styles.switchBtn}
-        onClick={() => {
-          props.setMemberPage(true);
-        }}
-      >
-        會員專區
-      </div>
-      <div
-        className={styles.switchBtn}
-        onClick={() => {
-          props.setMemberPage(false);
-          props.setInfoBox(false);
-          props.setprizeBox(false);
-        }}
-      >
-        找電影
+      <div className={styles.switchBtn}>
+        <div
+          className={styles.brick}
+          style={{ right: props.memberPage ? "80px" : "-80px" }}
+        >
+          <div>找電影</div>
+          <div>會員專區</div>
+        </div>
+        <div
+          onClick={() => {
+            props.setMemberPage(true);
+          }}
+        >
+          會員專區
+        </div>
+
+        <div
+          onClick={() => {
+            props.setMemberPage(false);
+            props.setInfoBox(false);
+            props.setprizeBox(false);
+          }}
+        >
+          找電影
+        </div>
       </div>
       {/* {currentUser && <div>{currentUser.email}</div>} */}
       <div className={styles.userName}>
-        <p>Hi, {props.userData.name ? props.userData.name : "小明"}</p>
+        <p>
+          Hi,{" "}
+          {currentUser && currentUser.displayName !== null
+            ? currentUser.displayName
+            : "親愛的會員"}
+        </p>
       </div>
       {error && <div>{error}</div>}
 

@@ -45,32 +45,46 @@ function PrizeInfo(props) {
             style={{ height: infoHeight[`index-${index + 1}`] }}
             onClick={() => openCard(index)}
           >
+            {/* ------- prize block ------- */}
             <div
               className={styles.prizeBlock}
               style={{
                 top:
-                  infoHeight[`index-${index + 1}`] === "30px" ? "0" : "-30px",
+                  infoHeight[`index-${index + 1}`] === "30px" ? "0px" : "-30px",
               }}
             >
-              <div>{BtnData[i].btnText}</div>
+              {/* <div>{BtnData[i].btnText}</div> */}
               <div>{BtnData[i].official_name}</div>
             </div>
-            {/* {infoHeight[`index-${index + 1}`] === "40px" ?  : ""} */}
+            {/* ------- prize block ------- */}
 
-            <div className={styles.inner}>
-              <div className={styles.logo}>
-                <a href={BtnData[i].web_link} target="_blank" rel="noreferrer">
-                  <img src={list.logo} alt="logo" />
-                </a>
-              </div>
-              <div className={styles.title}>
-                <div>{BtnData[i].btnText}</div>
-                <div>{BtnData[i].official_name}</div>
+            <div
+              className={styles.inner}
+              style={{
+                display:
+                  infoHeight[`index-${index + 1}`] === "30px"
+                    ? "none"
+                    : "block",
+              }}
+            >
+              <div className={styles.upper}>
+                <div className={styles.logo}>
+                  <a
+                    href={BtnData[i].web_link}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <list.logo />
+                  </a>
+                </div>
+                <div className={styles.title}>
+                  <div>{BtnData[i].btnText}</div>
+                  <div>{BtnData[i].official_name}</div>
+                </div>
               </div>
 
-              {/* <div>{BtnData[i].description}</div> */}
               <div>
-                <div>
+                <div className={styles.lower}>
                   {templist
                     .filter((film) => film.year === year)
                     .map((data, j) => (
@@ -79,39 +93,43 @@ function PrizeInfo(props) {
                         className={styles.winner}
                         key={j}
                       >
-                        <div className={styles.prizeName}>
-                          <div className={styles.th}>
-                            {" "}
-                            {props.ordinalSuffix(data.th)}
-                          </div>
-                          <div>{prizeName(i, data).subBtnName}</div>
-                          <div>{prizeName(i, data).subBtnText}</div>
+                        <div className={styles.th}>
+                          {" "}
+                          {props.ordinalSuffix(data.th)}
                         </div>
+                        <div>
+                          <div className={styles.prizeName}>
+                            <div>{prizeName(i, data).subBtnName}</div>
+                            <div>{prizeName(i, data).subBtnText}</div>
+                          </div>
+                          <div
+                            className={styles.filmName}
+                            onClick={(e) => {
+                              let movieId = data.tmdb_id;
+                              props.tmdbApi("", movieId);
+                              props.tmdbApi("/videos", movieId);
+                              props.tmdbApi("/images", movieId);
+                              props.tmdbApi("/credits", movieId);
 
-                        <div
-                          className={styles.filmName}
-                          onClick={(e) => {
-                            let movieId = data.tmdb_id;
-                            props.tmdbApi("", movieId);
-                            props.tmdbApi("/videos", movieId);
-                            props.tmdbApi("/images", movieId);
-                            props.tmdbApi("/credits", movieId);
+                              props.omdbApi(data.movie_id);
+                              props.renewData(data);
+                              // console.log(props);
 
-                            props.omdbApi(data.movie_id);
-                            props.renewData(data);
-                            // console.log(props);
-
-                            props.setInfoBox(true);
-                            console.log(data.tmdb_id);
-                            e.stopPropagation();
-                          }}
-                        >
-                          <div>{data.film_name_zh}</div>
-                          <div>{data.film_name_en}</div>
+                              props.setInfoBox(true);
+                              console.log(data.tmdb_id);
+                              e.stopPropagation();
+                            }}
+                          >
+                            {data.film_name_zh} {data.film_name_en}
+                          </div>
                         </div>
                       </div>
                     ))}
                 </div>
+              </div>
+              <div className={styles.description}>
+                <span>Introduction</span>
+                <div> {BtnData[i].description}</div>
               </div>
             </div>
           </div>
@@ -141,7 +159,7 @@ function PrizeInfo(props) {
             transform: props.prizeBoxState ? "rotate(0deg)" : "rotate(180deg)",
           }}
         />
-        <span>{year}</span> Film Festival
+        <span>{year}</span> FESTIVAL
       </div>
       <div className={styles.outterBox}>
         <div className={styles.innerBox}>
