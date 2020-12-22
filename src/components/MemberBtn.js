@@ -43,13 +43,7 @@ function MemberBtn(props) {
     <div className={styles.signInDiv}>
       <div className={styles.switchBtn}>
         <div
-          className={styles.brick}
-          style={{ right: props.memberPage ? "80px" : "-80px" }}
-        >
-          <div>找電影</div>
-          <div>會員專區</div>
-        </div>
-        <div
+          className={props.memberPage === true ? styles.pressed : ""}
           onClick={() => {
             props.setMemberPage(true);
           }}
@@ -58,6 +52,7 @@ function MemberBtn(props) {
         </div>
 
         <div
+          className={props.memberPage !== true ? styles.pressed : ""}
           onClick={() => {
             props.setMemberPage(false);
             props.setInfoBox(false);
@@ -70,7 +65,7 @@ function MemberBtn(props) {
       {/* {currentUser && <div>{currentUser.email}</div>} */}
       <div className={styles.userName}>
         <p>
-          Hi,{" "}
+          Hi,
           {currentUser && currentUser.displayName !== null
             ? currentUser.displayName
             : "親愛的會員"}
@@ -110,11 +105,13 @@ function MemberBtn(props) {
   );
 
   return (
+    // <div>
+    //    <div>Log in</div>
     <div className={styles.loginOutter}>
       {isLogin ? logedIn : loginIcon}
-
       {isOpen ? loginDiv : ""}
     </div>
+    // </div>
   );
 }
 

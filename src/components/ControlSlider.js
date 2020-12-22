@@ -30,15 +30,15 @@ function ControlSilder(props) {
     props.setScroll(true);
   }
 
-  //  const verticalLabels = {
-  //     //  25: "-",
-  //     //  50: "-",
-  //     //  75: "-",
+  const verticalLabels = {
+    //  25: "-",
+    //  50: "-",
+    //  75: "-",
 
-  //     25: Math.floor((props.maxYear - props.minYear) / 4 + props.minYear),
-  //     50: Math.floor((props.maxYear - props.minYear) / 2 + props.minYear),
-  //     75: Math.floor(((props.maxYear - props.minYear) / 4) * 3 + props.minYear),
-  //  };
+    // 25: Math.floor((props.maxYear - props.minYear) / 4 + props.minYear),
+    50: Math.floor((props.maxYear - props.minYear) / 2 + props.minYear),
+    // 75: Math.floor(((props.maxYear - props.minYear) / 4) * 3 + props.minYear),
+  };
 
   const formatPc = (p) =>
     Math.floor(
@@ -52,7 +52,7 @@ function ControlSilder(props) {
         //   FIXME: fix when listState===undefined can't grab the slider
         value={props.vertical}
         orientation="vertical"
-        // labels={verticalLabels}
+        labels={verticalLabels}
         handleLabel={formatPc(props.vertical)}
         format={formatPc}
         onChangeStart={handleChangeStart}

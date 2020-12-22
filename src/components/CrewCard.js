@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "../style/Crew.module.scss";
+import { ReactComponent as Bookmark } from "../image/icon/add.svg";
 
 export default function CrewCard(props) {
   let obj = {
@@ -32,20 +33,15 @@ export default function CrewCard(props) {
     >
       {/* ------- keetTag --------*/}
       {props.userId ? (
-        <div
-          style={{
-            borderColor: isLiked
-              ? "transparent #D8AE00 transparent transparent"
-              : "transparent  #00000050 transparent transparent",
-          }}
-          className={styles.keepTag}
+        <Bookmark
+          className={isLiked ? styles.addBtn : styles.cancelBtn}
           //    data-id={props.movie_id}
           onClick={(e) =>
             isLiked
               ? props.cancelLiked(e, props.data.id)
               : props.addLiked(e, obj)
           }
-        ></div>
+        />
       ) : (
         ""
       )}

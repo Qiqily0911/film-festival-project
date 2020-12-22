@@ -5,9 +5,11 @@ import { nanoid } from "nanoid";
 import { ReactComponent as Taipeilibrary } from "../image/TaipeiCity_library.svg";
 import { ReactComponent as NewTaipeilibrary } from "../image/newTaipeiCity_library.svg";
 import { ReactComponent as Bookmark } from "../image/icon/add.svg";
-import { ReactComponent as Star } from "../image/icon/star.svg";
+import { ReactComponent as Imdb } from "../image/IMDB_Logo.svg";
 import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
 import { ReactComponent as Clock } from "../image/icon/clock.svg";
+import { ReactComponent as Video } from "../image/icon/video.svg";
+import catchplay from "../image/catchplay_logo.png";
 import Loading from "./Loading";
 import Crew from "./Crew";
 import { BtnData } from "../data/BtnData";
@@ -148,7 +150,9 @@ function MovieInfo(props) {
                     src={`https://image.tmdb.org/t/p/w154${person.profile_path}`}
                   />
                 ) : (
-                  <div className={styles.noPic}>not found</div>
+                  <div className={styles.noPic}>
+                    <span> not found</span>
+                  </div>
                 )}
 
                 <div className={styles.personName}>
@@ -160,15 +164,6 @@ function MovieInfo(props) {
     </div>
   );
 
-  //  let btn = e.currentTarget;
-  //  if (props.tmdbVideo.results[0] !== undefined) {
-  //     setVideoOpen(true);
-  //     if (btn.className.includes(`${styles.noVideo}`)) {
-  //        btn.classList.toggle(`${styles.noVideo}`);
-  //     }
-  //  } else {
-  //     btn.classList.add(`${styles.noVideo}`);
-  //  }
   let obj = {
     user: props.userId,
     movie_id: movieId,
@@ -179,6 +174,7 @@ function MovieInfo(props) {
     film_name_zh: props.localData.film_name_zh,
   };
 
+  // 獎項名稱
   const prizeTitle = () => {
     let dataId = props.localData.data_id;
     if (dataId !== undefined) {
@@ -190,13 +186,13 @@ function MovieInfo(props) {
         if (BtnData[i].list_name === filmFes) {
           return (
             <>
-              <div>
-                {BtnData[i].official_name}{" "}
-                {BtnData[i].arr[prizeId - 1].subBtnText}
-              </div>
-              <div>
+              {/* <div> */}
+              {BtnData[i].official_name}{" "}
+              {BtnData[i].arr[prizeId - 1].subBtnText}
+              {/* </div> */}
+              {/* <div>
                 {BtnData[i].btnText} {BtnData[i].arr[prizeId - 1].subBtnName}
-              </div>
+              </div> */}
             </>
           );
         }
@@ -204,215 +200,235 @@ function MovieInfo(props) {
     }
   };
 
+  //內容
   const content = (
     <div className={styles.innerBox}>
-      {/* TODO: loading animation */}
-      {/* <Loading /> */}
-      <div className={styles.imageBox} ref={props.movieInfoEl}>
-        {imageList !== "" ? (
-          imageList.map((path) => (
-            <img
-              key={nanoid()}
-              alt="images"
-              src={`https://image.tmdb.org/t/p/w780${path}`}
-            />
-          ))
-        ) : (
-          <div className={styles.notFound}>
-            <p>Poster not found</p>
+      <div>
+        <div className={styles.imageBox} ref={props.movieInfoEl}>
+          {/* ----- 圖片 ----- */}
+          {imageList !== "" ? (
+            imageList.map((path) => (
+              <img
+                key={nanoid()}
+                alt="images"
+                src={`https://image.tmdb.org/t/p/w780${path}`}
+              />
+            ))
+          ) : (
+            <div className={styles.notFound}>
+              <p>Poster not found</p>
+            </div>
+          )}
+        </div>
+
+        <div className={styles.infoBox}>
+          <div className={styles.upper}>
+            <div>
+              {/* ----- 年份 ----- */}
+              {props.localData.th !== undefined ? (
+                <span className={styles.subtitle}>
+                  {props.ordinalSuffix(props.localData.th)} (
+                  {props.localData.year}) {prizeTitle()}
+                </span>
+              ) : (
+                ""
+              )}
+            </div>
+
+            <div className={styles.row}>
+              <div className={styles.title}>
+                <p>{props.tmdbData.title}</p>
+                <p>{props.localData.film_name_zh}</p>
+              </div>
+
+              {/* 書籤 */}
+              <div
+                className={isLiked ? styles.addBtn : styles.cancelBtn}
+                onClick={(e) => {
+                  if (props.userId) {
+                    isLiked
+                      ? props.cancelLiked(e, tmdbId)
+                      : props.addLiked(e, obj);
+                  } else {
+                    alert("登入會員才能加入收藏喔！");
+                  }
+                }}
+              >
+                <Bookmark />
+              </div>
+            </div>
           </div>
-        )}
-      </div>
 
-      <div className={styles.infoBox}>
-        <div className={styles.upper}>
-          <div>
-            {props.localData.th !== undefined ? (
-              <span className={styles.subtitle}>
-                {props.ordinalSuffix(props.localData.th)} (
-                {props.localData.year})
-              </span>
-            ) : (
-              ""
-            )}
-            {prizeTitle()}
-
-            {/* --------------- rating -------------- */}
-            <div className={styles.rating}>
-              {/* <span>{props.imdbSpan[0]} /10</span>
+          <div className={styles.linkBox}>
+            <div className={styles.box1}>
+              {/* --------------- rating -------------- */}
+              <div className={styles.rating}>
+                {/* <span>{props.imdbSpan[0]} /10</span>
                       <span>{props.imdbSpan[1]} votes</span> */}
 
-              {props.omdbData.Response !== "False" ? (
-                <div>
-                  <Star className={styles.star} />
-                  <span>{props.omdbData.imdbRating} /10</span>
-                  <span>{props.omdbData.imdbVotes} votes</span>
-                  <div>{props.omdbData.Awards}</div>
+                {/* <div> */}
+
+                {props.omdbData.Response !== "False" ? (
+                  <>
+                    <a
+                      className={styles.imbdBtn}
+                      href={props.localData.imdb_link}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <Imdb />
+                    </a>
+                    <span>{props.omdbData.imdbRating}</span>
+                    {/* <span>{props.omdbData.imdbVotes} votes</span> */}
+                    {/* <div>{props.omdbData.Awards}</div> */}
+                  </>
+                ) : (
+                  ""
+                )}
+                {/* </div> */}
+              </div>
+              {/* --------------- rating -------------- */}
+
+              {/* ------ 影片時間 ------ */}
+              <div className={styles.clock}>
+                <Clock />
+                <div>{props.tmdbData.runtime} min</div>
+              </div>
+
+              {/* --------------- trailer -------------- */}
+              <div
+                className={styles.videoBtn}
+                onClick={() => {
+                  if (props.tmdbVideo.results !== undefined) {
+                    setVideoOpen(true);
+                  }
+                }}
+              >
+                <Video />
+                Trailer
+              </div>
+
+              {/* --------------- trailer iframe -------------- */}
+              {isVideoOpen ? (
+                <div className={styles.videoDiv}>
+                  <div>
+                    <div
+                      className={styles.closeBtn}
+                      onClick={() => setVideoOpen(false)}
+                    >
+                      ×
+                    </div>
+                    <iframe
+                      title="trailer"
+                      id="ytplayer"
+                      type="text/html"
+                      width="640"
+                      height="360"
+                      frameBorder="0"
+                      src={videoSrc}
+                    ></iframe>
+                  </div>
                 </div>
               ) : (
                 ""
               )}
-
-              {/* {console.log(props.omdbData)} */}
-
-              <div>
-                {/* <img src={clock} alt="clock" /> */}
-                <Clock className={styles.clock} />
-                {props.tmdbData.runtime} min
-              </div>
+              {/* --------------- trailer iframe -------------- */}
             </div>
-            {/* --------------- rating -------------- */}
-          </div>
 
-          <div
-            className={isLiked ? styles.addBtn : styles.cancelBtn}
-            onClick={(e) =>
-              isLiked ? props.cancelLiked(e, tmdbId) : props.addLiked(e, obj)
-            }
-          >
-            <Bookmark />
-          </div>
-        </div>
-        <div className={styles.title}>
-          <p>{props.tmdbData.title}</p>
-          <p>{props.localData.film_name_zh}</p>
-        </div>
-
-        <div className={styles.linkBox}>
-          {/* --------------- trailer -------------- */}
-          <div
-            className={styles.videoBtn}
-            onClick={() => {
-              if (props.tmdbVideo.results !== undefined) {
-                setVideoOpen(true);
-              }
-            }}
-          >
-            Trailer
-          </div>
-
-          {/* --------------- trailer iframe -------------- */}
-          {isVideoOpen ? (
-            <div className={styles.videoDiv}>
-              <div>
-                <div
-                  className={styles.closeBtn}
-                  onClick={() => setVideoOpen(false)}
+            {/* ---------- media source ---------- */}
+            <div className={styles.mediaSource}>
+              {props.localData.atmovie_link ? (
+                <a
+                  className={styles.atmovieLink}
+                  href={props.localData.atmovie_link}
+                  target="_blank"
+                  rel="noreferrer"
                 >
-                  ×
-                </div>
-                <iframe
-                  title="trailer"
-                  id="ytplayer"
-                  type="text/html"
-                  width="640"
-                  height="360"
-                  frameBorder="0"
-                  src={videoSrc}
-                ></iframe>
-              </div>
-            </div>
-          ) : (
-            ""
-          )}
-
-          {/* --------------- movie link -------------- */}
-          <a
-            className={styles.videoBtn}
-            href={props.localData.imdb_link}
-            target="_blank"
-            rel="noreferrer"
-          >
-            IMDb
-          </a>
-          {props.localData.atmovie_link ? (
-            <a
-              className={styles.videoBtn}
-              href={props.localData.atmovie_link}
-              target="_blank"
-              rel="noreferrer"
-            >
-              開眼電影
-            </a>
-          ) : (
-            ""
-          )}
-          {/* ---------- media source ---------- */}
-          <div className={styles.mediaSource}>
-            <a
-              href={`https://book.tpml.edu.tw/webpac/bookSearchList.do?searchtype=simplesearch&search_field=TI&search_input=${
-                props.localData.film_name_zh
-                  ? props.localData.film_name_zh
-                  : props.localData.film_name_en
-              }&execodehidden=true&execode=webpac.dataType.media&ebook=#searchtype=simplesearch&search_field=TI&search_input=${
-                props.localData.film_name_zh
-                  ? props.localData.film_name_zh
-                  : props.localData.film_name_en
-              }`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Taipeilibrary />
-              {/* <div>
+                  開眼電影
+                </a>
+              ) : (
+                ""
+              )}
+              <a
+                href={`https://book.tpml.edu.tw/webpac/bookSearchList.do?searchtype=simplesearch&search_field=TI&search_input=${
+                  props.localData.film_name_zh
+                    ? props.localData.film_name_zh
+                    : props.localData.film_name_en
+                }&execodehidden=true&execode=webpac.dataType.media&ebook=#searchtype=simplesearch&search_field=TI&search_input=${
+                  props.localData.film_name_zh
+                    ? props.localData.film_name_zh
+                    : props.localData.film_name_en
+                }`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Taipeilibrary />
+                {/* <div>
                      台北市立圖書館
                      <br />
                      影視資料
                   </div> */}
-            </a>
-            <a
-              href={`https://webpac.tphcc.gov.tw/webpac/search.cfm?m=as&k0=${
-                props.localData.film_name_zh
-                  ? props.localData.film_name_zh
-                  : props.localData.film_name_en
-              }&t0=t&c0=and&y10=&y20=&cat0=&dt0=%E8%A6%96%E8%81%BD%E8%B3%87%E6%96%99&l0=&lv0=&lc0=`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <NewTaipeilibrary />
-              {/* <div>
+              </a>
+              <a
+                href={`https://webpac.tphcc.gov.tw/webpac/search.cfm?m=as&k0=${
+                  props.localData.film_name_zh
+                    ? props.localData.film_name_zh
+                    : props.localData.film_name_en
+                }&t0=t&c0=and&y10=&y20=&cat0=&dt0=%E8%A6%96%E8%81%BD%E8%B3%87%E6%96%99&l0=&lv0=&lc0=`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <NewTaipeilibrary />
+                {/* <div>
                      新北市立圖書館
                      <br />
                      影視資料
                   </div> */}
-            </a>
-            <a
-              href={`https://www.catchplay.com/tw/search?keyword=${
-                props.localData.film_name_zh
-                  ? props.localData.film_name_zh
-                  : props.localData.film_name_en
-              }`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              CatchPlay+
-            </a>
+              </a>
+              <a
+                href={`https://www.catchplay.com/tw/search?keyword=${
+                  props.localData.film_name_zh
+                    ? props.localData.film_name_zh
+                    : props.localData.film_name_en
+                }`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <img src={catchplay} alt="catchplay" />
+              </a>
+            </div>
+            {/* ---------- media source ---------- */}
           </div>
-          {/* ---------- media source ---------- */}
-        </div>
-        {/* --------- flags -------------- */}
-        <div className={styles.flag}>
-          {props.tmdbData && props.tmdbData.production_countries !== undefined
-            ? props.tmdbData.production_countries.slice(0, 5).map((country) => (
-                <div className={styles.tooltip} key={nanoid()}>
-                  <span className={styles.tooltiptext}>{country.name}</span>
-                  {/* {console.log(
+          {/* --------- flags -------------- */}
+          <div className={styles.flag}>
+            {props.tmdbData && props.tmdbData.production_countries !== undefined
+              ? props.tmdbData.production_countries
+                  .slice(0, 5)
+                  .map((country) => (
+                    <div className={styles.tooltip} key={nanoid()}>
+                      <span className={styles.tooltiptext}>{country.name}</span>
+                      {/* {console.log(
                              typeof require(`../data/png100px/${country.iso_3166_1.toLowerCase()}.png`).default
                           )} */}
-                  <img
-                    alt="flag"
-                    src={
-                      require(`../data/png100px/${country.iso_3166_1.toLowerCase()}.png`)
-                        .default || ""
-                    }
-                  />
-                </div>
-              ))
-            : ""}
-          {/* <div>{props.tmdbData ? props.tmdbData.production_countries[0].name : ""}</div> */}
-        </div>
-        {/* --------- flags -------------- */}
+                      <img
+                        alt="flag"
+                        src={
+                          require(`../data/png100px/${country.iso_3166_1.toLowerCase()}.png`)
+                            .default || ""
+                        }
+                      />
+                    </div>
+                  ))
+              : ""}
+            {/* <div>{props.tmdbData ? props.tmdbData.production_countries[0].name : ""}</div> */}
+          </div>
+          {/* --------- flags -------------- */}
 
-        <div className={styles.overview}>{props.tmdbData.overview} </div>
+          <div className={styles.overview}>
+            <span>Overview</span>
+            <div>{props.tmdbData.overview}</div>{" "}
+          </div>
+        </div>
       </div>
       {/* --------------- casts -------------- */}
       <div className={styles.crew}>
@@ -487,7 +503,14 @@ function MovieInfo(props) {
         />
         <p> ABOUT</p>
       </div>
-      <div className={styles.outterBox}>{tmdbId ? content : ""}</div>
+      <div className={styles.outterBox}>
+        {/* TODO: loading animation */}
+        {/* <div className={styles.loadingAnimate}>
+               <Loading />
+            </div> */}
+
+        {tmdbId ? content : ""}
+      </div>
     </div>
   );
 }

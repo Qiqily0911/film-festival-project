@@ -15,7 +15,7 @@ import React, { useState, useEffect, useRef } from "react";
 //config and firebase
 import { apiKey, omdbKey, firestore } from "./config";
 import { AuthProvider } from "./contexts/AuthContexts";
-import { ReactComponent as Logo } from "./image/logo.svg";
+import { ReactComponent as Logo } from "./image/logo-2.svg";
 
 // import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 // import * as firebase from "firebase";
@@ -70,7 +70,7 @@ function App() {
     const yearList = [];
     //  根據 listState 去把 yearList 給做出來
     for (let i = 2020; i >= 1928; i--) {
-      let item = { year: i, list: [[], [], []] };
+      let item = { year: i, list: [[], [], [], []] };
       yearList.push(item);
     }
 
@@ -79,8 +79,6 @@ function App() {
       acc[value.year] = React.createRef();
       return acc;
     }, {});
-
-    console.log(listState);
 
     setRefs(refs);
     listState.map((list) =>
@@ -119,22 +117,31 @@ function App() {
   // 取得使用者收藏清單，並設訂變數 likedList
   useEffect(() => {
     if (userId) {
-      movieLiked.where("user", "==", userId).onSnapshot((onSnapshot) => {
-        let arr = [];
-        onSnapshot.forEach((doc) => {
-          arr.push(doc.data());
+      movieLiked
+        .where("user", "==", userId)
+        // .orderBy("time", "desc")
+        .onSnapshot((onSnapshot) => {
+          let arr = [];
+          onSnapshot.forEach((doc) => {
+            arr.push(doc.data());
+          });
+          setLikedList(arr);
+          // console.log(arr);
         });
-        setLikedList(arr);
-      });
 
       //  喜歡的演員或導演清單
-      personLiked.where("user", "==", userId).onSnapshot((onSnapshot) => {
-        let arr = [];
-        onSnapshot.forEach((doc) => {
-          arr.push(doc.data());
+      personLiked
+        .where("user", "==", userId)
+        // TODO 照時間順序呈現資料
+        // .orderBy("time", "desc")
+        .onSnapshot((onSnapshot) => {
+          let arr = [];
+          onSnapshot.forEach((doc) => {
+            arr.push(doc.data());
+          });
+          setPersonList(arr);
+          // console.log(arr);
         });
-        setPersonList(arr);
-      });
     }
   }, [userId]);
 
@@ -193,7 +200,7 @@ function App() {
   // 取消收藏，並恢復原本 keepTag 樣式
   function cancelLiked(e, movieId) {
     // console.log(props.likedList);
-    console.log(movieId);
+    // console.log(movieId);
 
     for (let i = 0; i < likedList.length; i++) {
       // let a = props.movie_id;
@@ -363,7 +370,7 @@ function App() {
                 setScroll={setScroll}
               />
             )}
-            {/* <Router> */}
+
             <AuthProvider>
               <MemberBtn
                 setUserData={setUserData}
@@ -375,11 +382,6 @@ function App() {
                 setprizeBox={setprizeBox}
               />
             </AuthProvider>
-            {/* <Switch>
-                  <Route path="./signup" component={MemberBtn} />
-                     </Switch> */}
-
-            {/* </Router> */}
           </div>
 
           {memberPage ? (

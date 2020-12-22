@@ -43,7 +43,7 @@ function PrizeInfo(props) {
             className={styles.prizeData}
             key={index}
             style={{ height: infoHeight[`index-${index + 1}`] }}
-            onClick={() => openCard(index)}
+            onDoubleClick={() => openCard(index)}
           >
             {/* ------- prize block ------- */}
             <div

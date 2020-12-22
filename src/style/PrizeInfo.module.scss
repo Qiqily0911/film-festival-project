@@ -84,16 +84,19 @@
           }
         }
         .inner {
-          padding: 10px 20px;
+          padding: 20px;
+
           .upper {
             display: flex;
             align-items: center;
             margin-bottom: 10px;
+            border-bottom: 1px solid $color-gold;
+
             .title {
               // display: flex;
-              margin-left: 20px;
+              margin-left: 10px;
               font-size: 1.2rem;
-              font-weight: 500;
+              font-weight: 600;
               color: $color-blue;
             }
 
@@ -102,6 +105,7 @@
               width: 70px;
               overflow: hidden;
               svg {
+                margin: 0 auto;
                 height: 100%;
                 fill: $color-gold;
               }
@@ -116,12 +120,15 @@
               .th {
                 width: 40px;
                 font-size: 1rem;
-                margin-right: 20px;
+                font-weight: 600;
+                margin-right: 30px;
+                color: $color-gold;
                 // position: absolute;
               }
               .prizeName {
                 font-size: 1rem;
-                color: $color-gray;
+                color: $color-gold;
+                // opacity: 0.5;
                 display: flex;
                 // font-size: 1rem;
 
@@ -133,11 +140,19 @@
               .filmName {
                 // display: flex;
                 font-size: 1rem;
+                color: $color-gray;
+                transition: 0.3s ease;
+              }
+              .filmName:hover {
+                cursor: pointer;
+                color: rgb(85, 85, 85);
+                transition: 0.3s ease;
               }
             }
           }
           .description {
-            font-size: 0.5rem;
+            margin-top: 50px;
+            font-size: $font-p;
             color: $color-gray;
             span {
               padding: 5px 0;

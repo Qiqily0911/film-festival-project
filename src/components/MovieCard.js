@@ -17,7 +17,7 @@ function MovieCard(props) {
     time: new Date(),
   };
   //  console.log(props);
-  console.log("--render all movie cards--");
+  // console.log("--render all movie cards--");
   const notFound = (
     <div className={styles.movieCard}>
       <div className={styles.notFound}></div>
