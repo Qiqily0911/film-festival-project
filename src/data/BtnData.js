@@ -48,16 +48,16 @@ export const InitListState = [
     logo: GoldenHorseLogo,
     order: 2,
   },
-  {
-    title: "柏林影展",
-    prize_zh: "金熊獎",
-    prize_name: "Golden Bear",
-    list_name: "berlin",
-    film_list: berlin,
-    prize: "golden_bear",
-    logo: BerlinLogo,
-    order: 3,
-  },
+  // {
+  //   title: "柏林影展",
+  //   prize_zh: "金熊獎",
+  //   prize_name: "Golden Bear",
+  //   list_name: "berlin",
+  //   film_list: berlin,
+  //   prize: "golden_bear",
+  //   logo: BerlinLogo,
+  //   order: 3,
+  // },
 ];
 
 export const BtnData = [

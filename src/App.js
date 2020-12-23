@@ -70,7 +70,7 @@ function App() {
     const yearList = [];
     //  根據 listState 去把 yearList 給做出來
     for (let i = 2020; i >= 1928; i--) {
-      let item = { year: i, list: [[], [], [], []] };
+      let item = { year: i, list: [[], [], []] };
       yearList.push(item);
     }
 
