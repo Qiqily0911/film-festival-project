@@ -90,9 +90,10 @@ function MovieFilter(props) {
     props.setlistState(arr);
   }
 
-  const title = props.listState.map((data, i) => (
+  const title = props.listState.map((list, i) => (
     <div className={styles.fesTitle} key={i}>
-      {data.film_list !== undefined ? (
+      {/* {console.log(props.listState)} */}
+      {list.film_list !== undefined ? (
         <div>
           <div className={styles.inner}>
             <div>
@@ -100,19 +101,19 @@ function MovieFilter(props) {
                 <div
                   className={styles.closeBtn}
                   onClick={close}
-                  data-order={data.order}
+                  data-order={list.order}
                 >
                   ×
                 </div>
-                {data.title}
+                {list.title}
               </span>
               <br />
-              <span className={styles.prize}>{data.prize_zh}</span>
+              <span className={styles.prize}>{list.prize_zh}</span>
             </div>
           </div>
         </div>
       ) : (
-        <div data-order={data.order} name={"index-" + i}>
+        <div data-order={list.order} name={"index-" + i}>
           <div className={styles.inner}>
             {/* <div className={styles.addBtn}>×</div> */}
             <span>
@@ -131,19 +132,26 @@ function MovieFilter(props) {
                   >
                     {data.btnText}
                   </button>
-                  {/* FIXME make btn close smoothly */}
-                  <CSSTransition
-                    in={subBtnVal[`index-${i}`] === data.btnText}
-                    timeout={300}
-                    // unmountOnExit
-                    classNames={styles.subBtnAnimate}
+
+                  <div
+                    className={styles.subBtn}
+                    data-order={j}
+                    style={{
+                      // FIXME: 消除殘影
+                      visibility:
+                        subBtnVal[`index-${i}`] === data.btnText
+                          ? "visible"
+                          : "hidden",
+                      opacity:
+                        subBtnVal[`index-${i}`] === data.btnText ? "1" : "0",
+                      marginTop:
+                        subBtnVal[`index-${i}`] === data.btnText
+                          ? "0"
+                          : `-${data.arr.length * 36 + 20}px`,
+                    }}
                   >
-                    <div
-                      className={styles.subBtn}
-                      data-order={j}
-                      // style={{ visibility: subBtnVal[`index-${i}`] === data.btnText ? "visible" : "hidden" }}
-                    >
-                      {data.arr.map((subBtn, k) => (
+                    {data.arr.map((subBtn, k) => (
+                      <>
                         <button
                           key={k}
                           type="button"
@@ -152,9 +160,9 @@ function MovieFilter(props) {
                         >
                           {subBtn.subBtnName}
                         </button>
-                      ))}
-                    </div>
-                  </CSSTransition>
+                      </>
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>

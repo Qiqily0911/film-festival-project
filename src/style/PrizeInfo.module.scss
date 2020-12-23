@@ -3,26 +3,55 @@
 .prizeInfo {
   position: fixed;
   //    right: 20px;
+  z-index: 5;
   top: 120px;
   bottom: 20px;
   width: 450px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
     rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
   display: flex;
-  //  overflow: scroll;
+  overflow: hidden;
   background-color: white;
   transition: right 0.5s ease;
+  .handleBar:hover {
+    transition: 1s ease;
+    background: rgb(105, 105, 105);
+  }
   .handleBar {
     cursor: pointer;
     writing-mode: vertical-rl;
     width: 30px;
     line-height: 1rem;
     height: 100%;
-    padding: 20px 5px 0 5px;
-    font-size: 0.5rem;
-    font-weight: 500;
+    padding: 10px 5px 0 5px;
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 0.3rem;
     color: white;
     background-color: $color-gray;
+    // background: linear-gradient(180deg, $color-blue, rgba(255, 0, 0, 0) 70.71%);
+    transition: 1s ease;
+
+    .arrow {
+      margin-top: -30px;
+      width: 20px;
+      height: 20px;
+      fill: white;
+      transition: 0.5s ease;
+    }
+    span {
+      margin: 20px 0 10px 0;
+      line-height: 1rem;
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.3rem;
+    }
+  }
+  .handleBar:hover {
+    .arrow {
+      transition: 0.5s ease;
+      margin-top: 0;
+    }
   }
   .outterBox {
     overflow: scroll;
@@ -33,29 +62,108 @@
       width: 100%;
       height: 100%;
       .prizeData {
-        // height: calc(100% / 3);
+        position: relative;
         transition: all 0.5s ease;
-        // border: 1px solid red;
-        padding: 20px;
         overflow: scroll;
-        box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
-          rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+        @include shadow;
 
-        .logo {
-          width: 100px;
-          max-height: 100px;
-          overflow: hidden;
-          img {
-            height: 100%;
+        .prizeBlock {
+          @include centerPosition;
+          position: absolute;
+          transition: all 0.3s ease;
+          width: 100%;
+          height: 30px;
+          background-color: $color-blue;
+          color: white;
+          // border-top: 1px solid white;
+          div {
+            font-size: 0.7rem;
+            font-weight: 300;
+            letter-spacing: 0.2rem;
+            margin: 0 10px;
           }
         }
-        .filmName {
-          display: flex;
-        }
+        .inner {
+          padding: 20px;
 
-        // .winner {
-        //    border: 1px solid green;
-        // }
+          .upper {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 1px solid $color-gold;
+
+            .title {
+              // display: flex;
+              margin-left: 10px;
+              font-size: 1.2rem;
+              font-weight: 600;
+              color: $color-blue;
+            }
+
+            .logo {
+              height: 70px;
+              width: 70px;
+              overflow: hidden;
+              svg {
+                margin: 0 auto;
+                height: 100%;
+                fill: $color-gold;
+              }
+            }
+          }
+
+          .lower {
+            padding: 0 10px;
+            .winner {
+              display: flex;
+              margin-bottom: 20px;
+              .th {
+                width: 40px;
+                font-size: 1rem;
+                font-weight: 600;
+                margin-right: 30px;
+                color: $color-gold;
+                // position: absolute;
+              }
+              .prizeName {
+                font-size: 1rem;
+                color: $color-gold;
+                // opacity: 0.5;
+                display: flex;
+                // font-size: 1rem;
+
+                div {
+                  margin-right: 10px;
+                }
+              }
+
+              .filmName {
+                // display: flex;
+                font-size: 1rem;
+                color: $color-gray;
+                transition: 0.3s ease;
+              }
+              .filmName:hover {
+                cursor: pointer;
+                color: rgb(85, 85, 85);
+                transition: 0.3s ease;
+              }
+            }
+          }
+          .description {
+            margin-top: 50px;
+            font-size: $font-p;
+            color: $color-gray;
+            span {
+              padding: 5px 0;
+            }
+            div {
+              margin-top: 5px;
+              border-top: 1px solid $color-gray;
+              padding: 10px 0;
+            }
+          }
+        }
       }
     }
   }

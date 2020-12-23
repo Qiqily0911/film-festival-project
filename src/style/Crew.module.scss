@@ -1,4 +1,14 @@
 @import "./Default.scss";
+
+@mixin bookmark {
+  width: 25px;
+  position: absolute;
+  z-index: 5;
+  right: 5px;
+  top: -7px;
+  filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.3));
+}
+
 .crewDiv {
   @include blackMask;
   .crewBox {
@@ -21,7 +31,8 @@
       display: flex;
       position: relative;
       .profile {
-        margin: 20px;
+        background-color: $color-lightgray;
+        padding: 30px;
         // width: 300px;
         display: flex;
         flex-direction: column;
@@ -49,19 +60,24 @@
           cursor: pointer;
         }
         .biography {
+          margin-top: 10px;
           width: 200px;
           overflow: scroll;
+          p {
+            font-size: $font-p;
+          }
         }
       }
       .movieBox {
-        margin: 20px;
-        border: 1px solid red;
+        margin: 30px;
+        // border: 1px solid red;
         width: 100%;
         // padding-left: 30px;
         display: flex;
         flex-flow: row wrap;
         overflow: scroll;
         text-align: center;
+        cursor: pointer;
 
         .outter {
           .title {
@@ -71,26 +87,33 @@
             display: flex;
             flex-flow: row wrap;
             .movieCard {
-              border: 1px solid blue;
-              margin: 5px;
+              // border: 1px solid blue;
+              margin: 20px 10px;
               width: 120px;
               position: relative;
-              overflow: hidden;
-              .keepTag {
-                filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.3));
-                position: absolute;
-                width: 0;
-                height: 0;
-                border-style: solid;
-                border-width: 0 35px 35px 0;
-                border-color: transparent #00000050 transparent transparent;
-                top: 0px;
-                right: 0px;
+              //  overflow: hidden;
+              font-size: 0.8rem;
+
+              .addBtn {
+                @include bookmark;
+                // @include shadow;
+                fill: $color-gold;
+              }
+              .cancelBtn {
+                @include bookmark;
+                fill: rgba(0, 0, 0, 0.3);
+                stroke: 1px white;
+                opacity: 1;
+                transition: 0.3s ease;
+              }
+              .cancelBtn:active {
+                fill: rgba(0, 0, 0, 0.7);
               }
               .poster {
                 width: 120px;
                 height: 180px;
                 overflow: hidden;
+                @include shadow;
                 img {
                   width: 100%;
                 }
@@ -105,14 +128,61 @@
           }
         }
       }
+
       .infoBox {
+        display: flex;
+        flex-direction: column;
         position: absolute;
-        right: 0;
+        z-index: 6;
+        // right: 0;
         height: 100%;
-        width: 400px;
-        padding: 20px;
+        width: 300px;
+        padding: 30px;
         background-color: $color-blue;
+        transition: all 0.5s ease;
+        color: white;
+        // overflow: hidden;
+        .arrow {
+          cursor: pointer;
+          margin-bottom: 10px;
+          svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+          }
+        }
+        a {
+          text-decoration: none;
+          color: #ffffff;
+          text-align: center;
+          padding: 3px 5px;
+          margin: 10px;
+          border: 1px solid #ffffff;
+          cursor: pointer;
+        }
+        .filmTitle {
+          font-size: 1.2rem;
+        }
+
+        .filmTitle2 {
+          font-size: 1rem;
+        }
+        .overview {
+          margin-top: 10px;
+          //  width: 200px;
+          overflow: scroll;
+          p {
+            font-size: $font-p;
+          }
+        }
       }
     }
   }
 }
+// .movieCard:hover {
+//    .cancelBtn {
+//       opacity: 1;
+//       transition: 0.3s ease;
+//       // width: 30px;
+//    }
+// }

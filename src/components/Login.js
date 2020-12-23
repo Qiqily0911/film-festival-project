@@ -4,6 +4,7 @@ import googleIcon from "../image/Google__G__Logo.svg";
 import facebookIcon from "../image/f_logo_RGB-Blue_114.png";
 import { useAuth } from "../contexts/AuthContexts";
 import { googleSignIn, faceBookSignIn } from "../config";
+import { ReactComponent as Logo } from "../image/logo.svg";
 
 function Login() {
   const nameRef = useRef();
@@ -48,7 +49,11 @@ function Login() {
   const loginDiv = (
     <div className={styles.container}>
       <div className={styles.side}>
+        {" "}
         <span>會員登入</span>
+        <div className={styles.logo}>
+          <Logo />
+        </div>
       </div>
 
       <div className={styles.main}>
@@ -82,7 +87,11 @@ function Login() {
               <input type="password" ref={passwordRef} required />
             </div>
 
-            <button disabled={loading} type={"submit"}>
+            <button
+              className={styles.mainBtn}
+              disabled={loading}
+              type={"submit"}
+            >
               Log In
             </button>
           </form>
@@ -100,6 +109,9 @@ function Login() {
     <div className={styles.container}>
       <div className={styles.side}>
         <span>註冊會員</span>
+        <div className={styles.logo}>
+          <Logo />
+        </div>
       </div>
       {/* ======== native sign-up ========*/}
       {/* {error && <div>{error}</div>} */}
@@ -127,7 +139,11 @@ function Login() {
               <br />
               <input type="password" ref={passwordConfirmRef} required />
             </div>
-            <button disabled={loading} type={"submit"}>
+            <button
+              className={styles.mainBtn}
+              disabled={loading}
+              type={"submit"}
+            >
               Sign up
             </button>
           </form>

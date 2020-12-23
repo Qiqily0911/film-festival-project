@@ -21,7 +21,7 @@ function ControlSilder(props) {
     if (refs[num] !== null) {
       refs[num].current.scrollIntoView({
         behavior: "smooth",
-        block: "start",
+        block: "center",
       });
     }
   }
@@ -31,8 +31,13 @@ function ControlSilder(props) {
   }
 
   const verticalLabels = {
-    0: props.minYear,
-    100: props.maxYear,
+    //  25: "-",
+    //  50: "-",
+    //  75: "-",
+
+    // 25: Math.floor((props.maxYear - props.minYear) / 4 + props.minYear),
+    50: Math.floor((props.maxYear - props.minYear) / 2 + props.minYear),
+    // 75: Math.floor(((props.maxYear - props.minYear) / 4) * 3 + props.minYear),
   };
 
   const formatPc = (p) =>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "../style/Crew.module.scss";
 import CrewMovieCard from "./CrewCard";
+import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
 // import { firestore } from "../config";
 
 function Crew(props) {
@@ -17,19 +18,26 @@ function Crew(props) {
       setCastData(crewDetial.cast);
       setCrewData(crewDetial.crew);
       setPersonData(personDetail);
-      console.log(personDetail);
+      // console.log(personDetail);
       //  console.log(personData["also_known_as"]);
       //  console.log(personData["also_known_as"][0]);
     }
   }, [crewDetial, personDetail]);
 
   const infoBox = (
-    <div className={styles.infoBox}>
-      <div onClick={() => setInfoOpen(false)}>return</div>
-      <img
-        alt="poster"
-        src={`https://image.tmdb.org/t/p/w154${props.tmdbData2.poster_path}`}
-      />
+    <div
+      className={styles.infoBox}
+      style={{ right: infoOpen ? "0" : "-400px" }}
+    >
+      <div className={styles.arrow} onClick={() => setInfoOpen(false)}>
+        <Arrow />
+      </div>
+      <div>
+        <img
+          alt="poster"
+          src={`https://image.tmdb.org/t/p/w154${props.tmdbData2.poster_path}`}
+        />
+      </div>
       <a
         href={`https://www.imdb.com/title/${props.tmdbData2.imdb_id}`}
         target="_blank"
@@ -37,9 +45,11 @@ function Crew(props) {
       >
         <div>IMDB</div>
       </a>
-      <div>{props.tmdbData2.title}</div>
-      <div>{props.tmdbData2.original_title}</div>
-      <div>{props.tmdbData2.overview}</div>
+      <div className={styles.filmTitle}>{props.tmdbData2.title}</div>
+      <div className={styles.filmTitle2}>{props.tmdbData2.original_title}</div>
+      <div className={styles.overview}>
+        <p>{props.tmdbData2.overview}</p>
+      </div>
     </div>
   );
 
@@ -148,8 +158,9 @@ function Crew(props) {
               </div>
             </div>
           </div>
+          {infoBox}
 
-          {infoOpen ? infoBox : ""}
+          {/* {infoOpen ? infoBox : ""} */}
         </div>
       </div>
     </div>

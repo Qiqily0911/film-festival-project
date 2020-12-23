@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "../style/MovieCard.module.scss";
+import { ReactComponent as Bookmark } from "../image/icon/add.svg";
 // import { firestore } from "../config";
 // const movieLiked = firestore.collection("movie_liked");
 
@@ -16,8 +17,17 @@ function MovieCard(props) {
     time: new Date(),
   };
   //  console.log(props);
-  console.log("--render all movie cards--");
-  const notFound = <div className={styles.notFound}></div>;
+  // console.log("--render all movie cards--");
+  const notFound = (
+    <div className={styles.movieCard}>
+      <div className={styles.notFound}></div>
+      <div className={styles.basicInfo}>
+        <div>
+          <div className={styles.titleZh}>無資料</div>
+        </div>
+      </div>
+    </div>
+  );
 
   const hasCard = (
     <div
@@ -30,10 +40,8 @@ function MovieCard(props) {
         props.tmdbApi("/videos", movieId);
         props.tmdbApi("/images", movieId);
         props.tmdbApi("/credits", movieId);
-
         props.omdbApi(props.movie_id);
         props.renewData(props);
-        // console.log(props);
 
         props.setInfoBox(true);
 
@@ -43,20 +51,15 @@ function MovieCard(props) {
     >
       {/* add to movie list */}
       {props.userId ? (
-        <div
-          style={{
-            borderColor: props.isLiked
-              ? "transparent #D8AE00 transparent transparent"
-              : "transparent  #00000050 transparent transparent",
-          }}
-          className={styles.keepTag}
+        <Bookmark
+          className={props.isLiked ? styles.addBtn : styles.cancelBtn}
           data-id={props.movie_id}
           onClick={(e) =>
             props.isLiked
               ? props.cancelLiked(e, props.tmdb_id)
               : props.addLiked(e, obj)
           }
-        ></div>
+        />
       ) : (
         ""
       )}
