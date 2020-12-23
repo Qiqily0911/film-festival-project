@@ -23,15 +23,23 @@ import { ReactComponent as Logo } from "./image/logo-2.svg";
 // import "firebase/firestore";
 
 function App() {
-  const [tmdbData, setData] = useState("");
-  const [tmdbVideo, setVideo] = useState("");
-  const [tmdbImages, setImages] = useState("");
-  const [tmdbCredits, setCredits] = useState("");
-  const [tmdbCrew, setCrew] = useState("");
-  const [tmdbData2, setData2] = useState("");
-  const [tmdbPerson, setPerson] = useState("");
-  const [localData, renewData] = useState("");
-  const [omdbData, setomdbData] = useState("");
+  const [movieData, setMovieData] = useState({
+    detail: "",
+    video: "",
+    images: "",
+    credits: "",
+    localData: "",
+    omdbData: "",
+    imdbRating: "",
+    overview_translate: "",
+  });
+
+  const [personData, setPersonData] = useState({
+    crew: "",
+    person: "",
+    // subData: "",
+  });
+
   const [imdbSpan, setRating] = useState("");
 
   const [list, setList] = useState([]);
@@ -218,39 +226,21 @@ function App() {
 
     e.stopPropagation();
   }
+
   //  get tmdb movie detail & video
-  function tmdbApi(type, movie_id, inCrewDiv) {
+  function tmdbApi(type, movie_id) {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open(
         "GET",
         `https://api.themoviedb.org/3/movie/${movie_id}${type}?api_key=${apiKey}`
       );
-
-      xhr.onload = () => resolve(xhr.responseText);
+      xhr.onload = () => resolve(JSON.parse(xhr.responseText));
       xhr.onerror = () => reject(xhr.statusText);
       xhr.send();
-    })
-      .then((response) => JSON.parse(response))
-      .then((data) => {
-        if (type === "") {
-          if (inCrewDiv) {
-            console.log("inCrewDiv");
-            setData2(data);
-          } else {
-            setData(data);
-          }
-        } else if (type === "/videos") {
-          setVideo(data);
-        } else if (type === "/images") {
-          setImages(data);
-        } else if (type === "/credits") {
-          setCredits(data);
-        }
-      });
+    });
   }
 
-  // TODO: 精簡傳輸資料的方式
   //  get tmdb crew detail
   function tmdbCrewApi(type, personId) {
     return new Promise((resolve, reject) => {
@@ -260,36 +250,26 @@ function App() {
         `https://api.themoviedb.org/3/person/${personId}${type}?api_key=${apiKey}`
       );
 
-      xhr.onload = () => resolve(xhr.responseText);
+      xhr.onload = () => resolve(JSON.parse(xhr.responseText));
       xhr.onerror = () => reject(xhr.statusText);
       xhr.send();
-    })
-      .then((response) => JSON.parse(response))
-      .then((data) => {
-        if (type === "") {
-          //  console.log(data);
-          setPerson(data);
-        } else if (type === "/movie_credits") {
-          setCrew(data);
-        }
-      });
+    });
   }
 
   //  get get imdb rating from omdb APi
   function omdbApi(movie_id) {
-    const xhr = new XMLHttpRequest();
-    xhr.open(
-      "GET",
-      `https://www.omdbApi.com/?apikey=${omdbKey}&i=${movie_id}`,
-      true
-    );
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-        let a = JSON.parse(xhr.responseText);
-        setomdbData(a);
-      }
-    };
-    xhr.send();
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open(
+        "GET",
+        `https://www.omdbApi.com/?apikey=${omdbKey}&i=${movie_id}`,
+        true
+      );
+      xhr.onload = () => resolve(JSON.parse(xhr.responseText));
+      xhr.onerror = () => reject(xhr.statusText);
+
+      xhr.send();
+    });
   }
 
   //  get get imdb rating from imdb page
@@ -309,6 +289,10 @@ function App() {
         let elements = [...doc.getElementsByTagName("span")];
         let a = elements.filter((x) => !!x.getAttribute("itemprop"));
         setRating([a[0].innerText, a[2].innerText]);
+        // setMovieData({
+        //    ...movieData,
+        //    imdbRating: [a[0].innerText, a[2].innerText],
+        // });
       }
     };
     xhr.send();
@@ -394,18 +378,19 @@ function App() {
               tmdbApi={tmdbApi}
               omdbApi={omdbApi}
               setInfoBox={setInfoBox}
-              renewData={renewData}
               personList={personList}
+              setMovieData={setMovieData}
             />
           ) : (
             <>
               <div className={styles.subContainer}>
                 <YearList
+                  setMovieData={setMovieData}
+                  movieData={movieData}
                   prize={prize}
                   tmdbApi={tmdbApi}
                   omdbApi={omdbApi}
                   imdbRating={imdbRating}
-                  renewData={renewData}
                   yearlist={list}
                   yearListRefs={yearListRefs}
                   listState={listState}
@@ -423,11 +408,8 @@ function App() {
                   likedList={likedList}
                   addLiked={addLiked}
                   cancelLiked={cancelLiked}
-
-                  // memberPage={memberPage}
                 />
                 <PrizeInfo
-                  renewData={renewData}
                   tmdbApi={tmdbApi}
                   omdbApi={omdbApi}
                   listState={listState}
@@ -444,20 +426,15 @@ function App() {
             </>
           )}
           <MovieInfo
+            movieData={movieData}
+            personData={personData}
+            setPersonData={setPersonData}
             movieInfoEl={movieInfoEl}
             crewsEl={crewsEl}
-            tmdbData={tmdbData}
-            tmdbVideo={tmdbVideo}
-            tmdbImages={tmdbImages}
-            tmdbCredits={tmdbCredits}
-            localData={localData}
-            renewData={renewData}
-            omdbData={omdbData}
             imdbSpan={imdbSpan}
+            // crewMovieData={crewMovieData}
+            // setCrewMovieData={setCrewMovieData}
             tmdbCrewApi={tmdbCrewApi}
-            setCrew={setCrew}
-            tmdbCrew={tmdbCrew}
-            tmdbPerson={tmdbPerson}
             ordinalSuffix={ordinalSuffix}
             infoBoxState={infoBoxState}
             setInfoBox={setInfoBox}
@@ -468,7 +445,6 @@ function App() {
             addLiked={addLiked}
             cancelLiked={cancelLiked}
             tmdbApi={tmdbApi}
-            tmdbData2={tmdbData2}
             addPerson={addPerson}
             memberPage={memberPage}
           />

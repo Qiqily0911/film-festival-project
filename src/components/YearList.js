@@ -29,25 +29,29 @@ function YearList(props) {
                 props.likedList.find(
                   (item) => item.movie_id === data[0].movie_id
                 );
+              const listData = {
+                th: data[0].th,
+                year: data[0].year,
+                prize: data[0].prize,
+                atmovie_link: data[0].atmovie_link,
+                imdb_link: data[0].imdb_link,
+                movie_id: data[0].movie_id,
+                tmdb_id: data[0].tmdb_id,
+                data_id: data[0].data_id,
+                film_name_zh: data[0].film_name_zh,
+                film_name_en: data[0].film_name_en,
+                poster_path: data[0].poster_path,
+              };
 
               return (
                 <MovieCard
+                  setMovieData={props.setMovieData}
+                  movieData={props.movieData}
                   renewData={props.renewData}
                   tmdbApi={props.tmdbApi}
                   omdbApi={props.omdbApi}
-                  //  imdbRating={props.imdbRating}
                   key={j}
-                  th={data[0].th}
-                  year={data[0].year}
-                  prize={data[0].prize}
-                  atmovie_link={data[0].atmovie_link}
-                  imdb_link={data[0].imdb_link}
-                  movie_id={data[0].movie_id}
-                  tmdb_id={data[0].tmdb_id}
-                  data_id={data[0].data_id}
-                  film_name_zh={data[0].film_name_zh}
-                  film_name_en={data[0].film_name_en}
-                  poster_path={data[0].poster_path}
+                  listData={listData}
                   isLiked={Boolean(isLiked)}
                   userId={props.userId}
                   setInfoBox={props.setInfoBox}

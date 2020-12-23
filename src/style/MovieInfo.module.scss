@@ -361,16 +361,19 @@
           overflow: hidden;
           height: 180px;
           position: relative;
+          //  background-color: rgb(47, 91, 128);
 
           img {
-            filter: grayscale(100%);
+            // filter: grayscale(100%);
+            // mix-blend-mode: luminosity;
             width: 100%;
             transition: 0.3s ease;
           }
 
           img:hover {
             transform: scale(1.1);
-            filter: grayscale(0%);
+            // mix-blend-mode: none;
+            // filter: grayscale(0%);
             cursor: pointer;
             transition: 0.3s ease;
           }

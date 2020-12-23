@@ -5,24 +5,40 @@ import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
 // import { firestore } from "../config";
 
 function Crew(props) {
+  console.log(props.personData);
   const [castData, setCastData] = useState("");
   const [crewData, setCrewData] = useState("");
   const [personData, setPersonData] = useState("");
+  const [crewMovieData, setCrewMovieData] = useState(["", ""]);
   const [infoOpen, setInfoOpen] = useState(false);
 
-  let crewDetial = props.tmdbCrew;
-  let personDetail = props.tmdbPerson;
+  let crewDetial = props.personData.crew;
+  let personDetail = props.personData.person;
 
   useEffect(() => {
     if (crewDetial !== undefined && personDetail !== undefined) {
       setCastData(crewDetial.cast);
       setCrewData(crewDetial.crew);
       setPersonData(personDetail);
-      // console.log(personDetail);
-      //  console.log(personData["also_known_as"]);
-      //  console.log(personData["also_known_as"][0]);
     }
-  }, [crewDetial, personDetail]);
+  }, [props.personData]);
+  //  中文簡介
+  //  const overviewChinese = () => {
+  //     console.log(crewMovieData[1]);
+  //     if (crewMovieData[1] !== "" && crewMovieData[1].translations !== undefined) {
+  //        let version = crewMovieData[1].translations;
+  //        for (let i = 0; i < version.length; i++) {
+  //           if (version[i]["iso_3166_1"] === "TW") {
+  //              return version[i].data.overview;
+  //           }
+  //           // FIXME: 簡中簡介判斷
+  //           // if (version[i]["iso_3166_1"] === "CN" && version[i].data.overview !== "") {
+  //           //    console.log("cn");
+  //           //    return version[i].data.overview;
+  //           // }
+  //        }
+  //     }
+  //  };
 
   const infoBox = (
     <div
@@ -32,23 +48,27 @@ function Crew(props) {
       <div className={styles.arrow} onClick={() => setInfoOpen(false)}>
         <Arrow />
       </div>
+      {console.log(crewMovieData)}
       <div>
         <img
           alt="poster"
-          src={`https://image.tmdb.org/t/p/w154${props.tmdbData2.poster_path}`}
+          src={`https://image.tmdb.org/t/p/w154${crewMovieData[0].poster_path}`}
         />
       </div>
       <a
-        href={`https://www.imdb.com/title/${props.tmdbData2.imdb_id}`}
+        href={`https://www.imdb.com/title/${crewMovieData[0].imdb_id}`}
         target="_blank"
         rel="noreferrer"
       >
         <div>IMDB</div>
       </a>
-      <div className={styles.filmTitle}>{props.tmdbData2.title}</div>
-      <div className={styles.filmTitle2}>{props.tmdbData2.original_title}</div>
+      <div className={styles.filmTitle}>{crewMovieData[0].title}</div>
+      <div className={styles.filmTitle2}>{crewMovieData[0].original_title}</div>
       <div className={styles.overview}>
-        <p>{props.tmdbData2.overview}</p>
+        {/* FIXME: 會報錯？i don't know */}
+        {console.log(crewMovieData[0], crewMovieData[1])}
+        {/* <p>{overviewChinese()}</p> */}
+        <p>{crewMovieData[0].overview}</p>
       </div>
     </div>
   );
@@ -124,7 +144,7 @@ function Crew(props) {
                           userId={props.userId}
                           cancelLiked={props.cancelLiked}
                           addLiked={props.addLiked}
-                          tmdbData2={props.tmdbData2}
+                          setCrewMovieData={setCrewMovieData}
                           tmdbApi={props.tmdbApi}
                         />
                       ))
@@ -150,7 +170,7 @@ function Crew(props) {
                           userId={props.userId}
                           cancelLiked={props.cancelLiked}
                           addLiked={props.addLiked}
-                          tmdbData2={props.tmdbData2}
+                          setCrewMovieData={setCrewMovieData}
                           tmdbApi={props.tmdbApi}
                         />
                       ))

@@ -23,14 +23,13 @@ function MovieInfo(props) {
   const [isVideoOpen, setVideoOpen] = useState(false);
   const [isCrewOpen, setCrewOpen] = useState(false);
 
-  let movieId = props.localData.movie_id;
-  //  console.log(movieId);
-  // console.log(props.localData.data_id);
-  let tmdbId = props.localData.tmdb_id;
-  let videoPath = props.tmdbVideo.results;
-  let images = props.tmdbImages;
-  let credits = props.tmdbCredits;
+  let movieId = props.movieData.localData.movie_id;
+  let tmdbId = props.movieData.localData.tmdb_id;
+  let videoPath = props.movieData.video.results;
+  let images = props.movieData.images;
+  let credits = props.movieData.credits;
 
+  //  console.log(props.movieData);
   //  reset infoBox position
   useEffect(() => {
     if (props.movieInfoEl.current && props.crewsEl.current !== null) {
@@ -65,22 +64,9 @@ function MovieInfo(props) {
         images.backdrops.forEach((obj) => arr.push(obj.file_path));
         setImageList(arr);
       }
-
-      //  if (images.posters[0] !== undefined) {
-      //     images.posters.forEach((obj) => arr.push(obj.file_path));
-      //     setImageList(arr);
-      //  }
     }
     // FIXME run 4 times; it works but want to try a better way
-  }, [
-    props.tmdbVideo,
-    props.tmdbImages,
-    props.tmdbCredits,
-    tmdbId,
-    credits,
-    images,
-    videoPath,
-  ]);
+  }, [props.movieData]);
 
   const isLiked = Boolean(
     props.likedList && props.likedList.find((item) => item.tmdb_id === tmdbId)
@@ -98,10 +84,17 @@ function MovieInfo(props) {
           key={person.credit_id}
           data-creditid={id}
           onClick={() => {
-            //  console.log(person.credit_id);
-            console.log(id);
-            props.tmdbCrewApi("/movie_credits", id);
-            props.tmdbCrewApi("", id);
+            Promise.all([
+              props.tmdbCrewApi("/movie_credits", id),
+              props.tmdbCrewApi("", id),
+            ]).then((arr) => {
+              props.setPersonData({
+                ...props.personData,
+                crew: arr[0],
+                person: arr[1],
+              });
+            });
+
             setCrewOpen(true);
           }}
         >
@@ -138,8 +131,19 @@ function MovieInfo(props) {
                 onClick={() => {
                   // console.log(person);
                   // console.log(person.id);
-                  props.tmdbCrewApi("/movie_credits", person.id);
-                  props.tmdbCrewApi("", person.id);
+                  // props.tmdbCrewApi("/movie_credits", person.id);
+                  // props.tmdbCrewApi("", person.id);
+                  Promise.all([
+                    props.tmdbCrewApi("/movie_credits", person.id),
+                    props.tmdbCrewApi("", person.id),
+                  ]).then((arr) => {
+                    props.setPersonData({
+                      ...props.personData,
+                      crew: arr[0],
+                      person: arr[1],
+                    });
+                  });
+
                   setCrewOpen(true);
                 }}
               >
@@ -168,15 +172,16 @@ function MovieInfo(props) {
     user: props.userId,
     movie_id: movieId,
     tmdb_id: tmdbId,
-    data_id: props.localData.data_id,
-    poster_path: props.tmdbData.poster_path,
-    film_name_en: props.tmdbData.title,
-    film_name_zh: props.localData.film_name_zh,
+    data_id: props.movieData.localData.data_id,
+    poster_path: props.movieData.localData.poster_path,
+    film_name_en: props.movieData.localData.film_name_en,
+    film_name_zh: props.movieData.localData.film_name_zh,
+    year: props.movieData.localData.year,
   };
 
   // 獎項名稱
   const prizeTitle = () => {
-    let dataId = props.localData.data_id;
+    let dataId = props.movieData.localData.data_id;
     if (dataId !== undefined) {
       let filmFes = dataId.slice(0, dataId.lastIndexOf("_"));
       let prizeId = dataId.substring(dataId.length - 1);
@@ -190,12 +195,28 @@ function MovieInfo(props) {
               {BtnData[i].official_name}{" "}
               {BtnData[i].arr[prizeId - 1].subBtnText}
               {/* </div> */}
-              {/* <div>
-                {BtnData[i].btnText} {BtnData[i].arr[prizeId - 1].subBtnName}
-              </div> */}
             </>
           );
         }
+      }
+    }
+  };
+
+  //  中文簡介
+  const overviewChinese = () => {
+    let dataId = props.movieData.localData.data_id;
+    if (dataId !== undefined) {
+      let version = props.movieData.overview_translate.translations;
+      for (let i = 0; i < version.length; i++) {
+        if (version[i]["iso_3166_1"] === "TW") {
+          //  console.log("tw");
+          return version[i].data.overview;
+        }
+        // FIXME: 簡中簡介判斷
+        // if (version[i]["iso_3166_1"] === "CN" && version[i].data.overview !== "") {
+        //    console.log("cn");
+        //    return version[i].data.overview;
+        // }
       }
     }
   };
@@ -225,20 +246,24 @@ function MovieInfo(props) {
           <div className={styles.upper}>
             <div>
               {/* ----- 年份 ----- */}
-              {props.localData.th !== undefined ? (
+              {props.movieData.localData.th !== "" ? (
                 <span className={styles.subtitle}>
-                  {props.ordinalSuffix(props.localData.th)} (
-                  {props.localData.year}) {prizeTitle()}
+                  {/* {console.log(props.movieData.localData)} */}
+                  {props.ordinalSuffix(props.movieData.localData.th)} (
+                  {props.movieData.localData.year}){prizeTitle()}
                 </span>
               ) : (
-                ""
+                <span className={styles.subtitle}>
+                  {props.movieData.localData.year}
+                  {prizeTitle()}
+                </span>
               )}
             </div>
 
             <div className={styles.row}>
               <div className={styles.title}>
-                <p>{props.tmdbData.title}</p>
-                <p>{props.localData.film_name_zh}</p>
+                <p>{props.movieData.detail.title}</p>
+                <p>{props.movieData.localData.film_name_zh}</p>
               </div>
 
               {/* 書籤 */}
@@ -268,17 +293,17 @@ function MovieInfo(props) {
 
                 {/* <div> */}
 
-                {props.omdbData.Response !== "False" ? (
+                {props.movieData.omdbData.Response !== "False" ? (
                   <>
                     <a
                       className={styles.imbdBtn}
-                      href={props.localData.imdb_link}
+                      href={props.movieData.localData.imdb_link}
                       target="_blank"
                       rel="noreferrer"
                     >
                       <Imdb />
                     </a>
-                    <span>{props.omdbData.imdbRating}</span>
+                    <span>{props.movieData.omdbData.imdbRating}</span>
                     {/* <span>{props.omdbData.imdbVotes} votes</span> */}
                     {/* <div>{props.omdbData.Awards}</div> */}
                   </>
@@ -292,14 +317,14 @@ function MovieInfo(props) {
               {/* ------ 影片時間 ------ */}
               <div className={styles.clock}>
                 <Clock />
-                <div>{props.tmdbData.runtime} min</div>
+                <div>{props.movieData.detail.runtime} min</div>
               </div>
 
               {/* --------------- trailer -------------- */}
               <div
                 className={styles.videoBtn}
                 onClick={() => {
-                  if (props.tmdbVideo.results !== undefined) {
+                  if (props.movieData.video.results !== undefined) {
                     setVideoOpen(true);
                   }
                 }}
@@ -337,10 +362,10 @@ function MovieInfo(props) {
 
             {/* ---------- media source ---------- */}
             <div className={styles.mediaSource}>
-              {props.localData.atmovie_link ? (
+              {props.movieData.localData.atmovie_link ? (
                 <a
                   className={styles.atmovieLink}
-                  href={props.localData.atmovie_link}
+                  href={props.movieData.localData.atmovie_link}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -351,45 +376,35 @@ function MovieInfo(props) {
               )}
               <a
                 href={`https://book.tpml.edu.tw/webpac/bookSearchList.do?searchtype=simplesearch&search_field=TI&search_input=${
-                  props.localData.film_name_zh
-                    ? props.localData.film_name_zh
-                    : props.localData.film_name_en
+                  props.movieData.localData.film_name_zh
+                    ? props.movieData.localData.film_name_zh
+                    : props.movieData.localData.film_name_en
                 }&execodehidden=true&execode=webpac.dataType.media&ebook=#searchtype=simplesearch&search_field=TI&search_input=${
-                  props.localData.film_name_zh
-                    ? props.localData.film_name_zh
-                    : props.localData.film_name_en
+                  props.movieData.localData.film_name_zh
+                    ? props.movieData.localData.film_name_zh
+                    : props.movieData.localData.film_name_en
                 }`}
                 target="_blank"
                 rel="noreferrer"
               >
                 <Taipeilibrary />
-                {/* <div>
-                     台北市立圖書館
-                     <br />
-                     影視資料
-                  </div> */}
               </a>
               <a
                 href={`https://webpac.tphcc.gov.tw/webpac/search.cfm?m=as&k0=${
-                  props.localData.film_name_zh
-                    ? props.localData.film_name_zh
-                    : props.localData.film_name_en
+                  props.movieData.localData.film_name_zh
+                    ? props.movieData.localData.film_name_zh
+                    : props.movieData.localData.film_name_en
                 }&t0=t&c0=and&y10=&y20=&cat0=&dt0=%E8%A6%96%E8%81%BD%E8%B3%87%E6%96%99&l0=&lv0=&lc0=`}
                 target="_blank"
                 rel="noreferrer"
               >
                 <NewTaipeilibrary />
-                {/* <div>
-                     新北市立圖書館
-                     <br />
-                     影視資料
-                  </div> */}
               </a>
               <a
                 href={`https://www.catchplay.com/tw/search?keyword=${
-                  props.localData.film_name_zh
-                    ? props.localData.film_name_zh
-                    : props.localData.film_name_en
+                  props.movieData.localData.film_name_zh
+                    ? props.movieData.localData.film_name_zh
+                    : props.movieData.localData.film_name_en
                 }`}
                 target="_blank"
                 rel="noreferrer"
@@ -397,12 +412,14 @@ function MovieInfo(props) {
                 <img src={catchplay} alt="catchplay" />
               </a>
             </div>
+
             {/* ---------- media source ---------- */}
           </div>
           {/* --------- flags -------------- */}
           <div className={styles.flag}>
-            {props.tmdbData && props.tmdbData.production_countries !== undefined
-              ? props.tmdbData.production_countries
+            {props.movieData.detail &&
+            props.movieData.detail.production_countries !== undefined
+              ? props.movieData.detail.production_countries
                   .slice(0, 5)
                   .map((country) => (
                     <div className={styles.tooltip} key={nanoid()}>
@@ -426,7 +443,8 @@ function MovieInfo(props) {
 
           <div className={styles.overview}>
             <span>Overview</span>
-            <div>{props.tmdbData.overview}</div>{" "}
+            <div>{overviewChinese()}</div>
+            <div>{props.movieData.detail.overview}</div>
           </div>
         </div>
       </div>
@@ -445,15 +463,13 @@ function MovieInfo(props) {
             <Crew
               userId={props.userId}
               setCrewOpen={setCrewOpen}
-              tmdbCrew={props.tmdbCrew}
-              tmdbPerson={props.tmdbPerson}
-              //  isLiked={props.isLiked}
+              tmdbApi={props.tmdbApi}
+              crewMovieData={props.crewMovieData}
+              setCrewMovieData={props.setCrewMovieData}
+              personData={props.personData}
               likedList={props.likedList}
               addLiked={props.addLiked}
               cancelLiked={props.cancelLiked}
-              tmdbApi={props.tmdbApi}
-              tmdbData2={props.tmdbData2}
-              //  renewData={props.renewData}
               addPerson={props.addPerson}
             />
           ) : (

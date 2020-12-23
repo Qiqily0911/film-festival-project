@@ -11,15 +11,13 @@ export default function CrewCard(props) {
     poster_path: props.data.poster_path,
     film_name_en: props.data.title,
     film_name_zh: "",
+    year: props.data.release_date.split("-")[0],
   };
-
-  //    console.log(obj);
 
   const isLiked = Boolean(
     props.likedList &&
       props.likedList.find((item) => item.tmdb_id === props.data.id)
   );
-  //    console.log(isLiked);
 
   return (
     <div
@@ -27,7 +25,13 @@ export default function CrewCard(props) {
       key={props.data.credit_id}
       value={props.data.id}
       onClick={() => {
-        props.tmdbApi("", props.data.id, true);
+        // console.log(props);
+        let data = [props.data];
+        props.tmdbApi("/translations", props.data.id).then((res) => {
+          data.push(res);
+        });
+        console.log(data);
+        props.setCrewMovieData(data);
         props.setInfoOpen(true);
       }}
     >
@@ -48,6 +52,7 @@ export default function CrewCard(props) {
       {/* ------- keetTag --------*/}
 
       <div className={styles.poster}>
+        {/* {console.log(props.data)} */}
         {props.data.poster_path !== null ? (
           <img
             alt="poster"
@@ -57,10 +62,12 @@ export default function CrewCard(props) {
           <div className={styles.noPic}></div>
         )}
       </div>
-      <div>{props.data.release_date}</div>
+      <div>
+        {props.data.release_date !== undefined
+          ? props.data.release_date.split("-")[0]
+          : ""}
+      </div>
       <div>{props.data.title}</div>
-      {/* <div>{data.original_title}</div> */}
-      {/* .match(/^\d{4}$/g) */}
     </div>
   );
 }
