@@ -11,15 +11,19 @@
 }
 
 .movieFilter {
-  margin: auto 0;
+  border: 1px solid orange;
+  width: 70%;
+  display: flex;
+
   .titleBox {
+    margin: 0 auto;
     // margin: 0 20px;
     display: flex;
-    // border: 1px solid blue;
+    border: 1px solid blue;
   }
   .fesTitle {
     @include navBtn;
-    // border: 1px solid red;
+    border: 1px solid red;
 
     .inner {
       @include centerPosition;

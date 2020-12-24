@@ -1,8 +1,11 @@
 @import "./Default.scss";
 .loginOutter {
+  width: 30%;
+  border: 1px solid brown;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+  padding-right: 20px;
 
   .signInDiv {
     // border: 1px solid red;

@@ -9,7 +9,10 @@ function Crew(props) {
   const [castData, setCastData] = useState("");
   const [crewData, setCrewData] = useState("");
   const [personData, setPersonData] = useState("");
-  const [crewMovieData, setCrewMovieData] = useState(["", ""]);
+  const [crewMovieData, setCrewMovieData] = useState({
+    detail: "",
+    overview_translate: "",
+  });
   const [infoOpen, setInfoOpen] = useState(false);
 
   let crewDetial = props.personData.crew;
@@ -22,23 +25,26 @@ function Crew(props) {
       setPersonData(personDetail);
     }
   }, [props.personData]);
+
   //  中文簡介
-  //  const overviewChinese = () => {
-  //     console.log(crewMovieData[1]);
-  //     if (crewMovieData[1] !== "" && crewMovieData[1].translations !== undefined) {
-  //        let version = crewMovieData[1].translations;
-  //        for (let i = 0; i < version.length; i++) {
-  //           if (version[i]["iso_3166_1"] === "TW") {
-  //              return version[i].data.overview;
-  //           }
-  //           // FIXME: 簡中簡介判斷
-  //           // if (version[i]["iso_3166_1"] === "CN" && version[i].data.overview !== "") {
-  //           //    console.log("cn");
-  //           //    return version[i].data.overview;
-  //           // }
-  //        }
-  //     }
-  //  };
+  const overviewData = () => {
+    // let dataId = props.movieData.localData.data_id;
+
+    if (crewMovieData.overview_translate !== "") {
+      let version = crewMovieData.overview_translate.translations;
+
+      let translateData = "";
+      version.forEach((item) => {
+        if (item.iso_3166_1 === "CN") {
+          translateData = item.data;
+        } else if (item.iso_3166_1 === "TW") {
+          translateData = item.data;
+        }
+      });
+
+      return translateData;
+    }
+  };
 
   const infoBox = (
     <div
@@ -52,23 +58,29 @@ function Crew(props) {
       <div>
         <img
           alt="poster"
-          src={`https://image.tmdb.org/t/p/w154${crewMovieData[0].poster_path}`}
+          src={`https://image.tmdb.org/t/p/w154${crewMovieData.detail.poster_path}`}
         />
       </div>
+      {console.log(crewMovieData.detail)}
       <a
-        href={`https://www.imdb.com/title/${crewMovieData[0].imdb_id}`}
+        href={`https://www.imdb.com/title/${crewMovieData.detail.imdb_id}`}
         target="_blank"
         rel="noreferrer"
       >
         <div>IMDB</div>
       </a>
-      <div className={styles.filmTitle}>{crewMovieData[0].title}</div>
-      <div className={styles.filmTitle2}>{crewMovieData[0].original_title}</div>
+      <div className={styles.filmTitle}>
+        {overviewData() && overviewData().title}
+      </div>
+      <div className={styles.filmTitle}>{crewMovieData.detail.title}</div>
+      <div className={styles.filmTitle2}>
+        {crewMovieData.detail.original_title}
+      </div>
       <div className={styles.overview}>
         {/* FIXME: 會報錯？i don't know */}
-        {console.log(crewMovieData[0], crewMovieData[1])}
-        {/* <p>{overviewChinese()}</p> */}
-        <p>{crewMovieData[0].overview}</p>
+        {/* {console.log(crewMovieData[0], crewMovieData[1])} */}
+        <p>{overviewData() && overviewData().overview}</p>
+        <p>{crewMovieData.detail.overview}</p>
       </div>
     </div>
   );
@@ -171,6 +183,7 @@ function Crew(props) {
                           cancelLiked={props.cancelLiked}
                           addLiked={props.addLiked}
                           setCrewMovieData={setCrewMovieData}
+                          crewMovieData={crewMovieData}
                           tmdbApi={props.tmdbApi}
                         />
                       ))
@@ -179,8 +192,6 @@ function Crew(props) {
             </div>
           </div>
           {infoBox}
-
-          {/* {infoOpen ? infoBox : ""} */}
         </div>
       </div>
     </div>

@@ -37,7 +37,6 @@ function App() {
   const [personData, setPersonData] = useState({
     crew: "",
     person: "",
-    // subData: "",
   });
 
   const [imdbSpan, setRating] = useState("");
@@ -78,7 +77,7 @@ function App() {
     const yearList = [];
     //  根據 listState 去把 yearList 給做出來
     for (let i = 2020; i >= 1928; i--) {
-      let item = { year: i, list: [[], [], []] };
+      let item = { year: i, list: [[], [], [], []] };
       yearList.push(item);
     }
 
@@ -312,7 +311,10 @@ function App() {
     }
     return i + "th";
   }
-
+  const handlemovieproperty = (value) => {
+    console.log(value);
+    setMovieData(value);
+  };
   return (
     <div className={styles.outter}>
       <aside>
@@ -367,23 +369,24 @@ function App() {
               />
             </AuthProvider>
           </div>
-
-          {memberPage ? (
-            <MemberPage
-              userId={userId}
-              userData={userData}
-              memberPage={memberPage}
-              likedList={likedList}
-              cancelLiked={cancelLiked}
-              tmdbApi={tmdbApi}
-              omdbApi={omdbApi}
-              setInfoBox={setInfoBox}
-              personList={personList}
-              setMovieData={setMovieData}
-            />
-          ) : (
-            <>
-              <div className={styles.subContainer}>
+          <div className={styles.subContainer}>
+            {memberPage ? (
+              <>
+                <MemberPage
+                  userId={userId}
+                  userData={userData}
+                  memberPage={memberPage}
+                  likedList={likedList}
+                  cancelLiked={cancelLiked}
+                  tmdbApi={tmdbApi}
+                  omdbApi={omdbApi}
+                  setInfoBox={setInfoBox}
+                  personList={personList}
+                  setMovieData={setMovieData}
+                />
+              </>
+            ) : (
+              <>
                 <YearList
                   setMovieData={setMovieData}
                   movieData={movieData}
@@ -421,33 +424,33 @@ function App() {
                   prizeBoxState={prizeBoxState}
                   setprizeBox={setprizeBox}
                   ordinalSuffix={ordinalSuffix}
+                  movieData={movieData}
+                  setMovieData={handlemovieproperty}
                 />
-              </div>
-            </>
-          )}
-          <MovieInfo
-            movieData={movieData}
-            personData={personData}
-            setPersonData={setPersonData}
-            movieInfoEl={movieInfoEl}
-            crewsEl={crewsEl}
-            imdbSpan={imdbSpan}
-            // crewMovieData={crewMovieData}
-            // setCrewMovieData={setCrewMovieData}
-            tmdbCrewApi={tmdbCrewApi}
-            ordinalSuffix={ordinalSuffix}
-            infoBoxState={infoBoxState}
-            setInfoBox={setInfoBox}
-            prizeBoxState={prizeBoxState}
-            setprizeBox={setprizeBox}
-            userId={userId}
-            likedList={likedList}
-            addLiked={addLiked}
-            cancelLiked={cancelLiked}
-            tmdbApi={tmdbApi}
-            addPerson={addPerson}
-            memberPage={memberPage}
-          />
+              </>
+            )}
+            <MovieInfo
+              movieData={movieData}
+              personData={personData}
+              setPersonData={setPersonData}
+              movieInfoEl={movieInfoEl}
+              crewsEl={crewsEl}
+              imdbSpan={imdbSpan}
+              tmdbCrewApi={tmdbCrewApi}
+              ordinalSuffix={ordinalSuffix}
+              infoBoxState={infoBoxState}
+              setInfoBox={setInfoBox}
+              prizeBoxState={prizeBoxState}
+              setprizeBox={setprizeBox}
+              userId={userId}
+              likedList={likedList}
+              addLiked={addLiked}
+              cancelLiked={cancelLiked}
+              tmdbApi={tmdbApi}
+              addPerson={addPerson}
+              memberPage={memberPage}
+            />
+          </div>
         </div>
       </main>
     </div>

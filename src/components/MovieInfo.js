@@ -6,14 +6,13 @@ import { ReactComponent as Taipeilibrary } from "../image/TaipeiCity_library.svg
 import { ReactComponent as NewTaipeilibrary } from "../image/newTaipeiCity_library.svg";
 import { ReactComponent as Bookmark } from "../image/icon/add.svg";
 import { ReactComponent as Imdb } from "../image/IMDB_Logo.svg";
-import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
+// import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
 import { ReactComponent as Clock } from "../image/icon/clock.svg";
 import { ReactComponent as Video } from "../image/icon/video.svg";
 import catchplay from "../image/catchplay_logo.png";
 import Loading from "./Loading";
 import Crew from "./Crew";
 import { BtnData } from "../data/BtnData";
-// import countryName from "../data/countries.json";
 
 function MovieInfo(props) {
   const [videoSrc, setvideoSrc] = useState("");
@@ -65,7 +64,6 @@ function MovieInfo(props) {
         setImageList(arr);
       }
     }
-    // FIXME run 4 times; it works but want to try a better way
   }, [props.movieData]);
 
   const isLiked = Boolean(
@@ -108,8 +106,7 @@ function MovieInfo(props) {
           )}
 
           <div className={styles.personName}>
-            {" "}
-            <p>{person.name}</p>{" "}
+            <p>{person.name}</p>
           </div>
         </div>
       </div>
@@ -129,10 +126,6 @@ function MovieInfo(props) {
                 key={person.credit_id}
                 data-creditid={person.id}
                 onClick={() => {
-                  // console.log(person);
-                  // console.log(person.id);
-                  // props.tmdbCrewApi("/movie_credits", person.id);
-                  // props.tmdbCrewApi("", person.id);
                   Promise.all([
                     props.tmdbCrewApi("/movie_credits", person.id),
                     props.tmdbCrewApi("", person.id),
@@ -205,19 +198,20 @@ function MovieInfo(props) {
   //  中文簡介
   const overviewChinese = () => {
     let dataId = props.movieData.localData.data_id;
+
     if (dataId !== undefined) {
       let version = props.movieData.overview_translate.translations;
-      for (let i = 0; i < version.length; i++) {
-        if (version[i]["iso_3166_1"] === "TW") {
-          //  console.log("tw");
-          return version[i].data.overview;
+      // console.log(version);
+      let overview = "";
+      version.forEach((item) => {
+        if (item.iso_3166_1 === "CN") {
+          overview = item.data.overview;
+        } else if (item.iso_3166_1 === "TW") {
+          overview = item.data.overview;
         }
-        // FIXME: 簡中簡介判斷
-        // if (version[i]["iso_3166_1"] === "CN" && version[i].data.overview !== "") {
-        //    console.log("cn");
-        //    return version[i].data.overview;
-        // }
-      }
+      });
+      // console.log(overview);
+      return overview;
     }
   };
 
@@ -464,8 +458,8 @@ function MovieInfo(props) {
               userId={props.userId}
               setCrewOpen={setCrewOpen}
               tmdbApi={props.tmdbApi}
-              crewMovieData={props.crewMovieData}
-              setCrewMovieData={props.setCrewMovieData}
+              // crewMovieData={props.crewMovieData}
+              // setCrewMovieData={props.setCrewMovieData}
               personData={props.personData}
               likedList={props.likedList}
               addLiked={props.addLiked}
@@ -481,44 +475,7 @@ function MovieInfo(props) {
   );
 
   return (
-    <div
-      className={styles.movieInfo}
-      style={{ right: props.infoBoxState ? "0" : "-420px" }}
-    >
-      <div
-        className={styles.handleBar}
-        onClick={() => {
-          if (props.memberPage === true) {
-            props.infoBoxState
-              ? props.setInfoBox(false)
-              : props.setInfoBox(true);
-          } else {
-            if (props.prizeBoxState === false && props.infoBoxState === false) {
-              props.setInfoBox(true);
-              props.setprizeBox(true);
-            }
-
-            if (props.prizeBoxState === true && props.infoBoxState === true) {
-              props.setInfoBox(false);
-              props.setprizeBox(false);
-            }
-
-            if (props.prizeBoxState === false) {
-              props.infoBoxState
-                ? props.setInfoBox(false)
-                : props.setInfoBox(true);
-            }
-          }
-        }}
-      >
-        <Arrow
-          className={styles.arrow}
-          style={{
-            transform: props.infoBoxState ? "rotate(0deg)" : "rotate(180deg)",
-          }}
-        />
-        <p> ABOUT</p>
-      </div>
+    <div className={styles.movieInfo}>
       <div className={styles.outterBox}>
         {/* TODO: loading animation */}
         {/* <div className={styles.loadingAnimate}>

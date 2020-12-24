@@ -70,9 +70,7 @@
       }
       .movieBox {
         margin: 30px;
-        // border: 1px solid red;
         width: 100%;
-        // padding-left: 30px;
         display: flex;
         flex-flow: row wrap;
         overflow: scroll;
@@ -134,14 +132,13 @@
         flex-direction: column;
         position: absolute;
         z-index: 6;
-        // right: 0;
         height: 100%;
         width: 300px;
         padding: 30px;
         background-color: $color-blue;
-        transition: all 0.5s ease;
+        transition: 0.5s ease;
         color: white;
-        // overflow: hidden;
+
         .arrow {
           cursor: pointer;
           margin-bottom: 10px;
@@ -179,10 +176,3 @@
     }
   }
 }
-// .movieCard:hover {
-//    .cancelBtn {
-//       opacity: 1;
-//       transition: 0.3s ease;
-//       // width: 30px;
-//    }
-// }

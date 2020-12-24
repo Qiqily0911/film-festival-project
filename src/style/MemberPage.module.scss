@@ -11,17 +11,30 @@
 
 .outter {
   //  border: 1px solid red;
-  padding: 0 40px;
-  position: fixed;
-  bottom: 0;
-  top: 100px;
+  // padding: 0 40px;
+  //  position: fixed;
+  //  bottom: 0;
+  //  top: 100px;
+  width: 60%;
   overflow: scroll;
   .innerBox {
+    width: 100%;
+    padding: 0 5%;
+    justify-content: center;
     // display: flex;
     // flex-flow: row wrap;
     .cardBox {
+      //  margin: 0 auto;
+      border: 1px solid green;
       display: flex;
       flex-flow: row wrap;
+      justify-content: center;
+      .blank {
+        position: relative;
+        max-height: 360px;
+        width: 180px;
+        margin: 0 20px;
+      }
       .personCard {
         position: relative;
         max-height: 360px;

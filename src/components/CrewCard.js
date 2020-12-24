@@ -3,6 +3,7 @@ import styles from "../style/Crew.module.scss";
 import { ReactComponent as Bookmark } from "../image/icon/add.svg";
 
 export default function CrewCard(props) {
+  //  console.log(props.data);
   let obj = {
     user: props.userId,
     movie_id: "",
@@ -11,7 +12,10 @@ export default function CrewCard(props) {
     poster_path: props.data.poster_path,
     film_name_en: props.data.title,
     film_name_zh: "",
-    year: props.data.release_date.split("-")[0],
+    year:
+      props.data.release_date !== undefined
+        ? props.data.release_date.split("-")[0]
+        : "",
   };
 
   const isLiked = Boolean(
@@ -25,14 +29,19 @@ export default function CrewCard(props) {
       key={props.data.credit_id}
       value={props.data.id}
       onClick={() => {
-        // console.log(props);
-        let data = [props.data];
-        props.tmdbApi("/translations", props.data.id).then((res) => {
-          data.push(res);
+        Promise.all([
+          props.tmdbApi("", props.data.id),
+          props.tmdbApi("/translations", props.data.id),
+        ]).then((arr) => {
+          props.setCrewMovieData({
+            ...props.crewMovieData,
+            detail: arr[0],
+            overview_translate: arr[1],
+          });
         });
-        console.log(data);
-        props.setCrewMovieData(data);
         props.setInfoOpen(true);
+        // console.log(data);
+        // props.setCrewMovieData(data);
       }}
     >
       {/* ------- keetTag --------*/}
