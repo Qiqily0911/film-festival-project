@@ -1,15 +1,16 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../style/MovieFilter.module.scss";
 import { BtnData } from "../data/BtnData";
 // import { CSSTransition } from "react-transition-group";
 
 function MovieFilter(props) {
-  let [currentlist, setCurrentList] = useState("");
+  //  let [currentlist, setCurrentList] = useState("");
   const [subBtnVal, setSubBtnVal] = useState({
     "index-0": "",
     "index-1": "",
     "index-2": "",
   });
+  const [prizeArr, setPrizeArr] = useState([]);
 
   // 設定影展和獎項
   function selectPrize(e) {
@@ -24,6 +25,7 @@ function MovieFilter(props) {
       list_name: BtnData[num1].list_name,
       film_list: BtnData[num1].value,
       prize: BtnData[num1].arr[num2].subBtnValue,
+      prizeId: BtnData[num1].arr[num2].subBtnId,
       logo: BtnData[num1].logo,
       order: order,
     };
@@ -62,9 +64,21 @@ function MovieFilter(props) {
     props.setlistState(arr);
   }
 
+  useEffect(() => {
+    let arr = [];
+    for (let i = 0; i < 3; i++) {
+      if (props.listState[i].film_list !== undefined) {
+        arr.push(props.listState[i].prizeId);
+        // console.log(props.listState[i]);
+      } else {
+        arr.push(null);
+      }
+    }
+    setPrizeArr(arr);
+  }, [props.listState]);
+
   const title = props.listState.map((list, i) => (
     <div className={styles.fesTitle} key={i}>
-      {/* {console.log(props.listState)} */}
       {list.film_list !== undefined ? (
         <div>
           <div className={styles.inner}>
@@ -92,7 +106,7 @@ function MovieFilter(props) {
               <br />
               影展及獎項
             </span>
-
+            {/* {console.log(props.listState)} */}
             <div className={styles.option}>
               {BtnData.map((data, j) => (
                 <div
@@ -102,14 +116,23 @@ function MovieFilter(props) {
                       ? styles.wrapOpen
                       : ""
                   }`}
+                  style={{
+                    color: "red",
+                    transitionDuration: `${data.arr.length * 0.3}s`,
+                  }}
                   value={data.btnText}
                   onClick={(e) => {
-                    setSubBtnVal({
-                      ...subBtnVal,
-                      [`index-${i}`]: e.target.value,
-                    });
-                    console.log(subBtnVal);
-                    setCurrentList(e.target.value);
+                    if (subBtnVal[`index-${i}`] === e.target.value) {
+                      setSubBtnVal({
+                        ...subBtnVal,
+                        [`index-${i}`]: "",
+                      });
+                    } else {
+                      setSubBtnVal({
+                        ...subBtnVal,
+                        [`index-${i}`]: e.target.value,
+                      });
+                    }
                   }}
                 >
                   <button
@@ -132,7 +155,13 @@ function MovieFilter(props) {
                           type="button"
                           onClick={selectPrize}
                           data-order={k}
+                          style={{
+                            color: prizeArr.includes(subBtn.subBtnId)
+                              ? "#ad9654"
+                              : "gray",
+                          }}
                         >
+                          {/* {console.log(subBtn.subBtnId)} */}
                           {subBtn.subBtnName}
                         </button>
                       </>
@@ -146,9 +175,10 @@ function MovieFilter(props) {
       )}
     </div>
   ));
-  console.log(currentlist);
+  //  console.log(currentlist);
   return (
     <div className={styles.movieFilter}>
+      {console.log(prizeArr)}
       <div className={styles.titleBox}>{title}</div>
     </div>
   );
