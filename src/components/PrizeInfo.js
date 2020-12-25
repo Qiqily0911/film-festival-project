@@ -126,7 +126,7 @@ function PrizeInfo(props) {
   return (
     <div
       className={styles.prizeInfo}
-      style={{ left: props.prizeBoxState ? "8%" : "70.65% " }}
+      style={{ left: props.prizeBoxState ? "8%" : "70.67% " }}
     >
       <div
         className={styles.handleBar}

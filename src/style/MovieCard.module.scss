@@ -1,8 +1,12 @@
 @import "./Default.scss";
+
 @mixin card {
   max-height: 360px;
   width: 180px;
   margin: 20px;
+  @media (min-width: 1440px) {
+    margin: 20px 40px;
+  }
 }
 
 .movieCard {

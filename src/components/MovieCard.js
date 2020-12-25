@@ -18,8 +18,6 @@ function MovieCard(props) {
     time: new Date(),
     year: props.listData.year,
   };
-  //  console.log(props.listData);
-  //  console.log(obj);
 
   const notFound = (
     <div className={styles.movieCard}>
@@ -38,7 +36,8 @@ function MovieCard(props) {
       key={props.listData.movie_id}
       onClick={() => {
         let movieId = props.listData.tmdb_id;
-        console.log(props.listData);
+        // console.log(props.listData);
+        props.setLoadingOpen(true);
 
         Promise.all([
           props.tmdbApi("", movieId),

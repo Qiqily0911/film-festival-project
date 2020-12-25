@@ -38,6 +38,16 @@ export const InitListState = [
     logo: CannesLogo,
     order: 1,
   },
+  // {
+  //    title: "柏林影展",
+  //    prize_zh: "金熊獎",
+  //    prize_name: "Golden Bear",
+  //    list_name: "berlin",
+  //    film_list: berlin,
+  //    prize: "golden_bear",
+  //    logo: BerlinLogo,
+  //    order: 2,
+  // },
   {
     title: "金馬影展",
     prize_zh: "最佳劇情片",
@@ -47,16 +57,6 @@ export const InitListState = [
     film_list: goldenHorse,
     logo: GoldenHorseLogo,
     order: 2,
-  },
-  {
-    title: "柏林影展",
-    prize_zh: "金熊獎",
-    prize_name: "Golden Bear",
-    list_name: "berlin",
-    film_list: berlin,
-    prize: "golden_bear",
-    logo: BerlinLogo,
-    order: 3,
   },
 ];
 

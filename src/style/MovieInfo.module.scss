@@ -24,6 +24,18 @@
       right: 0;
       left: 0;
       bottom: 0;
+      animation-name: vanish;
+      animation-duration: 1s;
+      animation-delay: 0.8s;
+    }
+
+    @keyframes vanish {
+      0% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+      }
     }
 
     .innerBox {
@@ -120,11 +132,6 @@
         .rating {
           @include centerPosition;
 
-          // .star {
-          //    width: 25px;
-          //    height: 25px;
-          //    fill: $color-gold;
-          // }
           .imbdBtn {
             display: flex;
             svg {

@@ -28,8 +28,8 @@ function MovieInfo(props) {
   let images = props.movieData.images;
   let credits = props.movieData.credits;
 
-  //  console.log(props.movieData);
   //  reset infoBox position
+
   useEffect(() => {
     if (props.movieInfoEl.current && props.crewsEl.current !== null) {
       props.crewsEl.current.scrollLeft = 0;
@@ -38,9 +38,6 @@ function MovieInfo(props) {
         block: "start",
       });
     }
-  }, [tmdbId]);
-
-  useEffect(() => {
     if (
       videoPath !== undefined &&
       images !== undefined &&
@@ -62,6 +59,10 @@ function MovieInfo(props) {
         const arr = [];
         images.backdrops.forEach((obj) => arr.push(obj.file_path));
         setImageList(arr);
+
+        setTimeout(() => {
+          props.setLoadingOpen(false);
+        }, 1000);
       }
     }
   }, [props.movieData]);
@@ -169,6 +170,7 @@ function MovieInfo(props) {
     poster_path: props.movieData.localData.poster_path,
     film_name_en: props.movieData.localData.film_name_en,
     film_name_zh: props.movieData.localData.film_name_zh,
+    time: new Date(),
     year: props.movieData.localData.year,
   };
 
@@ -291,7 +293,7 @@ function MovieInfo(props) {
                   <>
                     <a
                       className={styles.imbdBtn}
-                      href={props.movieData.localData.imdb_link}
+                      href={`https://www.imdb.com/title/${props.movieData.localData.movie_id}/`}
                       target="_blank"
                       rel="noreferrer"
                     >
@@ -478,11 +480,17 @@ function MovieInfo(props) {
     <div className={styles.movieInfo}>
       <div className={styles.outterBox}>
         {/* TODO: loading animation */}
-        {/* <div className={styles.loadingAnimate}>
-               <Loading />
-            </div> */}
+        {props.loadingOpen ? (
+          <div className={styles.loadingAnimate}>
+            <Loading />
+          </div>
+        ) : (
+          ""
+        )}
 
-        {tmdbId ? content : ""}
+        {content}
+
+        {/* {tmdbId ? content : ""} */}
       </div>
     </div>
   );

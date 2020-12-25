@@ -5,7 +5,7 @@ import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
 // import { firestore } from "../config";
 
 function Crew(props) {
-  console.log(props.personData);
+  // console.log(props.personData);
   const [castData, setCastData] = useState("");
   const [crewData, setCrewData] = useState("");
   const [personData, setPersonData] = useState("");
@@ -54,14 +54,14 @@ function Crew(props) {
       <div className={styles.arrow} onClick={() => setInfoOpen(false)}>
         <Arrow />
       </div>
-      {console.log(crewMovieData)}
+
       <div>
         <img
           alt="poster"
           src={`https://image.tmdb.org/t/p/w154${crewMovieData.detail.poster_path}`}
         />
       </div>
-      {console.log(crewMovieData.detail)}
+
       <a
         href={`https://www.imdb.com/title/${crewMovieData.detail.imdb_id}`}
         target="_blank"
@@ -77,8 +77,6 @@ function Crew(props) {
         {crewMovieData.detail.original_title}
       </div>
       <div className={styles.overview}>
-        {/* FIXME: 會報錯？i don't know */}
-        {/* {console.log(crewMovieData[0], crewMovieData[1])} */}
         <p>{overviewData() && overviewData().overview}</p>
         <p>{crewMovieData.detail.overview}</p>
       </div>

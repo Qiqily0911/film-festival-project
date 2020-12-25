@@ -41,42 +41,48 @@ function MemberBtn(props) {
 
   const logedIn = (
     <div className={styles.signInDiv}>
-      <div className={styles.switchBtn}>
-        <div
-          className={props.memberPage === true ? styles.pressed : ""}
-          onClick={() => {
-            props.setMemberPage(true);
-          }}
-        >
-          會員專區
-        </div>
+      {/* <div className={styles.switchBtn}>
+            <div
+               className={props.memberPage === true ? styles.pressed : ""}
+               onClick={() => {
+                  props.setMemberPage(true);
+               }}
+            >
+               會員專區
+            </div>
 
-        <div
-          className={props.memberPage !== true ? styles.pressed : ""}
-          onClick={() => {
-            props.setMemberPage(false);
-            props.setInfoBox(false);
-            props.setprizeBox(false);
-          }}
-        >
-          找電影
-        </div>
-      </div>
+            <div
+               className={props.memberPage !== true ? styles.pressed : ""}
+               onClick={() => {
+                  props.setMemberPage(false);
+                  props.setInfoBox(false);
+                  props.setprizeBox(false);
+               }}
+            >
+               找電影
+            </div>
+         </div> */}
       {/* {currentUser && <div>{currentUser.email}</div>} */}
-      <div className={styles.userName}>
+      <div
+        className={styles.userName}
+        onClick={() => {
+          props.setMemberPage(true);
+        }}
+      >
         <p>
           Hi,
-          {currentUser && currentUser.displayName !== null
-            ? currentUser.displayName
-            : "親愛的會員"}
+          {currentUser && currentUser.displayName}
+          {/* {currentUser && currentUser.displayName !== null ? currentUser.displayName : "親愛的會員"} */}
+          {/* {console.log(currentUser)} */}
         </p>
       </div>
       {error && <div>{error}</div>}
-
-      <div className={styles.loginIcon} onClick={handleLogout}>
-        <LogoutIcon />
+      <div onClick={handleLogout}>
+        <p>Log out</p>
+        <div className={styles.loginIcon}>
+          <LogoutIcon />
+        </div>
       </div>
-      {/* <button onClick={handleLogout}>Log Out</button> */}
     </div>
   );
 
@@ -99,19 +105,19 @@ function MemberBtn(props) {
   );
 
   const loginIcon = (
-    <div className={styles.loginIcon} onClick={() => setOpen(true)}>
-      <LoginIcon />
+    <div onClick={() => setOpen(true)}>
+      <p>Log in</p>
+      <div className={styles.loginIcon}>
+        <LoginIcon />
+      </div>
     </div>
   );
 
   return (
-    // <div>
-    //    <div>Log in</div>
     <div className={styles.loginOutter}>
       {isLogin ? logedIn : loginIcon}
       {isOpen ? loginDiv : ""}
     </div>
-    // </div>
   );
 }
 

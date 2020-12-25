@@ -1,43 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styles from "../style/MovieFilter.module.scss";
 import { BtnData } from "../data/BtnData";
-import { CSSTransition } from "react-transition-group";
+// import { CSSTransition } from "react-transition-group";
 
 function MovieFilter(props) {
+  let [currentlist, setCurrentList] = useState("");
   const [subBtnVal, setSubBtnVal] = useState({
+    "index-0": "",
     "index-1": "",
     "index-2": "",
-    "index-3": "",
   });
-
-  // const [subBtnOpen, setOpen] = useState(false);
-
-  function selectFilmList(e) {
-    let btnValue = e.target.value;
-    let name = e.nativeEvent.path[4].getAttribute("name");
-
-    //  reset button
-    // let a = document.getElementsByClassName(`${styles.subBtnAfter}`);
-    // if (a.length !== 0) {
-    //    a[0].className = a[0].className.replace(`${styles.subBtnAfter}`, `${styles.subBtnBefore}`);
-    // }
-
-    // let b = document.getElementsByClassName(`${styles.subBtnBefore}`);
-    // for (let i = 0; i < b.length; i++) {
-    //    b[i].style.marginTop = "-10px";
-    // }
-
-    // e.target.nextSibling.style.visibility = "visible";
-    // e.target.nextSibling.className = e.target.nextSibling.className.replace(
-    //    `${styles.subBtnBefore}`,
-    //    `${styles.subBtnAfter}`
-    // );
-
-    setSubBtnVal({
-      ...subBtnVal,
-      [name]: btnValue,
-    });
-  }
 
   // 設定影展和獎項
   function selectPrize(e) {
@@ -115,7 +87,6 @@ function MovieFilter(props) {
       ) : (
         <div data-order={list.order} name={"index-" + i}>
           <div className={styles.inner}>
-            {/* <div className={styles.addBtn}>×</div> */}
             <span>
               選擇
               <br />
@@ -124,31 +95,35 @@ function MovieFilter(props) {
 
             <div className={styles.option}>
               {BtnData.map((data, j) => (
-                <div key={j}>
+                <div
+                  key={j}
+                  className={`${styles.wrap} ${
+                    subBtnVal["index-" + i] === data.btnText
+                      ? styles.wrapOpen
+                      : ""
+                  }`}
+                  value={data.btnText}
+                  onClick={(e) => {
+                    setSubBtnVal({
+                      ...subBtnVal,
+                      [`index-${i}`]: e.target.value,
+                    });
+                    console.log(subBtnVal);
+                    setCurrentList(e.target.value);
+                  }}
+                >
                   <button
                     type="button"
-                    onClick={selectFilmList}
+                    className={styles.mainBtn}
                     value={data.btnText}
                   >
                     {data.btnText}
                   </button>
 
                   <div
+                    id={data.btnText}
                     className={styles.subBtn}
                     data-order={j}
-                    style={{
-                      // FIXME: 消除殘影
-                      visibility:
-                        subBtnVal[`index-${i}`] === data.btnText
-                          ? "visible"
-                          : "hidden",
-                      opacity:
-                        subBtnVal[`index-${i}`] === data.btnText ? "1" : "0",
-                      marginTop:
-                        subBtnVal[`index-${i}`] === data.btnText
-                          ? "0"
-                          : `-${data.arr.length * 36 + 20}px`,
-                    }}
                   >
                     {data.arr.map((subBtn, k) => (
                       <>
@@ -171,7 +146,7 @@ function MovieFilter(props) {
       )}
     </div>
   ));
-
+  console.log(currentlist);
   return (
     <div className={styles.movieFilter}>
       <div className={styles.titleBox}>{title}</div>

@@ -46,6 +46,7 @@ function App() {
   const [listState, setlistState] = useState(InitListState);
   const [filmList, setFilmList] = useState("");
   const [prize, setPrize] = useState("");
+  const [loadingOpen, setLoadingOpen] = useState(false);
 
   // init control-slider
   const [vertical, setVertical] = useState(100);
@@ -73,11 +74,25 @@ function App() {
   const personLiked = firestore.collection("person_liked");
   const [personList, setPersonList] = useState();
 
+  // const myFunction = (x) => {
+  //    if (x.matches) {
+  //       // If media query matches
+  //       document.body.style.backgroundColor = "yellow";
+  //    } else {
+  //       document.body.style.backgroundColor = "pink";
+  //    }
+  // };
+
+  // let x = window.matchMedia("(max-width: 700px)");
+  // myFunction(x); // Call listener function at run time
+
+  // console.log(window.getBoundingClientRect());
+
   useEffect(() => {
     const yearList = [];
     //  根據 listState 去把 yearList 給做出來
     for (let i = 2020; i >= 1928; i--) {
-      let item = { year: i, list: [[], [], [], []] };
+      let item = { year: i, list: [[], [], []] };
       yearList.push(item);
     }
 
@@ -318,7 +333,12 @@ function App() {
   return (
     <div className={styles.outter}>
       <aside>
-        <div className={styles.logo}>
+        <div
+          className={styles.logo}
+          onClick={() => {
+            setMemberPage(false);
+          }}
+        >
           <Logo />
         </div>
         {memberPage ? (
@@ -341,7 +361,7 @@ function App() {
         <div className={styles.container}>
           <div className={styles.navbar}>
             {memberPage ? (
-              <MemberNav />
+              <MemberNav setMemberPage={setMemberPage} />
             ) : (
               <MovieFilter
                 filmList={filmList}
@@ -411,6 +431,7 @@ function App() {
                   likedList={likedList}
                   addLiked={addLiked}
                   cancelLiked={cancelLiked}
+                  setLoadingOpen={setLoadingOpen}
                 />
                 <PrizeInfo
                   tmdbApi={tmdbApi}
@@ -426,6 +447,7 @@ function App() {
                   ordinalSuffix={ordinalSuffix}
                   movieData={movieData}
                   setMovieData={handlemovieproperty}
+                  setLoadingOpen={setLoadingOpen}
                 />
               </>
             )}
@@ -449,6 +471,8 @@ function App() {
               tmdbApi={tmdbApi}
               addPerson={addPerson}
               memberPage={memberPage}
+              loadingOpen={loadingOpen}
+              setLoadingOpen={setLoadingOpen}
             />
           </div>
         </div>

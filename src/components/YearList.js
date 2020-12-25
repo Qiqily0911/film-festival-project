@@ -58,6 +58,7 @@ function YearList(props) {
                   likedList={props.likedList}
                   addLiked={props.addLiked}
                   cancelLiked={props.cancelLiked}
+                  setLoadingOpen={props.setLoadingOpen}
 
                   // memberPage={props.memberPage}
                 />

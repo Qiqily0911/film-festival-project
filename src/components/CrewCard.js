@@ -12,6 +12,7 @@ export default function CrewCard(props) {
     poster_path: props.data.poster_path,
     film_name_en: props.data.title,
     film_name_zh: "",
+    time: new Date(),
     year:
       props.data.release_date !== undefined
         ? props.data.release_date.split("-")[0]
