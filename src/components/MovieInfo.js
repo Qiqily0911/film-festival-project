@@ -52,9 +52,8 @@ function MovieInfo(props) {
       setTimeout(() => {
         props.setLoadingOpen(false);
         console.log("4-loading close");
-      }, 2000);
-
-      props.infoWrap.current.style.overflow = "scroll";
+        props.infoWrap.current.style.overflow = "scroll";
+      }, 1000);
     }
   }, [props.movieData]);
 
@@ -213,6 +212,12 @@ function MovieInfo(props) {
   //內容
   const content = (
     <div className={styles.innerBox}>
+      {props.loadingOpen ? (
+        <div className={styles.loadingBackground}></div>
+      ) : (
+        ""
+      )}
+
       <div>
         <div className={styles.imageBox} ref={props.movieInfoEl}>
           {/* ----- 圖片 ----- */}
@@ -454,9 +459,11 @@ function MovieInfo(props) {
               likedList={props.likedList}
               addLiked={props.addLiked}
               cancelLiked={props.cancelLiked}
-              addPerson={props.addPerson}
               crewLoading={crewLoading}
               setCrewLoading={setCrewLoading}
+              personList={props.personList}
+              addPerson={props.addPerson}
+              cancelPerson={props.cancelPerson}
             />
           ) : (
             ""

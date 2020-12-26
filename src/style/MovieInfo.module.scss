@@ -17,16 +17,26 @@
     // height: 100%;
     .loadingAnimate {
       @include centerPosition;
-      background-color: $color-blue;
+
       z-index: 10;
       position: absolute;
       top: 0;
       right: 0;
       left: 0;
       bottom: 0;
-      animation-name: vanish;
-      animation-duration: 2s;
-      animation-delay: 0.8s;
+      //  animation-name: vanish;
+      //  animation-duration: 1s;
+      // animation-delay: 0.8s;
+    }
+
+    .loadingBackground {
+      z-index: 8;
+      background-color: $color-blue;
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
     }
 
     @keyframes vanish {
@@ -42,11 +52,12 @@
     }
 
     .innerBox {
+      position: relative;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       width: 100%;
-      height: 100%;
+      //  height: 100%;
       .imageBox {
         display: flex;
         width: 100%;

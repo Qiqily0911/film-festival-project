@@ -29,21 +29,6 @@ export default function CrewCard(props) {
       className={styles.movieCard}
       key={props.data.credit_id}
       value={props.data.id}
-      onClick={() => {
-        Promise.all([
-          props.tmdbApi("", props.data.id),
-          props.tmdbApi("/translations", props.data.id),
-        ]).then((arr) => {
-          props.setCrewMovieData({
-            ...props.crewMovieData,
-            detail: arr[0],
-            overview_translate: arr[1],
-          });
-        });
-        props.setInfoOpen(true);
-        // console.log(data);
-        // props.setCrewMovieData(data);
-      }}
     >
       {/* ------- keetTag --------*/}
       {props.userId ? (
@@ -61,7 +46,24 @@ export default function CrewCard(props) {
       )}
       {/* ------- keetTag --------*/}
 
-      <div className={styles.poster}>
+      <div
+        className={styles.poster}
+        onClick={() => {
+          Promise.all([
+            props.tmdbApi("", props.data.id),
+            props.tmdbApi("/translations", props.data.id),
+          ]).then((arr) => {
+            props.setCrewMovieData({
+              ...props.crewMovieData,
+              detail: arr[0],
+              overview_translate: arr[1],
+            });
+          });
+          props.setInfoOpen(true);
+          // console.log(data);
+          // props.setCrewMovieData(data);
+        }}
+      >
         {/* {console.log(props.data)} */}
         {props.data.poster_path !== null ? (
           <img

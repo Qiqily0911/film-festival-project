@@ -14,12 +14,35 @@
     // width: 100%;
     padding-top: 20px;
     .yearBox {
-      //  scroll-margin-top: 120px;
       display: flex;
-      // border: 1px solid green;
-      .movieCard {
-        @media (min-width: 1500px) {
-          margin: 20px 40px;
+      flex-direction: column;
+      .yearTitle {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        text-align: center;
+        margin: 15px 0;
+        // border: 1px solid green;
+        span {
+          margin: 0 30px;
+          letter-spacing: 0.2rem;
+          color: $color-lightgray;
+        }
+        .line {
+          width: 50%;
+          height: 1px;
+          background-color: $color-lightgray;
+        }
+      }
+
+      //  border: 1px solid green;
+      .cardWrap {
+        display: flex;
+        .movieCard {
+          @media (min-width: 1500px) {
+            margin: 20px 40px;
+          }
         }
       }
     }

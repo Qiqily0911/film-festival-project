@@ -259,6 +259,23 @@ function App() {
     e.stopPropagation();
   }
 
+  // 取消收藏人物
+  function cancelPerson(e, personId) {
+    for (let i = 0; i < personList.length; i++) {
+      if (personId === personList[i].person_id) {
+        personLiked
+          .doc(personList[i].id)
+          .delete()
+          .then(() => {
+            console.log("delete data successful");
+            e.stopPropagation();
+          });
+      }
+    }
+
+    e.stopPropagation();
+  }
+
   //  get tmdb movie detail & video
   function tmdbApi(type, movie_id) {
     return new Promise((resolve, reject) => {
@@ -346,7 +363,7 @@ function App() {
   }
 
   const handlemovieproperty = (value) => {
-    console.log(value);
+    // console.log(value);
     setMovieData(value);
   };
 
@@ -426,6 +443,8 @@ function App() {
                   setLoadingOpen={setLoadingOpen}
                   movieInfoEl={movieInfoEl}
                   crewsEl={crewsEl}
+                  infoWrap={infoWrap}
+                  cancelPerson={cancelPerson}
                 />
               </>
             ) : (
@@ -461,7 +480,6 @@ function App() {
                 <PrizeInfo
                   tmdbApi={tmdbApi}
                   omdbApi={omdbApi}
-                  listState={listState}
                   minYear={minYear}
                   maxYear={maxYear}
                   vertical={vertical}
@@ -472,7 +490,15 @@ function App() {
                   ordinalSuffix={ordinalSuffix}
                   movieData={movieData}
                   setMovieData={handlemovieproperty}
+                  listState={listState}
+                  setlistState={setlistState}
+                  setVertical={setVertical}
+                  setScroll={setScroll}
+                  loadingOpen={loadingOpen}
                   setLoadingOpen={setLoadingOpen}
+                  movieInfoEl={movieInfoEl}
+                  crewsEl={crewsEl}
+                  infoWrap={infoWrap}
                 />
               </>
             )}
@@ -495,7 +521,9 @@ function App() {
               addLiked={addLiked}
               cancelLiked={cancelLiked}
               tmdbApi={tmdbApi}
+              personList={personList}
               addPerson={addPerson}
+              cancelPerson={cancelPerson}
               memberPage={memberPage}
               loadingOpen={loadingOpen}
               setLoadingOpen={setLoadingOpen}

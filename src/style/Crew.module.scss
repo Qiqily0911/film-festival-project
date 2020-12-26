@@ -36,6 +36,46 @@
         width: 30%;
         display: flex;
         flex-direction: column;
+
+        .photo {
+          display: flex;
+          .likeBtn {
+            // fill: rgba(129, 129, 129, 0.5);
+            position: absolute;
+            bottom: 10px;
+            right: 6px;
+
+            // border: 1px solid $color-gray;
+            cursor: pointer;
+          }
+        }
+
+        @mixin bookmark {
+          z-index: 2;
+          width: 30px;
+          height: 30px;
+          filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.3));
+        }
+        .addBtn {
+          @include bookmark;
+          fill: $color-gold;
+        }
+        .cancelBtn {
+          @include bookmark;
+          //  fill: red;
+          fill: rgba(0, 0, 0, 0.3);
+          stroke: rgba(255, 255, 255, 0.3);
+          //  opacity: 0;
+          transition: 0.3s ease;
+        }
+        .cancelBtn:active {
+          fill: rgba(0, 0, 0, 0.7);
+        }
+
+        .photo > div:nth-child(1) {
+          position: relative;
+          //  border: 1px solid red;
+        }
         .name {
           font-size: 20px;
           font-weight: 600;
@@ -51,17 +91,9 @@
           cursor: pointer;
         }
 
-        .likeBtn {
-          color: $color-gray;
-          text-align: center;
-          padding: 3px 5px;
-          margin: 5px;
-          border: 1px solid $color-gray;
-          cursor: pointer;
-        }
         .biography {
           margin-top: 10px;
-          width: 200px;
+          width: 100%;
           overflow: scroll;
           p {
             font-size: $font-p;
@@ -75,7 +107,6 @@
         flex-flow: row wrap;
         overflow: scroll;
         text-align: center;
-        cursor: pointer;
 
         .outter {
           .title {
@@ -108,12 +139,18 @@
                 fill: rgba(0, 0, 0, 0.7);
               }
               .poster {
+                cursor: pointer;
                 width: 120px;
                 height: 180px;
                 overflow: hidden;
                 @include shadow;
                 img {
                   width: 100%;
+                  transition: all 0.7s ease;
+                }
+                img:hover {
+                  transform: scale(1.08);
+                  transition: all 0.7s ease;
                 }
                 .noPic {
                   // border: 1px solid red;

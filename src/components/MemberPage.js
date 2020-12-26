@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "../style/MemberPage.module.scss";
 import MovieCard from "./MovieCard";
+import { ReactComponent as Star } from "../image/icon/star.svg";
 
 export function MemberNav(props) {
   return (
@@ -81,9 +82,9 @@ export function MemberPage(props) {
                     alt="poster"
                     src={`https://image.tmdb.org/t/p/w185${data.profile_path}`}
                   />
-                  {/* <a href={`https://www.imdb.com/name/${data.person_imdb_id}`} target="_blank" rel="noreferrer">
-                           <div>IMDB</div>
-                        </a> */}
+                  <Star
+                    onClick={(e) => props.cancelPerson(e, data.person_id)}
+                  />
                 </div>
                 <div className={styles.basicInfo}>
                   <div>{data.person_name}</div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "../style/Crew.module.scss";
 import CrewMovieCard from "./CrewCard";
 import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
+import { ReactComponent as Star } from "../image/icon/star.svg";
 import Loading from "./Loading";
 // import { firestore } from "../config";
 
@@ -35,7 +36,7 @@ function Crew(props) {
     if (personData !== "" && personData["also_known_as"] !== undefined) {
       let a = personData["also_known_as"];
 
-      console.log(a);
+      //  console.log(a);
       setPersonNameCh("");
       for (let i = 0; i < a.length; i++) {
         if (a[i].match(/[\u3400-\u9FBF]/)) {
@@ -67,10 +68,7 @@ function Crew(props) {
   };
 
   const infoBox = (
-    <div
-      className={styles.infoBox}
-      style={{ right: infoOpen ? "0" : "-400px" }}
-    >
+    <div className={styles.infoBox} style={{ right: infoOpen ? "0" : "-30%" }}>
       <div className={styles.arrow} onClick={() => setInfoOpen(false)}>
         <Arrow />
       </div>
@@ -114,6 +112,12 @@ function Crew(props) {
     time: new Date(),
   };
 
+  const isLiked =
+    props.personList &&
+    props.personList.find((item) => item.person_id === personData.id);
+  console.log(props.personList);
+  console.log(isLiked);
+
   return (
     <div className={styles.crewDiv}>
       <div className={styles.crewBox}>
@@ -125,11 +129,23 @@ function Crew(props) {
         </div>
         <div className={styles.container}>
           <div className={styles.profile}>
-            <div>
-              <img
-                alt="profile"
-                src={`https://image.tmdb.org/t/p/w154${personData.profile_path}`}
-              />
+            <div className={styles.photo}>
+              <div>
+                <img
+                  alt="profile"
+                  src={`https://image.tmdb.org/t/p/w154${personData.profile_path}`}
+                />
+                <div className={styles.likeBtn}>
+                  <Star
+                    className={isLiked ? styles.addBtn : styles.cancelBtn}
+                    onClick={(e) =>
+                      isLiked
+                        ? props.cancelPerson(e, personData.id)
+                        : props.addPerson(e, obj)
+                    }
+                  />
+                </div>
+              </div>
             </div>
             <span className={styles.name}>{personData.name}</span>
             {personNameCh}
@@ -141,15 +157,7 @@ function Crew(props) {
             >
               <div>IMDB</div>
             </a>
-            <div
-              className={styles.likeBtn}
-              onClick={(e) => {
-                props.addPerson(e, obj);
-                console.log(obj);
-              }}
-            >
-              Like
-            </div>
+
             <div className={styles.biography}>
               <p>{personData.biography}</p>
             </div>

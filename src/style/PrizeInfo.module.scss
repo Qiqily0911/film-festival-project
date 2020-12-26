@@ -17,9 +17,11 @@
     background: rgb(105, 105, 105);
   }
   .handleBar {
+    display: flex;
+    align-items: center;
     cursor: pointer;
     writing-mode: vertical-rl;
-    width: 30px;
+    min-width: 40px;
     line-height: 1rem;
     height: 100%;
     padding: 10px 5px 0 5px;
@@ -86,12 +88,16 @@
           }
         }
         .inner {
+          height: 100%;
           padding: 20px;
+          display: flex;
+          flex-direction: column;
 
           .upper {
             display: flex;
             align-items: center;
-            margin-bottom: 10px;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
             border-bottom: 1px solid $color-gold;
 
             .title {
@@ -100,6 +106,10 @@
               font-size: 1.2rem;
               font-weight: 600;
               color: $color-blue;
+            }
+            .title > div:nth-child(2) {
+              //  color: red;
+              font-size: 1rem;
             }
 
             .logo {
@@ -116,6 +126,10 @@
 
           .lower {
             padding: 0 10px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             .winner {
               display: flex;
               margin-bottom: 20px;
@@ -144,6 +158,7 @@
                 font-size: 1rem;
                 color: $color-gray;
                 transition: 0.3s ease;
+                font-weight: 300;
               }
               .filmName:hover {
                 cursor: pointer;
@@ -153,17 +168,50 @@
             }
           }
           .description {
-            margin-top: 50px;
+            // margin-top: 50px;
+            height: 40%;
+            overflow: hidden;
             font-size: $font-p;
             color: $color-gray;
-            span {
-              padding: 5px 0;
-            }
-            div {
-              margin-top: 5px;
-              border-top: 1px solid $color-gray;
-              padding: 10px 0;
-            }
+          }
+
+          .description > div:nth-child(1) {
+            width: 100%;
+            border-bottom: 1px solid $color-gray;
+            padding: 5px 0;
+          }
+
+          .description > div:nth-child(2) {
+            padding: 10px 0;
+            // border: 1px solid red;
+            // width: 100%;
+            overflow: scroll;
+          }
+        }
+        .upper2 {
+          text-align: center;
+          margin-bottom: 30px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          .title {
+            width: 80%;
+            font-size: 1rem;
+            color: $color-blue;
+            padding: 10px 0;
+            border-bottom: 1px solid $color-gold;
+          }
+          .prizeName {
+            cursor: pointer;
+            margin: 10px 0;
+            font-size: 1rem;
+            font-weight: 300;
+            color: $color-gray;
+          }
+          .prizeName:hover {
+            color: $color-gold;
+            transition: 0.3s ease;
           }
         }
       }
