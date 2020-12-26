@@ -74,20 +74,6 @@ function App() {
   const personLiked = firestore.collection("person_liked");
   const [personList, setPersonList] = useState();
 
-  // const myFunction = (x) => {
-  //    if (x.matches) {
-  //       // If media query matches
-  //       document.body.style.backgroundColor = "yellow";
-  //    } else {
-  //       document.body.style.backgroundColor = "pink";
-  //    }
-  // };
-
-  // let x = window.matchMedia("(max-width: 700px)");
-  // myFunction(x); // Call listener function at run time
-
-  // console.log(window.getBoundingClientRect());
-
   useEffect(() => {
     const yearList = [];
     //  根據 listState 去把 yearList 給做出來
@@ -121,9 +107,13 @@ function App() {
 
     function setSilderValue() {
       if (yearListRefs !== null) {
-        if (yearListRefs[minYear] !== undefined) {
+        if (
+          yearListRefs[minYear] !== undefined &&
+          yearListRefs[minYear].current !== null
+        ) {
           // console.log(yearListRefs[minYear]);
           let a = maxYear - minYear + 1;
+          // console.log(yearListRefs[minYear].current);
           let b = yearListRefs[minYear].current.getBoundingClientRect();
           let c = a * b.height;
           let d = Math.floor(((b.bottom - 100) / c) * 100);
@@ -403,6 +393,7 @@ function App() {
                   setInfoBox={setInfoBox}
                   personList={personList}
                   setMovieData={setMovieData}
+                  setLoadingOpen={setLoadingOpen}
                 />
               </>
             ) : (

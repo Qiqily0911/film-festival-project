@@ -83,6 +83,13 @@ $padding-l: 3rem;
   }
 }
 
+@mixin cardMargin {
+  margin: 20px;
+  @media (min-width: 1500px) {
+    margin: 20px 40px;
+  }
+}
+
 /* general css */
 
 .d-flex {

@@ -55,6 +55,7 @@ export function MemberPage(props) {
                     omdbApi={props.omdbApi}
                     setInfoBox={props.setInfoBox}
                     renewData={props.renewData}
+                    setLoadingOpen={props.setLoadingOpen}
                   />
                 );
               })}

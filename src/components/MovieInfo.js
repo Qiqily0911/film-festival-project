@@ -21,6 +21,7 @@ function MovieInfo(props) {
   const [imageList, setImageList] = useState("");
   const [isVideoOpen, setVideoOpen] = useState(false);
   const [isCrewOpen, setCrewOpen] = useState(false);
+  const [crewLoading, setCrewLoading] = useState(false);
 
   let movieId = props.movieData.localData.movie_id;
   let tmdbId = props.movieData.localData.tmdb_id;
@@ -31,12 +32,14 @@ function MovieInfo(props) {
   //  reset infoBox position
 
   useEffect(() => {
+    console.log(props.movieData);
     if (props.movieInfoEl.current && props.crewsEl.current !== null) {
       props.crewsEl.current.scrollLeft = 0;
       props.movieInfoEl.current.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
+      console.log("reset scroll");
     }
     if (
       videoPath !== undefined &&
@@ -47,23 +50,27 @@ function MovieInfo(props) {
         // FIXME: content_security_policy setting
         let youtubeUrl = `https://www.youtube.com/embed/${videoPath[0].key}?enablejsapi=1`;
         setvideoSrc(youtubeUrl);
+        console.log("1-video");
       } else {
         setvideoSrc(" ");
+        console.log("1-video");
       }
 
       if (credits.id !== undefined) {
         setCreditsList(credits);
+        console.log("2-credits");
       }
 
       if (images.backdrops !== undefined) {
         const arr = [];
         images.backdrops.forEach((obj) => arr.push(obj.file_path));
         setImageList(arr);
-
-        setTimeout(() => {
-          props.setLoadingOpen(false);
-        }, 1000);
+        console.log("3-images");
       }
+      setTimeout(() => {
+        props.setLoadingOpen(false);
+        console.log("4-loading close");
+      }, 2000);
     }
   }, [props.movieData]);
 
@@ -95,6 +102,7 @@ function MovieInfo(props) {
             });
 
             setCrewOpen(true);
+            setCrewLoading(true);
           }}
         >
           {person.profile_path ? (
@@ -139,6 +147,7 @@ function MovieInfo(props) {
                   });
 
                   setCrewOpen(true);
+                  setCrewLoading(true);
                 }}
               >
                 {person.profile_path ? (
@@ -467,6 +476,8 @@ function MovieInfo(props) {
               addLiked={props.addLiked}
               cancelLiked={props.cancelLiked}
               addPerson={props.addPerson}
+              crewLoading={crewLoading}
+              setCrewLoading={setCrewLoading}
             />
           ) : (
             ""

@@ -7,7 +7,7 @@
   overflow: scroll;
 
   .yearList {
-    border: 1px solid purple;
+    // border: 1px solid purple;
     // margin-top: 20px;
     height: 100%;
     margin: 0 auto;
@@ -17,6 +17,11 @@
       //  scroll-margin-top: 120px;
       display: flex;
       // border: 1px solid green;
+      .movieCard {
+        @media (min-width: 1500px) {
+          margin: 20px 40px;
+        }
+      }
     }
   }
 }

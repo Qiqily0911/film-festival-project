@@ -11,7 +11,7 @@
 }
 
 .movieFilter {
-  border: 1px solid orange;
+  // border: 1px solid orange;
   width: 70%;
   display: flex;
 
@@ -19,14 +19,12 @@
     margin: 0 auto;
     // margin: 0 20px;
     display: flex;
-    border: 1px solid blue;
+    // border: 1px solid blue;
   }
   .fesTitle {
     @include navBtn;
-    border: 1px solid red;
-    @media (min-width: 1440px) {
-      margin: 10px 40px;
-    }
+    // border: 1px solid red;
+    @include cardMargin;
 
     .inner {
       @include centerPosition;
@@ -86,10 +84,9 @@
       .wrapOpen {
         // border: 1px solid red;
         max-height: 300px;
-        transition: all ease-out;
+        transition: all 0.5s ease-out;
       }
 
-      // FIXME: subBtn animation
       .subBtn {
         @include centerPosition;
         flex-direction: column;

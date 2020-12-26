@@ -106,7 +106,7 @@ function MovieFilter(props) {
               <br />
               影展及獎項
             </span>
-            {/* {console.log(props.listState)} */}
+
             <div className={styles.option}>
               {BtnData.map((data, j) => (
                 <div
@@ -116,10 +116,9 @@ function MovieFilter(props) {
                       ? styles.wrapOpen
                       : ""
                   }`}
-                  style={{
-                    color: "red",
-                    transitionDuration: `${data.arr.length * 0.3}s`,
-                  }}
+                  //  style={{
+                  //     transitionDuration: `${data.arr.length * 0.3}s`,
+                  //  }}
                   value={data.btnText}
                   onClick={(e) => {
                     if (subBtnVal[`index-${i}`] === e.target.value) {
@@ -178,7 +177,7 @@ function MovieFilter(props) {
   //  console.log(currentlist);
   return (
     <div className={styles.movieFilter}>
-      {console.log(prizeArr)}
+      {/* {console.log(prizeArr)} */}
       <div className={styles.titleBox}>{title}</div>
     </div>
   );

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "../style/Crew.module.scss";
 import CrewMovieCard from "./CrewCard";
 import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
+import Loading from "./Loading";
 // import { firestore } from "../config";
 
 function Crew(props) {
@@ -23,6 +24,9 @@ function Crew(props) {
       setCastData(crewDetial.cast);
       setCrewData(crewDetial.crew);
       setPersonData(personDetail);
+      setTimeout(() => {
+        props.setCrewLoading(false);
+      }, 1000);
     }
   }, [props.personData]);
 
@@ -93,6 +97,18 @@ function Crew(props) {
     time: new Date(),
   };
 
+  const chineseName = () => {
+    if (personData["also_known_as"] !== undefined) {
+      let a = personData["also_known_as"];
+
+      for (let i = 0; i < a.length; i++) {
+        if (a[i].match(/[\u3400-\u9FBF]/)) {
+          return a[i];
+        }
+      }
+    }
+  };
+
   return (
     <div className={styles.crewDiv}>
       <div className={styles.crewBox}>
@@ -111,6 +127,7 @@ function Crew(props) {
               />
             </div>
             <span className={styles.name}>{personData.name}</span>
+            {chineseName()}
             {/* {personData["also_known_as"] !== undefined ? personData["also_known_as"][0] : ""} */}
             {personData.birthday}
             <a
@@ -190,6 +207,13 @@ function Crew(props) {
             </div>
           </div>
           {infoBox}
+          {props.crewLoading ? (
+            <div className={styles.loadingAnimate}>
+              <Loading />
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </div>

@@ -173,6 +173,29 @@
           }
         }
       }
+
+      .loadingAnimate {
+        @include centerPosition;
+        background-color: $color-blue;
+        z-index: 10;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        animation-name: vanish;
+        animation-duration: 1s;
+        animation-delay: 0.8s;
+      }
+
+      @keyframes vanish {
+        0% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
     }
   }
 }

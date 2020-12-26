@@ -3,10 +3,7 @@
 @mixin card {
   max-height: 360px;
   width: 180px;
-  margin: 20px;
-  @media (min-width: 1440px) {
-    margin: 20px 40px;
-  }
+  @include cardMargin;
 }
 
 .movieCard {
@@ -61,9 +58,9 @@
       line-height: 20px;
     }
 
-    .titleZh {
-      // font-size: 13px;
-    }
+    // .titleZh {
+    //    // font-size: 13px;
+    // }
   }
 
   @mixin bookmark {

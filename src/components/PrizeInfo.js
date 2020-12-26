@@ -67,7 +67,6 @@ function PrizeInfo(props) {
                           key={j}
                         >
                           <div className={styles.th}>
-                            {" "}
                             {props.ordinalSuffix(data.th)}
                           </div>
                           <div>
@@ -126,7 +125,7 @@ function PrizeInfo(props) {
   return (
     <div
       className={styles.prizeInfo}
-      style={{ left: props.prizeBoxState ? "8%" : "70.67% " }}
+      style={{ left: props.prizeBoxState ? "8%" : "70.68% " }}
     >
       <div
         className={styles.handleBar}

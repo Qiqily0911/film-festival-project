@@ -25,12 +25,15 @@
       left: 0;
       bottom: 0;
       animation-name: vanish;
-      animation-duration: 1s;
+      animation-duration: 2s;
       animation-delay: 0.8s;
     }
 
     @keyframes vanish {
       0% {
+        opacity: 1;
+      }
+      80% {
         opacity: 1;
       }
       100% {
