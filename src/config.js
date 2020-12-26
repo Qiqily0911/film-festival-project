@@ -79,12 +79,12 @@ var providerFb = new firebase.auth.FacebookAuthProvider();
 export const faceBookSignIn = () =>
   firebaseAuth
     .signInWithPopup(providerFb)
-    .then(function (result) {
-      console.log(result);
-      //  var token = result.credential.accessToken; // Facebook Access Token
-      // var user = result.user; // The signed-in user info.
-      // createUser(user);
-    })
+    // .then(function (result) {
+    //   // console.log(result);
+    //   //  var token = result.credential.accessToken; // Facebook Access Token
+    //   // var user = result.user; // The signed-in user info.
+    //   // createUser(user);
+    // })
     .catch(function (error) {
       // Handle Errors here.
       var errorCode = error.code;

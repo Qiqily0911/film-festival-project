@@ -10,6 +10,7 @@ function Crew(props) {
   const [castData, setCastData] = useState("");
   const [crewData, setCrewData] = useState("");
   const [personData, setPersonData] = useState("");
+  const [personNameCh, setPersonNameCh] = useState("");
   const [crewMovieData, setCrewMovieData] = useState({
     detail: "",
     overview_translate: "",
@@ -29,6 +30,21 @@ function Crew(props) {
       }, 1000);
     }
   }, [props.personData]);
+
+  useEffect(() => {
+    if (personData !== "" && personData["also_known_as"] !== undefined) {
+      let a = personData["also_known_as"];
+
+      console.log(a);
+      setPersonNameCh("");
+      for (let i = 0; i < a.length; i++) {
+        if (a[i].match(/[\u3400-\u9FBF]/)) {
+          setPersonNameCh(a[i]);
+          break;
+        }
+      }
+    }
+  }, [personData]);
 
   //  中文簡介
   const overviewData = () => {
@@ -89,24 +105,13 @@ function Crew(props) {
 
   let obj = {
     person_name: personData.name,
+    person_name_ch: personNameCh,
     person_id: personData.id,
     person_imdb_id: personData.imdb_id,
     profile_path: personData.profile_path,
     department: personData.known_for_department,
     user: props.userId,
     time: new Date(),
-  };
-
-  const chineseName = () => {
-    if (personData["also_known_as"] !== undefined) {
-      let a = personData["also_known_as"];
-
-      for (let i = 0; i < a.length; i++) {
-        if (a[i].match(/[\u3400-\u9FBF]/)) {
-          return a[i];
-        }
-      }
-    }
   };
 
   return (
@@ -127,8 +132,7 @@ function Crew(props) {
               />
             </div>
             <span className={styles.name}>{personData.name}</span>
-            {chineseName()}
-            {/* {personData["also_known_as"] !== undefined ? personData["also_known_as"][0] : ""} */}
+            {personNameCh}
             {personData.birthday}
             <a
               href={`https://www.imdb.com/name/${personData.imdb_id}/`}

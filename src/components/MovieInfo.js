@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styles from "../style/MovieInfo.module.scss";
 import { nanoid } from "nanoid";
-// import clock from "../image/clock.png";
 import { ReactComponent as Taipeilibrary } from "../image/TaipeiCity_library.svg";
 import { ReactComponent as NewTaipeilibrary } from "../image/newTaipeiCity_library.svg";
 import { ReactComponent as Bookmark } from "../image/icon/add.svg";
 import { ReactComponent as Imdb } from "../image/IMDB_Logo.svg";
-// import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
 import { ReactComponent as Clock } from "../image/icon/clock.svg";
 import { ReactComponent as Video } from "../image/icon/video.svg";
 import catchplay from "../image/catchplay_logo.png";
@@ -29,48 +27,34 @@ function MovieInfo(props) {
   let images = props.movieData.images;
   let credits = props.movieData.credits;
 
-  //  reset infoBox position
-
   useEffect(() => {
-    console.log(props.movieData);
-    if (props.movieInfoEl.current && props.crewsEl.current !== null) {
-      props.crewsEl.current.scrollLeft = 0;
-      props.movieInfoEl.current.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-      console.log("reset scroll");
-    }
     if (
       videoPath !== undefined &&
       images !== undefined &&
       credits !== undefined
     ) {
       if (videoPath[0] !== undefined) {
-        // FIXME: content_security_policy setting
         let youtubeUrl = `https://www.youtube.com/embed/${videoPath[0].key}?enablejsapi=1`;
         setvideoSrc(youtubeUrl);
-        console.log("1-video");
       } else {
         setvideoSrc(" ");
-        console.log("1-video");
       }
 
       if (credits.id !== undefined) {
         setCreditsList(credits);
-        console.log("2-credits");
       }
 
       if (images.backdrops !== undefined) {
         const arr = [];
         images.backdrops.forEach((obj) => arr.push(obj.file_path));
         setImageList(arr);
-        console.log("3-images");
       }
       setTimeout(() => {
         props.setLoadingOpen(false);
         console.log("4-loading close");
       }, 2000);
+
+      props.infoWrap.current.style.overflow = "scroll";
     }
   }, [props.movieData]);
 
@@ -429,9 +413,7 @@ function MovieInfo(props) {
                   .map((country) => (
                     <div className={styles.tooltip} key={nanoid()}>
                       <span className={styles.tooltiptext}>{country.name}</span>
-                      {/* {console.log(
-                             typeof require(`../data/png100px/${country.iso_3166_1.toLowerCase()}.png`).default
-                          )} */}
+
                       <img
                         alt="flag"
                         src={
@@ -442,7 +424,6 @@ function MovieInfo(props) {
                     </div>
                   ))
               : ""}
-            {/* <div>{props.tmdbData ? props.tmdbData.production_countries[0].name : ""}</div> */}
           </div>
           {/* --------- flags -------------- */}
 
@@ -469,8 +450,6 @@ function MovieInfo(props) {
               userId={props.userId}
               setCrewOpen={setCrewOpen}
               tmdbApi={props.tmdbApi}
-              // crewMovieData={props.crewMovieData}
-              // setCrewMovieData={props.setCrewMovieData}
               personData={props.personData}
               likedList={props.likedList}
               addLiked={props.addLiked}
@@ -489,8 +468,7 @@ function MovieInfo(props) {
 
   return (
     <div className={styles.movieInfo}>
-      <div className={styles.outterBox}>
-        {/* TODO: loading animation */}
+      <div className={styles.outterBox} ref={props.infoWrap}>
         {props.loadingOpen ? (
           <div className={styles.loadingAnimate}>
             <Loading />
@@ -500,8 +478,6 @@ function MovieInfo(props) {
         )}
 
         {content}
-
-        {/* {tmdbId ? content : ""} */}
       </div>
     </div>
   );

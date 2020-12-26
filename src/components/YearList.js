@@ -59,6 +59,9 @@ function YearList(props) {
                   addLiked={props.addLiked}
                   cancelLiked={props.cancelLiked}
                   setLoadingOpen={props.setLoadingOpen}
+                  movieInfoEl={props.movieInfoEl}
+                  crewsEl={props.crewsEl}
+                  infoWrap={props.infoWrap}
 
                   // memberPage={props.memberPage}
                 />

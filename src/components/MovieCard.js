@@ -38,16 +38,18 @@ function MovieCard(props) {
       onClick={() => {
         let movieId = props.listData.tmdb_id;
         // console.log(props.listData);
+
+        props.infoWrap.current.style.overflow = "hidden";
         props.setLoadingOpen(true);
 
-        // if (props.movieInfoEl.current && props.crewsEl.current !== null) {
-        //    props.crewsEl.current.scrollLeft = 0;
-        //    props.movieInfoEl.current.scrollIntoView({
-        //       behavior: "smooth",
-        //       block: "start",
-        //    });
-        //    console.log("reset scroll");
-        // }
+        if (props.movieInfoEl.current && props.crewsEl.current !== null) {
+          props.crewsEl.current.scrollLeft = 0;
+          props.movieInfoEl.current.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+          console.log("reset scroll");
+        }
 
         Promise.all([
           props.tmdbApi("", movieId),

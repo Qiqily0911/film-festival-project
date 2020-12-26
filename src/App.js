@@ -61,6 +61,7 @@ function App() {
   //  set ref of infoBox
   const movieInfoEl = useRef(null);
   const crewsEl = useRef(null);
+  const infoWrap = useRef(null);
 
   // switch of infoBox
   const [infoBoxState, setInfoBox] = useState(false);
@@ -89,6 +90,7 @@ function App() {
     }, {});
 
     setRefs(refs);
+
     listState.map((list) =>
       fillYearList(yearList, list.film_list, list.prize, list.order)
     );
@@ -129,33 +131,64 @@ function App() {
   // 取得使用者收藏清單，並設訂變數 likedList
   useEffect(() => {
     if (userId) {
-      movieLiked
-        .where("user", "==", userId)
-        // .orderBy("time", "desc")
-        .onSnapshot((onSnapshot) => {
-          let arr = [];
-          onSnapshot.forEach((doc) => {
-            arr.push(doc.data());
-          });
-          setLikedList(arr);
-          // console.log(arr);
+      movieLiked.where("user", "==", userId).onSnapshot((onSnapshot) => {
+        let arr = [];
+        onSnapshot.forEach((doc) => {
+          arr.push(doc.data());
         });
+        setLikedList(arr);
+      });
 
       //  喜歡的演員或導演清單
-      personLiked
-        .where("user", "==", userId)
-        // TODO 照時間順序呈現資料
-        // .orderBy("time", "desc")
-        .onSnapshot((onSnapshot) => {
-          let arr = [];
-          onSnapshot.forEach((doc) => {
-            arr.push(doc.data());
-          });
-          setPersonList(arr);
-          // console.log(arr);
+      personLiked.where("user", "==", userId).onSnapshot((onSnapshot) => {
+        let arr = [];
+        onSnapshot.forEach((doc) => {
+          arr.push(doc.data());
         });
+        setPersonList(arr);
+      });
     }
   }, [userId]);
+
+  // 初始畫面載入電影
+  useEffect(() => {
+    console.log(likedList);
+
+    let data = {
+      th: 72,
+      year: 2019,
+      prize: "palme_d_or",
+      film_name_zh: "寄生上流",
+      film_name_en: "Parasite",
+      atmovie_link: "http://app2.atmovies.com.tw/film/fpkr46751668/",
+      imdb_link: "https://www.imdb.com/title/tt6751668",
+      movie_id: "tt6751668",
+      poster_path: "/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg",
+      tmdb_id: 496243,
+      data_id: "cannes_01",
+    };
+
+    Promise.all([
+      tmdbApi("", 496243),
+      tmdbApi("/videos", 496243),
+      tmdbApi("/images", 496243),
+      tmdbApi("/credits", 496243),
+      omdbApi("tt6751668"),
+      tmdbApi("/translations", 496243),
+    ]).then((arr) => {
+      setMovieData({
+        ...movieData,
+        detail: arr[0],
+        video: arr[1],
+        images: arr[2],
+        credits: arr[3],
+        localData: data,
+        omdbData: arr[4],
+        overview_translate: arr[5],
+      });
+      console.log("default data info");
+    });
+  }, []);
 
   // put movies to the correspondense year box
   function fillYearList(yearList, fes, prize, order) {
@@ -209,15 +242,10 @@ function App() {
     console.log("===========");
   }
 
-  // 取消收藏，並恢復原本 keepTag 樣式
+  // 取消收藏
   function cancelLiked(e, movieId) {
-    // console.log(props.likedList);
-    // console.log(movieId);
-
     for (let i = 0; i < likedList.length; i++) {
-      // let a = props.movie_id;
       if (movieId === likedList[i].tmdb_id) {
-        // console.log(props.likedList[i].id);
         movieLiked
           .doc(likedList[i].id)
           .delete()
@@ -316,10 +344,12 @@ function App() {
     }
     return i + "th";
   }
+
   const handlemovieproperty = (value) => {
     console.log(value);
     setMovieData(value);
   };
+
   return (
     <div className={styles.outter}>
       <aside>
@@ -394,6 +424,8 @@ function App() {
                   personList={personList}
                   setMovieData={setMovieData}
                   setLoadingOpen={setLoadingOpen}
+                  movieInfoEl={movieInfoEl}
+                  crewsEl={crewsEl}
                 />
               </>
             ) : (
@@ -417,12 +449,14 @@ function App() {
                   vertical={vertical}
                   isScroll={isScroll}
                   userId={userId}
-                  movieInfoEl={movieInfoEl}
                   setInfoBox={setInfoBox}
                   likedList={likedList}
                   addLiked={addLiked}
                   cancelLiked={cancelLiked}
                   setLoadingOpen={setLoadingOpen}
+                  movieInfoEl={movieInfoEl}
+                  crewsEl={crewsEl}
+                  infoWrap={infoWrap}
                 />
                 <PrizeInfo
                   tmdbApi={tmdbApi}
@@ -448,6 +482,7 @@ function App() {
               setPersonData={setPersonData}
               movieInfoEl={movieInfoEl}
               crewsEl={crewsEl}
+              infoWrap={infoWrap}
               imdbSpan={imdbSpan}
               tmdbCrewApi={tmdbCrewApi}
               ordinalSuffix={ordinalSuffix}

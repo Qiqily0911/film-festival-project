@@ -56,9 +56,13 @@ export function MemberPage(props) {
                     setInfoBox={props.setInfoBox}
                     renewData={props.renewData}
                     setLoadingOpen={props.setLoadingOpen}
+                    movieInfoEl={props.movieInfoEl}
+                    crewsEl={props.crewsEl}
+                    infoWrap={props.infoWrap}
                   />
                 );
               })}
+          {/* ---- blank ---- */}
           <div className={styles.blank}></div>
           <div className={styles.blank}></div>
           <div className={styles.blank}></div>
@@ -83,9 +87,11 @@ export function MemberPage(props) {
                 </div>
                 <div className={styles.basicInfo}>
                   <div>{data.person_name}</div>
+                  <div>{data.person_name_ch}</div>
                 </div>
               </div>
             ))}
+          {/* ---- blank ---- */}
           <div className={styles.blank}></div>
           <div className={styles.blank}></div>
           <div className={styles.blank}></div>
