@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "../style/MemberBtn.module.scss";
 import Login from "./Login";
 import { useAuth } from "../contexts/AuthContexts";
-import { firestore } from "../config";
+// import { firestore } from "../config";
 import { ReactComponent as LoginIcon } from "../image/icon/login.svg";
 import { ReactComponent as LogoutIcon } from "../image/icon/logout.svg";
 
@@ -41,47 +41,20 @@ function MemberBtn(props) {
 
   const logedIn = (
     <div className={styles.signInDiv}>
-      {/* <div className={styles.switchBtn}>
-            <div
-               className={props.memberPage === true ? styles.pressed : ""}
-               onClick={() => {
-                  props.setMemberPage(true);
-               }}
-            >
-               會員專區
-            </div>
-
-            <div
-               className={props.memberPage !== true ? styles.pressed : ""}
-               onClick={() => {
-                  props.setMemberPage(false);
-                  props.setInfoBox(false);
-                  props.setprizeBox(false);
-               }}
-            >
-               找電影
-            </div>
-         </div> */}
-      {/* {currentUser && <div>{currentUser.email}</div>} */}
       <div
         className={styles.userName}
         onClick={() => {
           props.setMemberPage(true);
         }}
       >
-        <p>
-          Hi,
-          {currentUser && currentUser.displayName}
-          {/* {currentUser && currentUser.displayName !== null ? currentUser.displayName : "親愛的會員"} */}
-          {/* {console.log(currentUser)} */}
-        </p>
+        <p>Hi, &nbsp;{currentUser && currentUser.displayName}</p>
       </div>
       {error && <div>{error}</div>}
-      <div onClick={handleLogout}>
-        <p>Log out</p>
+      <div className={styles.loginWrap} onClick={handleLogout}>
         <div className={styles.loginIcon}>
           <LogoutIcon />
         </div>
+        <p>Log out</p>
       </div>
     </div>
   );
@@ -92,9 +65,6 @@ function MemberBtn(props) {
         <div className={styles.loginClose} onClick={() => setOpen(false)}>
           ×
         </div>
-        {/* index.js:1 Warning: Cannot update a component (`App`) while rendering a different component 
-            (`MemberBtn`). To locate the bad setState() call inside `MemberBtn`, follow the stack trace 
-            as described in https://reactjs.org/link/setstate-in-render */}
 
         <Login
           googleSignIn={props.googleSignIn}
@@ -105,11 +75,11 @@ function MemberBtn(props) {
   );
 
   const loginIcon = (
-    <div onClick={() => setOpen(true)}>
-      <p>Log in</p>
+    <div className={styles.loginWrap} onClick={() => setOpen(true)}>
       <div className={styles.loginIcon}>
         <LoginIcon />
       </div>
+      <p>Log in</p>
     </div>
   );
 
@@ -122,3 +92,26 @@ function MemberBtn(props) {
 }
 
 export default MemberBtn;
+
+// <div className={styles.switchBtn}>
+//    <div
+//       className={props.memberPage === true ? styles.pressed : ""}
+//       onClick={() => {
+//          props.setMemberPage(true);
+//       }}
+//    >
+//       會員專區
+//    </div>
+
+//    <div
+//       className={props.memberPage !== true ? styles.pressed : ""}
+//       onClick={() => {
+//          props.setMemberPage(false);
+//          props.setInfoBox(false);
+//          props.setprizeBox(false);
+//       }}
+//    >
+//       找電影
+//    </div>
+// </div>;
+// currentUser && <div>{currentUser.email}</div>;

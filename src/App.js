@@ -379,7 +379,7 @@ function App() {
           <Logo />
         </div>
         {memberPage ? (
-          ""
+          <div className={styles.slider}></div>
         ) : (
           <ControlSilder
             vertical={vertical}

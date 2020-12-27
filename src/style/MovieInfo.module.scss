@@ -39,17 +39,17 @@
       bottom: 0;
     }
 
-    @keyframes vanish {
-      0% {
-        opacity: 1;
-      }
-      80% {
-        opacity: 1;
-      }
-      100% {
-        opacity: 0;
-      }
-    }
+    // @keyframes vanish {
+    //   0% {
+    //     opacity: 1;
+    //   }
+    //   80% {
+    //     opacity: 1;
+    //   }
+    //   100% {
+    //     opacity: 0;
+    //   }
+    // }
 
     .innerBox {
       position: relative;
@@ -212,7 +212,6 @@
         .flag {
           margin: 10px;
           display: flex;
-
           .tooltip:hover .tooltiptext {
             visibility: visible;
             opacity: 1;
@@ -220,10 +219,8 @@
 
           .tooltip {
             position: relative;
-            display: block;
-            // width: 50px;
+            // display: block;
             height: 33px;
-            // overflow: hidden;
             margin-right: 10px;
 
             .tooltiptext {
@@ -239,16 +236,17 @@
               z-index: 1;
               opacity: 0;
               transition: opacity 0.3s;
-              top: 125%;
+              top: 160%;
               left: 50%;
-              margin-left: -50%;
+              transform: translate(-50%, -50%);
             }
-            img {
-              // width: 100%;
-              // max-width: 50px;
-              max-height: 33px;
-              @include shadow;
-            }
+          }
+
+          img {
+            // width: 100%;
+            // max-width: 50px;
+            max-height: 33px;
+            @include shadow;
           }
         }
 
@@ -287,6 +285,34 @@
               height: 100%;
               opacity: 1;
               transition: all 0.3s ease;
+            }
+
+            .tooltip:hover .tooltiptext {
+              visibility: visible;
+              opacity: 1;
+            }
+
+            .tooltip {
+              position: relative;
+
+              .tooltiptext {
+                border: 1px solid;
+                visibility: hidden;
+                position: absolute;
+                font-size: 10px;
+                white-space: nowrap;
+                background-color: #555;
+                color: #fff;
+                text-align: center;
+                padding: 5px;
+                //  border-radius: 6px;
+                z-index: 1;
+                opacity: 0;
+                transition: opacity 0.3s;
+                top: 160%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+              }
             }
           }
 

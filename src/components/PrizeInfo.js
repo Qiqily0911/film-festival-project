@@ -146,11 +146,9 @@ function PrizeInfo(props) {
                                   <>
                                     <br />
                                     <span>
-                                      {" "}
                                       {data.director_zh ? data.director_zh : ""}
                                     </span>
                                     <span>
-                                      {" "}
                                       {data.director ? data.director : ""}
                                     </span>
                                   </>
@@ -217,9 +215,6 @@ function PrizeInfo(props) {
       className={styles.prizeInfo}
       style={{ right: props.prizeBoxState ? "27.6%" : "calc(-36.8% + 40px)" }}
     >
-      {/* right: 27.6%; */}
-      {/* "70.68% " */}
-
       <div
         className={styles.handleBar}
         onClick={() => {

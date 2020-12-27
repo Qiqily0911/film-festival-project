@@ -131,13 +131,11 @@
               .cancelBtn {
                 @include bookmark;
                 fill: rgba(0, 0, 0, 0.3);
-                stroke: 1px white;
-                opacity: 1;
+                stroke: white;
+                opacity: 0;
                 transition: 0.3s ease;
               }
-              .cancelBtn:active {
-                fill: rgba(0, 0, 0, 0.7);
-              }
+
               .poster {
                 cursor: pointer;
                 width: 120px;
@@ -158,6 +156,24 @@
                   height: 100%;
                   background-color: rgb(226, 226, 226);
                 }
+              }
+
+              .basicInfo {
+                margin: 10px 0;
+              }
+
+              .basicInfo > div:nth-child(1) {
+                color: $color-lightgray;
+              }
+            }
+
+            .movieCard:hover {
+              .cancelBtn {
+                @include bookmark;
+                fill: rgba(0, 0, 0, 0.3);
+                stroke: white;
+                opacity: 1;
+                transition: 0.3s ease;
               }
             }
           }

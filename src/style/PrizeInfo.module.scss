@@ -34,7 +34,7 @@
     transition: 1s ease;
 
     .arrow {
-      margin-top: -30px;
+      // margin-top: -30px;
       width: 20px;
       height: 20px;
       fill: white;
@@ -48,12 +48,12 @@
       letter-spacing: 0.3rem;
     }
   }
-  .handleBar:hover {
-    .arrow {
-      transition: 0.5s ease;
-      margin-top: 0;
-    }
-  }
+  // .handleBar:hover {
+  //   .arrow {
+  //     transition: 0.5s ease;
+  //     margin-top: 0;
+  //   }
+  // }
   .outterBox {
     overflow: scroll;
 
@@ -136,7 +136,7 @@
               margin-bottom: 20px;
               padding-left: 10px;
               border-left: 5px solid rgb(204, 195, 145);
-
+              //  animation: fadeIn 0.5s ease;
               .prizeName {
                 font-size: 1rem;
                 color: $color-gold;
@@ -162,6 +162,15 @@
                 transition: 0.3s ease;
               }
             }
+
+            // @keyframes fadeIn {
+            //    0% {
+            //       opacity: 0;
+            //    }
+            //    100% {
+            //       opacity: 1;
+            //    }
+            // }
           }
           .description {
             // margin-top: 50px;

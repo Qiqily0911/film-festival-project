@@ -60,8 +60,6 @@ export default function CrewCard(props) {
             });
           });
           props.setInfoOpen(true);
-          // console.log(data);
-          // props.setCrewMovieData(data);
         }}
       >
         {/* {console.log(props.data)} */}
@@ -74,12 +72,14 @@ export default function CrewCard(props) {
           <div className={styles.noPic}></div>
         )}
       </div>
-      <div>
-        {props.data.release_date !== undefined
-          ? props.data.release_date.split("-")[0]
-          : ""}
+      <div className={styles.basicInfo}>
+        <div>
+          {props.data.release_date !== undefined
+            ? props.data.release_date.split("-")[0]
+            : ""}
+        </div>
+        <div>{props.data.title}</div>
       </div>
-      <div>{props.data.title}</div>
     </div>
   );
 }

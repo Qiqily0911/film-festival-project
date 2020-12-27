@@ -20,7 +20,7 @@ function MovieCard(props) {
   };
 
   const notFound = (
-    <div className={styles.movieCard}>
+    <div className={styles.movieCard} style={{ cursor: "default" }}>
       <div className={styles.notFound}></div>
       <div className={styles.basicInfo}>
         <div>

@@ -394,17 +394,20 @@ function MovieInfo(props) {
               >
                 <NewTaipeilibrary />
               </a>
-              <a
-                href={`https://www.catchplay.com/tw/search?keyword=${
-                  props.movieData.localData.film_name_zh
-                    ? props.movieData.localData.film_name_zh
-                    : props.movieData.localData.film_name_en
-                }`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <img src={catchplay} alt="catchplay" />
-              </a>
+              <div className={styles.tooltip}>
+                <span className={styles.tooltiptext}>Catch Play</span>
+                <a
+                  href={`https://www.catchplay.com/tw/search?keyword=${
+                    props.movieData.localData.film_name_zh
+                      ? props.movieData.localData.film_name_zh
+                      : props.movieData.localData.film_name_en
+                  }`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <img src={catchplay} alt="catchplay" />
+                </a>
+              </div>
             </div>
 
             {/* ---------- media source ---------- */}
