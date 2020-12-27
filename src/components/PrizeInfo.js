@@ -9,6 +9,7 @@ function PrizeInfo(props) {
   );
   const [prizeArr, setPrizeArr] = useState([]);
 
+  // 取出prize的id作為檢查依據
   useEffect(() => {
     let arr = [];
     for (let i = 0; i < 3; i++) {
@@ -58,6 +59,40 @@ function PrizeInfo(props) {
       props.setVertical(100);
     }
 
+    function loadData(movieId, imbdId, data) {
+      props.infoWrap.current.style.overflow = "hidden";
+      props.setLoadingOpen(true);
+
+      if (props.movieInfoEl.current && props.crewsEl.current !== null) {
+        props.crewsEl.current.scrollLeft = 0;
+        props.movieInfoEl.current.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+        console.log("reset scroll");
+      }
+
+      Promise.all([
+        props.tmdbApi("", movieId),
+        props.tmdbApi("/videos", movieId),
+        props.tmdbApi("/images", movieId),
+        props.tmdbApi("/credits", movieId),
+        imbdId !== "" ? props.omdbApi(imbdId) : "",
+        props.tmdbApi("/translations", movieId),
+      ]).then((arr) => {
+        props.setMovieData({
+          ...props.movieData,
+          detail: arr[0],
+          video: arr[1],
+          images: arr[2],
+          credits: arr[3],
+          localData: data,
+          omdbData: arr[4],
+          overview_translate: arr[5],
+        });
+      });
+    }
+
     // 依據每筆資料的 data_id 找對應名稱
     let prizeId = (dataId) => dataId.substring(dataId.length - 1) - 1;
     let prizeName = (i, data) => BtnData[i].arr[prizeId(data.data_id)];
@@ -71,13 +106,8 @@ function PrizeInfo(props) {
               <div className={styles.inner}>
                 <div className={styles.upper}>
                   <div className={styles.logo}>
-                    <a
-                      href={BtnData[i].web_link}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <list.logo />
-                    </a>
+                    <list.logo />
+                    {/* <a href={BtnData[i].web_link} target="_blank" rel="noreferrer"></a> */}
                   </div>
                   <div className={styles.title}>
                     <div>{BtnData[i].btnText}</div>
@@ -90,18 +120,15 @@ function PrizeInfo(props) {
                     {templist
                       .filter((film) => film.year === year)
                       .map((data, j) => {
-                        //  console.log(data);
                         return (
                           <div
                             data-id={data.movie_id}
                             className={styles.winner}
                             key={j}
                           >
-                            <div className={styles.th}>
-                              {props.ordinalSuffix(data.th)}
-                            </div>
                             <div>
                               <div className={styles.prizeName}>
+                                <div>{props.ordinalSuffix(data.th)}</div>
                                 <div>{prizeName(i, data).subBtnName}</div>
                                 <div>{prizeName(i, data).subBtnText}</div>
                               </div>
@@ -109,49 +136,27 @@ function PrizeInfo(props) {
                                 className={styles.filmName}
                                 onClick={() => {
                                   let movieId = data.tmdb_id;
-                                  props.infoWrap.current.style.overflow =
-                                    "hidden";
-                                  props.setLoadingOpen(true);
-
-                                  if (
-                                    props.movieInfoEl.current &&
-                                    props.crewsEl.current !== null
-                                  ) {
-                                    props.crewsEl.current.scrollLeft = 0;
-                                    props.movieInfoEl.current.scrollIntoView({
-                                      behavior: "smooth",
-                                      block: "start",
-                                    });
-                                    console.log("reset scroll");
-                                  }
-
-                                  Promise.all([
-                                    props.tmdbApi("", movieId),
-                                    props.tmdbApi("/videos", movieId),
-                                    props.tmdbApi("/images", movieId),
-                                    props.tmdbApi("/credits", movieId),
-                                    data.movie_id !== ""
-                                      ? props.omdbApi(data.movie_id)
-                                      : "",
-                                    props.tmdbApi("/translations", movieId),
-                                  ]).then((arr) => {
-                                    props.setMovieData({
-                                      ...props.movieData,
-                                      detail: arr[0],
-                                      video: arr[1],
-                                      images: arr[2],
-                                      credits: arr[3],
-                                      localData: data,
-                                      omdbData: arr[4],
-                                      overview_translate: arr[5],
-                                    });
-                                  });
+                                  loadData(movieId, data.movie_id, data);
                                 }}
                               >
-                                {data.film_name_zh} {data.film_name_en}
-                                <br />
-                                {data.director_zh ? data.director_zh : ""}
-                                {data.director ? data.director : ""}
+                                <span>
+                                  {data.film_name_zh} {data.film_name_en}
+                                </span>
+                                {data.director ? (
+                                  <>
+                                    <br />
+                                    <span>
+                                      {" "}
+                                      {data.director_zh ? data.director_zh : ""}
+                                    </span>
+                                    <span>
+                                      {" "}
+                                      {data.director ? data.director : ""}
+                                    </span>
+                                  </>
+                                ) : (
+                                  ""
+                                )}
                               </div>
                             </div>
                           </div>
