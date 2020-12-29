@@ -2,25 +2,26 @@
 
 .prizeInfo {
   position: fixed;
-  //    right: 20px;
   z-index: 5;
-  top: 120px;
-  bottom: 20px;
-  width: 450px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
+  bottom: 0;
+  height: calc(100% - 100px);
+  width: 64.4%;
+  box-shadow: rgba(148, 110, 110, 0.1) 0px 0px 5px 0px,
     rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
   display: flex;
   overflow: hidden;
   background-color: white;
-  transition: right 0.5s ease;
+  transition: 0.7s ease;
   .handleBar:hover {
-    transition: 1s ease;
+    transition: 0.7s ease;
     background: rgb(105, 105, 105);
   }
   .handleBar {
+    display: flex;
+    align-items: center;
     cursor: pointer;
     writing-mode: vertical-rl;
-    width: 30px;
+    min-width: 40px;
     line-height: 1rem;
     height: 100%;
     padding: 10px 5px 0 5px;
@@ -33,7 +34,7 @@
     transition: 1s ease;
 
     .arrow {
-      margin-top: -30px;
+      // margin-top: -30px;
       width: 20px;
       height: 20px;
       fill: white;
@@ -47,21 +48,24 @@
       letter-spacing: 0.3rem;
     }
   }
-  .handleBar:hover {
-    .arrow {
-      transition: 0.5s ease;
-      margin-top: 0;
-    }
-  }
+  // .handleBar:hover {
+  //   .arrow {
+  //     transition: 0.5s ease;
+  //     margin-top: 0;
+  //   }
+  // }
   .outterBox {
     overflow: scroll;
 
-    width: 430px;
+    width: 100%;
 
     .innerBox {
+      display: flex;
+
       width: 100%;
       height: 100%;
       .prizeData {
+        width: calc(100% / 3);
         position: relative;
         transition: all 0.5s ease;
         overflow: scroll;
@@ -84,12 +88,17 @@
           }
         }
         .inner {
-          padding: 20px;
+          height: 100%;
+          padding: 30px;
+          display: flex;
+          flex-direction: column;
 
           .upper {
+            // border: 1px solid red;
             display: flex;
             align-items: center;
-            margin-bottom: 10px;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
             border-bottom: 1px solid $color-gold;
 
             .title {
@@ -98,6 +107,10 @@
               font-size: 1.2rem;
               font-weight: 600;
               color: $color-blue;
+            }
+            .title > div:nth-child(2) {
+              //  color: red;
+              font-size: 1rem;
             }
 
             .logo {
@@ -113,35 +126,35 @@
           }
 
           .lower {
-            padding: 0 10px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             .winner {
+              //  border: 1px solid red;
               display: flex;
               margin-bottom: 20px;
-              .th {
-                width: 40px;
-                font-size: 1rem;
-                font-weight: 600;
-                margin-right: 30px;
-                color: $color-gold;
-                // position: absolute;
-              }
+              padding-left: 10px;
+              border-left: 5px solid rgb(204, 195, 145);
+              //  animation: fadeIn 0.5s ease;
               .prizeName {
                 font-size: 1rem;
                 color: $color-gold;
-                // opacity: 0.5;
                 display: flex;
-                // font-size: 1rem;
 
                 div {
-                  margin-right: 10px;
+                  margin-right: 6px;
                 }
               }
 
               .filmName {
-                // display: flex;
-                font-size: 1rem;
-                color: $color-gray;
-                transition: 0.3s ease;
+                span {
+                  margin-right: 6px;
+                  font-size: 1rem;
+                  color: $color-gray;
+                  transition: 0.3s ease;
+                  font-weight: 300;
+                }
               }
               .filmName:hover {
                 cursor: pointer;
@@ -149,19 +162,61 @@
                 transition: 0.3s ease;
               }
             }
+
+            // @keyframes fadeIn {
+            //    0% {
+            //       opacity: 0;
+            //    }
+            //    100% {
+            //       opacity: 1;
+            //    }
+            // }
           }
           .description {
-            margin-top: 50px;
+            // margin-top: 50px;
+            height: 40%;
+            overflow: hidden;
             font-size: $font-p;
             color: $color-gray;
-            span {
-              padding: 5px 0;
-            }
-            div {
-              margin-top: 5px;
-              border-top: 1px solid $color-gray;
-              padding: 10px 0;
-            }
+          }
+
+          .description > div:nth-child(1) {
+            width: 100%;
+            border-bottom: 1px solid $color-gray;
+            padding: 5px 0;
+          }
+
+          .description > div:nth-child(2) {
+            padding: 10px 0;
+            // border: 1px solid red;
+            // width: 100%;
+            overflow: scroll;
+          }
+        }
+        .upper2 {
+          text-align: center;
+          margin-bottom: 30px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          .title {
+            width: 80%;
+            font-size: 1rem;
+            color: $color-blue;
+            padding: 10px 0;
+            border-bottom: 1px solid $color-gold;
+          }
+          .prizeName {
+            cursor: pointer;
+            margin: 10px 0;
+            font-size: 1rem;
+            font-weight: 300;
+            color: $color-gray;
+          }
+          .prizeName:hover {
+            color: $color-gold;
+            transition: 0.3s ease;
           }
         }
       }

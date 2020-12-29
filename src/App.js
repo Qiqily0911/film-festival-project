@@ -1,37 +1,36 @@
-// style
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./style/App.module.scss";
-// data json
-import { InitListState } from "./data/BtnData";
-
-// components
+import { apiKey, omdbKey, firestore } from "./config";
+import { AuthProvider } from "./contexts/AuthContexts";
+import ControlSilder from "./components/ControlSlider";
 import YearList from "./components/YearList";
 import MovieInfo from "./components/MovieInfo";
 import PrizeInfo from "./components/PrizeInfo";
 import MovieFilter from "./components/MovieFilter";
 import MemberBtn from "./components/MemberBtn";
 import { MemberNav, MemberPage } from "./components/MemberPage";
-import ControlSilder from "./components/ControlSlider";
-import React, { useState, useEffect, useRef } from "react";
-//config and firebase
-import { apiKey, omdbKey, firestore } from "./config";
-import { AuthProvider } from "./contexts/AuthContexts";
+import { InitListState } from "./data/BtnData";
 import { ReactComponent as Logo } from "./image/logo-2.svg";
-
-// import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-// import * as firebase from "firebase";
-// import "firebase/auth";
-// import "firebase/firestore";
+import { ReactComponent as MainLogo } from "./image/logo.svg";
 
 function App() {
-  const [tmdbData, setData] = useState("");
-  const [tmdbVideo, setVideo] = useState("");
-  const [tmdbImages, setImages] = useState("");
-  const [tmdbCredits, setCredits] = useState("");
-  const [tmdbCrew, setCrew] = useState("");
-  const [tmdbData2, setData2] = useState("");
-  const [tmdbPerson, setPerson] = useState("");
-  const [localData, renewData] = useState("");
-  const [omdbData, setomdbData] = useState("");
+  const [movieData, setMovieData] = useState({
+    detail: "",
+    video: "",
+    images: "",
+    credits: "",
+    localData: "",
+    omdbData: "",
+    imdbRating: "",
+    overview_translate: "",
+  });
+
+  const [personData, setPersonData] = useState({
+    crew: "",
+    person: "",
+  });
+
+  const [welcomeOpen, setWelcome] = useState(true);
   const [imdbSpan, setRating] = useState("");
 
   const [list, setList] = useState([]);
@@ -39,9 +38,10 @@ function App() {
   const [listState, setlistState] = useState(InitListState);
   const [filmList, setFilmList] = useState("");
   const [prize, setPrize] = useState("");
+  const [loadingOpen, setLoadingOpen] = useState(false);
 
   // init control-slider
-  const [vertical, setVertical] = useState(100);
+  const [percentValue, setPercentValue] = useState(100);
   const [minYear, setMin] = useState(1928);
   const [maxYear, setMax] = useState(2020);
   const [isScroll, setScroll] = useState(true);
@@ -53,9 +53,11 @@ function App() {
   //  set ref of infoBox
   const movieInfoEl = useRef(null);
   const crewsEl = useRef(null);
+  const infoWrap = useRef(null);
+  const welcome = useRef(null);
 
   // switch of infoBox
-  const [infoBoxState, setInfoBox] = useState(false);
+
   const [prizeBoxState, setprizeBox] = useState(false);
 
   const [memberPage, setMemberPage] = useState(false);
@@ -81,6 +83,7 @@ function App() {
     }, {});
 
     setRefs(refs);
+
     listState.map((list) =>
       fillYearList(yearList, list.film_list, list.prize, list.order)
     );
@@ -99,13 +102,15 @@ function App() {
 
     function setSilderValue() {
       if (yearListRefs !== null) {
-        if (yearListRefs[minYear] !== undefined) {
-          // console.log(yearListRefs[minYear]);
+        if (
+          yearListRefs[minYear] !== undefined &&
+          yearListRefs[minYear].current !== null
+        ) {
           let a = maxYear - minYear + 1;
           let b = yearListRefs[minYear].current.getBoundingClientRect();
           let c = a * b.height;
           let d = Math.floor(((b.bottom - 100) / c) * 100);
-          setVertical(d);
+          setPercentValue(d);
         }
       }
     }
@@ -117,35 +122,65 @@ function App() {
   // 取得使用者收藏清單，並設訂變數 likedList
   useEffect(() => {
     if (userId) {
-      movieLiked
-        .where("user", "==", userId)
-        // .orderBy("time", "desc")
-        .onSnapshot((onSnapshot) => {
-          let arr = [];
-          onSnapshot.forEach((doc) => {
-            arr.push(doc.data());
-          });
-          setLikedList(arr);
-          // console.log(arr);
+      movieLiked.where("user", "==", userId).onSnapshot((onSnapshot) => {
+        let arr = [];
+        onSnapshot.forEach((doc) => {
+          arr.push(doc.data());
         });
+        setLikedList(arr);
+      });
 
       //  喜歡的演員或導演清單
-      personLiked
-        .where("user", "==", userId)
-        // TODO 照時間順序呈現資料
-        // .orderBy("time", "desc")
-        .onSnapshot((onSnapshot) => {
-          let arr = [];
-          onSnapshot.forEach((doc) => {
-            arr.push(doc.data());
-          });
-          setPersonList(arr);
-          // console.log(arr);
+      personLiked.where("user", "==", userId).onSnapshot((onSnapshot) => {
+        let arr = [];
+        onSnapshot.forEach((doc) => {
+          arr.push(doc.data());
         });
+        setPersonList(arr);
+      });
     }
   }, [userId]);
 
-  // put movies to the correspondense year box
+  // 初始畫面載入電影
+  useEffect(() => {
+    console.log(likedList);
+
+    let data = {
+      th: 72,
+      year: 2019,
+      prize: "palme_d_or",
+      film_name_zh: "寄生上流",
+      film_name_en: "Parasite",
+      atmovie_link: "http://app2.atmovies.com.tw/film/fpkr46751668/",
+      imdb_link: "https://www.imdb.com/title/tt6751668",
+      movie_id: "tt6751668",
+      poster_path: "/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg",
+      tmdb_id: 496243,
+      data_id: "cannes_01",
+    };
+
+    Promise.all([
+      tmdbApi("movie", "", 496243),
+      tmdbApi("movie", "/videos", 496243),
+      tmdbApi("movie", "/images", 496243),
+      tmdbApi("movie", "/credits", 496243),
+      omdbApi("tt6751668"),
+      tmdbApi("movie", "/translations", 496243),
+    ]).then((arr) => {
+      setMovieData({
+        ...movieData,
+        detail: arr[0],
+        video: arr[1],
+        images: arr[2],
+        credits: arr[3],
+        localData: data,
+        omdbData: arr[4],
+        overview_translate: arr[5],
+      });
+      console.log("default data info");
+    });
+  }, []);
+
   function fillYearList(yearList, fes, prize, order) {
     if (fes !== undefined) {
       let data = fes.filter((obj) => obj.prize === prize);
@@ -197,15 +232,10 @@ function App() {
     console.log("===========");
   }
 
-  // 取消收藏，並恢復原本 keepTag 樣式
+  // 取消收藏
   function cancelLiked(e, movieId) {
-    // console.log(props.likedList);
-    // console.log(movieId);
-
     for (let i = 0; i < likedList.length; i++) {
-      // let a = props.movie_id;
       if (movieId === likedList[i].tmdb_id) {
-        // console.log(props.likedList[i].id);
         movieLiked
           .doc(likedList[i].id)
           .delete()
@@ -218,78 +248,52 @@ function App() {
 
     e.stopPropagation();
   }
-  //  get tmdb movie detail & video
-  function tmdbApi(type, movie_id, inCrewDiv) {
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.open(
-        "GET",
-        `https://api.themoviedb.org/3/movie/${movie_id}${type}?api_key=${apiKey}`
-      );
 
-      xhr.onload = () => resolve(xhr.responseText);
-      xhr.onerror = () => reject(xhr.statusText);
-      xhr.send();
-    })
-      .then((response) => JSON.parse(response))
-      .then((data) => {
-        if (type === "") {
-          if (inCrewDiv) {
-            console.log("inCrewDiv");
-            setData2(data);
-          } else {
-            setData(data);
-          }
-        } else if (type === "/videos") {
-          setVideo(data);
-        } else if (type === "/images") {
-          setImages(data);
-        } else if (type === "/credits") {
-          setCredits(data);
-        }
-      });
+  // 取消收藏人物
+  function cancelPerson(e, personId) {
+    for (let i = 0; i < personList.length; i++) {
+      if (personId === personList[i].person_id) {
+        personLiked
+          .doc(personList[i].id)
+          .delete()
+          .then(() => {
+            console.log("delete data successful");
+            e.stopPropagation();
+          });
+      }
+    }
+
+    e.stopPropagation();
   }
 
-  // TODO: 精簡傳輸資料的方式
-  //  get tmdb crew detail
-  function tmdbCrewApi(type, personId) {
+  //  get tmdb movie detail & video
+  function tmdbApi(category, type, movie_id) {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open(
         "GET",
-        `https://api.themoviedb.org/3/person/${personId}${type}?api_key=${apiKey}`
+        `https://api.themoviedb.org/3/${category}/${movie_id}${type}?api_key=${apiKey}`
       );
-
-      xhr.onload = () => resolve(xhr.responseText);
+      xhr.onload = () => resolve(JSON.parse(xhr.responseText));
       xhr.onerror = () => reject(xhr.statusText);
       xhr.send();
-    })
-      .then((response) => JSON.parse(response))
-      .then((data) => {
-        if (type === "") {
-          //  console.log(data);
-          setPerson(data);
-        } else if (type === "/movie_credits") {
-          setCrew(data);
-        }
-      });
+    });
   }
 
   //  get get imdb rating from omdb APi
   function omdbApi(movie_id) {
-    const xhr = new XMLHttpRequest();
-    xhr.open(
-      "GET",
-      `https://www.omdbApi.com/?apikey=${omdbKey}&i=${movie_id}`,
-      true
-    );
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-        let a = JSON.parse(xhr.responseText);
-        setomdbData(a);
-      }
-    };
-    xhr.send();
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open(
+        "GET",
+        `https://www.omdbApi.com/?apikey=${omdbKey}&i=${movie_id}`,
+        true
+      );
+      xhr.onload = () => resolve(JSON.parse(xhr.responseText));
+      xhr.onerror = () => reject(xhr.statusText);
+
+      xhr.send();
+    });
   }
 
   //  get get imdb rating from imdb page
@@ -309,6 +313,10 @@ function App() {
         let elements = [...doc.getElementsByTagName("span")];
         let a = elements.filter((x) => !!x.getAttribute("itemprop"));
         setRating([a[0].innerText, a[2].innerText]);
+        // setMovieData({
+        //    ...movieData,
+        //    imdbRating: [a[0].innerText, a[2].innerText],
+        // });
       }
     };
     xhr.send();
@@ -329,18 +337,57 @@ function App() {
     return i + "th";
   }
 
+  const handlemovieproperty = (value) => {
+    // console.log(value);
+    setMovieData(value);
+  };
+
+  const welcomePage = () => {
+    const closeClass = welcomeOpen ? "" : styles.welcomeClose;
+
+    return (
+      <div className={`${styles.welcome} ${closeClass}`} ref={welcome}>
+        <div className={styles.mainLogo}>
+          <MainLogo />
+        </div>
+        <div className={styles.text}>
+          <div>
+            結合電影＋時間軸 <br />
+            探索影展獲獎好片
+          </div>
+          <div
+            className={styles.enterBtn}
+            onClick={() => {
+              setWelcome(false);
+              setTimeout(() => (welcome.current.style.display = "none"), 1000);
+            }}
+          >
+            開始探索
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className={styles.outter}>
+      {/* {welcomeOpen ? welcomePage() : ""} */}
+      {welcomePage()}
       <aside>
-        <div className={styles.logo}>
+        <div
+          className={styles.logo}
+          onClick={() => {
+            setMemberPage(false);
+          }}
+        >
           <Logo />
         </div>
         {memberPage ? (
-          ""
+          <div className={styles.slider}></div>
         ) : (
           <ControlSilder
-            vertical={vertical}
-            setVertical={setVertical}
+            percentValue={percentValue}
+            setPercentValue={setPercentValue}
             yearListRefs={yearListRefs}
             minYear={minYear}
             maxYear={maxYear}
@@ -355,7 +402,7 @@ function App() {
         <div className={styles.container}>
           <div className={styles.navbar}>
             {memberPage ? (
-              <MemberNav />
+              <MemberNav setMemberPage={setMemberPage} />
             ) : (
               <MovieFilter
                 filmList={filmList}
@@ -366,7 +413,7 @@ function App() {
                 yearListRefs={yearListRefs}
                 listState={listState}
                 setlistState={setlistState}
-                setVertical={setVertical}
+                setPercentValue={setPercentValue}
                 setScroll={setScroll}
               />
             )}
@@ -378,34 +425,39 @@ function App() {
                 setUserId={setUserId}
                 memberPage={memberPage}
                 setMemberPage={setMemberPage}
-                setInfoBox={setInfoBox}
                 setprizeBox={setprizeBox}
               />
             </AuthProvider>
           </div>
-
-          {memberPage ? (
-            <MemberPage
-              userId={userId}
-              userData={userData}
-              memberPage={memberPage}
-              likedList={likedList}
-              cancelLiked={cancelLiked}
-              tmdbApi={tmdbApi}
-              omdbApi={omdbApi}
-              setInfoBox={setInfoBox}
-              renewData={renewData}
-              personList={personList}
-            />
-          ) : (
-            <>
-              <div className={styles.subContainer}>
+          <div className={styles.subContainer}>
+            {memberPage ? (
+              <>
+                <MemberPage
+                  userId={userId}
+                  userData={userData}
+                  memberPage={memberPage}
+                  likedList={likedList}
+                  cancelLiked={cancelLiked}
+                  tmdbApi={tmdbApi}
+                  omdbApi={omdbApi}
+                  personList={personList}
+                  setMovieData={setMovieData}
+                  setLoadingOpen={setLoadingOpen}
+                  movieInfoEl={movieInfoEl}
+                  crewsEl={crewsEl}
+                  infoWrap={infoWrap}
+                  cancelPerson={cancelPerson}
+                />
+              </>
+            ) : (
+              <>
                 <YearList
+                  setMovieData={setMovieData}
+                  movieData={movieData}
                   prize={prize}
                   tmdbApi={tmdbApi}
                   omdbApi={omdbApi}
                   imdbRating={imdbRating}
-                  renewData={renewData}
                   yearlist={list}
                   yearListRefs={yearListRefs}
                   listState={listState}
@@ -414,64 +466,66 @@ function App() {
                   minYear={minYear}
                   setMax={setMax}
                   maxYear={maxYear}
-                  setVertical={setVertical}
-                  vertical={vertical}
+                  setPercentValue={setPercentValue}
+                  percentValue={percentValue}
                   isScroll={isScroll}
                   userId={userId}
-                  movieInfoEl={movieInfoEl}
-                  setInfoBox={setInfoBox}
                   likedList={likedList}
                   addLiked={addLiked}
                   cancelLiked={cancelLiked}
-
-                  // memberPage={memberPage}
+                  setLoadingOpen={setLoadingOpen}
+                  movieInfoEl={movieInfoEl}
+                  crewsEl={crewsEl}
+                  infoWrap={infoWrap}
                 />
                 <PrizeInfo
-                  renewData={renewData}
                   tmdbApi={tmdbApi}
                   omdbApi={omdbApi}
-                  listState={listState}
                   minYear={minYear}
                   maxYear={maxYear}
-                  vertical={vertical}
-                  infoBoxState={infoBoxState}
-                  setInfoBox={setInfoBox}
+                  percentValue={percentValue}
                   prizeBoxState={prizeBoxState}
                   setprizeBox={setprizeBox}
                   ordinalSuffix={ordinalSuffix}
+                  movieData={movieData}
+                  setMovieData={handlemovieproperty}
+                  listState={listState}
+                  setlistState={setlistState}
+                  setPercentValue={setPercentValue}
+                  setScroll={setScroll}
+                  loadingOpen={loadingOpen}
+                  setLoadingOpen={setLoadingOpen}
+                  movieInfoEl={movieInfoEl}
+                  crewsEl={crewsEl}
+                  infoWrap={infoWrap}
                 />
-              </div>
-            </>
-          )}
-          <MovieInfo
-            movieInfoEl={movieInfoEl}
-            crewsEl={crewsEl}
-            tmdbData={tmdbData}
-            tmdbVideo={tmdbVideo}
-            tmdbImages={tmdbImages}
-            tmdbCredits={tmdbCredits}
-            localData={localData}
-            renewData={renewData}
-            omdbData={omdbData}
-            imdbSpan={imdbSpan}
-            tmdbCrewApi={tmdbCrewApi}
-            setCrew={setCrew}
-            tmdbCrew={tmdbCrew}
-            tmdbPerson={tmdbPerson}
-            ordinalSuffix={ordinalSuffix}
-            infoBoxState={infoBoxState}
-            setInfoBox={setInfoBox}
-            prizeBoxState={prizeBoxState}
-            setprizeBox={setprizeBox}
-            userId={userId}
-            likedList={likedList}
-            addLiked={addLiked}
-            cancelLiked={cancelLiked}
-            tmdbApi={tmdbApi}
-            tmdbData2={tmdbData2}
-            addPerson={addPerson}
-            memberPage={memberPage}
-          />
+              </>
+            )}
+            <MovieInfo
+              movieData={movieData}
+              personData={personData}
+              setPersonData={setPersonData}
+              movieInfoEl={movieInfoEl}
+              crewsEl={crewsEl}
+              infoWrap={infoWrap}
+              imdbSpan={imdbSpan}
+              // tmdbApi={tmdbApi}
+              ordinalSuffix={ordinalSuffix}
+              prizeBoxState={prizeBoxState}
+              setprizeBox={setprizeBox}
+              userId={userId}
+              likedList={likedList}
+              addLiked={addLiked}
+              cancelLiked={cancelLiked}
+              tmdbApi={tmdbApi}
+              personList={personList}
+              addPerson={addPerson}
+              cancelPerson={cancelPerson}
+              memberPage={memberPage}
+              loadingOpen={loadingOpen}
+              setLoadingOpen={setLoadingOpen}
+            />
+          </div>
         </div>
       </main>
     </div>

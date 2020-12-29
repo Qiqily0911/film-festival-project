@@ -4,24 +4,82 @@
   margin: auto 0;
   display: flex;
   .navBtn {
-    @include navBtn;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    // flex-direction: column;
+    // text-align: left;
+    width: 180px;
+    margin: 10px 20px;
+    padding: 10px;
+    font-weight: 500;
+    font-size: 1rem;
+    color: #06466b;
+    font-weight: 500;
+    font-size: 1rem;
+    color: $color-blue;
+  }
+  .backBtn {
+    cursor: pointer;
     // border: 1px solid red;
+    @include centerPosition;
+    margin-left: 80px;
+    .arrow {
+      transform: rotate(180deg);
+      width: 25px;
+      height: 25px;
+      fill: $color-blue;
+      transition: all 0.3s ease;
+    }
+  }
+  .backBtn:hover {
+    .arrow {
+      fill: $color-gold;
+      transition: all 0.3s ease;
+    }
   }
 }
 
 .outter {
   //  border: 1px solid red;
-  padding: 0 40px;
-  position: fixed;
-  bottom: 0;
-  top: 100px;
+  // padding: 0 40px;
+  //  position: fixed;
+  //  bottom: 0;
+  //  top: 100px;
+  width: 70%;
   overflow: scroll;
   .innerBox {
+    width: 100%;
+    padding: 0 5%;
+    justify-content: center;
     // display: flex;
     // flex-flow: row wrap;
+    .headline {
+      border-bottom: 1px solid $color-blue;
+      margin: 20px;
+      padding: 10px 0;
+      //  padding-left: 30px;
+      display: flex;
+      justify-content: space-between;
+
+      span {
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: $color-blue;
+      }
+    }
     .cardBox {
+      //  margin: 0 auto;
+      //  border: 1px solid green;
       display: flex;
       flex-flow: row wrap;
+      justify-content: center;
+      .blank {
+        position: relative;
+        max-height: 360px;
+        width: 180px;
+        margin: 0 20px;
+      }
       .personCard {
         position: relative;
         max-height: 360px;
@@ -33,6 +91,7 @@
           height: 270px;
           overflow: hidden;
           box-shadow: rgba(0, 0, 0, 0.3) 0px 3px 5px 0px;
+          position: relative;
 
           img:hover {
             transform: scale(1.08);
@@ -43,24 +102,33 @@
             width: 100%;
             height: 100%;
           }
+
+          svg {
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            position: absolute;
+            bottom: 6px;
+            right: 6px;
+            fill: $color-gold;
+            stroke: rgba(255, 255, 255, 0.75);
+            filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.5));
+          }
         }
         .basicInfo {
           @include centerPosition;
+          flex-direction: column;
           height: 90px;
           width: 100%;
           font-size: 15px;
           text-align: center;
           color: $color-gray;
-
-          // .titleEn {
-          //    margin-bottom: 5px;
-          //
-          //    line-height: 20px;
-          // }
-
-          // .titleZh {
-          //    font-size: 13px;
-          // }
+          font-size: $font-p;
+          div {
+            margin-bottom: 5px;
+            // font-size: 15px;
+            line-height: 20px;
+          }
         }
       }
     }

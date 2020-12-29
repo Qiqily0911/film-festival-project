@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styles from "../style/Crew.module.scss";
 import { ReactComponent as Bookmark } from "../image/icon/add.svg";
+import { ReactComponent as Nopic } from "../image/icon/no-pic.svg";
 
 export default function CrewCard(props) {
+  //  console.log(props.data);
   let obj = {
     user: props.userId,
     movie_id: "",
@@ -11,25 +13,23 @@ export default function CrewCard(props) {
     poster_path: props.data.poster_path,
     film_name_en: props.data.title,
     film_name_zh: "",
+    time: new Date(),
+    year:
+      props.data.release_date !== undefined
+        ? props.data.release_date.split("-")[0]
+        : "",
   };
-
-  //    console.log(obj);
 
   const isLiked = Boolean(
     props.likedList &&
       props.likedList.find((item) => item.tmdb_id === props.data.id)
   );
-  //    console.log(isLiked);
 
   return (
     <div
       className={styles.movieCard}
       key={props.data.credit_id}
       value={props.data.id}
-      onClick={() => {
-        props.tmdbApi("", props.data.id, true);
-        props.setInfoOpen(true);
-      }}
     >
       {/* ------- keetTag --------*/}
       {props.userId ? (
@@ -47,20 +47,42 @@ export default function CrewCard(props) {
       )}
       {/* ------- keetTag --------*/}
 
-      <div className={styles.poster}>
+      <div
+        className={styles.poster}
+        onClick={() => {
+          Promise.all([
+            props.tmdbApi("movie", "", props.data.id),
+            props.tmdbApi("movie", "/translations", props.data.id),
+          ]).then((arr) => {
+            props.setCrewMovieData({
+              ...props.crewMovieData,
+              detail: arr[0],
+              overview_translate: arr[1],
+            });
+          });
+          props.setInfoOpen(true);
+        }}
+      >
+        {/* {console.log(props.data)} */}
         {props.data.poster_path !== null ? (
           <img
             alt="poster"
             src={`https://image.tmdb.org/t/p/w154${props.data.poster_path}`}
           />
         ) : (
-          <div className={styles.noPic}></div>
+          <div className={styles.noPic}>
+            <Nopic />
+          </div>
         )}
       </div>
-      <div>{props.data.release_date}</div>
-      <div>{props.data.title}</div>
-      {/* <div>{data.original_title}</div> */}
-      {/* .match(/^\d{4}$/g) */}
+      <div className={styles.basicInfo}>
+        <div>
+          {props.data.release_date !== undefined
+            ? props.data.release_date.split("-")[0]
+            : ""}
+        </div>
+        <div>{props.data.title}</div>
+      </div>
     </div>
   );
 }

@@ -1,61 +1,37 @@
 @import "./Default.scss";
 
 .movieInfo {
-  position: fixed;
-  z-index: 5;
-  top: 120px;
-  bottom: 20px;
-  width: 450px;
+  width: 30%;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
     rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
   display: flex;
   overflow: hidden;
   background-color: white;
-  transition: right 0.5s ease;
-  .handleBar:hover {
-    transition: 1s ease;
-    background: rgb(165, 165, 165);
-    .arrow {
-      transition: 0.5s ease;
-      margin-top: 0;
-    }
-  }
-  .handleBar {
-    cursor: pointer;
-    writing-mode: vertical-rl;
-    width: 30px;
-    line-height: 1rem;
-    height: 100%;
-    padding: 10px 5px 0 5px;
-    font-size: 1rem;
-    font-weight: 300;
-    display: flex;
-    background-color: $color-lightgray;
-    transition: 1s ease;
-    .arrow {
-      margin-top: -30px;
-      width: 20px;
-      height: 20px;
-      fill: white;
-      transition: 0.5s ease;
-    }
-    p {
-      margin: 20px 0 10px 0;
-      letter-spacing: 0.3rem;
-      color: white;
-    }
-  }
+  z-index: 5;
 
   .outterBox {
     overflow: scroll;
     position: relative;
     // flex-direction: row-reverse;
-    width: 430px;
+    width: 100%;
     // height: 100%;
     .loadingAnimate {
       @include centerPosition;
-      background-color: $color-blue;
+
       z-index: 10;
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      //  animation-name: vanish;
+      //  animation-duration: 1s;
+      // animation-delay: 0.8s;
+    }
+
+    .loadingBackground {
+      z-index: 8;
+      background-color: $color-blue;
       position: absolute;
       top: 0;
       right: 0;
@@ -63,26 +39,39 @@
       bottom: 0;
     }
 
+    // @keyframes vanish {
+    //   0% {
+    //     opacity: 1;
+    //   }
+    //   80% {
+    //     opacity: 1;
+    //   }
+    //   100% {
+    //     opacity: 0;
+    //   }
+    // }
+
     .innerBox {
+      position: relative;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       width: 100%;
-      height: 100%;
+      //  height: 100%;
       .imageBox {
         display: flex;
         width: 100%;
         //  overflow: scroll;
         // min-height: 250px;
-        height: 250px;
-        // border: 1px solid $color-gray;
+        // height: 250px;
+        // border: 1px solid red;
         // margin: 20px 0;
         overflow: auto;
         background-color: rgb(236, 236, 236);
 
         img {
           width: 100%;
-          max-height: 250px;
+          // max-height: 250px;
           //  margin-right: 10px;
         }
 
@@ -97,7 +86,7 @@
 
       .infoBox {
         // border: 1px solid red;
-        padding: 20px;
+        padding: $padding-l;
 
         .upper {
           // border: 1px solid green;
@@ -157,11 +146,6 @@
         .rating {
           @include centerPosition;
 
-          // .star {
-          //    width: 25px;
-          //    height: 25px;
-          //    fill: $color-gold;
-          // }
           .imbdBtn {
             display: flex;
             svg {
@@ -187,7 +171,7 @@
           font-size: 14px;
           .box1 {
             display: flex;
-            margin: 10px 0;
+            // margin: 10px 10px 10px 0;
           }
           a {
             text-decoration: none;
@@ -228,7 +212,6 @@
         .flag {
           margin: 10px;
           display: flex;
-
           .tooltip:hover .tooltiptext {
             visibility: visible;
             opacity: 1;
@@ -236,10 +219,8 @@
 
           .tooltip {
             position: relative;
-            display: block;
-            // width: 50px;
+            // display: block;
             height: 33px;
-            // overflow: hidden;
             margin-right: 10px;
 
             .tooltiptext {
@@ -255,16 +236,17 @@
               z-index: 1;
               opacity: 0;
               transition: opacity 0.3s;
-              top: 125%;
+              top: 160%;
               left: 50%;
-              margin-left: -50%;
+              transform: translate(-50%, -50%);
             }
-            img {
-              // width: 100%;
-              // max-width: 50px;
-              max-height: 33px;
-              @include shadow;
-            }
+          }
+
+          img {
+            // width: 100%;
+            // max-width: 50px;
+            max-height: 33px;
+            @include shadow;
           }
         }
 
@@ -305,7 +287,33 @@
               transition: all 0.3s ease;
             }
           }
+          .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+          }
 
+          .tooltip {
+            position: relative;
+
+            .tooltiptext {
+              //  border: 1px solid;
+              visibility: hidden;
+              position: absolute;
+              font-size: 10px;
+              white-space: nowrap;
+              background-color: #555;
+              color: #fff;
+              text-align: center;
+              padding: 5px;
+              //  border-radius: 6px;
+              z-index: 1;
+              opacity: 0;
+              transition: opacity 0.3s;
+              top: 140%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+            }
+          }
           svg {
             width: 30px;
             height: 30px;
@@ -326,10 +334,15 @@
             padding: 5px 0;
           }
           div {
-            margin-top: 5px;
-            border-top: 1px solid $color-gray;
+            // margin-top: 5px;
+            // border-top: 1px solid $color-gray;
             padding: 10px 0;
           }
+        }
+        .overview > div:nth-child(1) {
+          width: 100%;
+          border-bottom: 1px solid $color-gray;
+          padding: 5px 0;
         }
       }
     }
@@ -338,9 +351,10 @@
   .crew {
     // position: absolute;
     // bottom: 0;
+    // height: 50%;
     width: 100%;
     background-color: $color-blue;
-    padding: 20px;
+    padding: $padding-l;
     color: white;
 
     .outter {
@@ -361,16 +375,19 @@
           overflow: hidden;
           height: 180px;
           position: relative;
+          //  background-color: rgb(47, 91, 128);
 
           img {
-            filter: grayscale(100%);
+            // filter: grayscale(100%);
+            // mix-blend-mode: luminosity;
             width: 100%;
             transition: 0.3s ease;
           }
 
           img:hover {
             transform: scale(1.1);
-            filter: grayscale(0%);
+            // mix-blend-mode: none;
+            // filter: grayscale(0%);
             cursor: pointer;
             transition: 0.3s ease;
           }

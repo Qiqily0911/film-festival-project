@@ -38,7 +38,11 @@ function Login() {
     try {
       setError("");
       setLoading(true);
-      await signup(emailRef.current.value, passwordRef.current.value);
+      await signup(
+        emailRef.current.value,
+        passwordRef.current.value,
+        nameRef.current.value
+      );
       console.log(nameRef.current.value);
     } catch {
       return setError("Failed to create an account");
@@ -49,7 +53,6 @@ function Login() {
   const loginDiv = (
     <div className={styles.container}>
       <div className={styles.side}>
-        {" "}
         <span>會員登入</span>
         <div className={styles.logo}>
           <Logo />

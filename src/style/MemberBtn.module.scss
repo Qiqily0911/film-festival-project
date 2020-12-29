@@ -1,55 +1,58 @@
 @import "./Default.scss";
 .loginOutter {
+  width: 30%;
+  //  border: 1px solid brown;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+  padding-right: 3%;
+  text-align: center;
+  font-weight: 500;
+  color: $color-blue;
 
   .signInDiv {
-    // border: 1px solid red;
-    color: $color-blue;
-    display: flex;
-    text-align: center;
-    font-weight: 500;
     @include centerPosition;
-    .switchBtn {
-      // border-radius: 5px;
-      margin: 0 10px;
-      display: flex;
-      position: relative;
-      height: 30px;
-      font-size: 0.9rem;
-      overflow: hidden;
-      box-shadow: rgb(221, 221, 221) 0px 0px 2px 0px inset,
-        rgba(219, 219, 219, 0.5) -1px -1px 3px 3px inset;
-
-      div {
-        // transition: 0.5s ease;
-        @include centerPosition;
-        margin: auto 0;
-        height: 100%;
-        width: 80px;
-        cursor: pointer;
-      }
-      .pressed {
-        // transition: 0.3s ease;
-        cursor: inherit;
-        color: white;
-        background-color: $color-blue;
-      }
-    }
     .userName {
+      cursor: pointer;
       @include centerPosition;
+      transition: all 0.3s ease;
       width: 150px;
-      margin: 10px;
+      //  margin: 10px;
+      //  p {
+      //     // text-decoration: dashed;
+      //     // padding-bottom: 5px;
+      //     height: 30px;
+      //     border-bottom: 1px solid $color-blue;
+      //  }
+    }
+
+    .userName:hover {
+      color: $color-gold;
+      transition: all 0.3s ease;
     }
   }
-  .loginIcon {
-    margin: 10px;
+
+  .loginWrap {
+    margin-left: 20px;
+    @include centerPosition;
     cursor: pointer;
-    width: 35px;
-    height: 35px;
+    transition: all 0.3s ease;
+    .loginIcon {
+      margin: 0 10px;
+      width: 35px;
+      height: 35px;
+      svg {
+        fill: $color-blue;
+        transition: all 0.3s ease;
+      }
+    }
+  }
+  .loginWrap:hover {
+    color: $color-gold;
+    transition: all 0.3s ease;
     svg {
-      fill: $color-blue;
+      fill: $color-gold;
+      transition: all 0.3s ease;
     }
   }
 }
@@ -192,3 +195,30 @@
     outline: none;
   }
 }
+
+// .switchBtn {
+//   // border-radius: 5px;
+//   margin: 0 10px;
+//   display: flex;
+//   position: relative;
+//   height: 30px;
+//   font-size: 0.9rem;
+//   overflow: hidden;
+//   box-shadow: rgb(221, 221, 221) 0px 0px 2px 0px inset,
+//     rgba(219, 219, 219, 0.5) -1px -1px 3px 3px inset;
+
+//   div {
+//     // transition: 0.5s ease;
+//     @include centerPosition;
+//     margin: auto 0;
+//     height: 100%;
+//     width: 80px;
+//     cursor: pointer;
+//   }
+//   .pressed {
+//     // transition: 0.3s ease;
+//     cursor: inherit;
+//     color: white;
+//     background-color: $color-blue;
+//   }
+// }

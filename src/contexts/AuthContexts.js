@@ -9,9 +9,14 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
 
-  function signup(email, password) {
+  function signup(email, password, name) {
     return firebaseAuth
       .createUserWithEmailAndPassword(email, password)
+      .then((results) => {
+        firebaseAuth.currentUser.updateProfile({
+          displayName: name,
+        });
+      })
       .then(() => {
         console.log("set data successful");
       });

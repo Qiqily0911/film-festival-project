@@ -1,8 +1,9 @@
 @import "./Default.scss";
+
 @mixin card {
   max-height: 360px;
   width: 180px;
-  margin: 20px;
+  @include cardMargin;
 }
 
 .movieCard {
@@ -40,6 +41,18 @@
       p {
         color: white;
       }
+      svg {
+        fill: rgb(207, 207, 207);
+        width: 120px;
+        height: 120px;
+        transition: all 0.5s ease;
+      }
+    }
+    .noPoster:hover {
+      svg {
+        fill: rgb(156, 156, 156);
+        transition: all 0.5s ease;
+      }
     }
   }
 
@@ -49,22 +62,23 @@
     width: 100%;
     text-align: center;
     color: $color-gray;
+    font-size: $font-p;
 
     .titleEn {
       margin-bottom: 5px;
-      font-size: 15px;
+      // font-size: 15px;
       line-height: 20px;
     }
 
-    .titleZh {
-      font-size: 13px;
-    }
+    // .titleZh {
+    //    // font-size: 13px;
+    // }
   }
 
   @mixin bookmark {
     width: 25px;
     position: absolute;
-    z-index: 5;
+    z-index: 2;
     right: 5px;
     top: -7px;
     filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.3));
@@ -73,6 +87,7 @@
     @include bookmark;
     // @include shadow;
     fill: $color-gold;
+    stroke: rgba(255, 255, 255, 0.75);
   }
   .cancelBtn {
     @include bookmark;
@@ -110,12 +125,10 @@
   }
 }
 .notFound {
-  //  @include card;
   width: 180px;
   height: 270px;
-  //  border: 2px dashed rgb(224, 224, 224);
+
   background-color: rgb(240, 240, 240);
-  //  padding: 10px;
 }
 
 // @include shadow;

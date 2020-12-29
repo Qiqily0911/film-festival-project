@@ -18,7 +18,10 @@ $color-white: white;
 $color-gold: rgb(173, 150, 84);
 
 /* font size */
-$font-p: 0.85rem;
+$font-p: 0.9rem;
+
+/* padding size */
+$padding-l: 2rem;
 
 @mixin centerPosition {
   display: flex;
@@ -77,6 +80,13 @@ $font-p: 0.85rem;
     to {
       opacity: 1;
     }
+  }
+}
+
+@mixin cardMargin {
+  margin: 20px;
+  @media (min-width: 1500px) {
+    margin: 20px 40px;
   }
 }
 
