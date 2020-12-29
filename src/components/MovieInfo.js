@@ -74,8 +74,8 @@ function MovieInfo(props) {
           data-creditid={id}
           onClick={() => {
             Promise.all([
-              props.tmdbCrewApi("/movie_credits", id),
-              props.tmdbCrewApi("", id),
+              props.tmdbApi("person", "/movie_credits", id),
+              props.tmdbApi("person", "", id),
             ]).then((arr) => {
               props.setPersonData({
                 ...props.personData,
@@ -119,8 +119,8 @@ function MovieInfo(props) {
                 data-creditid={person.id}
                 onClick={() => {
                   Promise.all([
-                    props.tmdbCrewApi("/movie_credits", person.id),
-                    props.tmdbCrewApi("", person.id),
+                    props.tmdbApi("person", "/movie_credits", person.id),
+                    props.tmdbApi("person", "", person.id),
                   ]).then((arr) => {
                     props.setPersonData({
                       ...props.personData,
@@ -368,32 +368,46 @@ function MovieInfo(props) {
               ) : (
                 ""
               )}
-              <a
-                href={`https://book.tpml.edu.tw/webpac/bookSearchList.do?searchtype=simplesearch&search_field=TI&search_input=${
-                  props.movieData.localData.film_name_zh
-                    ? props.movieData.localData.film_name_zh
-                    : props.movieData.localData.film_name_en
-                }&execodehidden=true&execode=webpac.dataType.media&ebook=#searchtype=simplesearch&search_field=TI&search_input=${
-                  props.movieData.localData.film_name_zh
-                    ? props.movieData.localData.film_name_zh
-                    : props.movieData.localData.film_name_en
-                }`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <Taipeilibrary />
-              </a>
-              <a
-                href={`https://webpac.tphcc.gov.tw/webpac/search.cfm?m=as&k0=${
-                  props.movieData.localData.film_name_zh
-                    ? props.movieData.localData.film_name_zh
-                    : props.movieData.localData.film_name_en
-                }&t0=t&c0=and&y10=&y20=&cat0=&dt0=%E8%A6%96%E8%81%BD%E8%B3%87%E6%96%99&l0=&lv0=&lc0=`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <NewTaipeilibrary />
-              </a>
+              <div className={styles.tooltip}>
+                <span className={styles.tooltiptext}>
+                  台北市立圖書館
+                  {/* <br />
+                           影音館藏 */}
+                </span>
+                <a
+                  href={`https://book.tpml.edu.tw/webpac/bookSearchList.do?searchtype=simplesearch&search_field=TI&search_input=${
+                    props.movieData.localData.film_name_zh
+                      ? props.movieData.localData.film_name_zh
+                      : props.movieData.localData.film_name_en
+                  }&execodehidden=true&execode=webpac.dataType.media&ebook=#searchtype=simplesearch&search_field=TI&search_input=${
+                    props.movieData.localData.film_name_zh
+                      ? props.movieData.localData.film_name_zh
+                      : props.movieData.localData.film_name_en
+                  }`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <Taipeilibrary />
+                </a>
+              </div>
+              <div className={styles.tooltip}>
+                <span className={styles.tooltiptext}>
+                  新北市立圖書館
+                  {/* <br />
+                           影音館藏 */}
+                </span>
+                <a
+                  href={`https://webpac.tphcc.gov.tw/webpac/search.cfm?m=as&k0=${
+                    props.movieData.localData.film_name_zh
+                      ? props.movieData.localData.film_name_zh
+                      : props.movieData.localData.film_name_en
+                  }&t0=t&c0=and&y10=&y20=&cat0=&dt0=%E8%A6%96%E8%81%BD%E8%B3%87%E6%96%99&l0=&lv0=&lc0=`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <NewTaipeilibrary />
+                </a>
+              </div>
               <div className={styles.tooltip}>
                 <span className={styles.tooltiptext}>Catch Play</span>
                 <a
@@ -436,7 +450,9 @@ function MovieInfo(props) {
           {/* --------- flags -------------- */}
 
           <div className={styles.overview}>
-            <span>Overview</span>
+            <div>
+              <span>Overview</span>
+            </div>
             <div>{overviewChinese()}</div>
             <div>{props.movieData.detail.overview}</div>
           </div>

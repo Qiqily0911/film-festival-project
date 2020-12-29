@@ -5,7 +5,7 @@ import styles from "../style/PrizeInfo.module.scss";
 
 function PrizeInfo(props) {
   const year = Math.floor(
-    props.vertical * ((props.maxYear - props.minYear) / 100) + props.minYear
+    props.percentValue * ((props.maxYear - props.minYear) / 100) + props.minYear
   );
   const [prizeArr, setPrizeArr] = useState([]);
 
@@ -56,7 +56,7 @@ function PrizeInfo(props) {
       arr[index] = btnSelect;
 
       props.setlistState(arr);
-      props.setVertical(100);
+      props.setPercentValue(100);
     }
 
     function loadData(movieId, imbdId, data) {
@@ -73,12 +73,12 @@ function PrizeInfo(props) {
       }
 
       Promise.all([
-        props.tmdbApi("", movieId),
-        props.tmdbApi("/videos", movieId),
-        props.tmdbApi("/images", movieId),
-        props.tmdbApi("/credits", movieId),
+        props.tmdbApi("movie", "", movieId),
+        props.tmdbApi("movie", "/videos", movieId),
+        props.tmdbApi("movie", "/images", movieId),
+        props.tmdbApi("movie", "/credits", movieId),
         imbdId !== "" ? props.omdbApi(imbdId) : "",
-        props.tmdbApi("/translations", movieId),
+        props.tmdbApi("movie", "/translations", movieId),
       ]).then((arr) => {
         props.setMovieData({
           ...props.movieData,

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "../style/Crew.module.scss";
 import { ReactComponent as Bookmark } from "../image/icon/add.svg";
+import { ReactComponent as Nopic } from "../image/icon/no-pic.svg";
 
 export default function CrewCard(props) {
   //  console.log(props.data);
@@ -50,8 +51,8 @@ export default function CrewCard(props) {
         className={styles.poster}
         onClick={() => {
           Promise.all([
-            props.tmdbApi("", props.data.id),
-            props.tmdbApi("/translations", props.data.id),
+            props.tmdbApi("movie", "", props.data.id),
+            props.tmdbApi("movie", "/translations", props.data.id),
           ]).then((arr) => {
             props.setCrewMovieData({
               ...props.crewMovieData,
@@ -69,7 +70,9 @@ export default function CrewCard(props) {
             src={`https://image.tmdb.org/t/p/w154${props.data.poster_path}`}
           />
         ) : (
-          <div className={styles.noPic}></div>
+          <div className={styles.noPic}>
+            <Nopic />
+          </div>
         )}
       </div>
       <div className={styles.basicInfo}>

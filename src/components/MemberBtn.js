@@ -107,7 +107,7 @@ export default MemberBtn;
 //       className={props.memberPage !== true ? styles.pressed : ""}
 //       onClick={() => {
 //          props.setMemberPage(false);
-//          props.setInfoBox(false);
+//
 //          props.setprizeBox(false);
 //       }}
 //    >

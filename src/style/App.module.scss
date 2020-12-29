@@ -6,6 +6,73 @@
   width: 100vw;
   //  border: 1px solid blue;
 
+  .welcome {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 100;
+    background-color: $color-blue;
+    // background: linear-gradient(30deg, rgb(30, 34, 51) 10%, $color-blue 50%);
+    color: white;
+    font-size: 2rem;
+    @include centerPosition;
+
+    .mainLogo {
+      width: 20%;
+    }
+    .text {
+      //  border: 1px solid red;
+      margin: 2rem;
+      padding-top: 2rem;
+      letter-spacing: 0.3rem;
+      display: flex;
+      flex-direction: column;
+
+      div {
+        margin: 1rem;
+      }
+      .enterBtn {
+        border: 1px solid white;
+        text-align: center;
+        // height: 3rem;
+        font-size: 1.5rem;
+        // line-height: 3rem;
+        padding: 0.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .enterBtn:hover {
+        background-color: white;
+        font-weight: 500;
+        color: $color-blue;
+        transition: all 0.3s ease;
+      }
+    }
+  }
+
+  .welcomeClose {
+    animation: fadeout 1s ease;
+  }
+
+  @keyframes fadeout {
+    0% {
+      bottom: 0px;
+      //  opacity: 1;
+    }
+
+    10% {
+      bottom: -300px;
+    }
+
+    100% {
+      top: -100%;
+      bottom: 100%;
+      //  opacity: 0;
+    }
+  }
+
   aside {
     width: 8%;
     background-color: $color-blue;
@@ -14,6 +81,7 @@
 
     .logo {
       //  border: 1px solid red;
+      cursor: pointer;
       width: 80px;
       height: 10%;
       margin: auto;

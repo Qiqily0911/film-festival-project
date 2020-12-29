@@ -60,7 +60,6 @@ function YearList(props) {
                     listData={listData}
                     isLiked={Boolean(isLiked)}
                     userId={props.userId}
-                    setInfoBox={props.setInfoBox}
                     likedList={props.likedList}
                     addLiked={props.addLiked}
                     cancelLiked={props.cancelLiked}
@@ -111,7 +110,7 @@ function YearList(props) {
       let b = props.yearListRefs[props.minYear].current.getBoundingClientRect();
       let c = a * b.height;
       let d = Math.floor(((b.bottom - 100) / c) * 100);
-      props.setVertical(d);
+      props.setPercentValue(d);
     }
     console.log("...scroll...");
   }

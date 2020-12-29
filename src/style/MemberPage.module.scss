@@ -4,8 +4,39 @@
   margin: auto 0;
   display: flex;
   .navBtn {
-    @include navBtn;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    // flex-direction: column;
+    // text-align: left;
+    width: 180px;
+    margin: 10px 20px;
+    padding: 10px;
+    font-weight: 500;
+    font-size: 1rem;
+    color: #06466b;
+    font-weight: 500;
+    font-size: 1rem;
+    color: $color-blue;
+  }
+  .backBtn {
+    cursor: pointer;
     // border: 1px solid red;
+    @include centerPosition;
+    margin-left: 80px;
+    .arrow {
+      transform: rotate(180deg);
+      width: 25px;
+      height: 25px;
+      fill: $color-blue;
+      transition: all 0.3s ease;
+    }
+  }
+  .backBtn:hover {
+    .arrow {
+      fill: $color-gold;
+      transition: all 0.3s ease;
+    }
   }
 }
 
@@ -23,9 +54,23 @@
     justify-content: center;
     // display: flex;
     // flex-flow: row wrap;
+    .headline {
+      border-bottom: 1px solid $color-blue;
+      margin: 20px;
+      padding: 10px 0;
+      //  padding-left: 30px;
+      display: flex;
+      justify-content: space-between;
+
+      span {
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: $color-blue;
+      }
+    }
     .cardBox {
       //  margin: 0 auto;
-      // border: 1px solid green;
+      //  border: 1px solid green;
       display: flex;
       flex-flow: row wrap;
       justify-content: center;
@@ -66,7 +111,8 @@
             bottom: 6px;
             right: 6px;
             fill: $color-gold;
-            filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.3));
+            stroke: rgba(255, 255, 255, 0.75);
+            filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.5));
           }
         }
         .basicInfo {

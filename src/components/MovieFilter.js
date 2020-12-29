@@ -53,7 +53,7 @@ function MovieFilter(props) {
 
     arr[order] = btnSelect;
     props.setlistState(arr);
-    props.setVertical(100);
+    props.setPercentValue(100);
     props.setScroll(true);
   }
 

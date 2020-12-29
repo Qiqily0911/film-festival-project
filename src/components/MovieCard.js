@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "../style/MovieCard.module.scss";
 import { ReactComponent as Bookmark } from "../image/icon/add.svg";
+import { ReactComponent as Nopic } from "../image/icon/no-pic.svg";
 // import { firestore } from "../config";
 // const movieLiked = firestore.collection("movie_liked");
 
@@ -52,12 +53,12 @@ function MovieCard(props) {
         }
 
         Promise.all([
-          props.tmdbApi("", movieId),
-          props.tmdbApi("/videos", movieId),
-          props.tmdbApi("/images", movieId),
-          props.tmdbApi("/credits", movieId),
+          props.tmdbApi("movie", "", movieId),
+          props.tmdbApi("movie", "/videos", movieId),
+          props.tmdbApi("movie", "/images", movieId),
+          props.tmdbApi("movie", "/credits", movieId),
           props.movie_id !== "" ? props.omdbApi(props.listData.movie_id) : "",
-          props.tmdbApi("/translations", movieId),
+          props.tmdbApi("movie", "/translations", movieId),
         ]).then((arr) => {
           props.setMovieData({
             ...props.movieData,
@@ -71,8 +72,6 @@ function MovieCard(props) {
           });
           //  console.log(arr[5]);
         });
-
-        props.setInfoBox(true);
 
         // FIXME: can work but slow
         //  props.imdbRating(movieId);
@@ -98,7 +97,8 @@ function MovieCard(props) {
         props.listData.poster_path === undefined ? (
           // if poster_path was null
           <div className={styles.noPoster}>
-            <p>Poster not found</p>
+            {/* <p>Poster not found</p> */}
+            <Nopic />
           </div>
         ) : (
           // if data has poster_path, then render the picture

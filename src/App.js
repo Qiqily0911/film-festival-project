@@ -1,26 +1,17 @@
-// style
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./style/App.module.scss";
-// data json
-import { InitListState } from "./data/BtnData";
-
-// components
+import { apiKey, omdbKey, firestore } from "./config";
+import { AuthProvider } from "./contexts/AuthContexts";
+import ControlSilder from "./components/ControlSlider";
 import YearList from "./components/YearList";
 import MovieInfo from "./components/MovieInfo";
 import PrizeInfo from "./components/PrizeInfo";
 import MovieFilter from "./components/MovieFilter";
 import MemberBtn from "./components/MemberBtn";
 import { MemberNav, MemberPage } from "./components/MemberPage";
-import ControlSilder from "./components/ControlSlider";
-import React, { useState, useEffect, useRef } from "react";
-//config and firebase
-import { apiKey, omdbKey, firestore } from "./config";
-import { AuthProvider } from "./contexts/AuthContexts";
+import { InitListState } from "./data/BtnData";
 import { ReactComponent as Logo } from "./image/logo-2.svg";
-
-// import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-// import * as firebase from "firebase";
-// import "firebase/auth";
-// import "firebase/firestore";
+import { ReactComponent as MainLogo } from "./image/logo.svg";
 
 function App() {
   const [movieData, setMovieData] = useState({
@@ -39,6 +30,7 @@ function App() {
     person: "",
   });
 
+  const [welcomeOpen, setWelcome] = useState(true);
   const [imdbSpan, setRating] = useState("");
 
   const [list, setList] = useState([]);
@@ -49,7 +41,7 @@ function App() {
   const [loadingOpen, setLoadingOpen] = useState(false);
 
   // init control-slider
-  const [vertical, setVertical] = useState(100);
+  const [percentValue, setPercentValue] = useState(100);
   const [minYear, setMin] = useState(1928);
   const [maxYear, setMax] = useState(2020);
   const [isScroll, setScroll] = useState(true);
@@ -62,9 +54,10 @@ function App() {
   const movieInfoEl = useRef(null);
   const crewsEl = useRef(null);
   const infoWrap = useRef(null);
+  const welcome = useRef(null);
 
   // switch of infoBox
-  const [infoBoxState, setInfoBox] = useState(false);
+
   const [prizeBoxState, setprizeBox] = useState(false);
 
   const [memberPage, setMemberPage] = useState(false);
@@ -113,13 +106,11 @@ function App() {
           yearListRefs[minYear] !== undefined &&
           yearListRefs[minYear].current !== null
         ) {
-          // console.log(yearListRefs[minYear]);
           let a = maxYear - minYear + 1;
-          // console.log(yearListRefs[minYear].current);
           let b = yearListRefs[minYear].current.getBoundingClientRect();
           let c = a * b.height;
           let d = Math.floor(((b.bottom - 100) / c) * 100);
-          setVertical(d);
+          setPercentValue(d);
         }
       }
     }
@@ -169,12 +160,12 @@ function App() {
     };
 
     Promise.all([
-      tmdbApi("", 496243),
-      tmdbApi("/videos", 496243),
-      tmdbApi("/images", 496243),
-      tmdbApi("/credits", 496243),
+      tmdbApi("movie", "", 496243),
+      tmdbApi("movie", "/videos", 496243),
+      tmdbApi("movie", "/images", 496243),
+      tmdbApi("movie", "/credits", 496243),
       omdbApi("tt6751668"),
-      tmdbApi("/translations", 496243),
+      tmdbApi("movie", "/translations", 496243),
     ]).then((arr) => {
       setMovieData({
         ...movieData,
@@ -190,7 +181,6 @@ function App() {
     });
   }, []);
 
-  // put movies to the correspondense year box
   function fillYearList(yearList, fes, prize, order) {
     if (fes !== undefined) {
       let data = fes.filter((obj) => obj.prize === prize);
@@ -277,28 +267,13 @@ function App() {
   }
 
   //  get tmdb movie detail & video
-  function tmdbApi(type, movie_id) {
+  function tmdbApi(category, type, movie_id) {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open(
         "GET",
-        `https://api.themoviedb.org/3/movie/${movie_id}${type}?api_key=${apiKey}`
+        `https://api.themoviedb.org/3/${category}/${movie_id}${type}?api_key=${apiKey}`
       );
-      xhr.onload = () => resolve(JSON.parse(xhr.responseText));
-      xhr.onerror = () => reject(xhr.statusText);
-      xhr.send();
-    });
-  }
-
-  //  get tmdb crew detail
-  function tmdbCrewApi(type, personId) {
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.open(
-        "GET",
-        `https://api.themoviedb.org/3/person/${personId}${type}?api_key=${apiKey}`
-      );
-
       xhr.onload = () => resolve(JSON.parse(xhr.responseText));
       xhr.onerror = () => reject(xhr.statusText);
       xhr.send();
@@ -367,8 +342,37 @@ function App() {
     setMovieData(value);
   };
 
+  const welcomePage = () => {
+    const closeClass = welcomeOpen ? "" : styles.welcomeClose;
+
+    return (
+      <div className={`${styles.welcome} ${closeClass}`} ref={welcome}>
+        <div className={styles.mainLogo}>
+          <MainLogo />
+        </div>
+        <div className={styles.text}>
+          <div>
+            結合電影＋時間軸 <br />
+            探索影展獲獎好片
+          </div>
+          <div
+            className={styles.enterBtn}
+            onClick={() => {
+              setWelcome(false);
+              setTimeout(() => (welcome.current.style.display = "none"), 1000);
+            }}
+          >
+            開始探索
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className={styles.outter}>
+      {/* {welcomeOpen ? welcomePage() : ""} */}
+      {welcomePage()}
       <aside>
         <div
           className={styles.logo}
@@ -382,8 +386,8 @@ function App() {
           <div className={styles.slider}></div>
         ) : (
           <ControlSilder
-            vertical={vertical}
-            setVertical={setVertical}
+            percentValue={percentValue}
+            setPercentValue={setPercentValue}
             yearListRefs={yearListRefs}
             minYear={minYear}
             maxYear={maxYear}
@@ -409,7 +413,7 @@ function App() {
                 yearListRefs={yearListRefs}
                 listState={listState}
                 setlistState={setlistState}
-                setVertical={setVertical}
+                setPercentValue={setPercentValue}
                 setScroll={setScroll}
               />
             )}
@@ -421,7 +425,6 @@ function App() {
                 setUserId={setUserId}
                 memberPage={memberPage}
                 setMemberPage={setMemberPage}
-                setInfoBox={setInfoBox}
                 setprizeBox={setprizeBox}
               />
             </AuthProvider>
@@ -437,7 +440,6 @@ function App() {
                   cancelLiked={cancelLiked}
                   tmdbApi={tmdbApi}
                   omdbApi={omdbApi}
-                  setInfoBox={setInfoBox}
                   personList={personList}
                   setMovieData={setMovieData}
                   setLoadingOpen={setLoadingOpen}
@@ -464,11 +466,10 @@ function App() {
                   minYear={minYear}
                   setMax={setMax}
                   maxYear={maxYear}
-                  setVertical={setVertical}
-                  vertical={vertical}
+                  setPercentValue={setPercentValue}
+                  percentValue={percentValue}
                   isScroll={isScroll}
                   userId={userId}
-                  setInfoBox={setInfoBox}
                   likedList={likedList}
                   addLiked={addLiked}
                   cancelLiked={cancelLiked}
@@ -482,9 +483,7 @@ function App() {
                   omdbApi={omdbApi}
                   minYear={minYear}
                   maxYear={maxYear}
-                  vertical={vertical}
-                  infoBoxState={infoBoxState}
-                  setInfoBox={setInfoBox}
+                  percentValue={percentValue}
                   prizeBoxState={prizeBoxState}
                   setprizeBox={setprizeBox}
                   ordinalSuffix={ordinalSuffix}
@@ -492,7 +491,7 @@ function App() {
                   setMovieData={handlemovieproperty}
                   listState={listState}
                   setlistState={setlistState}
-                  setVertical={setVertical}
+                  setPercentValue={setPercentValue}
                   setScroll={setScroll}
                   loadingOpen={loadingOpen}
                   setLoadingOpen={setLoadingOpen}
@@ -510,10 +509,8 @@ function App() {
               crewsEl={crewsEl}
               infoWrap={infoWrap}
               imdbSpan={imdbSpan}
-              tmdbCrewApi={tmdbCrewApi}
+              // tmdbApi={tmdbApi}
               ordinalSuffix={ordinalSuffix}
-              infoBoxState={infoBoxState}
-              setInfoBox={setInfoBox}
               prizeBoxState={prizeBoxState}
               setprizeBox={setprizeBox}
               userId={userId}

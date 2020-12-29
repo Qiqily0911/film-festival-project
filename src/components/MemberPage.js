@@ -2,17 +2,18 @@ import React, { useState, useEffect } from "react";
 import styles from "../style/MemberPage.module.scss";
 import MovieCard from "./MovieCard";
 import { ReactComponent as Star } from "../image/icon/star.svg";
+import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
 
 export function MemberNav(props) {
   return (
     <div className={styles.navBox}>
       <div
-        className={styles.navBtn}
+        className={styles.backBtn}
         onClick={() => {
           props.setMemberPage(false);
         }}
       >
-        Back
+        <Arrow className={styles.arrow} />
       </div>
       <div className={styles.navBtn}>我的收藏夾</div>
     </div>
@@ -22,7 +23,10 @@ export function MemberPage(props) {
   return (
     <div className={styles.outter}>
       <div className={styles.innerBox}>
-        <div className={styles.headline}>收藏的電影</div>
+        <div className={styles.headline}>
+          <span>收藏的電影</span>
+          {/* <p>{props.likedList.length}</p> */}
+        </div>
         <div className={styles.cardBox}>
           {/* {console.log(props.likedList)} */}
           {props.likedList &&
@@ -54,7 +58,6 @@ export function MemberPage(props) {
                     cancelLiked={props.cancelLiked}
                     tmdbApi={props.tmdbApi}
                     omdbApi={props.omdbApi}
-                    setInfoBox={props.setInfoBox}
                     renewData={props.renewData}
                     setLoadingOpen={props.setLoadingOpen}
                     movieInfoEl={props.movieInfoEl}
@@ -71,7 +74,10 @@ export function MemberPage(props) {
           <div className={styles.blank}></div>
           <div className={styles.blank}></div>
         </div>
-        <div className={styles.headline}>喜愛的演員及導演</div>
+        <div className={styles.headline}>
+          <span>喜愛的演員及導演</span>
+          {/* <p>{props.personList.length}</p> */}
+        </div>
         <div className={styles.cardBox}>
           {props.personList
             .sort((a, b) => (a.time.seconds > b.time.seconds ? 1 : -1))

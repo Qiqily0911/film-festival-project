@@ -5,7 +5,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding-right: 20px;
+  padding-right: 3%;
   text-align: center;
   font-weight: 500;
   color: $color-blue;
@@ -14,27 +14,45 @@
     @include centerPosition;
     .userName {
       cursor: pointer;
-
       @include centerPosition;
+      transition: all 0.3s ease;
       width: 150px;
-      margin: 10px;
-      p {
-        text-decoration: dashed;
-      }
+      //  margin: 10px;
+      //  p {
+      //     // text-decoration: dashed;
+      //     // padding-bottom: 5px;
+      //     height: 30px;
+      //     border-bottom: 1px solid $color-blue;
+      //  }
+    }
+
+    .userName:hover {
+      color: $color-gold;
+      transition: all 0.3s ease;
     }
   }
 
   .loginWrap {
+    margin-left: 20px;
     @include centerPosition;
-
+    cursor: pointer;
+    transition: all 0.3s ease;
     .loginIcon {
       margin: 0 10px;
-      cursor: pointer;
       width: 35px;
       height: 35px;
       svg {
         fill: $color-blue;
+        transition: all 0.3s ease;
       }
+    }
+  }
+  .loginWrap:hover {
+    color: $color-gold;
+    transition: all 0.3s ease;
+    svg {
+      fill: $color-gold;
+      transition: all 0.3s ease;
     }
   }
 }

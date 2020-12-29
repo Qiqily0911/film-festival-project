@@ -41,6 +41,18 @@
       p {
         color: white;
       }
+      svg {
+        fill: rgb(207, 207, 207);
+        width: 120px;
+        height: 120px;
+        transition: all 0.5s ease;
+      }
+    }
+    .noPoster:hover {
+      svg {
+        fill: rgb(156, 156, 156);
+        transition: all 0.5s ease;
+      }
     }
   }
 
@@ -75,6 +87,7 @@
     @include bookmark;
     // @include shadow;
     fill: $color-gold;
+    stroke: rgba(255, 255, 255, 0.75);
   }
   .cancelBtn {
     @include bookmark;
@@ -112,12 +125,10 @@
   }
 }
 .notFound {
-  //  @include card;
   width: 180px;
   height: 270px;
-  //  border: 2px dashed rgb(224, 224, 224);
+
   background-color: rgb(240, 240, 240);
-  //  padding: 10px;
 }
 
 // @include shadow;

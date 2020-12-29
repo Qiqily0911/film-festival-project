@@ -14,10 +14,10 @@ function ControlSilder(props) {
     props.setScroll(false);
   }
   function handleChangeVertical(value) {
-    if (value !== props.vertical) {
-      props.setVertical(value);
+    if (value !== props.percentValue) {
+      props.setPercentValue(value);
     }
-    let num = formatPc(props.vertical);
+    let num = formatPc(props.percentValue);
     if (refs[num] !== null) {
       refs[num].current.scrollIntoView({
         behavior: "smooth",
@@ -51,10 +51,10 @@ function ControlSilder(props) {
         <div className={styles.yearText}>{props.maxYear}</div>
         <Slider
           //   FIXME: fix when listState===undefined can't grab the slider
-          value={props.vertical}
+          value={props.percentValue}
           orientation="vertical"
           labels={verticalLabels}
-          handleLabel={formatPc(props.vertical)}
+          handleLabel={formatPc(props.percentValue)}
           format={formatPc}
           onChangeStart={handleChangeStart}
           onChange={handleChangeVertical}
