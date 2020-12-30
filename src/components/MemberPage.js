@@ -3,6 +3,7 @@ import styles from "../style/MemberPage.module.scss";
 import MovieCard from "./MovieCard";
 import { ReactComponent as Star } from "../image/icon/star.svg";
 import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
+import { cancelLiked } from "../utils";
 
 export function MemberNav(props) {
   return (
@@ -55,14 +56,8 @@ export function MemberPage(props) {
                     isLiked={true}
                     memberPage={props.memberPage}
                     likedList={props.likedList}
-                    cancelLiked={props.cancelLiked}
-                    tmdbApi={props.tmdbApi}
-                    omdbApi={props.omdbApi}
                     renewData={props.renewData}
-                    setLoadingOpen={props.setLoadingOpen}
-                    movieInfoEl={props.movieInfoEl}
-                    crewsEl={props.crewsEl}
-                    infoWrap={props.infoWrap}
+                    resetInfoPosition={props.resetInfoPosition}
                   />
                 );
               })}
@@ -76,7 +71,6 @@ export function MemberPage(props) {
         </div>
         <div className={styles.headline}>
           <span>喜愛的演員及導演</span>
-          {/* <p>{props.personList.length}</p> */}
         </div>
         <div className={styles.cardBox}>
           {props.personList
@@ -89,7 +83,14 @@ export function MemberPage(props) {
                     src={`https://image.tmdb.org/t/p/w185${data.profile_path}`}
                   />
                   <Star
-                    onClick={(e) => props.cancelPerson(e, data.person_id)}
+                    onClick={(e) =>
+                      cancelLiked(
+                        e,
+                        props.personList,
+                        "person_liked",
+                        data.person_id
+                      )
+                    }
                   />
                 </div>
                 <div className={styles.basicInfo}>

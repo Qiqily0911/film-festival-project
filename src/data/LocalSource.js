@@ -1,4 +1,3 @@
-// import React, { Component } from "react";
 import oscar from "./Oscar_best_film.json";
 import cannes from "./CannesFilm.json";
 import berlin from "./BerlinFilm.json";
@@ -11,11 +10,19 @@ import { ReactComponent as BerlinLogo } from "../image/fes/berlin-festival.svg";
 import { ReactComponent as GoldenHorseLogo } from "../image/fes/golden-horse.svg";
 import { ReactComponent as VeniceLogo } from "../image/fes/venice-festival.svg";
 
-// import  OscarLogo  from "../image/fes/oscar.svg";
-// import  CannesLogo  from "../image/fes/cannes-festival.svg";
-// import  BerlinLogo  from "../image/fes/berlin-festival.svg";
-// import  GoldenHorseLogo  from "../image/fes/golden-horse.svg";
-// import  VeniceLogo  from "../image/fes/venice-festival.svg";
+export const InitMovieInfo = {
+  th: 72,
+  year: 2019,
+  prize: "palme_d_or",
+  film_name_zh: "寄生上流",
+  film_name_en: "Parasite",
+  atmovie_link: "http://app2.atmovies.com.tw/film/fpkr46751668/",
+  imdb_link: "https://www.imdb.com/title/tt6751668",
+  movie_id: "tt6751668",
+  poster_path: "/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg",
+  tmdb_id: 496243,
+  data_id: "cannes_01",
+};
 
 export const InitListState = [
   {
@@ -40,16 +47,6 @@ export const InitListState = [
     logo: CannesLogo,
     order: 1,
   },
-  // {
-  //    title: "柏林影展",
-  //    prize_zh: "金熊獎",
-  //    prize_name: "Golden Bear",
-  //    list_name: "berlin",
-  //    film_list: berlin,
-  //    prize: "golden_bear",
-  //    logo: BerlinLogo,
-  //    order: 2,
-  // },
   {
     title: "金馬影展",
     prize_zh: "最佳劇情片",

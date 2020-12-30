@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./style/App.module.scss";
-import { apiKey, omdbKey, firestore } from "./config";
+import { tmdbKey, omdbKey, firestore } from "./config";
 import { AuthProvider } from "./contexts/AuthContexts";
+import Welcome from "./components/Welcome";
 import ControlSilder from "./components/ControlSlider";
 import YearList from "./components/YearList";
 import MovieInfo from "./components/MovieInfo";
@@ -9,9 +10,9 @@ import PrizeInfo from "./components/PrizeInfo";
 import MovieFilter from "./components/MovieFilter";
 import MemberBtn from "./components/MemberBtn";
 import { MemberNav, MemberPage } from "./components/MemberPage";
-import { InitListState } from "./data/BtnData";
+import { InitMovieInfo, InitListState } from "./data/LocalSource";
 import { ReactComponent as Logo } from "./image/logo-2.svg";
-import { ReactComponent as MainLogo } from "./image/logo.svg";
+import { loadMovieData } from "./utils";
 
 function App() {
   const [movieData, setMovieData] = useState({
@@ -25,14 +26,7 @@ function App() {
     overview_translate: "",
   });
 
-  const [personData, setPersonData] = useState({
-    crew: "",
-    person: "",
-  });
-
   const [welcomeOpen, setWelcome] = useState(true);
-  const [imdbSpan, setRating] = useState("");
-
   const [list, setList] = useState([]);
   const [yearListRefs, setRefs] = useState("");
   const [listState, setlistState] = useState(InitListState);
@@ -41,6 +35,11 @@ function App() {
   const [loadingOpen, setLoadingOpen] = useState(false);
 
   // init control-slider
+
+  const [year, setYear] = useState({
+    min: 1928,
+    max: 2020,
+  });
   const [percentValue, setPercentValue] = useState(100);
   const [minYear, setMin] = useState(1928);
   const [maxYear, setMax] = useState(2020);
@@ -50,33 +49,22 @@ function App() {
   const [userData, setUserData] = useState("");
   const [userId, setUserId] = useState();
 
-  //  set ref of infoBox
   const movieInfoEl = useRef(null);
   const crewsEl = useRef(null);
   const infoWrap = useRef(null);
-  const welcome = useRef(null);
-
-  // switch of infoBox
 
   const [prizeBoxState, setprizeBox] = useState(false);
-
   const [memberPage, setMemberPage] = useState(false);
-
-  const movieLiked = firestore.collection("movie_liked");
   const [likedList, setLikedList] = useState();
-
-  const personLiked = firestore.collection("person_liked");
   const [personList, setPersonList] = useState();
 
   useEffect(() => {
     const yearList = [];
-    //  根據 listState 去把 yearList 給做出來
     for (let i = 2020; i >= 1928; i--) {
       let item = { year: i, list: [[], [], []] };
       yearList.push(item);
     }
 
-    // 設定年份欄位的參考
     const refs = yearList.reduce((acc, value) => {
       acc[value.year] = React.createRef();
       return acc;
@@ -91,10 +79,8 @@ function App() {
 
     setSilderValue();
 
-    // prevent scroll event when no film list
     for (let i = 0; i < listState.length; i++) {
       if (listState[i].film_list !== undefined) {
-        // console.log("scroll");
         setScroll(true);
         return;
       }
@@ -103,11 +89,11 @@ function App() {
     function setSilderValue() {
       if (yearListRefs !== null) {
         if (
-          yearListRefs[minYear] !== undefined &&
-          yearListRefs[minYear].current !== null
+          yearListRefs[year.min] !== undefined &&
+          yearListRefs[year.min].current !== null
         ) {
-          let a = maxYear - minYear + 1;
-          let b = yearListRefs[minYear].current.getBoundingClientRect();
+          let a = year.max - year.min + 1;
+          let b = yearListRefs[year.min].current.getBoundingClientRect();
           let c = a * b.height;
           let d = Math.floor(((b.bottom - 100) / c) * 100);
           setPercentValue(d);
@@ -116,69 +102,30 @@ function App() {
     }
 
     setScroll(false);
-    console.log("can't scroll");
   }, [listState]);
 
-  // 取得使用者收藏清單，並設訂變數 likedList
   useEffect(() => {
     if (userId) {
-      movieLiked.where("user", "==", userId).onSnapshot((onSnapshot) => {
-        let arr = [];
-        onSnapshot.forEach((doc) => {
-          arr.push(doc.data());
-        });
-        setLikedList(arr);
-      });
+      function userLikedList(firebaseCollection, listHook) {
+        firestore
+          .collection(firebaseCollection)
+          .where("user", "==", userId)
+          .onSnapshot((onSnapshot) => {
+            let arr = [];
+            onSnapshot.forEach((doc) => {
+              arr.push(doc.data());
+            });
+            listHook(arr);
+          });
+      }
 
-      //  喜歡的演員或導演清單
-      personLiked.where("user", "==", userId).onSnapshot((onSnapshot) => {
-        let arr = [];
-        onSnapshot.forEach((doc) => {
-          arr.push(doc.data());
-        });
-        setPersonList(arr);
-      });
+      userLikedList("movie_liked", setLikedList);
+      userLikedList("person_liked", setPersonList);
     }
   }, [userId]);
 
-  // 初始畫面載入電影
   useEffect(() => {
-    console.log(likedList);
-
-    let data = {
-      th: 72,
-      year: 2019,
-      prize: "palme_d_or",
-      film_name_zh: "寄生上流",
-      film_name_en: "Parasite",
-      atmovie_link: "http://app2.atmovies.com.tw/film/fpkr46751668/",
-      imdb_link: "https://www.imdb.com/title/tt6751668",
-      movie_id: "tt6751668",
-      poster_path: "/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg",
-      tmdb_id: 496243,
-      data_id: "cannes_01",
-    };
-
-    Promise.all([
-      tmdbApi("movie", "", 496243),
-      tmdbApi("movie", "/videos", 496243),
-      tmdbApi("movie", "/images", 496243),
-      tmdbApi("movie", "/credits", 496243),
-      omdbApi("tt6751668"),
-      tmdbApi("movie", "/translations", 496243),
-    ]).then((arr) => {
-      setMovieData({
-        ...movieData,
-        detail: arr[0],
-        video: arr[1],
-        images: arr[2],
-        credits: arr[3],
-        localData: data,
-        omdbData: arr[4],
-        overview_translate: arr[5],
-      });
-      console.log("default data info");
-    });
+    loadMovieData(496243, "tt6751668", InitMovieInfo, setMovieData);
   }, []);
 
   function fillYearList(yearList, fes, prize, order) {
@@ -204,175 +151,22 @@ function App() {
     }
   }
 
-  function addLiked(e, obj) {
-    movieLiked
-      .add(obj)
-      .then((res) => {
-        movieLiked.doc(res.id).set({ id: res.id }, { merge: true });
-      })
-      .then(() => {
-        console.log("add movie success!");
+  function resetInfoPosition() {
+    infoWrap.current.style.overflow = "hidden";
+    setLoadingOpen(true);
+
+    if (movieInfoEl.current && crewsEl.current !== null) {
+      crewsEl.current.scrollLeft = 0;
+      movieInfoEl.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
       });
-
-    e.stopPropagation();
-    console.log("===========");
-  }
-
-  function addPerson(e, obj) {
-    personLiked
-      .add(obj)
-      .then((res) => {
-        personLiked.doc(res.id).set({ id: res.id }, { merge: true });
-      })
-      .then(() => {
-        console.log("add person success!");
-      });
-
-    e.stopPropagation();
-    console.log("===========");
-  }
-
-  // 取消收藏
-  function cancelLiked(e, movieId) {
-    for (let i = 0; i < likedList.length; i++) {
-      if (movieId === likedList[i].tmdb_id) {
-        movieLiked
-          .doc(likedList[i].id)
-          .delete()
-          .then(() => {
-            console.log("delete data successful");
-            e.stopPropagation();
-          });
-      }
     }
-
-    e.stopPropagation();
   }
-
-  // 取消收藏人物
-  function cancelPerson(e, personId) {
-    for (let i = 0; i < personList.length; i++) {
-      if (personId === personList[i].person_id) {
-        personLiked
-          .doc(personList[i].id)
-          .delete()
-          .then(() => {
-            console.log("delete data successful");
-            e.stopPropagation();
-          });
-      }
-    }
-
-    e.stopPropagation();
-  }
-
-  //  get tmdb movie detail & video
-  function tmdbApi(category, type, movie_id) {
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.open(
-        "GET",
-        `https://api.themoviedb.org/3/${category}/${movie_id}${type}?api_key=${apiKey}`
-      );
-      xhr.onload = () => resolve(JSON.parse(xhr.responseText));
-      xhr.onerror = () => reject(xhr.statusText);
-      xhr.send();
-    });
-  }
-
-  //  get get imdb rating from omdb APi
-  function omdbApi(movie_id) {
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.open(
-        "GET",
-        `https://www.omdbApi.com/?apikey=${omdbKey}&i=${movie_id}`,
-        true
-      );
-      xhr.onload = () => resolve(JSON.parse(xhr.responseText));
-      xhr.onerror = () => reject(xhr.statusText);
-
-      xhr.send();
-    });
-  }
-
-  //  get get imdb rating from imdb page
-  function imdbRating(movie_id) {
-    const xhr = new XMLHttpRequest();
-    xhr.open(
-      "GET",
-      `https://cors-anywhere.herokuapp.com/https://www.imdb.com/title/${movie_id}/?ref_=tt_sims_tt`,
-      true
-    );
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-        let doc = new DOMParser().parseFromString(
-          xhr.responseText,
-          "text/html"
-        );
-        let elements = [...doc.getElementsByTagName("span")];
-        let a = elements.filter((x) => !!x.getAttribute("itemprop"));
-        setRating([a[0].innerText, a[2].innerText]);
-        // setMovieData({
-        //    ...movieData,
-        //    imdbRating: [a[0].innerText, a[2].innerText],
-        // });
-      }
-    };
-    xhr.send();
-  }
-
-  function ordinalSuffix(i) {
-    var j = i % 10,
-      k = i % 100;
-    if (j === 1 && k !== 11) {
-      return i + "st";
-    }
-    if (j === 2 && k !== 12) {
-      return i + "nd";
-    }
-    if (j === 3 && k !== 13) {
-      return i + "rd";
-    }
-    return i + "th";
-  }
-
-  const handlemovieproperty = (value) => {
-    // console.log(value);
-    setMovieData(value);
-  };
-
-  const welcomePage = () => {
-    const closeClass = welcomeOpen ? "" : styles.welcomeClose;
-
-    return (
-      <div className={`${styles.welcome} ${closeClass}`} ref={welcome}>
-        <div className={styles.mainLogo}>
-          <MainLogo />
-        </div>
-        <div className={styles.text}>
-          <div>
-            結合電影＋時間軸 <br />
-            探索影展獲獎好片
-          </div>
-          <div
-            className={styles.enterBtn}
-            onClick={() => {
-              setWelcome(false);
-              setTimeout(() => (welcome.current.style.display = "none"), 1000);
-            }}
-          >
-            開始探索
-          </div>
-        </div>
-      </div>
-    );
-  };
 
   return (
     <div className={styles.outter}>
-      {/* {welcomeOpen ? welcomePage() : ""} */}
-      {welcomePage()}
+      {/* <Welcome welcomeOpen={welcomeOpen} welcomeRef={welcomeRef} setWelcome={setWelcome} /> */}
       <aside>
         <div
           className={styles.logo}
@@ -389,14 +183,14 @@ function App() {
             percentValue={percentValue}
             setPercentValue={setPercentValue}
             yearListRefs={yearListRefs}
+            year={year}
+            setYear={setYear}
             minYear={minYear}
             maxYear={maxYear}
             setScroll={setScroll}
             isScroll={isScroll}
           />
         )}
-
-        {/* {console.log("=========== [01] control slider")} */}
       </aside>
       <main>
         <div className={styles.container}>
@@ -437,16 +231,9 @@ function App() {
                   userData={userData}
                   memberPage={memberPage}
                   likedList={likedList}
-                  cancelLiked={cancelLiked}
-                  tmdbApi={tmdbApi}
-                  omdbApi={omdbApi}
                   personList={personList}
                   setMovieData={setMovieData}
-                  setLoadingOpen={setLoadingOpen}
-                  movieInfoEl={movieInfoEl}
-                  crewsEl={crewsEl}
-                  infoWrap={infoWrap}
-                  cancelPerson={cancelPerson}
+                  resetInfoPosition={resetInfoPosition}
                 />
               </>
             ) : (
@@ -455,13 +242,12 @@ function App() {
                   setMovieData={setMovieData}
                   movieData={movieData}
                   prize={prize}
-                  tmdbApi={tmdbApi}
-                  omdbApi={omdbApi}
-                  imdbRating={imdbRating}
                   yearlist={list}
                   yearListRefs={yearListRefs}
                   listState={listState}
                   setlistState={setlistState}
+                  year={year}
+                  setYear={setYear}
                   setMin={setMin}
                   minYear={minYear}
                   setMax={setMax}
@@ -471,56 +257,38 @@ function App() {
                   isScroll={isScroll}
                   userId={userId}
                   likedList={likedList}
-                  addLiked={addLiked}
-                  cancelLiked={cancelLiked}
-                  setLoadingOpen={setLoadingOpen}
-                  movieInfoEl={movieInfoEl}
-                  crewsEl={crewsEl}
-                  infoWrap={infoWrap}
+                  resetInfoPosition={resetInfoPosition}
                 />
                 <PrizeInfo
-                  tmdbApi={tmdbApi}
-                  omdbApi={omdbApi}
+                  year={year}
+                  setYear={setYear}
                   minYear={minYear}
                   maxYear={maxYear}
                   percentValue={percentValue}
                   prizeBoxState={prizeBoxState}
                   setprizeBox={setprizeBox}
-                  ordinalSuffix={ordinalSuffix}
                   movieData={movieData}
-                  setMovieData={handlemovieproperty}
+                  setMovieData={setMovieData}
                   listState={listState}
                   setlistState={setlistState}
                   setPercentValue={setPercentValue}
                   setScroll={setScroll}
                   loadingOpen={loadingOpen}
-                  setLoadingOpen={setLoadingOpen}
-                  movieInfoEl={movieInfoEl}
-                  crewsEl={crewsEl}
-                  infoWrap={infoWrap}
+                  resetInfoPosition={resetInfoPosition}
                 />
               </>
             )}
             <MovieInfo
               movieData={movieData}
-              personData={personData}
-              setPersonData={setPersonData}
+              resetInfoPosition={resetInfoPosition}
               movieInfoEl={movieInfoEl}
               crewsEl={crewsEl}
               infoWrap={infoWrap}
-              imdbSpan={imdbSpan}
-              // tmdbApi={tmdbApi}
-              ordinalSuffix={ordinalSuffix}
               prizeBoxState={prizeBoxState}
               setprizeBox={setprizeBox}
               userId={userId}
               likedList={likedList}
-              addLiked={addLiked}
-              cancelLiked={cancelLiked}
-              tmdbApi={tmdbApi}
               personList={personList}
-              addPerson={addPerson}
-              cancelPerson={cancelPerson}
               memberPage={memberPage}
               loadingOpen={loadingOpen}
               setLoadingOpen={setLoadingOpen}

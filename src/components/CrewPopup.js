@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styles from "../style/Crew.module.scss";
-import CrewMovieCard from "./CrewCard";
+import CrewMovieCard from "./CrewMovieCard";
 import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
 import { ReactComponent as Star } from "../image/icon/star.svg";
 import Loading from "./Loading";
-// import { firestore } from "../config";
+import { addLiked, cancelLiked, overviewChinese } from "../utils";
 
-function Crew(props) {
-  // console.log(props.personData);
-  const [castData, setCastData] = useState("");
-  const [crewData, setCrewData] = useState("");
-  const [personData, setPersonData] = useState("");
+function CrewPopup(props) {
   const [personNameCh, setPersonNameCh] = useState("");
   const [crewMovieData, setCrewMovieData] = useState({
     detail: "",
@@ -18,25 +14,19 @@ function Crew(props) {
   });
   const [infoOpen, setInfoOpen] = useState(false);
 
-  let crewDetial = props.personData.crew;
-  let personDetail = props.personData.person;
-
-  useEffect(() => {
-    if (crewDetial !== undefined && personDetail !== undefined) {
-      setCastData(crewDetial.cast);
-      setCrewData(crewDetial.crew);
-      setPersonData(personDetail);
-      setTimeout(() => {
-        props.setCrewLoading(false);
-      }, 1000);
-    }
-  }, [props.personData]);
+  let crewData =
+    props.personData &&
+    props.personData.crew.crew.filter((data) => data.job === "Director");
+  let castData = props.personData && props.personData.crew.cast;
+  let personData = props.personData && props.personData.person;
+  setTimeout(() => {
+    props.setCrewLoading(false);
+  }, 1000);
 
   useEffect(() => {
     if (personData !== "" && personData["also_known_as"] !== undefined) {
       let a = personData["also_known_as"];
 
-      //  console.log(a);
       setPersonNameCh("");
       for (let i = 0; i < a.length; i++) {
         if (a[i].match(/[\u3400-\u9FBF]/)) {
@@ -46,26 +36,6 @@ function Crew(props) {
       }
     }
   }, [personData]);
-
-  //  中文簡介
-  const overviewData = () => {
-    // let dataId = props.movieData.localData.data_id;
-
-    if (crewMovieData.overview_translate !== "") {
-      let version = crewMovieData.overview_translate.translations;
-
-      let translateData = "";
-      version.forEach((item) => {
-        if (item.iso_3166_1 === "CN") {
-          translateData = item.data;
-        } else if (item.iso_3166_1 === "TW") {
-          translateData = item.data;
-        }
-      });
-
-      return translateData;
-    }
-  };
 
   const infoBox = (
     <div className={styles.infoBox} style={{ right: infoOpen ? "0" : "-30%" }}>
@@ -87,15 +57,20 @@ function Crew(props) {
       >
         <div>IMDB</div>
       </a>
+
       <div className={styles.filmTitle}>
-        {overviewData() && overviewData().title}
+        {crewMovieData.overview_translate !== "" &&
+          overviewChinese(crewMovieData).title}
       </div>
       <div className={styles.filmTitle}>{crewMovieData.detail.title}</div>
       <div className={styles.filmTitle2}>
         {crewMovieData.detail.original_title}
       </div>
       <div className={styles.overview}>
-        <p>{overviewData() && overviewData().overview}</p>
+        <p>
+          {crewMovieData.overview_translate !== "" &&
+            overviewChinese(crewMovieData).overview}
+        </p>
         <p>{crewMovieData.detail.overview}</p>
       </div>
     </div>
@@ -115,8 +90,38 @@ function Crew(props) {
   const isLiked =
     props.personList &&
     props.personList.find((item) => item.person_id === personData.id);
-  console.log(props.personList);
-  console.log(isLiked);
+
+  const crewMovieCards = (title, crewArr) => {
+    let newArr = [];
+    if (title === "Director") {
+      newArr = crewArr.filter((data) => data.job === "Director");
+    } else {
+      newArr = crewArr;
+    }
+    return (
+      <div className={styles.outter}>
+        <div className={styles.title}>{title}</div>
+        <div className={styles.inner}>
+          {newArr
+            ? newArr
+                .sort((a, b) =>
+                  a["release_date"] > b["release_date"] ? 1 : -1
+                )
+                .map((data, i) => (
+                  <CrewMovieCard
+                    key={i}
+                    data={data}
+                    likedList={props.likedList}
+                    setInfoOpen={setInfoOpen}
+                    userId={props.userId}
+                    setCrewMovieData={setCrewMovieData}
+                  />
+                ))
+            : ""}
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className={styles.crewDiv}>
@@ -140,8 +145,13 @@ function Crew(props) {
                     className={isLiked ? styles.addBtn : styles.cancelBtn}
                     onClick={(e) =>
                       isLiked
-                        ? props.cancelPerson(e, personData.id)
-                        : props.addPerson(e, obj)
+                        ? cancelLiked(
+                            e,
+                            props.personList,
+                            "person_liked",
+                            personData.id
+                          )
+                        : addLiked(e, "person_liked", obj)
                     }
                   />
                 </div>
@@ -164,59 +174,8 @@ function Crew(props) {
           </div>
 
           <div className={styles.movieBox}>
-            <div className={styles.outter}>
-              {/* Cast */}
-              <div className={styles.title}>Cast</div>
-              <div className={styles.inner}>
-                {castData
-                  ? castData
-                      //   .filter((data) => data.order === 0)
-                      .sort((a, b) =>
-                        a["release_date"] > b["release_date"] ? 1 : -1
-                      )
-                      .map((data, i) => (
-                        <CrewMovieCard
-                          key={i}
-                          data={data}
-                          likedList={props.likedList}
-                          setInfoOpen={setInfoOpen}
-                          userId={props.userId}
-                          cancelLiked={props.cancelLiked}
-                          addLiked={props.addLiked}
-                          setCrewMovieData={setCrewMovieData}
-                          tmdbApi={props.tmdbApi}
-                        />
-                      ))
-                  : ""}
-              </div>
-            </div>
-            <div className={styles.outter}>
-              {/* Director */}
-              <div className={styles.title}>Director</div>
-              <div className={styles.inner}>
-                {crewData
-                  ? crewData
-                      .filter((data) => data.job === "Director")
-                      .sort((a, b) =>
-                        a["release_date"] > b["release_date"] ? 1 : -1
-                      )
-                      .map((data, j) => (
-                        <CrewMovieCard
-                          key={j}
-                          data={data}
-                          likedList={props.likedList}
-                          setInfoOpen={setInfoOpen}
-                          userId={props.userId}
-                          cancelLiked={props.cancelLiked}
-                          addLiked={props.addLiked}
-                          setCrewMovieData={setCrewMovieData}
-                          crewMovieData={crewMovieData}
-                          tmdbApi={props.tmdbApi}
-                        />
-                      ))
-                  : ""}
-              </div>
-            </div>
+            {crewMovieCards("Director", crewData)}
+            {crewMovieCards("Cast", castData)}
           </div>
           {infoBox}
           {props.crewLoading ? (
@@ -232,4 +191,4 @@ function Crew(props) {
   );
 }
 
-export default Crew;
+export default CrewPopup;

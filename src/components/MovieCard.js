@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styles from "../style/MovieCard.module.scss";
+import { loadMovieData, addLiked, cancelLiked } from "../utils";
+
 import { ReactComponent as Bookmark } from "../image/icon/add.svg";
 import { ReactComponent as Nopic } from "../image/icon/no-pic.svg";
-// import { firestore } from "../config";
-// const movieLiked = firestore.collection("movie_liked");
 
 function MovieCard(props) {
-  // 加入收藏，在firestore加入資料
-
   let obj = {
     user: props.userId,
     movie_id: props.listData.movie_id,
@@ -37,56 +35,23 @@ function MovieCard(props) {
       style={{ margin: props.memberPage ? "20px" : "" }}
       key={props.listData.movie_id}
       onClick={() => {
-        let movieId = props.listData.tmdb_id;
-        // console.log(props.listData);
-
-        props.infoWrap.current.style.overflow = "hidden";
-        props.setLoadingOpen(true);
-
-        if (props.movieInfoEl.current && props.crewsEl.current !== null) {
-          props.crewsEl.current.scrollLeft = 0;
-          props.movieInfoEl.current.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
-          console.log("reset scroll");
-        }
-
-        Promise.all([
-          props.tmdbApi("movie", "", movieId),
-          props.tmdbApi("movie", "/videos", movieId),
-          props.tmdbApi("movie", "/images", movieId),
-          props.tmdbApi("movie", "/credits", movieId),
-          props.movie_id !== "" ? props.omdbApi(props.listData.movie_id) : "",
-          props.tmdbApi("movie", "/translations", movieId),
-        ]).then((arr) => {
-          props.setMovieData({
-            ...props.movieData,
-            detail: arr[0],
-            video: arr[1],
-            images: arr[2],
-            credits: arr[3],
-            localData: props.listData,
-            omdbData: arr[4],
-            overview_translate: arr[5],
-          });
-          //  console.log(arr[5]);
-        });
-
-        // FIXME: can work but slow
-        //  props.imdbRating(movieId);
+        let tmdbId = props.listData.tmdb_id;
+        let imdbId = props.listData.movie_id;
+        props.resetInfoPosition();
+        loadMovieData(tmdbId, imdbId, props.listData, props.setMovieData);
       }}
     >
-      {/* add to movie list */}
       {props.userId ? (
         <Bookmark
           className={props.isLiked ? styles.addBtn : styles.cancelBtn}
           data-id={props.listData.movie_id}
-          onClick={(e) =>
+          onClick={(e) => {
+            const tmdbId = props.listData.tmdb_id;
+
             props.isLiked
-              ? props.cancelLiked(e, props.listData.tmdb_id)
-              : props.addLiked(e, obj)
-          }
+              ? cancelLiked(e, props.likedList, "movie_liked", tmdbId)
+              : addLiked(e, "movie_liked", obj);
+          }}
         />
       ) : (
         ""
@@ -95,13 +60,10 @@ function MovieCard(props) {
       <div className={styles.posterBox}>
         {props.listData.poster_path === null ||
         props.listData.poster_path === undefined ? (
-          // if poster_path was null
           <div className={styles.noPoster}>
-            {/* <p>Poster not found</p> */}
             <Nopic />
           </div>
         ) : (
-          // if data has poster_path, then render the picture
           <img
             alt="poster"
             src={`https://image.tmdb.org/t/p/w342${props.listData.poster_path}`}
@@ -110,7 +72,6 @@ function MovieCard(props) {
       </div>
 
       <div className={styles.basicInfo}>
-        {/* <div className={styles.th}>{ordinalSuffix(props.th)}</div> */}
         <div>
           <div className={styles.titleEn}>{props.listData.film_name_en}</div>
           <div className={styles.titleZh}>{props.listData.film_name_zh}</div>

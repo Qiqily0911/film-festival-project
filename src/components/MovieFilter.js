@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "../style/MovieFilter.module.scss";
-import { BtnData } from "../data/BtnData";
+import { BtnData } from "../data/LocalSource";
 // import { CSSTransition } from "react-transition-group";
 
 function MovieFilter(props) {

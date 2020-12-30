@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { BtnData } from "../data/BtnData";
+import { BtnData } from "../data/LocalSource";
 import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
 import styles from "../style/PrizeInfo.module.scss";
+import { loadMovieData, ordinalSuffix } from "../utils";
 
 function PrizeInfo(props) {
   const year = Math.floor(
-    props.percentValue * ((props.maxYear - props.minYear) / 100) + props.minYear
+    props.percentValue * ((props.year.max - props.year.min) / 100) +
+      props.year.min
   );
   const [prizeArr, setPrizeArr] = useState([]);
 
@@ -39,58 +41,28 @@ function PrizeInfo(props) {
         order: index,
       };
 
-      let arr = [...props.listState];
-
-      // 選不同獎項
       for (let i = 0; i < props.listState.length; i++) {
         if (props.listState[i].film_list !== undefined) {
-          if (btnSelect.title === props.listState[i].title) {
-            if (btnSelect.prize === props.listState[i].prize) {
-              alert("選過囉");
-              return;
-            }
+          if (
+            btnSelect.title === props.listState[i].title &&
+            btnSelect.prize === props.listState[i].prize
+          ) {
+            alert("選過囉");
+            return;
           }
         }
       }
 
+      let arr = [...props.listState];
       arr[index] = btnSelect;
 
       props.setlistState(arr);
       props.setPercentValue(100);
     }
 
-    function loadData(movieId, imbdId, data) {
-      props.infoWrap.current.style.overflow = "hidden";
-      props.setLoadingOpen(true);
-
-      if (props.movieInfoEl.current && props.crewsEl.current !== null) {
-        props.crewsEl.current.scrollLeft = 0;
-        props.movieInfoEl.current.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
-        console.log("reset scroll");
-      }
-
-      Promise.all([
-        props.tmdbApi("movie", "", movieId),
-        props.tmdbApi("movie", "/videos", movieId),
-        props.tmdbApi("movie", "/images", movieId),
-        props.tmdbApi("movie", "/credits", movieId),
-        imbdId !== "" ? props.omdbApi(imbdId) : "",
-        props.tmdbApi("movie", "/translations", movieId),
-      ]).then((arr) => {
-        props.setMovieData({
-          ...props.movieData,
-          detail: arr[0],
-          video: arr[1],
-          images: arr[2],
-          credits: arr[3],
-          localData: data,
-          omdbData: arr[4],
-          overview_translate: arr[5],
-        });
-      });
+    function loadData(tmdbId, imdbId, data) {
+      props.resetInfoPosition();
+      loadMovieData(tmdbId, imdbId, data, props.setMovieData);
     }
 
     // 依據每筆資料的 data_id 找對應名稱
@@ -100,14 +72,12 @@ function PrizeInfo(props) {
     if (list.film_list !== undefined) {
       for (let i = 0; i < BtnData.length; i++) {
         if (list.list_name === BtnData[i].list_name) {
-          //  console.log(list.list_name);
           return (
             <div className={styles.prizeData} key={index}>
               <div className={styles.inner}>
                 <div className={styles.upper}>
                   <div className={styles.logo}>
                     <list.logo />
-                    {/* <a href={BtnData[i].web_link} target="_blank" rel="noreferrer"></a> */}
                   </div>
                   <div className={styles.title}>
                     <div>{BtnData[i].btnText}</div>
@@ -128,7 +98,7 @@ function PrizeInfo(props) {
                           >
                             <div>
                               <div className={styles.prizeName}>
-                                <div>{props.ordinalSuffix(data.th)}</div>
+                                <div>{ordinalSuffix(data.th)}</div>
                                 <div>{prizeName(i, data).subBtnName}</div>
                                 <div>{prizeName(i, data).subBtnText}</div>
                               </div>
@@ -166,7 +136,6 @@ function PrizeInfo(props) {
                       <span>Introduction</span>
                     </div>
                     <div>
-                      {/* {BtnData[i].description} */}
                       <div> {BtnData[i].description}</div>
                     </div>
                   </div>

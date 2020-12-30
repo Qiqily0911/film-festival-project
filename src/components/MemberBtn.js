@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "../style/MemberBtn.module.scss";
 import Login from "./Login";
 import { useAuth } from "../contexts/AuthContexts";
-// import { firestore } from "../config";
+
 import { ReactComponent as LoginIcon } from "../image/icon/login.svg";
 import { ReactComponent as LogoutIcon } from "../image/icon/logout.svg";
 

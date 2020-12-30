@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "../style/YearList.module.scss";
 import MovieCard from "./MovieCard";
-// import { nanoid } from "nanoid";
-// import { firestore } from "../config";
 
 function YearList(props) {
   const [showList, setShowList] = useState("");
@@ -54,21 +52,13 @@ function YearList(props) {
                     setMovieData={props.setMovieData}
                     movieData={props.movieData}
                     renewData={props.renewData}
-                    tmdbApi={props.tmdbApi}
-                    omdbApi={props.omdbApi}
                     key={j}
                     listData={listData}
                     isLiked={Boolean(isLiked)}
                     userId={props.userId}
                     likedList={props.likedList}
-                    addLiked={props.addLiked}
-                    cancelLiked={props.cancelLiked}
                     setLoadingOpen={props.setLoadingOpen}
-                    movieInfoEl={props.movieInfoEl}
-                    crewsEl={props.crewsEl}
-                    infoWrap={props.infoWrap}
-
-                    // memberPage={props.memberPage}
+                    resetInfoPosition={props.resetInfoPosition}
                   />
                 );
               })}
@@ -77,7 +67,21 @@ function YearList(props) {
         );
       }
     });
-
+    // props.setYear({
+    //    ...props.year,
+    //    max: "",
+    //    min: "",
+    // });
+    console.log(props.listState);
+    if (props.listState.length !== 0) {
+      let arr = [];
+      props.listState.forEach((item) => {
+        item.film_list.forEach((film) => arr.push(film.year));
+        console.log(arr);
+      });
+      console.log(Math.max(...arr));
+      console.log(Math.min(...arr));
+    }
     // find the min year of yearList
     if (props.listState.length !== 0) {
       for (let i = showYearList.length; i > 0; i--) {
@@ -106,8 +110,10 @@ function YearList(props) {
   // 偵測滾動事件，並改變滑桿數值
   function detect() {
     if (props.isScroll) {
-      let a = props.maxYear - props.minYear + 1;
-      let b = props.yearListRefs[props.minYear].current.getBoundingClientRect();
+      let a = props.year.max - props.year.min + 1;
+      let b = props.yearListRefs[
+        props.year.min
+      ].current.getBoundingClientRect();
       let c = a * b.height;
       let d = Math.floor(((b.bottom - 100) / c) * 100);
       props.setPercentValue(d);
