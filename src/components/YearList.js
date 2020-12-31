@@ -67,20 +67,31 @@ function YearList(props) {
         );
       }
     });
-    // props.setYear({
-    //    ...props.year,
-    //    max: "",
-    //    min: "",
-    // });
+
     console.log(props.listState);
     if (props.listState.length !== 0) {
-      let arr = [];
-      props.listState.forEach((item) => {
-        item.film_list.forEach((film) => arr.push(film.year));
-        console.log(arr);
+      let arr = props.listState.map((item) =>
+        item.film_list !== undefined
+          ? item.film_list.map((film) => film.year)
+          : [NaN]
+      );
+      console.log(arr);
+      let max = [];
+      let min = [];
+
+      arr.forEach((list) => {
+        max.push(Math.max(...list));
+        min.push(Math.min(...list));
       });
-      console.log(Math.max(...arr));
-      console.log(Math.min(...arr));
+
+      console.log(max, min);
+      props.setYear({
+        ...props.year,
+        max: Math.max(...max),
+        min: Math.min(...min),
+      });
+
+      console.log(props.year);
     }
     // find the min year of yearList
     if (props.listState.length !== 0) {
