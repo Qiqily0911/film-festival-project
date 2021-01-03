@@ -1,19 +1,16 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
 import { BtnData } from "../data/LocalSource";
 import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
 import styles from "../style/PrizeInfo.module.scss";
-import { loadMovieData, ordinalSuffix } from "../utils";
+import { loadMovieData, yearConvert, ordinalSuffix } from "../utils";
 
 function PrizeInfo(props) {
-  const year = Math.floor(
-    props.percentValue * ((props.year.max - props.year.min) / 100) +
-      props.year.min
-  );
+  const year = yearConvert(props.percentValue, props.year.max, props.year.min);
   const [prizeArr, setPrizeArr] = useState([]);
 
-  // 取出prize的id作為檢查依據
   useEffect(() => {
-    let arr = [];
+    const arr = [];
     for (let i = 0; i < 3; i++) {
       if (props.listState[i].film_list !== undefined) {
         arr.push(props.listState[i].prizeId);
@@ -25,18 +22,18 @@ function PrizeInfo(props) {
   }, [props.listState]);
 
   const content = (list, index) => {
-    let templist = list.film_list || [];
+    const templist = list.film_list || [];
 
     // 設定影展和獎項
     function selectPrize(fes, prize) {
-      let btnSelect = {
+      const btnSelect = {
         title: fes.btnText,
         prize_zh: prize.subBtnName,
         prize_name: prize.subBtnText,
         list_name: fes.list_name,
         film_list: fes.value,
         prize: prize.subBtnValue,
-        prizeId: prize.subBtnId,
+        prizeId: prize.dataId,
         logo: fes.logo,
         order: index,
       };
@@ -53,7 +50,7 @@ function PrizeInfo(props) {
         }
       }
 
-      let arr = [...props.listState];
+      const arr = [...props.listState];
       arr[index] = btnSelect;
 
       props.setlistState(arr);
@@ -66,8 +63,8 @@ function PrizeInfo(props) {
     }
 
     // 依據每筆資料的 data_id 找對應名稱
-    let prizeId = (dataId) => dataId.substring(dataId.length - 1) - 1;
-    let prizeName = (i, data) => BtnData[i].arr[prizeId(data.data_id)];
+    const prizeId = (dataId) => dataId.substring(dataId.length - 1) - 1;
+    const prizeName = (i, data) => BtnData[i].arr[prizeId(data.data_id)];
 
     if (list.film_list !== undefined) {
       for (let i = 0; i < BtnData.length; i++) {
@@ -100,12 +97,12 @@ function PrizeInfo(props) {
                               <div className={styles.prizeName}>
                                 <div>{ordinalSuffix(data.th)}</div>
                                 <div>{prizeName(i, data).subBtnName}</div>
-                                <div>{prizeName(i, data).subBtnText}</div>
+                                {/* <div>{prizeName(i, data).subBtnText}</div> */}
                               </div>
                               <div
                                 className={styles.filmName}
                                 onClick={() => {
-                                  let movieId = data.tmdb_id;
+                                  const movieId = data.tmdb_id;
                                   loadData(movieId, data.movie_id, data);
                                 }}
                               >
@@ -160,7 +157,7 @@ function PrizeInfo(props) {
                           className={styles.prizeName}
                           onClick={() => selectPrize(fes, prize)}
                           style={{
-                            color: prizeArr.includes(prize.subBtnId)
+                            color: prizeArr.includes(prize.dataId)
                               ? "#ad9654"
                               : "",
                           }}

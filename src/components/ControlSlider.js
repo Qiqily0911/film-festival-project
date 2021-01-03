@@ -1,25 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Slider from "react-rangeslider";
 import "react-rangeslider/lib/index.css";
 import styles from "../style/App.module.scss";
+import { yearConvert } from "../utils";
 
 function ControlSilder(props) {
-  const [refs, setRefs] = useState("");
-
-  useEffect(() => {
-    setRefs(props.yearListRefs);
-  }, [props.yearListRefs]);
-
   function handleChangeStart() {
     props.setScroll(false);
   }
+
   function handleChangeVertical(value) {
     if (value !== props.percentValue) {
       props.setPercentValue(value);
     }
-    let num = formatPc(props.percentValue);
-    if (refs[num] !== null) {
-      refs[num].current.scrollIntoView({
+    const num = formatPc(props.percentValue);
+    if (props.yearListRefs[num] !== null) {
+      props.yearListRefs[num].current.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
@@ -36,13 +32,10 @@ function ControlSilder(props) {
     75: "•",
   };
 
-  const formatPc = (p) =>
-    Math.floor(
-      p * ((props.year.max - props.year.min) / 100) + props.year.min
-    ).toString();
+  const formatPc = (p) => `${yearConvert(p, props.year.max, props.year.min)}`;
 
   return (
-    <div className={styles.slider}>
+    <div className={styles.slider} ref={props.slider}>
       <div className={styles.inner}>
         <div className={styles.yearText}>{props.year.max}</div>
         <Slider

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styles from "../style/YearList.module.scss";
 import MovieCard from "./MovieCard";
+import { dynamicHeightPercentage } from "../utils";
 
 function YearList(props) {
   const [showList, setShowList] = useState("");
-  //  console.log(props.yearlist);
-  // render 電影卡片（無狀態）
+
   useEffect(() => {
     const showYearList = props.yearlist.map((yearbox, i) => {
       const moviePrize = yearbox.list.map((data) => data[0].prize);
@@ -68,51 +68,29 @@ function YearList(props) {
       }
     });
 
-    console.log(props.listState);
-    if (props.listState.length !== 0) {
-      let arr = props.listState.map((item) =>
-        item.film_list !== undefined
-          ? item.film_list.map((film) => film.year)
-          : [NaN]
+    if (props.listState.every((item) => item.film_list === undefined)) {
+      props.slider.current.style.visibility = "hidden";
+    } else {
+      props.slider.current.style.visibility = "visible";
+      const arr = props.listState.map(
+        (item) =>
+          item.film_list !== undefined &&
+          item.film_list.map((film) => film.year)
       );
-      console.log(arr);
-      let max = [];
-      let min = [];
+
+      const max = [];
+      const min = [];
 
       arr.forEach((list) => {
-        max.push(Math.max(...list));
-        min.push(Math.min(...list));
+        list && max.push(Math.max(...list));
+        list && min.push(Math.min(...list));
       });
 
-      console.log(max, min);
       props.setYear({
         ...props.year,
         max: Math.max(...max),
         min: Math.min(...min),
       });
-
-      console.log(props.year);
-    }
-    // find the min year of yearList
-    if (props.listState.length !== 0) {
-      for (let i = showYearList.length; i > 0; i--) {
-        if (showYearList[i] !== undefined && showYearList[i] !== null) {
-          let min = showYearList[i].props["data-index"];
-          props.setMin(min);
-          break;
-        }
-      }
-    }
-
-    // find the max year of yearList
-    if (props.listState.length !== 0) {
-      for (let i = 0; i < showYearList.length; i++) {
-        if (showYearList[i] !== undefined && showYearList[i] !== null) {
-          let max = showYearList[i].props["data-index"];
-          props.setMax(max);
-          break;
-        }
-      }
     }
 
     setShowList(showYearList);
@@ -121,23 +99,18 @@ function YearList(props) {
   // 偵測滾動事件，並改變滑桿數值
   function detect() {
     if (props.isScroll) {
-      let a = props.year.max - props.year.min + 1;
-      let b = props.yearListRefs[
-        props.year.min
-      ].current.getBoundingClientRect();
-      let c = a * b.height;
-      let d = Math.floor(((b.bottom - 100) / c) * 100);
-      props.setPercentValue(d);
+      const percentage = dynamicHeightPercentage(
+        props.year.max,
+        props.year.min,
+        props.yearListRefs
+      );
+      props.setPercentValue(percentage);
     }
-    console.log("...scroll...");
   }
 
   return (
     <div className={styles.yearListBox} onWheel={detect}>
-      <div className={styles.yearList}>
-        {/* render movieCard */}
-        {showList}
-      </div>
+      <div className={styles.yearList}>{showList}</div>
     </div>
   );
 }

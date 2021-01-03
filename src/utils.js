@@ -30,7 +30,7 @@ export function loadMovieData(tmdbId, imdbId, localData, setMovieDataHook) {
   dataArr.push(imdbId !== "" ? dataApi("omdb", "", "", imdbId) : "");
 
   Promise.all(dataArr).then((arr) => {
-    let obj = {
+    const obj = {
       detail: arr[0],
       video: arr[1],
       images: arr[2],
@@ -69,9 +69,20 @@ export function cancelLiked(e, userLikedList, collectionName, id) {
   e.stopPropagation();
 }
 
+export function yearConvert(percentage, max, min) {
+  return Math.floor(percentage * ((max - min) / 100) + min);
+}
+
+export function dynamicHeightPercentage(max, min, ref) {
+  const interval = max - min + 1;
+  const unitHeight = ref[min].current.getBoundingClientRect();
+  const totalHeight = interval * unitHeight.height;
+  return Math.floor(((unitHeight.bottom - 100) / totalHeight) * 100);
+}
+
 export function overviewChinese(source) {
-  let version = source.overview_translate.translations;
-  let data = "";
+  const version = source.overview_translate.translations;
+  let data;
 
   version.forEach((item) => {
     if (item && item.iso_3166_1 === "CN") {
@@ -88,20 +99,17 @@ export function ordinalSuffix(num) {
     tens = num % 100;
 
   let numTh;
-  switch (num) {
-    case digit === 1 && tens !== 11:
-      numTh = num + "st";
-      break;
-    case digit === 2 && tens !== 12:
-      numTh = num + "nd";
-      break;
-    case digit === 3 && tens !== 13:
-      numTh = num + "rd";
-      break;
-    default:
-      numTh = num + "th";
-      break;
+
+  if (digit === 1 && tens !== 11) {
+    numTh = num + "st";
+  } else if (digit === 2 && tens !== 12) {
+    numTh = num + "nd";
+  } else if (digit === 3 && tens !== 13) {
+    numTh = num + "rd";
+  } else {
+    numTh = num + "th";
   }
 
+  // console.log(numTh);
   return numTh;
 }

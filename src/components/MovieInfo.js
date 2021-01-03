@@ -73,10 +73,10 @@ function MovieInfo(props) {
 
   // 獎項名稱
   const prizeTitle = () => {
-    let dataId = props.movieData.localData.data_id;
+    const dataId = props.movieData.localData.data_id;
     if (dataId !== undefined) {
-      let filmFes = dataId.slice(0, dataId.lastIndexOf("_"));
-      let prizeId = dataId.substring(dataId.length - 1);
+      const filmFes = dataId.slice(0, dataId.lastIndexOf("_"));
+      const prizeId = dataId.substring(dataId.length - 1);
 
       for (let i = 0; i < BtnData.length; i++) {
         if (BtnData[i].list_name === filmFes) {

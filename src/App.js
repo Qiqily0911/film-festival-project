@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./style/App.module.scss";
-import { tmdbKey, omdbKey, firestore } from "./config";
+import { firestore } from "./config";
 import { AuthProvider } from "./contexts/AuthContexts";
 import Welcome from "./components/Welcome";
 import ControlSilder from "./components/ControlSlider";
@@ -12,7 +12,7 @@ import MemberBtn from "./components/MemberBtn";
 import { MemberNav, MemberPage } from "./components/MemberPage";
 import { InitMovieInfo, InitListState } from "./data/LocalSource";
 import { ReactComponent as Logo } from "./image/logo-2.svg";
-import { loadMovieData } from "./utils";
+import { loadMovieData, dynamicHeightPercentage } from "./utils";
 
 function App() {
   const [movieData, setMovieData] = useState({
@@ -30,38 +30,32 @@ function App() {
   const [list, setList] = useState([]);
   const [yearListRefs, setRefs] = useState("");
   const [listState, setlistState] = useState(InitListState);
-  const [filmList, setFilmList] = useState("");
-  const [prize, setPrize] = useState("");
-  const [loadingOpen, setLoadingOpen] = useState(false);
 
-  // init control-slider
+  const [loadingOpen, setLoadingOpen] = useState(false);
 
   const [year, setYear] = useState({
     min: 1928,
     max: 2020,
   });
   const [percentValue, setPercentValue] = useState(100);
-  const [minYear, setMin] = useState(1928);
-  const [maxYear, setMax] = useState(2020);
   const [isScroll, setScroll] = useState(true);
 
-  // get uid
-  const [userData, setUserData] = useState("");
   const [userId, setUserId] = useState();
-
   const movieInfoEl = useRef(null);
   const crewsEl = useRef(null);
   const infoWrap = useRef(null);
+  const slider = useRef(null);
 
   const [prizeBoxState, setprizeBox] = useState(false);
   const [memberPage, setMemberPage] = useState(false);
+
   const [likedList, setLikedList] = useState();
   const [personList, setPersonList] = useState();
 
   useEffect(() => {
     const yearList = [];
     for (let i = 2020; i >= 1928; i--) {
-      let item = { year: i, list: [[], [], []] };
+      const item = { year: i, list: [[], [], []] };
       yearList.push(item);
     }
 
@@ -87,17 +81,17 @@ function App() {
     }
 
     function setSilderValue() {
-      if (yearListRefs !== null) {
-        if (
-          yearListRefs[year.min] !== undefined &&
-          yearListRefs[year.min].current !== null
-        ) {
-          let a = year.max - year.min + 1;
-          let b = yearListRefs[year.min].current.getBoundingClientRect();
-          let c = a * b.height;
-          let d = Math.floor(((b.bottom - 100) / c) * 100);
-          setPercentValue(d);
-        }
+      if (
+        yearListRefs &&
+        yearListRefs[year.min] !== undefined &&
+        yearListRefs[year.min].current !== null
+      ) {
+        const percentage = dynamicHeightPercentage(
+          year.max,
+          year.min,
+          yearListRefs
+        );
+        setPercentValue(percentage);
       }
     }
 
@@ -111,7 +105,7 @@ function App() {
           .collection(firebaseCollection)
           .where("user", "==", userId)
           .onSnapshot((onSnapshot) => {
-            let arr = [];
+            const arr = [];
             onSnapshot.forEach((doc) => {
               arr.push(doc.data());
             });
@@ -130,10 +124,10 @@ function App() {
 
   function fillYearList(yearList, fes, prize, order) {
     if (fes !== undefined) {
-      let data = fes.filter((obj) => obj.prize === prize);
+      const data = fes.filter((obj) => obj.prize === prize);
 
       yearList.forEach((yearbox) => {
-        let box = yearbox.list[order];
+        const box = yearbox.list[order];
 
         data.forEach((item) => {
           if (item.year === yearbox.year) {
@@ -185,10 +179,9 @@ function App() {
             yearListRefs={yearListRefs}
             year={year}
             setYear={setYear}
-            minYear={minYear}
-            maxYear={maxYear}
             setScroll={setScroll}
             isScroll={isScroll}
+            slider={slider}
           />
         )}
       </aside>
@@ -199,10 +192,6 @@ function App() {
               <MemberNav setMemberPage={setMemberPage} />
             ) : (
               <MovieFilter
-                filmList={filmList}
-                setFilmList={setFilmList}
-                prize={prize}
-                setPrize={setPrize}
                 yearlist={list}
                 yearListRefs={yearListRefs}
                 listState={listState}
@@ -214,8 +203,6 @@ function App() {
 
             <AuthProvider>
               <MemberBtn
-                setUserData={setUserData}
-                userData={userData}
                 setUserId={setUserId}
                 memberPage={memberPage}
                 setMemberPage={setMemberPage}
@@ -228,7 +215,6 @@ function App() {
               <>
                 <MemberPage
                   userId={userId}
-                  userData={userData}
                   memberPage={memberPage}
                   likedList={likedList}
                   personList={personList}
@@ -241,29 +227,23 @@ function App() {
                 <YearList
                   setMovieData={setMovieData}
                   movieData={movieData}
-                  prize={prize}
                   yearlist={list}
                   yearListRefs={yearListRefs}
                   listState={listState}
                   setlistState={setlistState}
                   year={year}
                   setYear={setYear}
-                  setMin={setMin}
-                  minYear={minYear}
-                  setMax={setMax}
-                  maxYear={maxYear}
                   setPercentValue={setPercentValue}
                   percentValue={percentValue}
                   isScroll={isScroll}
                   userId={userId}
                   likedList={likedList}
                   resetInfoPosition={resetInfoPosition}
+                  slider={slider}
                 />
                 <PrizeInfo
                   year={year}
                   setYear={setYear}
-                  minYear={minYear}
-                  maxYear={maxYear}
                   percentValue={percentValue}
                   prizeBoxState={prizeBoxState}
                   setprizeBox={setprizeBox}
@@ -280,7 +260,6 @@ function App() {
             )}
             <MovieInfo
               movieData={movieData}
-              resetInfoPosition={resetInfoPosition}
               movieInfoEl={movieInfoEl}
               crewsEl={crewsEl}
               infoWrap={infoWrap}

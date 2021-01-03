@@ -1,11 +1,12 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styles from "../style/Crew.module.scss";
 import { ReactComponent as Bookmark } from "../image/icon/add.svg";
 import { ReactComponent as Nopic } from "../image/icon/no-pic.svg";
 import { dataApi, addLiked, cancelLiked } from "../utils";
 
 export default function CrewMovieCard(props) {
-  let obj = {
+  const obj = {
     user: props.userId,
     movie_id: "",
     tmdb_id: props.data.id,
@@ -82,3 +83,12 @@ export default function CrewMovieCard(props) {
     </div>
   );
 }
+
+CrewMovieCard.propTypes = {
+  userId: PropTypes.string,
+  data: PropTypes.object,
+  likedList: PropTypes.array,
+  setCrewMovieData: PropTypes.func,
+  crewMovieData: PropTypes.object,
+  setInfoOpen: PropTypes.func,
+};

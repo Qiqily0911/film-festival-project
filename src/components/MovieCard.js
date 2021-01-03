@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styles from "../style/MovieCard.module.scss";
 import { loadMovieData, addLiked, cancelLiked } from "../utils";
 
@@ -6,7 +6,7 @@ import { ReactComponent as Bookmark } from "../image/icon/add.svg";
 import { ReactComponent as Nopic } from "../image/icon/no-pic.svg";
 
 function MovieCard(props) {
-  let obj = {
+  const obj = {
     user: props.userId,
     movie_id: props.listData.movie_id,
     tmdb_id: props.listData.tmdb_id,
@@ -35,8 +35,8 @@ function MovieCard(props) {
       style={{ margin: props.memberPage ? "20px" : "" }}
       key={props.listData.movie_id}
       onClick={() => {
-        let tmdbId = props.listData.tmdb_id;
-        let imdbId = props.listData.movie_id;
+        const tmdbId = props.listData.tmdb_id;
+        const imdbId = props.listData.movie_id;
         props.resetInfoPosition();
         loadMovieData(tmdbId, imdbId, props.listData, props.setMovieData);
       }}

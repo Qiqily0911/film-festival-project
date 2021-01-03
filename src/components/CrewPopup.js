@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
 import styles from "../style/Crew.module.scss";
 import CrewMovieCard from "./CrewMovieCard";
@@ -14,23 +15,23 @@ function CrewPopup(props) {
   });
   const [infoOpen, setInfoOpen] = useState(false);
 
-  let crewData =
+  const crewData =
     props.personData &&
     props.personData.crew.crew.filter((data) => data.job === "Director");
-  let castData = props.personData && props.personData.crew.cast;
-  let personData = props.personData && props.personData.person;
+  const castData = props.personData && props.personData.crew.cast;
+  const personData = props.personData && props.personData.person;
   setTimeout(() => {
     props.setCrewLoading(false);
   }, 1000);
 
   useEffect(() => {
     if (personData !== "" && personData["also_known_as"] !== undefined) {
-      let a = personData["also_known_as"];
+      const otherName = personData["also_known_as"];
 
       setPersonNameCh("");
-      for (let i = 0; i < a.length; i++) {
-        if (a[i].match(/[\u3400-\u9FBF]/)) {
-          setPersonNameCh(a[i]);
+      for (let i = 0; i < otherName.length; i++) {
+        if (otherName[i].match(/[\u3400-\u9FBF]/)) {
+          setPersonNameCh(otherName[i]);
           break;
         }
       }
@@ -76,7 +77,7 @@ function CrewPopup(props) {
     </div>
   );
 
-  let obj = {
+  const obj = {
     person_name: personData.name,
     person_name_ch: personNameCh,
     person_id: personData.id,
