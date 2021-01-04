@@ -82,7 +82,7 @@ function MovieInfo(props) {
         if (BtnData[i].list_name === filmFes) {
           return (
             <>
-              {BtnData[i].official_name}{" "}
+              {BtnData[i].official_name}
               {BtnData[i].arr[prizeId - 1].subBtnText}
             </>
           );

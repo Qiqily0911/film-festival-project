@@ -7,62 +7,15 @@ import { loadMovieData, yearConvert, ordinalSuffix } from "../utils";
 
 function PrizeInfo(props) {
   const year = yearConvert(props.percentValue, props.year.max, props.year.min);
-  const [prizeArr, setPrizeArr] = useState([]);
-
-  useEffect(() => {
-    const arr = [];
-    for (let i = 0; i < 3; i++) {
-      if (props.listState[i].film_list !== undefined) {
-        arr.push(props.listState[i].prizeId);
-      } else {
-        arr.push(null);
-      }
-    }
-    setPrizeArr(arr);
-  }, [props.listState]);
 
   const content = (list, index) => {
     const templist = list.film_list || [];
-
-    // 設定影展和獎項
-    function selectPrize(fes, prize) {
-      const btnSelect = {
-        title: fes.btnText,
-        prize_zh: prize.subBtnName,
-        prize_name: prize.subBtnText,
-        list_name: fes.list_name,
-        film_list: fes.value,
-        prize: prize.subBtnValue,
-        prizeId: prize.dataId,
-        logo: fes.logo,
-        order: index,
-      };
-
-      for (let i = 0; i < props.listState.length; i++) {
-        if (props.listState[i].film_list !== undefined) {
-          if (
-            btnSelect.title === props.listState[i].title &&
-            btnSelect.prize === props.listState[i].prize
-          ) {
-            alert("選過囉");
-            return;
-          }
-        }
-      }
-
-      const arr = [...props.listState];
-      arr[index] = btnSelect;
-
-      props.setlistState(arr);
-      props.setPercentValue(100);
-    }
 
     function loadData(tmdbId, imdbId, data) {
       props.resetInfoPosition();
       loadMovieData(tmdbId, imdbId, data, props.setMovieData);
     }
 
-    // 依據每筆資料的 data_id 找對應名稱
     const prizeId = (dataId) => dataId.substring(dataId.length - 1) - 1;
     const prizeName = (i, data) => BtnData[i].arr[prizeId(data.data_id)];
 
@@ -97,7 +50,6 @@ function PrizeInfo(props) {
                               <div className={styles.prizeName}>
                                 <div>{ordinalSuffix(data.th)}</div>
                                 <div>{prizeName(i, data).subBtnName}</div>
-                                {/* <div>{prizeName(i, data).subBtnText}</div> */}
                               </div>
                               <div
                                 className={styles.filmName}
@@ -109,18 +61,16 @@ function PrizeInfo(props) {
                                 <span>
                                   {data.film_name_zh} {data.film_name_en}
                                 </span>
-                                {data.director ? (
+                                {data.director && (
                                   <>
                                     <br />
                                     <span>
-                                      {data.director_zh ? data.director_zh : ""}
+                                      {data.director_zh && data.director_zh}
                                     </span>
                                     <span>
-                                      {data.director ? data.director : ""}
+                                      {data.director && data.director}
                                     </span>
                                   </>
-                                ) : (
-                                  ""
                                 )}
                               </div>
                             </div>
@@ -155,9 +105,9 @@ function PrizeInfo(props) {
                       return (
                         <div
                           className={styles.prizeName}
-                          onClick={() => selectPrize(fes, prize)}
+                          onClick={() => props.selectPrize(fes, prize, index)}
                           style={{
-                            color: prizeArr.includes(prize.dataId)
+                            color: props.prizeArr.includes(prize.dataId)
                               ? "#ad9654"
                               : "",
                           }}

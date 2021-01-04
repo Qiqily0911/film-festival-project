@@ -3,67 +3,27 @@ import styles from "../style/MovieFilter.module.scss";
 import { BtnData } from "../data/LocalSource";
 
 function MovieFilter(props) {
-  const [prizeArr, setPrizeArr] = useState([]);
   const [subBtnVal, setSubBtnVal] = useState({
     "index-0": "",
     "index-1": "",
     "index-2": "",
   });
 
-  useEffect(() => {
-    const arr = [];
-    for (let i = 0; i < 3; i++) {
-      if (props.listState[i].film_list !== undefined) {
-        arr.push(props.listState[i].prizeId);
-      } else {
-        arr.push(null);
-      }
-    }
-    setPrizeArr(arr);
-  }, [props.listState]);
-
   function selectPrize(e) {
-    const num1 = Number(e.target.parentNode.dataset.order);
-    const num2 = Number(e.target.dataset.order);
-    const order = Number(e.nativeEvent.path[5].dataset.order);
+    const dataId = e.target.value;
+    const prizeName = dataId.substring(0, dataId.length - 3);
+    const prizeNum = dataId.substring(dataId.length - 1) - 1;
 
-    const btnSelect = {
-      title: BtnData[num1].btnText,
-      prize_zh: BtnData[num1].arr[num2].subBtnName,
-      prize_name: BtnData[num1].arr[num2].subBtnText,
-      list_name: BtnData[num1].list_name,
-      film_list: BtnData[num1].value,
-      prize: BtnData[num1].arr[num2].subBtnValue,
-      prizeId: BtnData[num1].arr[num2].dataId,
-      logo: BtnData[num1].logo,
-      order: order,
-    };
+    const fesData = BtnData.find((e) => e.list_name === prizeName);
+    const prizeData = fesData.arr[prizeNum];
+    const index = Number(e.target.dataset.order);
 
-    const arr = [...props.listState];
+    props.selectPrize(fesData, prizeData, index);
 
-    // 選不同獎項
-    for (let i = 0; i < props.listState.length; i++) {
-      if (props.listState[i].film_list !== undefined) {
-        if (btnSelect.title === props.listState[i].title) {
-          if (btnSelect.prize === props.listState[i].prize) {
-            alert("選過囉");
-            return;
-          }
-        }
-      }
-    }
-
-    // reset subBtn value
-    // let name = `index-${order}`;
     setSubBtnVal({
       ...subBtnVal,
-      [`index-${order}`]: "",
+      [`index-${index}`]: "",
     });
-
-    arr[order] = btnSelect;
-    props.setlistState(arr);
-    props.setPercentValue(100);
-    props.setScroll(true);
   }
 
   function close(e) {
@@ -74,12 +34,7 @@ function MovieFilter(props) {
   }
 
   function selectFestival(e, i) {
-    if (subBtnVal[`index-${i}`] === e.target.value) {
-      setSubBtnVal({
-        ...subBtnVal,
-        [`index-${i}`]: "",
-      });
-    } else {
+    if (subBtnVal[`index-${i}`] !== e.target.value) {
       setSubBtnVal({
         ...subBtnVal,
         [`index-${i}`]: e.target.value,
@@ -109,7 +64,7 @@ function MovieFilter(props) {
   );
 
   const notSelectList = (list, i) => (
-    <div data-order={list.order} name={"index-" + i}>
+    <div name={"index-" + i}>
       <div className={styles.inner}>
         <span>
           選擇
@@ -124,26 +79,26 @@ function MovieFilter(props) {
               className={`${styles.wrap} ${
                 subBtnVal["index-" + i] === data.btnText ? styles.wrapOpen : ""
               }`}
-              value={data.btnText}
-              onClick={(e) => selectFestival(e, i)}
             >
               <button
                 type="button"
                 className={styles.mainBtn}
                 value={data.btnText}
+                onClick={(e) => selectFestival(e, i)}
               >
                 {data.btnText}
               </button>
 
-              <div id={data.btnText} className={styles.subBtn} data-order={j}>
+              <div className={styles.subBtn}>
                 {data.arr.map((subBtn, k) => (
                   <button
                     key={k}
                     type="button"
                     onClick={selectPrize}
-                    data-order={k}
+                    value={subBtn.dataId}
+                    data-order={i}
                     style={{
-                      color: prizeArr.includes(subBtn.dataId)
+                      color: props.prizeArr.includes(subBtn.dataId)
                         ? "#ad9654"
                         : "gray",
                     }}

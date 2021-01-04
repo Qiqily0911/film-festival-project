@@ -30,6 +30,7 @@ function App() {
   const [list, setList] = useState([]);
   const [yearListRefs, setRefs] = useState("");
   const [listState, setlistState] = useState(InitListState);
+  const [prizeArr, setPrizeArr] = useState([]);
 
   const [loadingOpen, setLoadingOpen] = useState(false);
 
@@ -95,8 +96,21 @@ function App() {
       }
     }
 
+    const arr = [];
+    for (let i = 0; i < 3; i++) {
+      if (listState[i].film_list !== undefined) {
+        arr.push(listState[i].prizeId);
+      } else {
+        arr.push(null);
+      }
+    }
+    // console.log(listState);
+    setPrizeArr(arr);
+
     setScroll(false);
   }, [listState]);
+
+  // console.log(listState);
 
   useEffect(() => {
     if (userId) {
@@ -158,6 +172,41 @@ function App() {
     }
   }
 
+  function preventDoubleSelect(btnSelect) {
+    for (let i = 0; i < listState.length; i++) {
+      if (
+        listState[i].film_list &&
+        btnSelect.title === listState[i].title &&
+        btnSelect.prize === listState[i].prize
+      ) {
+        alert("選過囉");
+        return;
+      }
+    }
+  }
+
+  function selectPrize(fesData, prizeData, index) {
+    const btnSelect = {
+      title: fesData.btnText,
+      prize_zh: prizeData.subBtnName,
+      prize_name: prizeData.subBtnText,
+      list_name: fesData.list_name,
+      film_list: fesData.value,
+      prize: prizeData.subBtnValue,
+      prizeId: prizeData.dataId,
+      logo: fesData.logo,
+      order: index,
+    };
+
+    preventDoubleSelect(btnSelect);
+
+    const arr = [...listState];
+    arr[index] = btnSelect;
+
+    setlistState(arr);
+    setPercentValue(100);
+  }
+
   return (
     <div className={styles.outter}>
       {/* <Welcome welcomeOpen={welcomeOpen} welcomeRef={welcomeRef} setWelcome={setWelcome} /> */}
@@ -198,6 +247,8 @@ function App() {
                 setlistState={setlistState}
                 setPercentValue={setPercentValue}
                 setScroll={setScroll}
+                selectPrize={selectPrize}
+                prizeArr={prizeArr}
               />
             )}
 
@@ -255,6 +306,8 @@ function App() {
                   setScroll={setScroll}
                   loadingOpen={loadingOpen}
                   resetInfoPosition={resetInfoPosition}
+                  selectPrize={selectPrize}
+                  prizeArr={prizeArr}
                 />
               </>
             )}

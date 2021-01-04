@@ -110,6 +110,5 @@ export function ordinalSuffix(num) {
     numTh = num + "th";
   }
 
-  // console.log(numTh);
   return numTh;
 }
