@@ -1,4 +1,3 @@
-// import React, { Component } from "react";
 import oscar from "./Oscar_best_film.json";
 import cannes from "./CannesFilm.json";
 import berlin from "./BerlinFilm.json";
@@ -11,11 +10,19 @@ import { ReactComponent as BerlinLogo } from "../image/fes/berlin-festival.svg";
 import { ReactComponent as GoldenHorseLogo } from "../image/fes/golden-horse.svg";
 import { ReactComponent as VeniceLogo } from "../image/fes/venice-festival.svg";
 
-// import  OscarLogo  from "../image/fes/oscar.svg";
-// import  CannesLogo  from "../image/fes/cannes-festival.svg";
-// import  BerlinLogo  from "../image/fes/berlin-festival.svg";
-// import  GoldenHorseLogo  from "../image/fes/golden-horse.svg";
-// import  VeniceLogo  from "../image/fes/venice-festival.svg";
+export const InitMovieInfo = {
+  th: 72,
+  year: 2019,
+  prize: "palme_d_or",
+  film_name_zh: "寄生上流",
+  film_name_en: "Parasite",
+  atmovie_link: "http://app2.atmovies.com.tw/film/fpkr46751668/",
+  imdb_link: "https://www.imdb.com/title/tt6751668",
+  movie_id: "tt6751668",
+  poster_path: "/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg",
+  tmdb_id: 496243,
+  data_id: "cannes_01",
+};
 
 export const InitListState = [
   {
@@ -40,16 +47,6 @@ export const InitListState = [
     logo: CannesLogo,
     order: 1,
   },
-  // {
-  //    title: "柏林影展",
-  //    prize_zh: "金熊獎",
-  //    prize_name: "Golden Bear",
-  //    list_name: "berlin",
-  //    film_list: berlin,
-  //    prize: "golden_bear",
-  //    logo: BerlinLogo,
-  //    order: 2,
-  // },
   {
     title: "金馬影展",
     prize_zh: "最佳劇情片",
@@ -78,26 +75,26 @@ export const BtnData = [
         subBtnValue: "palme_d_or",
         subBtnText: "Palme d'Or",
         subBtnName: "金棕櫚獎",
-        subBtnId: "cannes_01",
+        dataId: "cannes_01",
       },
 
       {
         subBtnValue: "grand_prix",
         subBtnText: "Grand Prix",
         subBtnName: "評審團大獎",
-        subBtnId: "cannes_02",
+        dataId: "cannes_02",
       },
       {
         subBtnValue: "prix_du_jury",
         subBtnText: "Prix du Jury",
         subBtnName: "評審團最佳影片",
-        subBtnId: "cannes_03",
+        dataId: "cannes_03",
       },
       {
         subBtnValue: "un_certain_regard",
         subBtnText: "Un Certain Regard",
         subBtnName: "一種注目",
-        subBtnId: "cannes_04",
+        dataId: "cannes_04",
       },
     ],
   },
@@ -115,7 +112,7 @@ export const BtnData = [
         subBtnValue: "best_film",
         subBtnText: "Best Film",
         subBtnName: "最佳影片",
-        subBtnId: "oscar_01",
+        dataId: "oscar_01",
       },
     ],
   },
@@ -133,13 +130,13 @@ export const BtnData = [
         subBtnValue: "best_film",
         subBtnText: "Best Film",
         subBtnName: "最佳劇情片",
-        subBtnId: "goldenHorse_01",
+        dataId: "goldenHorse_01",
       },
       {
         subBtnValue: "best_director",
         subBtnText: "Best Director",
         subBtnName: "最佳導演獎",
-        subBtnId: "goldenHorse_02",
+        dataId: "goldenHorse_02",
       },
     ],
   },
@@ -157,13 +154,13 @@ export const BtnData = [
         subBtnValue: "golden_bear",
         subBtnText: "Golden Bear",
         subBtnName: "金熊獎",
-        subBtnId: "berlin_01",
+        dataId: "berlin_01",
       },
       {
         subBtnValue: "jury_grand_prix",
         subBtnText: "Silver Bear Grand Jury Prix",
         subBtnName: "銀熊獎評審團大獎",
-        subBtnId: "berlin_02",
+        dataId: "berlin_02",
       },
     ],
   },
@@ -181,7 +178,7 @@ export const BtnData = [
         subBtnValue: "golden_lion",
         subBtnText: "Golden Lion",
         subBtnName: "金獅獎",
-        subBtnId: "venice_01",
+        dataId: "venice_01",
       },
     ],
   },

@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import PropTypes from "prop-types";
 import styles from "../style/Crew.module.scss";
 import { ReactComponent as Bookmark } from "../image/icon/add.svg";
 import { ReactComponent as Nopic } from "../image/icon/no-pic.svg";
+import { dataApi, addLiked, cancelLiked } from "../utils";
 
-export default function CrewCard(props) {
-  //  console.log(props.data);
-  let obj = {
+export default function CrewMovieCard(props) {
+  const obj = {
     user: props.userId,
     movie_id: "",
     tmdb_id: props.data.id,
@@ -31,28 +32,25 @@ export default function CrewCard(props) {
       key={props.data.credit_id}
       value={props.data.id}
     >
-      {/* ------- keetTag --------*/}
       {props.userId ? (
         <Bookmark
           className={isLiked ? styles.addBtn : styles.cancelBtn}
-          //    data-id={props.movie_id}
           onClick={(e) =>
             isLiked
-              ? props.cancelLiked(e, props.data.id)
-              : props.addLiked(e, obj)
+              ? cancelLiked(e, props.likedList, "movie_liked", props.data.id)
+              : addLiked(e, "movie_liked", obj)
           }
         />
       ) : (
         ""
       )}
-      {/* ------- keetTag --------*/}
 
       <div
         className={styles.poster}
         onClick={() => {
           Promise.all([
-            props.tmdbApi("movie", "", props.data.id),
-            props.tmdbApi("movie", "/translations", props.data.id),
+            dataApi("tmdb", "movie", "", props.data.id),
+            dataApi("tmdb", "movie", "/translations", props.data.id),
           ]).then((arr) => {
             props.setCrewMovieData({
               ...props.crewMovieData,
@@ -63,7 +61,6 @@ export default function CrewCard(props) {
           props.setInfoOpen(true);
         }}
       >
-        {/* {console.log(props.data)} */}
         {props.data.poster_path !== null ? (
           <img
             alt="poster"
@@ -86,3 +83,12 @@ export default function CrewCard(props) {
     </div>
   );
 }
+
+CrewMovieCard.propTypes = {
+  userId: PropTypes.string,
+  data: PropTypes.object,
+  likedList: PropTypes.array,
+  setCrewMovieData: PropTypes.func,
+  crewMovieData: PropTypes.object,
+  setInfoOpen: PropTypes.func,
+};

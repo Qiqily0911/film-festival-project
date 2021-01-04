@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styles from "../style/YearList.module.scss";
 import MovieCard from "./MovieCard";
-// import { nanoid } from "nanoid";
-// import { firestore } from "../config";
+import { dynamicHeightPercentage } from "../utils";
 
 function YearList(props) {
   const [showList, setShowList] = useState("");
-  //  console.log(props.yearlist);
-  // render 電影卡片（無狀態）
+
   useEffect(() => {
     const showYearList = props.yearlist.map((yearbox, i) => {
       const moviePrize = yearbox.list.map((data) => data[0].prize);
@@ -54,21 +52,13 @@ function YearList(props) {
                     setMovieData={props.setMovieData}
                     movieData={props.movieData}
                     renewData={props.renewData}
-                    tmdbApi={props.tmdbApi}
-                    omdbApi={props.omdbApi}
                     key={j}
                     listData={listData}
                     isLiked={Boolean(isLiked)}
                     userId={props.userId}
                     likedList={props.likedList}
-                    addLiked={props.addLiked}
-                    cancelLiked={props.cancelLiked}
                     setLoadingOpen={props.setLoadingOpen}
-                    movieInfoEl={props.movieInfoEl}
-                    crewsEl={props.crewsEl}
-                    infoWrap={props.infoWrap}
-
-                    // memberPage={props.memberPage}
+                    resetInfoPosition={props.resetInfoPosition}
                   />
                 );
               })}
@@ -78,26 +68,29 @@ function YearList(props) {
       }
     });
 
-    // find the min year of yearList
-    if (props.listState.length !== 0) {
-      for (let i = showYearList.length; i > 0; i--) {
-        if (showYearList[i] !== undefined && showYearList[i] !== null) {
-          let min = showYearList[i].props["data-index"];
-          props.setMin(min);
-          break;
-        }
-      }
-    }
+    if (props.listState.every((item) => item.film_list === undefined)) {
+      props.slider.current.style.visibility = "hidden";
+    } else {
+      props.slider.current.style.visibility = "visible";
+      const arr = props.listState.map(
+        (item) =>
+          item.film_list !== undefined &&
+          item.film_list.map((film) => film.year)
+      );
 
-    // find the max year of yearList
-    if (props.listState.length !== 0) {
-      for (let i = 0; i < showYearList.length; i++) {
-        if (showYearList[i] !== undefined && showYearList[i] !== null) {
-          let max = showYearList[i].props["data-index"];
-          props.setMax(max);
-          break;
-        }
-      }
+      const max = [];
+      const min = [];
+
+      arr.forEach((list) => {
+        list && max.push(Math.max(...list));
+        list && min.push(Math.min(...list));
+      });
+
+      props.setYear({
+        ...props.year,
+        max: Math.max(...max),
+        min: Math.min(...min),
+      });
     }
 
     setShowList(showYearList);
@@ -106,21 +99,18 @@ function YearList(props) {
   // 偵測滾動事件，並改變滑桿數值
   function detect() {
     if (props.isScroll) {
-      let a = props.maxYear - props.minYear + 1;
-      let b = props.yearListRefs[props.minYear].current.getBoundingClientRect();
-      let c = a * b.height;
-      let d = Math.floor(((b.bottom - 100) / c) * 100);
-      props.setPercentValue(d);
+      const percentage = dynamicHeightPercentage(
+        props.year.max,
+        props.year.min,
+        props.yearListRefs
+      );
+      props.setPercentValue(percentage);
     }
-    console.log("...scroll...");
   }
 
   return (
     <div className={styles.yearListBox} onWheel={detect}>
-      <div className={styles.yearList}>
-        {/* render movieCard */}
-        {showList}
-      </div>
+      <div className={styles.yearList}>{showList}</div>
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { firebaseAuth, firestore } from "../config";
+import { firebaseAuth } from "../config";
 
 const AuthContext = React.createContext();
 export function useAuth() {

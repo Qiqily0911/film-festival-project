@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styles from "../style/MemberPage.module.scss";
 import MovieCard from "./MovieCard";
 import { ReactComponent as Star } from "../image/icon/star.svg";
 import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
+import { cancelLiked } from "../utils";
 
 export function MemberNav(props) {
   return (
@@ -25,10 +26,8 @@ export function MemberPage(props) {
       <div className={styles.innerBox}>
         <div className={styles.headline}>
           <span>收藏的電影</span>
-          {/* <p>{props.likedList.length}</p> */}
         </div>
         <div className={styles.cardBox}>
-          {/* {console.log(props.likedList)} */}
           {props.likedList &&
             props.likedList
               .sort((a, b) => (a.time.seconds > b.time.seconds ? 1 : -1))
@@ -55,28 +54,18 @@ export function MemberPage(props) {
                     isLiked={true}
                     memberPage={props.memberPage}
                     likedList={props.likedList}
-                    cancelLiked={props.cancelLiked}
-                    tmdbApi={props.tmdbApi}
-                    omdbApi={props.omdbApi}
                     renewData={props.renewData}
-                    setLoadingOpen={props.setLoadingOpen}
-                    movieInfoEl={props.movieInfoEl}
-                    crewsEl={props.crewsEl}
-                    infoWrap={props.infoWrap}
+                    resetInfoPosition={props.resetInfoPosition}
                   />
                 );
               })}
-          {/* ---- blank ---- */}
-          <div className={styles.blank}></div>
-          <div className={styles.blank}></div>
-          <div className={styles.blank}></div>
-          <div className={styles.blank}></div>
-          <div className={styles.blank}></div>
-          <div className={styles.blank}></div>
+
+          {[...Array(6)].map((el, index) => (
+            <div className={styles.blank} key={index}></div>
+          ))}
         </div>
         <div className={styles.headline}>
           <span>喜愛的演員及導演</span>
-          {/* <p>{props.personList.length}</p> */}
         </div>
         <div className={styles.cardBox}>
           {props.personList
@@ -89,7 +78,14 @@ export function MemberPage(props) {
                     src={`https://image.tmdb.org/t/p/w185${data.profile_path}`}
                   />
                   <Star
-                    onClick={(e) => props.cancelPerson(e, data.person_id)}
+                    onClick={(e) =>
+                      cancelLiked(
+                        e,
+                        props.personList,
+                        "person_liked",
+                        data.person_id
+                      )
+                    }
                   />
                 </div>
                 <div className={styles.basicInfo}>
@@ -98,13 +94,10 @@ export function MemberPage(props) {
                 </div>
               </div>
             ))}
-          {/* ---- blank ---- */}
-          <div className={styles.blank}></div>
-          <div className={styles.blank}></div>
-          <div className={styles.blank}></div>
-          <div className={styles.blank}></div>
-          <div className={styles.blank}></div>
-          <div className={styles.blank}></div>
+
+          {[...Array(6)].map((el, index) => (
+            <div className={styles.blank} key={index}></div>
+          ))}
         </div>
       </div>
     </div>
