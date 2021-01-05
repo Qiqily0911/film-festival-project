@@ -27,8 +27,7 @@ password:123456
 ## Intro
 #### Drag the timeline to discover the films of the corresponding year, and get the movie detail on one click
 #### Display awarded films of three international festivals in the same year
-(/film-line/01.gif)
-
+<img src="/film-line/01.gif"/>
 
 #### Get winner lists of all prize in the festival data display mode
 <img src="/film-line/02.png" height="400" />
