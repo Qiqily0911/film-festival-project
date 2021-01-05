@@ -26,17 +26,19 @@ password:123456
 
 ## Intro
 #### Drag the timeline to discover the films of the corresponding year, and get the movie detail on one click
-#### Display awarded films of three international festivals in the same year
 <img src="/film-line/01.gif"/>
 
+#### Display awarded films of three international festivals in the same year
+<img src="/film-line/02.gif"/>
+
 #### Get winner lists of all prize in the festival data display mode
-<img src="/film-line/02.png" height="400" />
+<img src="/film-line/03.gif" />
 
 #### Find more works of the directors and actors 
-<img src="/film-line/03.png" height="400" />
+<img src="/film-line/04.gif" />
 
 #### Keep the films and crews you like in favorites
-<img src="/film-line/member_page.png" height="400" />
+<img src="/film-line/member_page.png" width="800" />
 
 
 
