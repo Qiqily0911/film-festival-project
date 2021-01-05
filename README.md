@@ -1,8 +1,8 @@
 # film-line
 > A small tool for browsing Awarded films by dragging timeline handlebar. Users can choose international film festival and find prize-winner in specific year. Another way to dive in the world of movie.
 
-
-<img src="/film-line/index.png" height="400" />
+<img src="/film-line/main-image.png" width="400" /> 
+<img src="/film-line/index.png" width="400" />
 
 ## Online DEMO
 Web-site: https://film-db-9936d.web.app/ <br>
