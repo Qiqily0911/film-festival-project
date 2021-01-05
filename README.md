@@ -29,10 +29,10 @@ password:123456
 <img src="/film-line/01.gif"/>
 
 #### Display awarded films of three international festivals in the same year
-<img src="/film-line/02.gif"/>
+<img src="/film-line/03.gif"/>
 
 #### Get winner lists of all prize in the festival data display mode
-<img src="/film-line/03.gif" />
+<img src="/film-line/02.gif" />
 
 #### Find more works of the directors and actors 
 <img src="/film-line/04.gif" />
