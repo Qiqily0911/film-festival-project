@@ -47,7 +47,6 @@ export function addLiked(e, collectionName, obj) {
   const db = firestore.collection(collectionName);
   db.add(obj).then((res) => {
     db.doc(res.id).set({ id: res.id }, { merge: true });
-    console.log("success");
   });
 
   e.stopPropagation();
@@ -60,7 +59,6 @@ export function cancelLiked(e, userLikedList, collectionName, id) {
       db.doc(userLikedList[i].id)
         .delete()
         .then(() => {
-          console.log("delete");
           e.stopPropagation();
         });
     }

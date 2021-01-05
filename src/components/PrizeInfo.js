@@ -19,7 +19,7 @@ function PrizeInfo(props) {
     const prizeId = (dataId) => dataId.substring(dataId.length - 1) - 1;
     const prizeName = (i, data) => BtnData[i].arr[prizeId(data.data_id)];
 
-    if (list.film_list !== undefined) {
+    if (list.film_list) {
       for (let i = 0; i < BtnData.length; i++) {
         if (list.list_name === BtnData[i].list_name) {
           return (
@@ -96,14 +96,15 @@ function PrizeInfo(props) {
       return (
         <div className={styles.prizeData} key={index}>
           <div className={styles.inner}>
-            {BtnData.map((fes) => {
+            {BtnData.map((fes, k) => {
               return (
-                <div className={styles.upper2}>
+                <div className={styles.upper2} key={k}>
                   <div className={styles.title}> {fes.btnText}</div>
                   <div>
-                    {fes.arr.map((prize) => {
+                    {fes.arr.map((prize, l) => {
                       return (
                         <div
+                          key={l}
                           className={styles.prizeName}
                           onClick={() => props.selectPrize(fes, prize, index)}
                           style={{

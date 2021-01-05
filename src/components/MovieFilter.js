@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styles from "../style/MovieFilter.module.scss";
 import { BtnData } from "../data/LocalSource";
 
@@ -29,7 +29,7 @@ function MovieFilter(props) {
   function close(e) {
     const order = Number(e.target.dataset.order);
     const arr = [...props.listState];
-    arr[order] = { film_list: undefined, order: order };
+    arr[order] = { film_list: null, order: order };
     props.setlistState(arr);
   }
 
@@ -119,9 +119,7 @@ function MovieFilter(props) {
       <div className={styles.titleBox}>
         {props.listState.map((list, i) => (
           <div className={styles.fesTitle} key={i}>
-            {list.film_list !== undefined
-              ? selectedList(list)
-              : notSelectList(list, i)}
+            {list.film_list ? selectedList(list) : notSelectList(list, i)}
           </div>
         ))}
       </div>

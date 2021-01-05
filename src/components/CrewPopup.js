@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
 import styles from "../style/Crew.module.scss";
 import CrewMovieCard from "./CrewMovieCard";
@@ -20,6 +19,7 @@ function CrewPopup(props) {
     props.personData.crew.crew.filter((data) => data.job === "Director");
   const castData = props.personData && props.personData.crew.cast;
   const personData = props.personData && props.personData.person;
+
   setTimeout(() => {
     props.setCrewLoading(false);
   }, 1000);
@@ -45,10 +45,14 @@ function CrewPopup(props) {
       </div>
 
       <div>
-        <img
-          alt="poster"
-          src={`https://image.tmdb.org/t/p/w154${crewMovieData.detail.poster_path}`}
-        />
+        {crewMovieData.detail.poster_path ? (
+          <img
+            alt="poster"
+            src={`https://image.tmdb.org/t/p/w154${crewMovieData.detail.poster_path}`}
+          />
+        ) : (
+          <div className={styles.noPoster}>no poster</div>
+        )}
       </div>
 
       <a
@@ -60,7 +64,8 @@ function CrewPopup(props) {
       </a>
 
       <div className={styles.filmTitle}>
-        {crewMovieData.overview_translate !== "" &&
+        {crewMovieData.overview_translate &&
+          overviewChinese(crewMovieData) &&
           overviewChinese(crewMovieData).title}
       </div>
       <div className={styles.filmTitle}>{crewMovieData.detail.title}</div>
@@ -69,7 +74,8 @@ function CrewPopup(props) {
       </div>
       <div className={styles.overview}>
         <p>
-          {crewMovieData.overview_translate !== "" &&
+          {crewMovieData.overview_translate &&
+            overviewChinese(crewMovieData) &&
             overviewChinese(crewMovieData).overview}
         </p>
         <p>{crewMovieData.detail.overview}</p>
@@ -142,19 +148,21 @@ function CrewPopup(props) {
                   src={`https://image.tmdb.org/t/p/w154${personData.profile_path}`}
                 />
                 <div className={styles.likeBtn}>
-                  <Star
-                    className={isLiked ? styles.addBtn : styles.cancelBtn}
-                    onClick={(e) =>
-                      isLiked
-                        ? cancelLiked(
-                            e,
-                            props.personList,
-                            "person_liked",
-                            personData.id
-                          )
-                        : addLiked(e, "person_liked", obj)
-                    }
-                  />
+                  {props.userId && (
+                    <Star
+                      className={isLiked ? styles.addBtn : styles.cancelBtn}
+                      onClick={(e) =>
+                        isLiked
+                          ? cancelLiked(
+                              e,
+                              props.personList,
+                              "person_liked",
+                              personData.id
+                            )
+                          : addLiked(e, "person_liked", obj)
+                      }
+                    />
+                  )}
                 </div>
               </div>
             </div>
@@ -179,12 +187,10 @@ function CrewPopup(props) {
             {crewMovieCards("Cast", castData)}
           </div>
           {infoBox}
-          {props.crewLoading ? (
+          {props.crewLoading && (
             <div className={styles.loadingAnimate}>
               <Loading />
             </div>
-          ) : (
-            ""
           )}
         </div>
       </div>

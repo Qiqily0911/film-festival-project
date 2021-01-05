@@ -13,6 +13,7 @@
       "lint-staged": "^10.5.3",
       "nanoid": "^3.1.20",
       "node-sass": "^4.14.1",
+      "opencc-js": "^0.3.6",
       "prettier": "^2.2.1",
       "react": "^17.0.1",
       "react-dom": "^17.0.1",

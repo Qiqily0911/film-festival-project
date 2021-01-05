@@ -42,9 +42,9 @@ function App() {
   const [isScroll, setScroll] = useState(true);
 
   const [userId, setUserId] = useState();
-  const movieInfoEl = useRef(null);
+  const imageBoxEl = useRef(null);
   const crewsEl = useRef(null);
-  const infoWrap = useRef(null);
+  const movieInfoEl = useRef(null);
   const slider = useRef(null);
 
   const [prizeBoxState, setprizeBox] = useState(false);
@@ -56,16 +56,16 @@ function App() {
   useEffect(() => {
     const yearList = [];
     for (let i = 2020; i >= 1928; i--) {
-      const item = { year: i, list: [[], [], []] };
-      yearList.push(item);
+      const emptyYearBox = { year: i, list: [[], [], []] };
+      yearList.push(emptyYearBox);
     }
 
-    const refs = yearList.reduce((acc, value) => {
-      acc[value.year] = React.createRef();
-      return acc;
+    const yearRefs = yearList.reduce((yearRef, yearBox) => {
+      yearRef[yearBox.year] = React.createRef();
+      return yearRef;
     }, {});
 
-    setRefs(refs);
+    setRefs(yearRefs);
 
     listState.map((list) =>
       fillYearList(yearList, list.film_list, list.prize, list.order)
@@ -74,18 +74,33 @@ function App() {
 
     setSilderValue();
 
-    for (let i = 0; i < listState.length; i++) {
-      if (listState[i].film_list !== undefined) {
-        setScroll(true);
-        return;
+    function fillYearList(emptyYearList, fes, prize, order) {
+      if (fes) {
+        const data = fes.filter((obj) => obj.prize === prize);
+
+        emptyYearList.forEach((yearbox) => {
+          const box = yearbox.list[order];
+          data.forEach((item) => {
+            if (item.year === yearbox.year) {
+              box.push(item);
+            }
+          });
+          if (box.length === 0) {
+            box.push({ prize: null });
+          }
+        });
+      } else {
+        emptyYearList.forEach((yearbox) => {
+          yearbox.list[order].push({ prize: null });
+        });
       }
     }
 
     function setSilderValue() {
       if (
         yearListRefs &&
-        yearListRefs[year.min] !== undefined &&
-        yearListRefs[year.min].current !== null
+        yearListRefs[year.min] &&
+        yearListRefs[year.min].current
       ) {
         const percentage = dynamicHeightPercentage(
           year.max,
@@ -96,21 +111,28 @@ function App() {
       }
     }
 
-    const arr = [];
-    for (let i = 0; i < 3; i++) {
-      if (listState[i].film_list !== undefined) {
-        arr.push(listState[i].prizeId);
-      } else {
-        arr.push(null);
+    setScroll(false);
+
+    for (let i = 0; i < listState.length; i++) {
+      if (listState[i].film_list) {
+        setScroll(true);
+        return;
       }
     }
-    // console.log(listState);
-    setPrizeArr(arr);
-
-    setScroll(false);
   }, [listState]);
 
-  // console.log(listState);
+  useEffect(() => {
+    const prizeIdArr = [];
+    for (let i = 0; i < 3; i++) {
+      if (listState[i].film_list?.length > 0) {
+        prizeIdArr.push(listState[i].prizeId);
+      } else {
+        prizeIdArr.push(null);
+      }
+    }
+
+    setPrizeArr(prizeIdArr);
+  }, [listState]);
 
   useEffect(() => {
     if (userId) {
@@ -136,36 +158,14 @@ function App() {
     loadMovieData(496243, "tt6751668", InitMovieInfo, setMovieData);
   }, []);
 
-  function fillYearList(yearList, fes, prize, order) {
-    if (fes !== undefined) {
-      const data = fes.filter((obj) => obj.prize === prize);
-
-      yearList.forEach((yearbox) => {
-        const box = yearbox.list[order];
-
-        data.forEach((item) => {
-          if (item.year === yearbox.year) {
-            box.push(item);
-          }
-        });
-        if (box.length === 0) {
-          box.push({ prize: null });
-        }
-      });
-    } else {
-      yearList.forEach((yearbox) => {
-        yearbox.list[order].push({ prize: null });
-      });
-    }
-  }
-
   function resetInfoPosition() {
-    infoWrap.current.style.overflow = "hidden";
+    movieInfoEl.current.style.overflow = "hidden";
     setLoadingOpen(true);
 
-    if (movieInfoEl.current && crewsEl.current !== null) {
+    if (imageBoxEl.current && crewsEl.current) {
       crewsEl.current.scrollLeft = 0;
-      movieInfoEl.current.scrollIntoView({
+      imageBoxEl.current.scrollLeft = 0;
+      imageBoxEl.current.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
@@ -180,7 +180,9 @@ function App() {
         btnSelect.prize === listState[i].prize
       ) {
         alert("選過囉");
-        return;
+        return false;
+      } else {
+        return true;
       }
     }
   }
@@ -198,13 +200,13 @@ function App() {
       order: index,
     };
 
-    preventDoubleSelect(btnSelect);
+    if (preventDoubleSelect(btnSelect)) {
+      const arr = [...listState];
+      arr[index] = btnSelect;
 
-    const arr = [...listState];
-    arr[index] = btnSelect;
-
-    setlistState(arr);
-    setPercentValue(100);
+      setlistState(arr);
+      setPercentValue(100);
+    }
   }
 
   return (
@@ -243,8 +245,8 @@ function App() {
               <MovieFilter
                 yearlist={list}
                 yearListRefs={yearListRefs}
-                listState={listState}
                 setlistState={setlistState}
+                listState={listState}
                 setPercentValue={setPercentValue}
                 setScroll={setScroll}
                 selectPrize={selectPrize}
@@ -281,7 +283,6 @@ function App() {
                   yearlist={list}
                   yearListRefs={yearListRefs}
                   listState={listState}
-                  setlistState={setlistState}
                   year={year}
                   setYear={setYear}
                   setPercentValue={setPercentValue}
@@ -301,7 +302,6 @@ function App() {
                   movieData={movieData}
                   setMovieData={setMovieData}
                   listState={listState}
-                  setlistState={setlistState}
                   setPercentValue={setPercentValue}
                   setScroll={setScroll}
                   loadingOpen={loadingOpen}
@@ -313,9 +313,9 @@ function App() {
             )}
             <MovieInfo
               movieData={movieData}
-              movieInfoEl={movieInfoEl}
+              imageBoxEl={imageBoxEl}
               crewsEl={crewsEl}
-              infoWrap={infoWrap}
+              movieInfoEl={movieInfoEl}
               prizeBoxState={prizeBoxState}
               setprizeBox={setprizeBox}
               userId={userId}
