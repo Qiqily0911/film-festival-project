@@ -1,5 +1,7 @@
 # film-line
-> A small tool for browsing Awarded films by dragging timeline handlebar. Users can choose international film festival and find prize-winner in specific year. Another way to dive in the world of movie.
+>film + timeline
+>Browsing awarded films by timeline. 
+>Users can choose international film festivals and find movies in specific year.
 
 <img src="/film-line/main-image.png" width="400" /> 
 <img src="/film-line/index.png" width="400" />
@@ -31,16 +33,19 @@ password:123456
 #### Display awarded films of three international festivals in the same year
 <img src="/film-line/03.gif"/>
 
-#### Provided list mode to display all prize winners of the festival. Once the year value has been changed, the data will be renewed simultaneously 
+#### Provided list mode to display all award films of the festival. Real-time data update when changing the year value 
 <img src="/film-line/02.gif" />
 
-#### Displayed choosed movie information, including stills, trailers, English & Chinese overview and casts
+#### Reassembled various movie information,  including stills, trailers, English & Chinese overview and casts
 
 #### Enabled users to discover additional film works of directors and actors 
 <img src="/film-line/04.gif" />
 
 #### Enabled users to add films, directors and casts in their own favorite list
 <img src="/film-line/member_page.png" width="800" />
+
+
+## Future Features
 
 
 
