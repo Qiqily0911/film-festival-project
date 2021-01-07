@@ -1,6 +1,6 @@
 # film-line
->film + timeline
->Browsing awarded films by timeline. 
+>film + timeline <br>
+>Browsing awarded films by timeline. <br>
 >Users can choose international film festivals and find movies in specific year.
 
 <img src="/film-line/main-image.png" width="400" /> 
