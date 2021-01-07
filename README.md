@@ -25,19 +25,21 @@ password:123456
 - Version Control: Git / GitHub
 
 ## Intro
-#### Drag the timeline to discover the films of the corresponding year, and get the movie detail on one click
+#### By dragging the handlebar on the timeline, users can find movies in the corresponding year
 <img src="/film-line/01.gif"/>
 
 #### Display awarded films of three international festivals in the same year
 <img src="/film-line/03.gif"/>
 
-#### Get winner lists of all prize in the festival data display mode
+#### Provided list mode to display all prize winners of the festival. Once the year value has been changed, the data will be renewed simultaneously 
 <img src="/film-line/02.gif" />
 
-#### Find more works of the directors and actors 
+#### Displayed choosed movie information, including stills, trailers, English & Chinese overview and casts
+
+#### Enabled users to discover additional film works of directors and actors 
 <img src="/film-line/04.gif" />
 
-#### Keep the films and crews you like in favorites
+#### Enabled users to add films, directors and casts in their own favorite list
 <img src="/film-line/member_page.png" width="800" />
 
 
