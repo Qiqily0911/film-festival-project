@@ -79,6 +79,7 @@ function YearList(props) {
               <div className={styles.cardWrap}>
                 {yearbox.list.map((data, j) => (
                   <MovieCard
+                    setMovieInfoOpen={props.setMovieInfoOpen}
                     setMovieData={props.setMovieData}
                     movieData={props.movieData}
                     key={j}

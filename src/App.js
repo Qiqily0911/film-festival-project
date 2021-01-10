@@ -56,21 +56,22 @@ function App() {
 
   const [likedList, setLikedList] = useState();
   const [personList, setPersonList] = useState();
-  const [listLength, setListLength] = useState("three");
+  const [listCase, setListCase] = useState(3);
   const { height, width } = useWindowDimensions();
+  const [movieInfoOpen, setMovieInfoOpen] = useState(false);
 
   useEffect(() => {
     if (width > 1024) {
-      setListLength("three");
+      setListCase(3);
       setlistState(InitListState);
     } else if (width <= 1024 && width >= 769) {
-      setListLength("two");
+      setListCase(2);
       setlistState(InitListState.slice(0, 2));
     } else if (width <= 768 && width >= 501) {
-      setListLength("two");
+      setListCase(1);
       setlistState(InitListState.slice(0, 2));
     } else if (width <= 500) {
-      setListLength("one");
+      setListCase(0);
       setlistState(InitListState.slice(0, 1));
     }
   }, [width]);
@@ -78,20 +79,21 @@ function App() {
   useEffect(() => {
     const yearList = [];
 
-    switch (listLength) {
-      case "three":
+    switch (listCase) {
+      case 3:
         for (let i = 2020; i >= 1928; i--) {
           const emptyYearBox = { year: i, list: [[], [], []] };
           yearList.push(emptyYearBox);
         }
         break;
-      case "two":
+      case 2:
+      case 1:
         for (let i = 2020; i >= 1928; i--) {
           const emptyYearBox = { year: i, list: [[], []] };
           yearList.push(emptyYearBox);
         }
         break;
-      case "one":
+      case 0:
         for (let i = 2020; i >= 1928; i--) {
           const emptyYearBox = { year: i, list: [[]] };
           yearList.push(emptyYearBox);
@@ -124,7 +126,7 @@ function App() {
         return;
       }
     }
-  }, [listState, listLength]);
+  }, [listState, listCase]);
 
   useEffect(() => {
     const prizeIdArr = [];
@@ -315,6 +317,9 @@ function App() {
                   personList={personList}
                   setMovieData={setMovieData}
                   resetInfoPosition={resetInfoPosition}
+                  listCase={listCase}
+                  movieInfoOpen={movieInfoOpen}
+                  setMovieInfoOpen={setMovieInfoOpen}
                 />
               </>
             ) : (
@@ -334,6 +339,9 @@ function App() {
                   likedList={likedList}
                   resetInfoPosition={resetInfoPosition}
                   slider={slider}
+                  listCase={listCase}
+                  movieInfoOpen={movieInfoOpen}
+                  setMovieInfoOpen={setMovieInfoOpen}
                 />
                 <div
                   className={styles.switchBtn}
@@ -358,7 +366,9 @@ function App() {
                   resetInfoPosition={resetInfoPosition}
                   selectPrize={selectPrize}
                   prizeArr={prizeArr}
-                  listLength={listLength}
+                  listCase={listCase}
+                  movieInfoOpen={movieInfoOpen}
+                  setMovieInfoOpen={setMovieInfoOpen}
                 />
               </>
             )}
@@ -375,6 +385,9 @@ function App() {
               memberPage={memberPage}
               loadingOpen={loadingOpen}
               setLoadingOpen={setLoadingOpen}
+              listCase={listCase}
+              movieInfoOpen={movieInfoOpen}
+              setMovieInfoOpen={setMovieInfoOpen}
             />
           </div>
         </div>

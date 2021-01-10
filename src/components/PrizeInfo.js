@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { BtnData } from "../data/LocalSource";
 import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
 import styles from "../style/PrizeInfo.module.scss";
@@ -11,6 +11,7 @@ function PrizeInfo(props) {
     const templist = list.film_list || [];
 
     function loadData(tmdbId, imdbId, data) {
+      props.setMovieInfoOpen(true);
       props.resetInfoPosition();
       loadMovieData(tmdbId, imdbId, data, props.setMovieData);
     }
@@ -128,12 +129,15 @@ function PrizeInfo(props) {
 
   let openState;
   let closeState;
-  if (props.listLength === "three") {
+  if (props.listCase === 3) {
     openState = "27.6%";
     closeState = "calc(-36.8% + 40px)";
-  } else if (props.listLength === "two") {
+  } else if (props.listCase === 2) {
     openState = "36%";
     closeState = "-18%";
+  } else if (props.listCase < 2) {
+    openState = "0";
+    closeState = "-90%";
   }
 
   return (

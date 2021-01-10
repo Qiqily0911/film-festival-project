@@ -41,19 +41,19 @@
 }
 
 .outter {
-  //  border: 1px solid red;
-  // padding: 0 40px;
-  //  position: fixed;
-  //  bottom: 0;
-  //  top: 100px;
   width: 70%;
   overflow: scroll;
+  @media screen and (max-width: 1024px) {
+    width: 60%;
+  }
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
   .innerBox {
     width: 100%;
     padding: 0 5%;
     justify-content: center;
-    // display: flex;
-    // flex-flow: row wrap;
+
     .headline {
       border-bottom: 1px solid $color-blue;
       margin: 20px;
@@ -69,8 +69,6 @@
       }
     }
     .cardBox {
-      //  margin: 0 auto;
-      //  border: 1px solid green;
       display: flex;
       flex-flow: row wrap;
       justify-content: center;
@@ -86,7 +84,6 @@
         width: 180px;
         margin: 20px;
         .posterBox {
-          // transition: all 0.3s ease;
           cursor: pointer;
           width: 180px;
           height: 270px;

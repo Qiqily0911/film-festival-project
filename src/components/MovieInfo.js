@@ -106,7 +106,26 @@ function MovieInfo(props) {
   };
 
   return (
-    <div className={styles.movieInfo}>
+    <div
+      className={styles.movieInfo}
+      style={
+        props.listCase < 2
+          ? { right: props.movieInfoOpen ? "0" : " -100%" }
+          : {}
+      }
+    >
+      {props.listCase < 2 && (
+        <div
+          className={styles.closeBtn}
+          onClick={() => {
+            console.log(props.movieInfoOpen);
+            props.setMovieInfoOpen(false);
+          }}
+        >
+          ×
+        </div>
+      )}
+
       <div className={styles.outterBox} ref={props.movieInfoEl}>
         {props.loadingOpen && (
           <div className={styles.loadingAnimate}>

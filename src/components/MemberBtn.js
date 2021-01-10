@@ -32,7 +32,6 @@ function MemberBtn(props) {
     }
   }, [currentUser, props]);
 
-  //  show user data
   useEffect(() => {
     if (currentUser) {
       currentUser && props.setUserId(currentUser.uid);

@@ -60,6 +60,9 @@ export function MemberPage(props) {
                     memberPage={props.memberPage}
                     likedList={props.likedList}
                     resetInfoPosition={props.resetInfoPosition}
+                    listCase={props.listCase}
+                    movieInfoOpen={props.movieInfoOpen}
+                    setMovieInfoOpen={props.setMovieInfoOpen}
                   />
                 );
               })}
