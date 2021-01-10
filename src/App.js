@@ -12,7 +12,11 @@ import MemberBtn from "./components/MemberBtn";
 import { MemberNav, MemberPage } from "./components/MemberPage";
 import { InitMovieInfo, InitListState } from "./data/LocalSource";
 import { ReactComponent as Logo } from "./image/logo-2.svg";
-import { loadMovieData, dynamicHeightPercentage } from "./utils";
+import {
+  loadMovieData,
+  dynamicHeightPercentage,
+  useWindowDimensions,
+} from "./utils";
 
 function App() {
   const [movieData, setMovieData] = useState({
@@ -52,12 +56,59 @@ function App() {
 
   const [likedList, setLikedList] = useState();
   const [personList, setPersonList] = useState();
+  const [listArr, setListArr] = useState();
+  const { height, width } = useWindowDimensions();
+
+  useEffect(() => {
+    if (width > 1024) {
+      setListArr(3);
+      setlistState(InitListState);
+      console.log("normal");
+    } else if (width <= 1024 && width >= 769) {
+      setListArr(2);
+      setlistState(InitListState.slice(0, 2));
+      console.log("1024");
+    } else if (width <= 768 && width >= 501) {
+      setListArr(2);
+      setlistState(InitListState.slice(0, 2));
+      console.log("768");
+    } else if (width <= 500) {
+      setListArr(1);
+      setlistState(InitListState.slice(0, 1));
+      console.log("500");
+    }
+  }, [width]);
 
   useEffect(() => {
     const yearList = [];
-    for (let i = 2020; i >= 1928; i--) {
-      const emptyYearBox = { year: i, list: [[], [], []] };
-      yearList.push(emptyYearBox);
+
+    switch (listArr) {
+      case 3:
+        console.log(333);
+        for (let i = 2020; i >= 1928; i--) {
+          const emptyYearBox = { year: i, list: [[], [], []] };
+          yearList.push(emptyYearBox);
+        }
+        break;
+      case 2:
+        console.log(222);
+        for (let i = 2020; i >= 1928; i--) {
+          const emptyYearBox = { year: i, list: [[], []] };
+          yearList.push(emptyYearBox);
+        }
+        break;
+      case 1:
+        console.log(111);
+        for (let i = 2020; i >= 1928; i--) {
+          const emptyYearBox = { year: i, list: [[]] };
+          yearList.push(emptyYearBox);
+        }
+        break;
+      default:
+        for (let i = 2020; i >= 1928; i--) {
+          const emptyYearBox = { year: i, list: [[], [], []] };
+          yearList.push(emptyYearBox);
+        }
     }
 
     const yearRefs = yearList.reduce((yearRef, yearBox) => {
@@ -71,46 +122,7 @@ function App() {
       fillYearList(yearList, list.film_list, list.prize, list.order)
     );
     setList(yearList);
-
     setSilderValue();
-
-    function fillYearList(emptyYearList, fes, prize, order) {
-      if (fes) {
-        const data = fes.filter((obj) => obj.prize === prize);
-
-        emptyYearList.forEach((yearbox) => {
-          const box = yearbox.list[order];
-          data.forEach((item) => {
-            if (item.year === yearbox.year) {
-              box.push(item);
-            }
-          });
-          if (box.length === 0) {
-            box.push({ prize: null });
-          }
-        });
-      } else {
-        emptyYearList.forEach((yearbox) => {
-          yearbox.list[order].push({ prize: null });
-        });
-      }
-    }
-
-    function setSilderValue() {
-      if (
-        yearListRefs &&
-        yearListRefs[year.min] &&
-        yearListRefs[year.min].current
-      ) {
-        const percentage = dynamicHeightPercentage(
-          year.max,
-          year.min,
-          yearListRefs
-        );
-        setPercentValue(percentage);
-      }
-    }
-
     setScroll(false);
 
     for (let i = 0; i < listState.length; i++) {
@@ -119,11 +131,11 @@ function App() {
         return;
       }
     }
-  }, [listState]);
+  }, [listState, listArr]);
 
   useEffect(() => {
     const prizeIdArr = [];
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < listState.length; i++) {
       if (listState[i].film_list?.length > 0) {
         prizeIdArr.push(listState[i].prizeId);
       } else {
@@ -157,6 +169,43 @@ function App() {
   useEffect(() => {
     loadMovieData(496243, "tt6751668", InitMovieInfo, setMovieData);
   }, []);
+
+  function fillYearList(emptyYearList, fes, prize, order) {
+    if (fes) {
+      const data = fes.filter((obj) => obj.prize === prize);
+
+      emptyYearList.forEach((yearbox) => {
+        const box = yearbox.list[order];
+        data.forEach((item) => {
+          if (item.year === yearbox.year) {
+            box.push(item);
+          }
+        });
+        if (box.length === 0) {
+          box.push({ prize: null });
+        }
+      });
+    } else {
+      emptyYearList.forEach((yearbox) => {
+        yearbox.list[order].push({ prize: null });
+      });
+    }
+  }
+
+  function setSilderValue() {
+    if (
+      yearListRefs &&
+      yearListRefs[year.min] &&
+      yearListRefs[year.min].current
+    ) {
+      const percentage = dynamicHeightPercentage(
+        year.max,
+        year.min,
+        yearListRefs
+      );
+      setPercentValue(percentage);
+    }
+  }
 
   function resetInfoPosition() {
     movieInfoEl.current.style.overflow = "hidden";
