@@ -1,15 +1,13 @@
 # film-line
 >film + timeline <br>
 >Browsing awarded films by timeline. <br>
->Users can choose international film festivals and find movies in specific year.
+>Users can choose international film festivals and find movies in specific year.<br>
+https://film-db-9936d.web.app/<br>
 
 <img src="/film-line/main-image.png" width="400" /> 
 <img src="/film-line/index.png" width="400" />
 
-## Online DEMO
-Web-site: https://film-db-9936d.web.app/ <br>
-test account: test@gmail.com <br>
-password:123456
+#### Using desktop device and Chrome browser is highly recommended for better user experience.
 
 ## Technologies
 
@@ -36,7 +34,7 @@ password:123456
 #### Provided list mode to display all award films of the festival. Real-time data update when changing the year value 
 <img src="/film-line/02.gif" width="600"/>
 
-#### Reassembled various movie information,  including stills, trailers, English & Chinese overview and casts
+#### Reassembled various movie information, including stills, trailers, English & Chinese overview and casts
 
 #### Enabled users to discover additional film works of directors and actors 
 <img src="/film-line/04.gif" width="600"/>
@@ -46,6 +44,8 @@ password:123456
 
 
 ## Future Features
-
+- Mark unwatched/watched movies
+- Share movie list to friends
+- Follow recommended movie list
 
 
