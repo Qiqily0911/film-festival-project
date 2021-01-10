@@ -54,6 +54,11 @@ export default function CrewMovieCard(props) {
               });
             })
             .then(props.setInfoOpen(true));
+
+          props.overviewEl.current.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
         }}
       >
         {props.data.poster_path !== null ? (

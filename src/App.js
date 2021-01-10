@@ -56,49 +56,42 @@ function App() {
 
   const [likedList, setLikedList] = useState();
   const [personList, setPersonList] = useState();
-  const [listArr, setListArr] = useState();
+  const [listLength, setListLength] = useState("three");
   const { height, width } = useWindowDimensions();
 
   useEffect(() => {
     if (width > 1024) {
-      setListArr(3);
+      setListLength("three");
       setlistState(InitListState);
-      console.log("normal");
     } else if (width <= 1024 && width >= 769) {
-      setListArr(2);
+      setListLength("two");
       setlistState(InitListState.slice(0, 2));
-      console.log("1024");
     } else if (width <= 768 && width >= 501) {
-      setListArr(2);
+      setListLength("two");
       setlistState(InitListState.slice(0, 2));
-      console.log("768");
     } else if (width <= 500) {
-      setListArr(1);
+      setListLength("one");
       setlistState(InitListState.slice(0, 1));
-      console.log("500");
     }
   }, [width]);
 
   useEffect(() => {
     const yearList = [];
 
-    switch (listArr) {
-      case 3:
-        console.log(333);
+    switch (listLength) {
+      case "three":
         for (let i = 2020; i >= 1928; i--) {
           const emptyYearBox = { year: i, list: [[], [], []] };
           yearList.push(emptyYearBox);
         }
         break;
-      case 2:
-        console.log(222);
+      case "two":
         for (let i = 2020; i >= 1928; i--) {
           const emptyYearBox = { year: i, list: [[], []] };
           yearList.push(emptyYearBox);
         }
         break;
-      case 1:
-        console.log(111);
+      case "one":
         for (let i = 2020; i >= 1928; i--) {
           const emptyYearBox = { year: i, list: [[]] };
           yearList.push(emptyYearBox);
@@ -131,7 +124,7 @@ function App() {
         return;
       }
     }
-  }, [listState, listArr]);
+  }, [listState, listLength]);
 
   useEffect(() => {
     const prizeIdArr = [];
@@ -342,6 +335,14 @@ function App() {
                   resetInfoPosition={resetInfoPosition}
                   slider={slider}
                 />
+                <div
+                  className={styles.switchBtn}
+                  onClick={() =>
+                    prizeBoxState ? setprizeBox(false) : setprizeBox(true)
+                  }
+                >
+                  {prizeBoxState ? "Poster" : "List"} mode
+                </div>
                 <PrizeInfo
                   year={year}
                   setYear={setYear}
@@ -357,6 +358,7 @@ function App() {
                   resetInfoPosition={resetInfoPosition}
                   selectPrize={selectPrize}
                   prizeArr={prizeArr}
+                  listLength={listLength}
                 />
               </>
             )}

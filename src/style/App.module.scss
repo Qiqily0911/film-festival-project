@@ -75,6 +75,12 @@
 
   aside {
     width: 8%;
+    @media screen and (max-width: 1024px) {
+      width: 10%;
+    }
+    @media screen and (max-width: 768px) {
+      width: 15%;
+    }
     background-color: $color-blue;
     display: flex;
     flex-direction: column;
@@ -122,8 +128,13 @@
 
   main {
     width: 92%;
+    @media screen and (max-width: 1024px) {
+      width: 90%;
+    }
+    @media screen and (max-width: 768px) {
+      width: 85%;
+    }
     .navbar {
-      // padding: 0 20px;
       display: flex;
       justify-content: space-between;
       width: 100%;
@@ -133,7 +144,6 @@
       background-color: white;
     }
     .container {
-      // border: 1px solid blue;
       width: 100%;
       height: 100%;
       justify-content: space-between;
@@ -145,6 +155,18 @@
         width: 100%;
         height: calc(100vh - 100px);
         display: flex;
+        position: relative;
+
+        .switchBtn {
+          display: none;
+          position: absolute;
+          z-index: 6;
+          left: 15px;
+          bottom: 15px;
+          @media screen and (max-width: 1024px) {
+            display: block;
+          }
+        }
       }
     }
   }

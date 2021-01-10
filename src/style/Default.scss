@@ -5,22 +5,19 @@
   padding: 0;
   margin: 0;
   font-family: "Noto Sans TC", sans-serif;
-  ::-webkit-scrollbar {
-    display: none;
-  }
+  // ::-webkit-scrollbar {
+  //   display: none;
+  // }
 }
 
-/* theme color */
 $color-lightgray: rgb(219, 219, 219);
 $color-gray: rgb(139, 139, 139);
 $color-blue: rgb(6, 70, 107);
 $color-white: white;
 $color-gold: rgb(173, 150, 84);
 
-/* font size */
 $font-p: 0.9rem;
 
-/* padding size */
 $padding-l: 2rem;
 
 @mixin centerPosition {
@@ -90,20 +87,9 @@ $padding-l: 2rem;
   }
 }
 
-/* general css */
-
-.d-flex {
-  display: flex;
-}
-
-.d-block {
-  display: block;
-}
-
-.d-none {
-  display: none;
-}
-
-.align-item-center {
-  align-items: center;
+@mixin middleWrap {
+  margin: 0 auto;
+  @media screen and (min-width: 1024.9px) {
+    padding-right: 40px;
+  }
 }

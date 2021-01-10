@@ -5,17 +5,17 @@
   z-index: 5;
   bottom: 0;
   height: calc(100% - 100px);
-  width: 64.4%;
+  width: 92% * 0.7;
+  @media screen and (max-width: 1024px) {
+    width: 90% * 0.6;
+  }
   box-shadow: rgba(148, 110, 110, 0.1) 0px 0px 5px 0px,
     rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
   display: flex;
   overflow: hidden;
   background-color: white;
   transition: 0.7s ease;
-  .handleBar:hover {
-    transition: 0.7s ease;
-    background: rgb(105, 105, 105);
-  }
+
   .handleBar {
     display: flex;
     align-items: center;
@@ -30,11 +30,13 @@
     letter-spacing: 0.3rem;
     color: white;
     background-color: $color-gray;
-    // background: linear-gradient(180deg, $color-blue, rgba(255, 0, 0, 0) 70.71%);
     transition: 1s ease;
 
+    @media screen and (max-width: 1024px) {
+      display: none;
+    }
+
     .arrow {
-      // margin-top: -30px;
       width: 20px;
       height: 20px;
       fill: white;
@@ -48,12 +50,11 @@
       letter-spacing: 0.3rem;
     }
   }
-  // .handleBar:hover {
-  //   .arrow {
-  //     transition: 0.5s ease;
-  //     margin-top: 0;
-  //   }
-  // }
+  .handleBar:hover {
+    transition: 0.7s ease;
+    background: rgb(105, 105, 105);
+  }
+
   .outterBox {
     overflow: scroll;
 
@@ -65,7 +66,7 @@
       width: 100%;
       height: 100%;
       .prizeData {
-        width: calc(100% / 3);
+        width: 100%;
         position: relative;
         transition: all 0.5s ease;
         overflow: scroll;
@@ -94,7 +95,6 @@
           flex-direction: column;
 
           .upper {
-            // border: 1px solid red;
             display: flex;
             align-items: center;
             padding-bottom: 10px;
@@ -102,14 +102,12 @@
             border-bottom: 1px solid $color-gold;
 
             .title {
-              // display: flex;
               margin-left: 10px;
               font-size: 1.2rem;
               font-weight: 600;
               color: $color-blue;
             }
             .title > div:nth-child(2) {
-              //  color: red;
               font-size: 1rem;
             }
 
@@ -168,18 +166,8 @@
                 transition: 0.3s ease;
               }
             }
-
-            // @keyframes fadeIn {
-            //    0% {
-            //       opacity: 0;
-            //    }
-            //    100% {
-            //       opacity: 1;
-            //    }
-            // }
           }
           .description {
-            // margin-top: 50px;
             height: 40%;
             overflow: hidden;
             font-size: $font-p;
@@ -194,8 +182,7 @@
 
           .description > div:nth-child(2) {
             padding: 10px 0;
-            // border: 1px solid red;
-            // width: 100%;
+
             overflow: scroll;
           }
         }

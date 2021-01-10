@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "../style/Crew.module.scss";
 import CrewMovieCard from "./CrewMovieCard";
 import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
@@ -19,6 +19,7 @@ function CrewPopup(props) {
     props.personData.crew.crew.filter((data) => data.job === "Director");
   const castData = props.personData && props.personData.crew.cast;
   const personData = props.personData && props.personData.person;
+  const overviewEl = useRef(null);
 
   setTimeout(() => {
     props.setCrewLoading(false);
@@ -73,7 +74,7 @@ function CrewPopup(props) {
         {crewMovieData.detail.original_title}
       </div>
       <div className={styles.overview}>
-        <p>
+        <p ref={overviewEl}>
           {crewMovieData.overview_translate &&
             overviewChinese(crewMovieData) &&
             overviewChinese(crewMovieData).overview}
@@ -122,6 +123,7 @@ function CrewPopup(props) {
                     setInfoOpen={setInfoOpen}
                     userId={props.userId}
                     setCrewMovieData={setCrewMovieData}
+                    overviewEl={overviewEl}
                   />
                 ))
             : ""}
@@ -186,6 +188,8 @@ function CrewPopup(props) {
             {crewMovieCards("Director", crewData)}
             {crewMovieCards("Cast", castData)}
           </div>
+
+          {/* FIXME: 畫面跟著移動 */}
           {infoBox}
           {props.crewLoading && (
             <div className={styles.loadingAnimate}>

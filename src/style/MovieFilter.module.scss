@@ -11,30 +11,27 @@
 }
 
 .movieFilter {
-  // border: 1px solid orange;
   width: 70%;
+  @media screen and (max-width: 1024px) {
+    width: 60%;
+  }
   display: flex;
 
   .titleBox {
-    margin: 0 auto;
-    // margin: 0 20px;
     display: flex;
-    // border: 1px solid blue;
+    @include middleWrap;
   }
   .fesTitle {
     @include navBtn;
-    // border: 1px solid red;
     @include cardMargin;
 
     .inner {
       @include centerPosition;
       .icon {
         position: absolute;
-        // border: 1px solid green;
         width: 30px;
         height: 30px;
         img {
-          // width: 100%;
           max-height: 30px;
         }
       }
@@ -59,30 +56,20 @@
       top: -3px;
       right: -40px;
     }
-    // .addBtn {
-    //    @include btnStyle;
-    // }
 
     .option {
       @include showUp;
-      //  border: 1px solid red;
       width: 200px;
       position: absolute;
       top: 100px;
-      //  bottom: 0;
       z-index: 5;
       padding: 30px 0;
-      // background-color: white;
-      // right: -30%;
-      // left: -30%;
+
       .wrap {
         max-height: 40px;
         overflow: hidden;
-        // transition: all 0.4s ease-in;
-        // border: 0.5px solid red;
       }
       .wrapOpen {
-        // border: 1px solid red;
         max-height: 300px;
         transition: all 0.5s ease-out;
       }
@@ -94,15 +81,13 @@
 
         button {
           height: 20px;
-          //  line-height: 20px;
+
           color: $color-gray;
           font-weight: 300;
-          //  border: 1px solid red;
         }
       }
 
       button {
-        // border: 1px solid red;
         width: 100%;
         border: 0;
         background: none;

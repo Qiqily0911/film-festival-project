@@ -154,24 +154,23 @@ function MovieInfo(props) {
                     <p>{props.movieData.localData.film_name_zh}</p>
                   </div>
 
-                  <div
-                    className={isLiked ? styles.addBtn : styles.cancelBtn}
-                    onClick={(e) => {
-                      if (props.userId) {
-                        isLiked
-                          ? cancelLiked(
-                              e,
-                              props.likedList,
-                              "movie_liked",
-                              movieInfo.tmdbId
-                            )
-                          : addLiked(e, "movie_liked", obj);
-                      } else {
-                        alert("登入會員才能加入收藏喔！");
-                      }
-                    }}
-                  >
-                    <Bookmark />
+                  <div className={isLiked ? styles.addBtn : styles.cancelBtn}>
+                    <Bookmark
+                      onClick={(e) => {
+                        if (props.userId) {
+                          isLiked
+                            ? cancelLiked(
+                                e,
+                                props.likedList,
+                                "movie_liked",
+                                movieInfo.tmdbId
+                              )
+                            : addLiked(e, "movie_liked", obj);
+                        } else {
+                          alert("登入會員才能加入收藏喔！");
+                        }
+                      }}
+                    />
                   </div>
                 </div>
               </div>
@@ -320,19 +319,19 @@ function MovieInfo(props) {
                     ))}
                 </div>
               </div>
-              {isCrewOpen && (
-                <CrewPopup
-                  userId={props.userId}
-                  setCrewOpen={setCrewOpen}
-                  personData={personData}
-                  likedList={props.likedList}
-                  crewLoading={crewLoading}
-                  setCrewLoading={setCrewLoading}
-                  personList={props.personList}
-                />
-              )}
             </div>
           </div>
+          {isCrewOpen && (
+            <CrewPopup
+              userId={props.userId}
+              setCrewOpen={setCrewOpen}
+              personData={personData}
+              likedList={props.likedList}
+              crewLoading={crewLoading}
+              setCrewLoading={setCrewLoading}
+              personList={props.personList}
+            />
+          )}
         </div>
       </div>
     </div>

@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { useState, useEffect } from "react";
 import { BtnData } from "../data/LocalSource";
 import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
@@ -108,9 +107,9 @@ function PrizeInfo(props) {
                           className={styles.prizeName}
                           onClick={() => props.selectPrize(fes, prize, index)}
                           style={{
-                            color: props.prizeArr.includes(prize.dataId)
-                              ? "#ad9654"
-                              : "",
+                            color:
+                              props.prizeArr.includes(prize.dataId) &&
+                              "#ad9654",
                           }}
                         >
                           {prize.subBtnName}
@@ -127,10 +126,20 @@ function PrizeInfo(props) {
     }
   };
 
+  let openState;
+  let closeState;
+  if (props.listLength === "three") {
+    openState = "27.6%";
+    closeState = "calc(-36.8% + 40px)";
+  } else if (props.listLength === "two") {
+    openState = "36%";
+    closeState = "-18%";
+  }
+
   return (
     <div
       className={styles.prizeInfo}
-      style={{ right: props.prizeBoxState ? "27.6%" : "calc(-36.8% + 40px)" }}
+      style={{ right: props.prizeBoxState ? openState : closeState }}
     >
       <div
         className={styles.handleBar}
