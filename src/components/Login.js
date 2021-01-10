@@ -73,7 +73,6 @@ function Login() {
           <p>Log in with FaceBook</p>
         </div>
         <div className={styles.nativeSignIn}>
-          {/* ======== native sign-in ========*/}
           <div className={styles.abc}>
             {error && <div>{error}</div>}
             <p>{currentUser && currentUser.email}</p>
@@ -82,12 +81,22 @@ function Login() {
             <div id="email">
               <label>Email</label>
               <br />
-              <input type="email" ref={emailRef} required />
+              <input
+                type="email"
+                ref={emailRef}
+                required
+                value="test@gmail.com"
+              />
             </div>
             <div id="password">
               <label>Password</label>
               <br />
-              <input type="password" ref={passwordRef} required />
+              <input
+                type="password"
+                ref={passwordRef}
+                required
+                value="123456"
+              />
             </div>
 
             <button
@@ -98,8 +107,6 @@ function Login() {
               Log In
             </button>
           </form>
-
-          {/* ======== native sign-in ========*/}
         </div>
         <button className={styles.switchBtn} onClick={() => setSignup(false)}>
           沒有帳號？註冊會員
@@ -116,8 +123,7 @@ function Login() {
           <Logo />
         </div>
       </div>
-      {/* ======== native sign-up ========*/}
-      {/* {error && <div>{error}</div>} */}
+
       <div className={styles.main}>
         <div className={styles.nativeSignIn}>
           <form onSubmit={handleSignUp}>
@@ -131,11 +137,16 @@ function Login() {
               <br />
               <input type="email" ref={emailRef} required />
             </div>
-            {/* TODO set remind: passwords must over 6 charactors */}
+
             <div id="password">
               <label>Password</label>
               <br />
-              <input type="password" ref={passwordRef} required />
+              <input
+                type="password"
+                ref={passwordRef}
+                placeholder="請輸入6個以上字符"
+                required
+              />
             </div>
             <div id="password-confirm">
               <label>Password Confirmatiom:</label>
@@ -151,7 +162,6 @@ function Login() {
             </button>
           </form>
         </div>
-        {/* ======== native sign-up ========*/}
 
         <button className={styles.switchBtn} onClick={() => setSignup(true)}>
           已經有帳號了嗎？登入會員

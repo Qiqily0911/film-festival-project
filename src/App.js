@@ -46,6 +46,7 @@ function App() {
   const [isScroll, setScroll] = useState(true);
 
   const [userId, setUserId] = useState();
+  const welcomeRef = useRef(null);
   const imageBoxEl = useRef(null);
   const crewsEl = useRef(null);
   const movieInfoEl = useRef(null);
@@ -255,7 +256,11 @@ function App() {
 
   return (
     <div className={styles.outter}>
-      {/* <Welcome welcomeOpen={welcomeOpen} welcomeRef={welcomeRef} setWelcome={setWelcome} /> */}
+      <Welcome
+        welcomeOpen={welcomeOpen}
+        welcomeRef={welcomeRef}
+        setWelcome={setWelcome}
+      />
       <aside>
         <div
           className={styles.logo}
@@ -304,6 +309,7 @@ function App() {
                 memberPage={memberPage}
                 setMemberPage={setMemberPage}
                 setprizeBox={setprizeBox}
+                listCase={listCase}
               />
             </AuthProvider>
           </div>
