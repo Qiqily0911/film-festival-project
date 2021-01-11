@@ -24,6 +24,10 @@ https://film-db-9936d.web.app/<br>
   
 - Version Control: Git / GitHub
 
+## Structure
+<img src="/film-line/structure.png" width="600"/>
+
+
 ## Intro
 #### By dragging the handlebar on the timeline, users can find movies in the corresponding year
 <img src="/film-line/01.gif" width="600"/>
