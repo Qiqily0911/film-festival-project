@@ -40,6 +40,8 @@ function CrewPopup(props) {
   }, [personData]);
 
   const infoBox = (
+    // style={{ right: infoOpen ? "0" : "-30%" }}
+    // className={`${styles.infoBox} ${infoOpen ? styles.move : styles.back}`
     <div className={styles.infoBox} style={{ right: infoOpen ? "0" : "-30%" }}>
       <div className={styles.arrow} onClick={() => setInfoOpen(false)}>
         <Arrow />
@@ -106,27 +108,25 @@ function CrewPopup(props) {
     } else {
       newArr = crewArr;
     }
+
     return (
       <div className={styles.outter}>
         <div className={styles.title}>{title}</div>
         <div className={styles.inner}>
-          {newArr
-            ? newArr
-                .sort((a, b) =>
-                  a["release_date"] > b["release_date"] ? 1 : -1
-                )
-                .map((data, i) => (
-                  <CrewMovieCard
-                    key={i}
-                    data={data}
-                    likedList={props.likedList}
-                    setInfoOpen={setInfoOpen}
-                    userId={props.userId}
-                    setCrewMovieData={setCrewMovieData}
-                    overviewEl={overviewEl}
-                  />
-                ))
-            : ""}
+          {newArr &&
+            newArr
+              .sort((a, b) => (a["release_date"] > b["release_date"] ? 1 : -1))
+              .map((data, i) => (
+                <CrewMovieCard
+                  key={i}
+                  data={data}
+                  likedList={props.likedList}
+                  setInfoOpen={setInfoOpen}
+                  userId={props.userId}
+                  setCrewMovieData={setCrewMovieData}
+                  overviewEl={overviewEl}
+                />
+              ))}
         </div>
       </div>
     );
@@ -142,55 +142,55 @@ function CrewPopup(props) {
           ×
         </div>
         <div className={styles.container}>
-          <div className={styles.profile}>
-            <div className={styles.photo}>
-              <div>
-                <img
-                  alt="profile"
-                  src={`https://image.tmdb.org/t/p/w154${personData.profile_path}`}
-                />
-                <div className={styles.likeBtn}>
-                  {props.userId && (
-                    <Star
-                      className={isLiked ? styles.addBtn : styles.cancelBtn}
-                      onClick={(e) =>
-                        isLiked
-                          ? cancelLiked(
-                              e,
-                              props.personList,
-                              "person_liked",
-                              personData.id
-                            )
-                          : addLiked(e, "person_liked", obj)
-                      }
-                    />
-                  )}
+          {infoBox}
+          <div className={styles.wrap}>
+            <div className={styles.profile}>
+              <div className={styles.photo}>
+                <div>
+                  <img
+                    alt="profile"
+                    src={`https://image.tmdb.org/t/p/w154${personData.profile_path}`}
+                  />
+                  <div className={styles.likeBtn}>
+                    {props.userId && (
+                      <Star
+                        className={isLiked ? styles.addBtn : styles.cancelBtn}
+                        onClick={(e) =>
+                          isLiked
+                            ? cancelLiked(
+                                e,
+                                props.personList,
+                                "person_liked",
+                                personData.id
+                              )
+                            : addLiked(e, "person_liked", obj)
+                        }
+                      />
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-            <span className={styles.name}>{personData.name}</span>
-            {personNameCh}
-            {personData.birthday}
-            <a
-              href={`https://www.imdb.com/name/${personData.imdb_id}/`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <div>IMDB</div>
-            </a>
+              <span className={styles.name}>{personData.name}</span>
+              {personNameCh}
+              {personData.birthday}
+              <a
+                href={`https://www.imdb.com/name/${personData.imdb_id}/`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <div>IMDB</div>
+              </a>
 
-            <div className={styles.biography}>
-              <p>{personData.biography}</p>
+              <div className={styles.biography}>
+                <p>{personData.biography}</p>
+              </div>
+            </div>
+            <div className={styles.movieBox}>
+              {crewMovieCards("Director", crewData)}
+              {crewMovieCards("Cast", castData)}
             </div>
           </div>
 
-          <div className={styles.movieBox}>
-            {crewMovieCards("Director", crewData)}
-            {crewMovieCards("Cast", castData)}
-          </div>
-
-          {/* FIXME: 畫面跟著移動 */}
-          {infoBox}
           {props.crewLoading && (
             <div className={styles.loadingAnimate}>
               <Loading />

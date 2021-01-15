@@ -24,168 +24,166 @@
       @include closeBtnStyle;
     }
     .container {
-      //  padding: 20px;
       width: 100%;
       height: 100%;
+
       color: gray;
       overflow: hidden;
-      display: flex;
       position: relative;
-      .profile {
-        background-color: $color-lightgray;
-        padding: 30px;
-        width: 30%;
+      .wrap {
         display: flex;
-        flex-direction: column;
-
-        .photo {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        .profile {
+          background-color: $color-lightgray;
+          padding: 30px;
+          width: 30%;
           display: flex;
-          .likeBtn {
-            // fill: rgba(129, 129, 129, 0.5);
-            position: absolute;
-            bottom: 10px;
-            right: 6px;
+          flex-direction: column;
 
-            // border: 1px solid $color-gray;
+          .photo {
+            display: flex;
+            .likeBtn {
+              position: absolute;
+              bottom: 10px;
+              right: 6px;
+              cursor: pointer;
+            }
+          }
+
+          @mixin bookmark {
+            z-index: 2;
+            width: 30px;
+            height: 30px;
+            filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.3));
+          }
+          .addBtn {
+            @include bookmark;
+            fill: $color-gold;
+            stroke: rgba(255, 255, 255, 0.75);
+          }
+          .cancelBtn {
+            @include bookmark;
+            fill: rgba(0, 0, 0, 0.3);
+            stroke: rgba(255, 255, 255, 0.3);
+            transition: 0.3s ease;
+          }
+
+          .photo > div:nth-child(1) {
+            position: relative;
+          }
+          .photo > div:hover {
+            .cancelBtn {
+              fill: rgba(255, 255, 255, 0.3);
+            }
+          }
+          .name {
+            font-size: 20px;
+            font-weight: 600;
+            color: $color-blue;
+          }
+          a {
+            text-decoration: none;
+            color: $color-gray;
+            text-align: center;
+            padding: 3px 5px;
+            margin: 5px;
+            border: 1px solid $color-gray;
             cursor: pointer;
           }
-        }
 
-        @mixin bookmark {
-          z-index: 2;
-          width: 30px;
-          height: 30px;
-          filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.3));
-        }
-        .addBtn {
-          @include bookmark;
-          fill: $color-gold;
-          stroke: rgba(255, 255, 255, 0.75);
-        }
-        .cancelBtn {
-          @include bookmark;
-          //  fill: red;
-          fill: rgba(0, 0, 0, 0.3);
-          stroke: rgba(255, 255, 255, 0.3);
-          //  opacity: 0;
-          transition: 0.3s ease;
-        }
-        // .cancelBtn:active {
-        //    fill: rgba(0, 0, 0, 0.7);
-        // }
-
-        .photo > div:nth-child(1) {
-          position: relative;
-        }
-        .photo > div:hover {
-          .cancelBtn {
-            fill: rgba(255, 255, 255, 0.3);
+          .biography {
+            margin-top: 10px;
+            width: 100%;
+            overflow: scroll;
+            p {
+              font-size: $font-p;
+            }
           }
         }
-        .name {
-          font-size: 20px;
-          font-weight: 600;
-          color: $color-blue;
-        }
-        a {
-          text-decoration: none;
-          color: $color-gray;
-          text-align: center;
-          padding: 3px 5px;
-          margin: 5px;
-          border: 1px solid $color-gray;
-          cursor: pointer;
-        }
-
-        .biography {
-          margin-top: 10px;
+        .movieBox {
+          margin: 30px;
           width: 100%;
+          display: flex;
+          flex-flow: row wrap;
           overflow: scroll;
-          p {
-            font-size: $font-p;
-          }
-        }
-      }
-      .movieBox {
-        margin: 30px;
-        width: 100%;
-        display: flex;
-        flex-flow: row wrap;
-        overflow: scroll;
-        text-align: center;
+          text-align: center;
 
-        .outter {
-          .title {
-            text-align: start;
-          }
-          .inner {
-            display: flex;
-            flex-flow: row wrap;
-            .movieCard {
-              // border: 1px solid blue;
-              margin: 20px 10px;
-              width: 120px;
-              position: relative;
-              //  overflow: hidden;
-              font-size: 0.8rem;
-
-              .addBtn {
-                @include bookmark;
-                // @include shadow;
-                fill: $color-gold;
-              }
-              .cancelBtn {
-                @include bookmark;
-                fill: rgba(0, 0, 0, 0.3);
-                stroke: white;
-                opacity: 0;
-                transition: 0.3s ease;
-              }
-
-              .poster {
-                cursor: pointer;
+          .outter {
+            .title {
+              text-align: start;
+            }
+            .inner {
+              display: flex;
+              flex-flow: row wrap;
+              .movieCard {
+                margin: 20px 10px;
                 width: 120px;
-                height: 180px;
-                overflow: hidden;
-                @include shadow;
-                img {
-                  width: 100%;
-                  transition: all 0.7s ease;
+                position: relative;
+
+                font-size: 0.8rem;
+
+                .addBtn {
+                  @include bookmark;
+                  fill: $color-gold;
                 }
-                img:hover {
-                  transform: scale(1.08);
-                  transition: all 0.7s ease;
+                .cancelBtn {
+                  @include bookmark;
+                  fill: rgba(0, 0, 0, 0.3);
+                  stroke: white;
+                  opacity: 0;
+                  transition: 0.3s ease;
                 }
-                .noPic {
-                  // border: 1px solid red;
-                  width: 100%;
-                  height: 100%;
-                  background-color: rgb(226, 226, 226);
-                  @include centerPosition;
-                  svg {
-                    width: 80px;
-                    height: 80px;
-                    fill: rgb(202, 202, 202);
+
+                .poster {
+                  cursor: pointer;
+                  width: 120px;
+                  height: 180px;
+                  overflow: hidden;
+                  @include shadow;
+                  img {
+                    width: 100%;
+                    transition: all 0.7s ease;
+                  }
+                  img:hover {
+                    transform: scale(1.08);
+                    transition: all 0.7s ease;
+                  }
+                  .noPic {
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgb(226, 226, 226);
+                    @include centerPosition;
+                    svg {
+                      width: 80px;
+                      height: 80px;
+                      fill: rgb(202, 202, 202);
+                    }
                   }
                 }
+
+                .basicInfo {
+                  margin: 10px 0;
+                }
+
+                .basicInfo > div:nth-child(1) {
+                  color: $color-lightgray;
+                }
               }
 
-              .basicInfo {
-                margin: 10px 0;
-              }
-
-              .basicInfo > div:nth-child(1) {
-                color: $color-lightgray;
-              }
-            }
-
-            .movieCard:hover {
-              .cancelBtn {
-                @include bookmark;
-                fill: rgba(0, 0, 0, 0.3);
-                stroke: white;
-                opacity: 1;
-                transition: 0.3s ease;
+              .movieCard:hover {
+                .cancelBtn {
+                  @include bookmark;
+                  fill: rgba(0, 0, 0, 0.3);
+                  stroke: white;
+                  opacity: 1;
+                  transition: 0.3s ease;
+                }
               }
             }
           }
@@ -193,16 +191,17 @@
       }
 
       .infoBox {
+        top: 0;
+        position: absolute;
         display: flex;
         flex-direction: column;
-        position: absolute;
-        z-index: 6;
+        z-index: 10;
         height: 100%;
         width: 30%;
         padding: 30px;
         background-color: $color-blue;
-        transition: 0.5s ease;
         color: white;
+        // transition: right 1s;
 
         .arrow {
           cursor: pointer;
@@ -231,13 +230,18 @@
         }
         .overview {
           margin-top: 10px;
-          //  width: 200px;
           overflow: scroll;
           p {
             font-size: $font-p;
           }
         }
       }
+      //  .move {
+      //     transform: translateX(250%);
+      //  }
+      //  .back {
+      //     transform: translateX(350%);
+      //  }
 
       .loadingAnimate {
         @include centerPosition;

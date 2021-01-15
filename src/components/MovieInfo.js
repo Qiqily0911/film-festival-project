@@ -118,7 +118,6 @@ function MovieInfo(props) {
         <div
           className={styles.closeBtn}
           onClick={() => {
-            console.log(props.movieInfoOpen);
             props.setMovieInfoOpen(false);
           }}
         >

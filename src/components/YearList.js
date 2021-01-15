@@ -43,6 +43,7 @@ function YearList(props) {
   const isLiked = (data) =>
     props.likedList &&
     props.likedList.find((item) => item.movie_id === data[0].movie_id);
+
   const listData = (data) => {
     return {
       th: data[0].th,

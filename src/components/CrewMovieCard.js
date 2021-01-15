@@ -4,7 +4,7 @@ import { ReactComponent as Bookmark } from "../image/icon/add.svg";
 import { ReactComponent as Nopic } from "../image/icon/no-pic.svg";
 import { dataApi, addLiked, cancelLiked } from "../utils";
 
-export default function CrewMovieCard(props) {
+function CrewMovieCard(props) {
   const obj = {
     user: props.userId,
     movie_id: "",
@@ -81,3 +81,5 @@ export default function CrewMovieCard(props) {
     </div>
   );
 }
+
+export default React.memo(CrewMovieCard);

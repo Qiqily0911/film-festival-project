@@ -34,7 +34,6 @@ export function AuthProvider({ children }) {
     const unsubscribe = firebaseAuth.onAuthStateChanged((user) => {
       setCurrentUser(user);
       setLoading(false);
-      console.log("-- [06] set current user--");
     });
 
     return unsubscribe;
