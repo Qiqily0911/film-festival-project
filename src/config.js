@@ -2,20 +2,12 @@
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
+import firebaseConfig from "./firebaseConfig";
 
 export const tmdbKey = "5c27dca1cd4fca2cefc5c8945cfb1974";
 export const omdbKey = "1bd03df3";
 
-const fireBaseConfig = {
-  apiKey: "AIzaSyBmbHqONy7XHhbAJgi7XI8Zb6xrKcDQ9NM",
-  authDomain: "film-db-9936d.firebaseapp.com",
-  databaseURL: "https://film-db-9936d.firebaseio.com",
-  projectId: "film-db-9936d",
-  storageBucket: "film-db-9936d.appspot.com",
-  messagingSenderId: "340728739287",
-  appId: "1:340728739287:web:6a5a212fc24c2cd1b18792",
-};
-const firebaseSet = firebase.initializeApp(fireBaseConfig);
+const firebaseSet = firebase.initializeApp(firebaseConfig);
 export const firebaseAuth = firebase.auth();
 export const firestore = firebaseSet.firestore();
 
