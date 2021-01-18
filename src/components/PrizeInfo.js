@@ -1,5 +1,4 @@
-/* eslint-disable react/prop-types */
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { BtnData } from "../data/LocalSource";
 import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
 import styles from "../style/PrizeInfo.module.scss";
@@ -12,6 +11,7 @@ function PrizeInfo(props) {
     const templist = list.film_list || [];
 
     function loadData(tmdbId, imdbId, data) {
+      props.setMovieInfoOpen(true);
       props.resetInfoPosition();
       loadMovieData(tmdbId, imdbId, data, props.setMovieData);
     }
@@ -19,7 +19,7 @@ function PrizeInfo(props) {
     const prizeId = (dataId) => dataId.substring(dataId.length - 1) - 1;
     const prizeName = (i, data) => BtnData[i].arr[prizeId(data.data_id)];
 
-    if (list.film_list !== undefined) {
+    if (list.film_list) {
       for (let i = 0; i < BtnData.length; i++) {
         if (list.list_name === BtnData[i].list_name) {
           return (
@@ -96,20 +96,21 @@ function PrizeInfo(props) {
       return (
         <div className={styles.prizeData} key={index}>
           <div className={styles.inner}>
-            {BtnData.map((fes) => {
+            {BtnData.map((fes, k) => {
               return (
-                <div className={styles.upper2}>
+                <div className={styles.upper2} key={k}>
                   <div className={styles.title}> {fes.btnText}</div>
                   <div>
-                    {fes.arr.map((prize) => {
+                    {fes.arr.map((prize, l) => {
                       return (
                         <div
+                          key={l}
                           className={styles.prizeName}
                           onClick={() => props.selectPrize(fes, prize, index)}
                           style={{
-                            color: props.prizeArr.includes(prize.dataId)
-                              ? "#ad9654"
-                              : "",
+                            color:
+                              props.prizeArr.includes(prize.dataId) &&
+                              "#ad9654",
                           }}
                         >
                           {prize.subBtnName}
@@ -126,10 +127,23 @@ function PrizeInfo(props) {
     }
   };
 
+  let openState;
+  let closeState;
+  if (props.listCase === 3) {
+    openState = "27.6%";
+    closeState = "calc(-36.8% + 40px)";
+  } else if (props.listCase === 2) {
+    openState = "36%";
+    closeState = "-18%";
+  } else if (props.listCase < 2) {
+    openState = "0";
+    closeState = "-90%";
+  }
+
   return (
     <div
       className={styles.prizeInfo}
-      style={{ right: props.prizeBoxState ? "27.6%" : "calc(-36.8% + 40px)" }}
+      style={{ right: props.prizeBoxState ? openState : closeState }}
     >
       <div
         className={styles.handleBar}

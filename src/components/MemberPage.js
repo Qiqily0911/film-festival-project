@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "../style/MemberPage.module.scss";
 import MovieCard from "./MovieCard";
 import { ReactComponent as Star } from "../image/icon/star.svg";
 import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
-import { cancelLiked } from "../utils";
+import { dataApi, cancelLiked } from "../utils";
+import CrewPopup from "./CrewPopup";
 
 export function MemberNav(props) {
   return (
@@ -21,6 +22,10 @@ export function MemberNav(props) {
   );
 }
 export function MemberPage(props) {
+  const [isCrewOpen, setCrewOpen] = useState(false);
+  const [crewLoading, setCrewLoading] = useState(false);
+  const [personData, setPersonData] = useState({});
+
   return (
     <div className={styles.outter}>
       <div className={styles.innerBox}>
@@ -54,8 +59,10 @@ export function MemberPage(props) {
                     isLiked={true}
                     memberPage={props.memberPage}
                     likedList={props.likedList}
-                    renewData={props.renewData}
                     resetInfoPosition={props.resetInfoPosition}
+                    listCase={props.listCase}
+                    movieInfoOpen={props.movieInfoOpen}
+                    setMovieInfoOpen={props.setMovieInfoOpen}
                   />
                 );
               })}
@@ -72,7 +79,33 @@ export function MemberPage(props) {
             .sort((a, b) => (a.time.seconds > b.time.seconds ? 1 : -1))
             .map((data, i) => (
               <div className={styles.personCard} key={i}>
-                <div className={styles.posterBox}>
+                {console.log(data)}
+                <div
+                  className={styles.posterBox}
+                  onClick={() => {
+                    Promise.all([
+                      dataApi(
+                        "tmdb",
+                        "person",
+                        "/movie_credits",
+                        data.person_id
+                      ),
+                      dataApi("tmdb", "person", "", data.person_id),
+                    ])
+                      .then((arr) => {
+                        setPersonData({
+                          crew: arr[0],
+                          person: arr[1],
+                        });
+                      })
+                      .then(() => {
+                        if (personData !== {}) {
+                          setCrewOpen(true);
+                          setCrewLoading(true);
+                        }
+                      });
+                  }}
+                >
                   <img
                     alt="poster"
                     src={`https://image.tmdb.org/t/p/w185${data.profile_path}`}
@@ -100,6 +133,18 @@ export function MemberPage(props) {
           ))}
         </div>
       </div>
+
+      {isCrewOpen && (
+        <CrewPopup
+          userId={props.userId}
+          setCrewOpen={setCrewOpen}
+          personData={personData}
+          likedList={props.likedList}
+          crewLoading={crewLoading}
+          setCrewLoading={setCrewLoading}
+          personList={props.personList}
+        />
+      )}
     </div>
   );
 }

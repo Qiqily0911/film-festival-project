@@ -12,7 +12,11 @@ import MemberBtn from "./components/MemberBtn";
 import { MemberNav, MemberPage } from "./components/MemberPage";
 import { InitMovieInfo, InitListState } from "./data/LocalSource";
 import { ReactComponent as Logo } from "./image/logo-2.svg";
-import { loadMovieData, dynamicHeightPercentage } from "./utils";
+import {
+  loadMovieData,
+  dynamicHeightPercentage,
+  useWindowDimensions,
+} from "./utils";
 
 function App() {
   const [movieData, setMovieData] = useState({
@@ -42,9 +46,10 @@ function App() {
   const [isScroll, setScroll] = useState(true);
 
   const [userId, setUserId] = useState();
-  const movieInfoEl = useRef(null);
+  const welcomeRef = useRef(null);
+  const imageBoxEl = useRef(null);
   const crewsEl = useRef(null);
-  const infoWrap = useRef(null);
+  const movieInfoEl = useRef(null);
   const slider = useRef(null);
 
   const [prizeBoxState, setprizeBox] = useState(false);
@@ -52,65 +57,90 @@ function App() {
 
   const [likedList, setLikedList] = useState();
   const [personList, setPersonList] = useState();
+  const [listCase, setListCase] = useState(3);
+  const { height, width } = useWindowDimensions();
+  const [movieInfoOpen, setMovieInfoOpen] = useState(false);
+
+  useEffect(() => {
+    if (width > 1024) {
+      setListCase(3);
+      setlistState(InitListState);
+    } else if (width <= 1024 && width >= 769) {
+      setListCase(2);
+      setlistState(InitListState.slice(0, 2));
+    } else if (width <= 768 && width >= 501) {
+      setListCase(1);
+      setlistState(InitListState.slice(0, 2));
+    } else if (width <= 500) {
+      setListCase(0);
+      setlistState(InitListState.slice(0, 1));
+    }
+  }, [width]);
 
   useEffect(() => {
     const yearList = [];
-    for (let i = 2020; i >= 1928; i--) {
-      const item = { year: i, list: [[], [], []] };
-      yearList.push(item);
+
+    switch (listCase) {
+      case 3:
+        for (let i = 2020; i >= 1928; i--) {
+          const emptyYearBox = { year: i, list: [[], [], []] };
+          yearList.push(emptyYearBox);
+        }
+        break;
+      case 2:
+      case 1:
+        for (let i = 2020; i >= 1928; i--) {
+          const emptyYearBox = { year: i, list: [[], []] };
+          yearList.push(emptyYearBox);
+        }
+        break;
+      case 0:
+        for (let i = 2020; i >= 1928; i--) {
+          const emptyYearBox = { year: i, list: [[]] };
+          yearList.push(emptyYearBox);
+        }
+        break;
+      default:
+        for (let i = 2020; i >= 1928; i--) {
+          const emptyYearBox = { year: i, list: [[], [], []] };
+          yearList.push(emptyYearBox);
+        }
     }
 
-    const refs = yearList.reduce((acc, value) => {
-      acc[value.year] = React.createRef();
-      return acc;
+    const yearRefs = yearList.reduce((yearRef, yearBox) => {
+      yearRef[yearBox.year] = React.createRef();
+      return yearRef;
     }, {});
 
-    setRefs(refs);
+    setRefs(yearRefs);
 
     listState.map((list) =>
       fillYearList(yearList, list.film_list, list.prize, list.order)
     );
     setList(yearList);
-
     setSilderValue();
+    setScroll(false);
 
     for (let i = 0; i < listState.length; i++) {
-      if (listState[i].film_list !== undefined) {
+      if (listState[i].film_list) {
         setScroll(true);
         return;
       }
     }
+  }, [listState, listCase]);
 
-    function setSilderValue() {
-      if (
-        yearListRefs &&
-        yearListRefs[year.min] !== undefined &&
-        yearListRefs[year.min].current !== null
-      ) {
-        const percentage = dynamicHeightPercentage(
-          year.max,
-          year.min,
-          yearListRefs
-        );
-        setPercentValue(percentage);
-      }
-    }
-
-    const arr = [];
-    for (let i = 0; i < 3; i++) {
-      if (listState[i].film_list !== undefined) {
-        arr.push(listState[i].prizeId);
+  useEffect(() => {
+    const prizeIdArr = [];
+    for (let i = 0; i < listState.length; i++) {
+      if (listState[i].film_list?.length > 0) {
+        prizeIdArr.push(listState[i].prizeId);
       } else {
-        arr.push(null);
+        prizeIdArr.push(null);
       }
     }
-    // console.log(listState);
-    setPrizeArr(arr);
 
-    setScroll(false);
+    setPrizeArr(prizeIdArr);
   }, [listState]);
-
-  // console.log(listState);
 
   useEffect(() => {
     if (userId) {
@@ -136,13 +166,12 @@ function App() {
     loadMovieData(496243, "tt6751668", InitMovieInfo, setMovieData);
   }, []);
 
-  function fillYearList(yearList, fes, prize, order) {
-    if (fes !== undefined) {
+  function fillYearList(emptyYearList, fes, prize, order) {
+    if (fes) {
       const data = fes.filter((obj) => obj.prize === prize);
 
-      yearList.forEach((yearbox) => {
+      emptyYearList.forEach((yearbox) => {
         const box = yearbox.list[order];
-
         data.forEach((item) => {
           if (item.year === yearbox.year) {
             box.push(item);
@@ -153,19 +182,35 @@ function App() {
         }
       });
     } else {
-      yearList.forEach((yearbox) => {
+      emptyYearList.forEach((yearbox) => {
         yearbox.list[order].push({ prize: null });
       });
     }
   }
 
+  function setSilderValue() {
+    if (
+      yearListRefs &&
+      yearListRefs[year.min] &&
+      yearListRefs[year.min].current
+    ) {
+      const percentage = dynamicHeightPercentage(
+        year.max,
+        year.min,
+        yearListRefs
+      );
+      setPercentValue(percentage);
+    }
+  }
+
   function resetInfoPosition() {
-    infoWrap.current.style.overflow = "hidden";
+    movieInfoEl.current.style.overflow = "hidden";
     setLoadingOpen(true);
 
-    if (movieInfoEl.current && crewsEl.current !== null) {
+    if (imageBoxEl.current && crewsEl.current) {
       crewsEl.current.scrollLeft = 0;
-      movieInfoEl.current.scrollIntoView({
+      imageBoxEl.current.scrollLeft = 0;
+      imageBoxEl.current.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
@@ -180,7 +225,9 @@ function App() {
         btnSelect.prize === listState[i].prize
       ) {
         alert("選過囉");
-        return;
+        return false;
+      } else {
+        return true;
       }
     }
   }
@@ -198,18 +245,22 @@ function App() {
       order: index,
     };
 
-    preventDoubleSelect(btnSelect);
+    if (preventDoubleSelect(btnSelect)) {
+      const arr = [...listState];
+      arr[index] = btnSelect;
 
-    const arr = [...listState];
-    arr[index] = btnSelect;
-
-    setlistState(arr);
-    setPercentValue(100);
+      setlistState(arr);
+      setPercentValue(100);
+    }
   }
 
   return (
     <div className={styles.outter}>
-      {/* <Welcome welcomeOpen={welcomeOpen} welcomeRef={welcomeRef} setWelcome={setWelcome} /> */}
+      <Welcome
+        welcomeOpen={welcomeOpen}
+        welcomeRef={welcomeRef}
+        setWelcome={setWelcome}
+      />
       <aside>
         <div
           className={styles.logo}
@@ -243,8 +294,8 @@ function App() {
               <MovieFilter
                 yearlist={list}
                 yearListRefs={yearListRefs}
-                listState={listState}
                 setlistState={setlistState}
+                listState={listState}
                 setPercentValue={setPercentValue}
                 setScroll={setScroll}
                 selectPrize={selectPrize}
@@ -258,6 +309,7 @@ function App() {
                 memberPage={memberPage}
                 setMemberPage={setMemberPage}
                 setprizeBox={setprizeBox}
+                listCase={listCase}
               />
             </AuthProvider>
           </div>
@@ -271,6 +323,9 @@ function App() {
                   personList={personList}
                   setMovieData={setMovieData}
                   resetInfoPosition={resetInfoPosition}
+                  listCase={listCase}
+                  movieInfoOpen={movieInfoOpen}
+                  setMovieInfoOpen={setMovieInfoOpen}
                 />
               </>
             ) : (
@@ -281,7 +336,6 @@ function App() {
                   yearlist={list}
                   yearListRefs={yearListRefs}
                   listState={listState}
-                  setlistState={setlistState}
                   year={year}
                   setYear={setYear}
                   setPercentValue={setPercentValue}
@@ -291,7 +345,18 @@ function App() {
                   likedList={likedList}
                   resetInfoPosition={resetInfoPosition}
                   slider={slider}
+                  listCase={listCase}
+                  movieInfoOpen={movieInfoOpen}
+                  setMovieInfoOpen={setMovieInfoOpen}
                 />
+                <div
+                  className={styles.switchBtn}
+                  onClick={() =>
+                    prizeBoxState ? setprizeBox(false) : setprizeBox(true)
+                  }
+                >
+                  {prizeBoxState ? "Poster" : "List"} mode
+                </div>
                 <PrizeInfo
                   year={year}
                   setYear={setYear}
@@ -301,21 +366,23 @@ function App() {
                   movieData={movieData}
                   setMovieData={setMovieData}
                   listState={listState}
-                  setlistState={setlistState}
                   setPercentValue={setPercentValue}
                   setScroll={setScroll}
                   loadingOpen={loadingOpen}
                   resetInfoPosition={resetInfoPosition}
                   selectPrize={selectPrize}
                   prizeArr={prizeArr}
+                  listCase={listCase}
+                  movieInfoOpen={movieInfoOpen}
+                  setMovieInfoOpen={setMovieInfoOpen}
                 />
               </>
             )}
             <MovieInfo
               movieData={movieData}
-              movieInfoEl={movieInfoEl}
+              imageBoxEl={imageBoxEl}
               crewsEl={crewsEl}
-              infoWrap={infoWrap}
+              movieInfoEl={movieInfoEl}
               prizeBoxState={prizeBoxState}
               setprizeBox={setprizeBox}
               userId={userId}
@@ -324,6 +391,9 @@ function App() {
               memberPage={memberPage}
               loadingOpen={loadingOpen}
               setLoadingOpen={setLoadingOpen}
+              listCase={listCase}
+              movieInfoOpen={movieInfoOpen}
+              setMovieInfoOpen={setMovieInfoOpen}
             />
           </div>
         </div>

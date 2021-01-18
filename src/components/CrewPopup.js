@@ -1,5 +1,4 @@
-/* eslint-disable react/prop-types */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "../style/Crew.module.scss";
 import CrewMovieCard from "./CrewMovieCard";
 import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
@@ -20,6 +19,8 @@ function CrewPopup(props) {
     props.personData.crew.crew.filter((data) => data.job === "Director");
   const castData = props.personData && props.personData.crew.cast;
   const personData = props.personData && props.personData.person;
+  const overviewEl = useRef(null);
+
   setTimeout(() => {
     props.setCrewLoading(false);
   }, 1000);
@@ -39,16 +40,22 @@ function CrewPopup(props) {
   }, [personData]);
 
   const infoBox = (
+    // style={{ right: infoOpen ? "0" : "-30%" }}
+    // className={`${styles.infoBox} ${infoOpen ? styles.move : styles.back}`
     <div className={styles.infoBox} style={{ right: infoOpen ? "0" : "-30%" }}>
       <div className={styles.arrow} onClick={() => setInfoOpen(false)}>
         <Arrow />
       </div>
 
       <div>
-        <img
-          alt="poster"
-          src={`https://image.tmdb.org/t/p/w154${crewMovieData.detail.poster_path}`}
-        />
+        {crewMovieData.detail.poster_path ? (
+          <img
+            alt="poster"
+            src={`https://image.tmdb.org/t/p/w154${crewMovieData.detail.poster_path}`}
+          />
+        ) : (
+          <div className={styles.noPoster}>no poster</div>
+        )}
       </div>
 
       <a
@@ -60,7 +67,8 @@ function CrewPopup(props) {
       </a>
 
       <div className={styles.filmTitle}>
-        {crewMovieData.overview_translate !== "" &&
+        {crewMovieData.overview_translate &&
+          overviewChinese(crewMovieData) &&
           overviewChinese(crewMovieData).title}
       </div>
       <div className={styles.filmTitle}>{crewMovieData.detail.title}</div>
@@ -68,8 +76,9 @@ function CrewPopup(props) {
         {crewMovieData.detail.original_title}
       </div>
       <div className={styles.overview}>
-        <p>
-          {crewMovieData.overview_translate !== "" &&
+        <p ref={overviewEl}>
+          {crewMovieData.overview_translate &&
+            overviewChinese(crewMovieData) &&
             overviewChinese(crewMovieData).overview}
         </p>
         <p>{crewMovieData.detail.overview}</p>
@@ -99,26 +108,25 @@ function CrewPopup(props) {
     } else {
       newArr = crewArr;
     }
+
     return (
       <div className={styles.outter}>
         <div className={styles.title}>{title}</div>
         <div className={styles.inner}>
-          {newArr
-            ? newArr
-                .sort((a, b) =>
-                  a["release_date"] > b["release_date"] ? 1 : -1
-                )
-                .map((data, i) => (
-                  <CrewMovieCard
-                    key={i}
-                    data={data}
-                    likedList={props.likedList}
-                    setInfoOpen={setInfoOpen}
-                    userId={props.userId}
-                    setCrewMovieData={setCrewMovieData}
-                  />
-                ))
-            : ""}
+          {newArr &&
+            newArr
+              .sort((a, b) => (a["release_date"] > b["release_date"] ? 1 : -1))
+              .map((data, i) => (
+                <CrewMovieCard
+                  key={i}
+                  data={data}
+                  likedList={props.likedList}
+                  setInfoOpen={setInfoOpen}
+                  userId={props.userId}
+                  setCrewMovieData={setCrewMovieData}
+                  overviewEl={overviewEl}
+                />
+              ))}
         </div>
       </div>
     );
@@ -134,57 +142,59 @@ function CrewPopup(props) {
           ×
         </div>
         <div className={styles.container}>
-          <div className={styles.profile}>
-            <div className={styles.photo}>
-              <div>
-                <img
-                  alt="profile"
-                  src={`https://image.tmdb.org/t/p/w154${personData.profile_path}`}
-                />
-                <div className={styles.likeBtn}>
-                  <Star
-                    className={isLiked ? styles.addBtn : styles.cancelBtn}
-                    onClick={(e) =>
-                      isLiked
-                        ? cancelLiked(
-                            e,
-                            props.personList,
-                            "person_liked",
-                            personData.id
-                          )
-                        : addLiked(e, "person_liked", obj)
-                    }
+          {infoBox}
+          <div className={styles.wrap}>
+            <div className={styles.profile}>
+              <div className={styles.photo}>
+                <div>
+                  <img
+                    alt="profile"
+                    src={`https://image.tmdb.org/t/p/w154${personData.profile_path}`}
                   />
+                  <div className={styles.likeBtn}>
+                    {props.userId && (
+                      <Star
+                        className={isLiked ? styles.addBtn : styles.cancelBtn}
+                        onClick={(e) =>
+                          isLiked
+                            ? cancelLiked(
+                                e,
+                                props.personList,
+                                "person_liked",
+                                personData.id
+                              )
+                            : addLiked(e, "person_liked", obj)
+                        }
+                      />
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-            <span className={styles.name}>{personData.name}</span>
-            {personNameCh}
-            {personData.birthday}
-            <a
-              href={`https://www.imdb.com/name/${personData.imdb_id}/`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <div>IMDB</div>
-            </a>
+              <span className={styles.name}>{personData.name}</span>
+              {personNameCh}
+              {personData.birthday}
+              <a
+                href={`https://www.imdb.com/name/${personData.imdb_id}/`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <div>IMDB</div>
+              </a>
 
-            <div className={styles.biography}>
-              <p>{personData.biography}</p>
+              <div className={styles.biography}>
+                <p>{personData.biography}</p>
+              </div>
+            </div>
+            <div className={styles.movieBox}>
+              {crewMovieCards("Director", crewData)}
+              {crewMovieCards("Cast", castData)}
             </div>
           </div>
 
-          <div className={styles.movieBox}>
-            {crewMovieCards("Director", crewData)}
-            {crewMovieCards("Cast", castData)}
-          </div>
-          {infoBox}
-          {props.crewLoading ? (
+          {props.crewLoading && (
             <div className={styles.loadingAnimate}>
               <Loading />
             </div>
-          ) : (
-            ""
           )}
         </div>
       </div>

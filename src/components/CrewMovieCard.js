@@ -1,11 +1,10 @@
 import React from "react";
-import PropTypes from "prop-types";
 import styles from "../style/Crew.module.scss";
 import { ReactComponent as Bookmark } from "../image/icon/add.svg";
 import { ReactComponent as Nopic } from "../image/icon/no-pic.svg";
 import { dataApi, addLiked, cancelLiked } from "../utils";
 
-export default function CrewMovieCard(props) {
+function CrewMovieCard(props) {
   const obj = {
     user: props.userId,
     movie_id: "",
@@ -15,10 +14,7 @@ export default function CrewMovieCard(props) {
     film_name_en: props.data.title,
     film_name_zh: "",
     time: new Date(),
-    year:
-      props.data.release_date !== undefined
-        ? props.data.release_date.split("-")[0]
-        : "",
+    year: props.data.release_date && props.data.release_date.split("-")[0],
   };
 
   const isLiked = Boolean(
@@ -32,7 +28,7 @@ export default function CrewMovieCard(props) {
       key={props.data.credit_id}
       value={props.data.id}
     >
-      {props.userId ? (
+      {props.userId && (
         <Bookmark
           className={isLiked ? styles.addBtn : styles.cancelBtn}
           onClick={(e) =>
@@ -41,8 +37,6 @@ export default function CrewMovieCard(props) {
               : addLiked(e, "movie_liked", obj)
           }
         />
-      ) : (
-        ""
       )}
 
       <div
@@ -51,14 +45,20 @@ export default function CrewMovieCard(props) {
           Promise.all([
             dataApi("tmdb", "movie", "", props.data.id),
             dataApi("tmdb", "movie", "/translations", props.data.id),
-          ]).then((arr) => {
-            props.setCrewMovieData({
-              ...props.crewMovieData,
-              detail: arr[0],
-              overview_translate: arr[1],
-            });
+          ])
+            .then((arr) => {
+              props.setCrewMovieData({
+                ...props.crewMovieData,
+                detail: arr[0],
+                overview_translate: arr[1],
+              });
+            })
+            .then(props.setInfoOpen(true));
+
+          props.overviewEl.current.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
           });
-          props.setInfoOpen(true);
         }}
       >
         {props.data.poster_path !== null ? (
@@ -74,9 +74,7 @@ export default function CrewMovieCard(props) {
       </div>
       <div className={styles.basicInfo}>
         <div>
-          {props.data.release_date !== undefined
-            ? props.data.release_date.split("-")[0]
-            : ""}
+          {props.data.release_date && props.data.release_date.split("-")[0]}
         </div>
         <div>{props.data.title}</div>
       </div>
@@ -84,11 +82,4 @@ export default function CrewMovieCard(props) {
   );
 }
 
-CrewMovieCard.propTypes = {
-  userId: PropTypes.string,
-  data: PropTypes.object,
-  likedList: PropTypes.array,
-  setCrewMovieData: PropTypes.func,
-  crewMovieData: PropTypes.object,
-  setInfoOpen: PropTypes.func,
-};
+export default React.memo(CrewMovieCard);

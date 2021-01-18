@@ -1,4 +1,5 @@
 import { tmdbKey, omdbKey, firestore } from "./config";
+import { useState, useEffect } from "react";
 
 export function dataApi(source, category, type, id) {
   return new Promise((resolve, reject) => {
@@ -47,7 +48,6 @@ export function addLiked(e, collectionName, obj) {
   const db = firestore.collection(collectionName);
   db.add(obj).then((res) => {
     db.doc(res.id).set({ id: res.id }, { merge: true });
-    console.log("success");
   });
 
   e.stopPropagation();
@@ -60,7 +60,6 @@ export function cancelLiked(e, userLikedList, collectionName, id) {
       db.doc(userLikedList[i].id)
         .delete()
         .then(() => {
-          console.log("delete");
           e.stopPropagation();
         });
     }
@@ -111,4 +110,29 @@ export function ordinalSuffix(num) {
   }
 
   return numTh;
+}
+
+function getWindowDimensions() {
+  const { innerWidth: width, innerHeight: height } = window;
+  return {
+    width,
+    height,
+  };
+}
+
+export function useWindowDimensions() {
+  const [windowDimensions, setWindowDimensions] = useState(
+    getWindowDimensions()
+  );
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowDimensions(getWindowDimensions());
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return windowDimensions;
 }

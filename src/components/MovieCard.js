@@ -37,6 +37,7 @@ function MovieCard(props) {
       onClick={() => {
         const tmdbId = props.listData.tmdb_id;
         const imdbId = props.listData.movie_id;
+        props.setMovieInfoOpen(true);
         props.resetInfoPosition();
         loadMovieData(tmdbId, imdbId, props.listData, props.setMovieData);
       }}

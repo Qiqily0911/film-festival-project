@@ -5,6 +5,7 @@ import { useAuth } from "../contexts/AuthContexts";
 
 import { ReactComponent as LoginIcon } from "../image/icon/login.svg";
 import { ReactComponent as LogoutIcon } from "../image/icon/logout.svg";
+import { ReactComponent as MenuIcon } from "../image/menu.svg";
 
 function MemberBtn(props) {
   const { logout, currentUser } = useAuth();
@@ -32,7 +33,6 @@ function MemberBtn(props) {
     }
   }, [currentUser, props]);
 
-  //  show user data
   useEffect(() => {
     if (currentUser) {
       currentUser && props.setUserId(currentUser.uid);
@@ -85,33 +85,16 @@ function MemberBtn(props) {
 
   return (
     <div className={styles.loginOutter}>
-      {isLogin ? logedIn : loginIcon}
-      {isOpen ? loginDiv : ""}
+      {props.listCase < 2 ? (
+        <MenuIcon />
+      ) : (
+        <>
+          {isLogin ? logedIn : loginIcon}
+          {isOpen && loginDiv}
+        </>
+      )}
     </div>
   );
 }
 
 export default MemberBtn;
-
-// <div className={styles.switchBtn}>
-//    <div
-//       className={props.memberPage === true ? styles.pressed : ""}
-//       onClick={() => {
-//          props.setMemberPage(true);
-//       }}
-//    >
-//       會員專區
-//    </div>
-
-//    <div
-//       className={props.memberPage !== true ? styles.pressed : ""}
-//       onClick={() => {
-//          props.setMemberPage(false);
-//
-//          props.setprizeBox(false);
-//       }}
-//    >
-//       找電影
-//    </div>
-// </div>;
-// currentUser && <div>{currentUser.email}</div>;
