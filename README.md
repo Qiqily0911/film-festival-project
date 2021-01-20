@@ -2,7 +2,7 @@
 >film + timeline <br>
 >Browsing awarded films by timeline. <br>
 >Users can choose international film festivals and find movies in specific year.<br>
-https://film-db-9936d.web.app/<br>
+<a href="https://film-db-9936d.web.app/" target="_blank">LINK</a><br>
 
 <img src="/film-line/main-image.png" width="400" /> 
 <img src="/film-line/index.png" width="400" />
