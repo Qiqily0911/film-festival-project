@@ -54,6 +54,16 @@
               right: 6px;
               cursor: pointer;
             }
+            .noprofile {
+              width: 154px;
+              height: 230px;
+              background: gray;
+              color: rgb(41, 41, 41);
+              display: flex;
+              p {
+                margin: auto;
+              }
+            }
           }
 
           @mixin bookmark {
@@ -87,14 +97,24 @@
             font-weight: 600;
             color: $color-blue;
           }
+          .below {
+            display: flex;
+            align-items: center;
+            // justify-content: space-between;
+          }
           a {
+            margin-left: 10px;
             text-decoration: none;
             color: $color-gray;
             text-align: center;
-            padding: 3px 5px;
-            margin: 5px;
-            border: 1px solid $color-gray;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+          }
+
+          a > svg {
+            width: 50px;
+            height: 20px;
           }
 
           .biography {
@@ -212,17 +232,24 @@
             fill: white;
           }
         }
+
         a {
           text-decoration: none;
           color: #ffffff;
           text-align: center;
           padding: 3px 5px;
-          margin: 10px;
-          border: 1px solid #ffffff;
           cursor: pointer;
+          display: flex;
+        }
+
+        a > svg {
+          width: 50px;
+          height: 20px;
         }
         .filmTitle {
           font-size: 1.2rem;
+          display: flex;
+          align-items: center;
         }
 
         .filmTitle2 {
@@ -236,12 +263,6 @@
           }
         }
       }
-      //  .move {
-      //     transform: translateX(250%);
-      //  }
-      //  .back {
-      //     transform: translateX(350%);
-      //  }
 
       .loadingAnimate {
         @include centerPosition;

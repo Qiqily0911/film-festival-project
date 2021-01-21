@@ -33,7 +33,7 @@ function MovieInfoCrew(props) {
           src={`https://image.tmdb.org/t/p/w154${props.person.profile_path}`}
         />
       ) : (
-        <div className={styles.noPic}>not found</div>
+        <div className={styles.noPic}>No Photo</div>
       )}
 
       <div className={styles.personName}>
