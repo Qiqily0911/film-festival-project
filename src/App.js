@@ -79,6 +79,7 @@ function App() {
 
   useEffect(() => {
     const yearList = [];
+    // let list;
 
     switch (listCase) {
       case 3:
@@ -107,11 +108,17 @@ function App() {
         }
     }
 
+    // for (let i = 2020; i >= 1928; i--) {
+    //    const emptyYearBox = { year: i, list: [[], [], []] };
+    //    yearList.push(emptyYearBox);
+    // }
+
     const yearRefs = yearList.reduce((yearRef, yearBox) => {
       yearRef[yearBox.year] = React.createRef();
       return yearRef;
     }, {});
 
+    // console.log(yearRefs);
     setRefs(yearRefs);
 
     listState.map((list) =>

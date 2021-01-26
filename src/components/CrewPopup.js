@@ -5,6 +5,7 @@ import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
 import { ReactComponent as Star } from "../image/icon/star.svg";
 import Loading from "./Loading";
 import { addLiked, cancelLiked, overviewChinese } from "../utils";
+import { ReactComponent as Imdb } from "../image/IMDB_Logo.svg";
 
 function CrewPopup(props) {
   const [personNameCh, setPersonNameCh] = useState("");
@@ -58,20 +59,21 @@ function CrewPopup(props) {
         )}
       </div>
 
-      <a
-        href={`https://www.imdb.com/title/${crewMovieData.detail.imdb_id}`}
-        target="_blank"
-        rel="noreferrer"
-      >
-        <div>IMDB</div>
-      </a>
-
       <div className={styles.filmTitle}>
         {crewMovieData.overview_translate &&
           overviewChinese(crewMovieData) &&
           overviewChinese(crewMovieData).title}
       </div>
-      <div className={styles.filmTitle}>{crewMovieData.detail.title}</div>
+      <div className={styles.filmTitle}>
+        {crewMovieData.detail.title}
+        <a
+          href={`https://www.imdb.com/title/${crewMovieData.detail.imdb_id}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <Imdb />
+        </a>
+      </div>
       <div className={styles.filmTitle2}>
         {crewMovieData.detail.original_title}
       </div>
@@ -147,10 +149,17 @@ function CrewPopup(props) {
             <div className={styles.profile}>
               <div className={styles.photo}>
                 <div>
-                  <img
-                    alt="profile"
-                    src={`https://image.tmdb.org/t/p/w154${personData.profile_path}`}
-                  />
+                  {personData.profile_path ? (
+                    <img
+                      alt="profile"
+                      src={`https://image.tmdb.org/t/p/w154${personData.profile_path}`}
+                    />
+                  ) : (
+                    <div className={styles.noprofile}>
+                      <p>No Photo</p>
+                    </div>
+                  )}
+
                   <div className={styles.likeBtn}>
                     {props.userId && (
                       <Star
@@ -172,14 +181,17 @@ function CrewPopup(props) {
               </div>
               <span className={styles.name}>{personData.name}</span>
               {personNameCh}
-              {personData.birthday}
-              <a
-                href={`https://www.imdb.com/name/${personData.imdb_id}/`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <div>IMDB</div>
-              </a>
+
+              <div className={styles.below}>
+                {personData.birthday}
+                <a
+                  href={`https://www.imdb.com/name/${personData.imdb_id}/`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <Imdb />
+                </a>
+              </div>
 
               <div className={styles.biography}>
                 <p>{personData.biography}</p>
