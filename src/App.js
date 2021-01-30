@@ -1,22 +1,58 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./style/App.module.scss";
 import { firestore } from "./config";
-import { AuthProvider } from "./contexts/AuthContexts";
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import reducer from "./store/reducer";
 import Welcome from "./components/Welcome";
-import ControlSilder from "./components/ControlSlider";
-import YearList from "./components/YearList";
-import MovieInfo from "./components/MovieInfo";
-import PrizeInfo from "./components/PrizeInfo";
-import MovieFilter from "./components/MovieFilter";
-import MemberBtn from "./components/MemberBtn";
-import { MemberNav, MemberPage } from "./components/MemberPage";
+
+import Aside from "./components/Aside/Aside";
+import Main from "./components/Main/Main";
 import { InitMovieInfo, InitListState } from "./data/LocalSource";
-import { ReactComponent as Logo } from "./image/logo-2.svg";
 import {
   loadMovieData,
   dynamicHeightPercentage,
   useWindowDimensions,
 } from "./utils";
+
+const store = createStore(reducer);
+
+function fillYearList(emptyYearList, fes, prize, order) {
+  if (fes) {
+    const data = fes.filter((obj) => obj.prize === prize);
+
+    emptyYearList.forEach((yearbox) => {
+      const box = yearbox.list[order];
+      data.forEach((item) => {
+        if (item.year === yearbox.year) {
+          box.push(item);
+        }
+      });
+      if (box.length === 0) {
+        box.push({ prize: null });
+      }
+    });
+  } else {
+    emptyYearList.forEach((yearbox) => {
+      yearbox.list[order].push({ prize: null });
+    });
+  }
+}
+
+function preventDoubleSelect(listState, btnSelect) {
+  for (let i = 0; i < listState.length; i++) {
+    if (
+      listState[i].film_list &&
+      btnSelect.title === listState[i].title &&
+      btnSelect.prize === listState[i].prize
+    ) {
+      alert("選過囉");
+      return false;
+    } else {
+      return true;
+    }
+  }
+}
 
 function App() {
   const [movieData, setMovieData] = useState({
@@ -63,62 +99,56 @@ function App() {
 
   useEffect(() => {
     if (width > 1024) {
-      setListCase(3);
-      setlistState(InitListState);
+      widthDetect(3, 0);
     } else if (width <= 1024 && width >= 769) {
-      setListCase(2);
-      setlistState(InitListState.slice(0, 2));
+      widthDetect(2, 2);
     } else if (width <= 768 && width >= 501) {
-      setListCase(1);
-      setlistState(InitListState.slice(0, 2));
+      widthDetect(1, 2);
     } else if (width <= 500) {
-      setListCase(0);
-      setlistState(InitListState.slice(0, 1));
+      widthDetect(0, 1);
+    }
+
+    function widthDetect(listCase, listLength) {
+      setListCase(listCase);
+      if (listLength === 0) {
+        setlistState(InitListState);
+      } else {
+        setlistState(InitListState.slice(0, listLength));
+      }
     }
   }, [width]);
 
   useEffect(() => {
     const yearList = [];
-    // let list;
 
-    switch (listCase) {
-      case 3:
-        for (let i = 2020; i >= 1928; i--) {
-          const emptyYearBox = { year: i, list: [[], [], []] };
-          yearList.push(emptyYearBox);
-        }
-        break;
-      case 2:
-      case 1:
-        for (let i = 2020; i >= 1928; i--) {
-          const emptyYearBox = { year: i, list: [[], []] };
-          yearList.push(emptyYearBox);
-        }
-        break;
-      case 0:
-        for (let i = 2020; i >= 1928; i--) {
-          const emptyYearBox = { year: i, list: [[]] };
-          yearList.push(emptyYearBox);
-        }
-        break;
-      default:
-        for (let i = 2020; i >= 1928; i--) {
-          const emptyYearBox = { year: i, list: [[], [], []] };
-          yearList.push(emptyYearBox);
-        }
+    for (let i = 2020; i >= 1928; i--) {
+      const emptyYearBox = { year: i, list: [] };
+      switch (listCase) {
+        case 3:
+          emptyYearBox.list = [[], [], []];
+
+          break;
+        case 2:
+        case 1:
+          emptyYearBox.list = [[], []];
+
+          break;
+        case 0:
+          emptyYearBox.list = [[]];
+
+          break;
+        default:
+          emptyYearBox.list = [[], [], []];
+      }
+
+      yearList.push(emptyYearBox);
     }
-
-    // for (let i = 2020; i >= 1928; i--) {
-    //    const emptyYearBox = { year: i, list: [[], [], []] };
-    //    yearList.push(emptyYearBox);
-    // }
 
     const yearRefs = yearList.reduce((yearRef, yearBox) => {
       yearRef[yearBox.year] = React.createRef();
       return yearRef;
     }, {});
 
-    // console.log(yearRefs);
     setRefs(yearRefs);
 
     listState.map((list) =>
@@ -173,28 +203,6 @@ function App() {
     loadMovieData(496243, "tt6751668", InitMovieInfo, setMovieData);
   }, []);
 
-  function fillYearList(emptyYearList, fes, prize, order) {
-    if (fes) {
-      const data = fes.filter((obj) => obj.prize === prize);
-
-      emptyYearList.forEach((yearbox) => {
-        const box = yearbox.list[order];
-        data.forEach((item) => {
-          if (item.year === yearbox.year) {
-            box.push(item);
-          }
-        });
-        if (box.length === 0) {
-          box.push({ prize: null });
-        }
-      });
-    } else {
-      emptyYearList.forEach((yearbox) => {
-        yearbox.list[order].push({ prize: null });
-      });
-    }
-  }
-
   function setSilderValue() {
     if (
       yearListRefs &&
@@ -224,21 +232,6 @@ function App() {
     }
   }
 
-  function preventDoubleSelect(btnSelect) {
-    for (let i = 0; i < listState.length; i++) {
-      if (
-        listState[i].film_list &&
-        btnSelect.title === listState[i].title &&
-        btnSelect.prize === listState[i].prize
-      ) {
-        alert("選過囉");
-        return false;
-      } else {
-        return true;
-      }
-    }
-  }
-
   function selectPrize(fesData, prizeData, index) {
     const btnSelect = {
       title: fesData.btnText,
@@ -252,7 +245,7 @@ function App() {
       order: index,
     };
 
-    if (preventDoubleSelect(btnSelect)) {
+    if (preventDoubleSelect(listState, btnSelect)) {
       const arr = [...listState];
       arr[index] = btnSelect;
 
@@ -262,150 +255,61 @@ function App() {
   }
 
   return (
-    <div className={styles.outter}>
-      <Welcome
-        welcomeOpen={welcomeOpen}
-        welcomeRef={welcomeRef}
-        setWelcome={setWelcome}
-      />
-      <aside>
-        <div
-          className={styles.logo}
-          onClick={() => {
-            setMemberPage(false);
-          }}
-        >
-          <Logo />
-        </div>
-        {memberPage ? (
-          <div className={styles.slider}></div>
-        ) : (
-          <ControlSilder
-            percentValue={percentValue}
-            setPercentValue={setPercentValue}
-            yearListRefs={yearListRefs}
-            year={year}
-            setYear={setYear}
-            setScroll={setScroll}
-            isScroll={isScroll}
-            slider={slider}
-          />
-        )}
-      </aside>
-      <main>
-        <div className={styles.container}>
-          <div className={styles.navbar}>
-            {memberPage ? (
-              <MemberNav setMemberPage={setMemberPage} />
-            ) : (
-              <MovieFilter
-                yearlist={list}
-                yearListRefs={yearListRefs}
-                setlistState={setlistState}
-                listState={listState}
-                setPercentValue={setPercentValue}
-                setScroll={setScroll}
-                selectPrize={selectPrize}
-                prizeArr={prizeArr}
-              />
-            )}
-
-            <AuthProvider>
-              <MemberBtn
-                setUserId={setUserId}
-                memberPage={memberPage}
-                setMemberPage={setMemberPage}
-                setprizeBox={setprizeBox}
-                listCase={listCase}
-              />
-            </AuthProvider>
-          </div>
-          <div className={styles.subContainer}>
-            {memberPage ? (
-              <>
-                <MemberPage
-                  userId={userId}
-                  memberPage={memberPage}
-                  likedList={likedList}
-                  personList={personList}
-                  setMovieData={setMovieData}
-                  resetInfoPosition={resetInfoPosition}
-                  listCase={listCase}
-                  movieInfoOpen={movieInfoOpen}
-                  setMovieInfoOpen={setMovieInfoOpen}
-                />
-              </>
-            ) : (
-              <>
-                <YearList
-                  setMovieData={setMovieData}
-                  movieData={movieData}
-                  yearlist={list}
-                  yearListRefs={yearListRefs}
-                  listState={listState}
-                  year={year}
-                  setYear={setYear}
-                  setPercentValue={setPercentValue}
-                  percentValue={percentValue}
-                  isScroll={isScroll}
-                  userId={userId}
-                  likedList={likedList}
-                  resetInfoPosition={resetInfoPosition}
-                  slider={slider}
-                  listCase={listCase}
-                  movieInfoOpen={movieInfoOpen}
-                  setMovieInfoOpen={setMovieInfoOpen}
-                />
-                <div
-                  className={styles.switchBtn}
-                  onClick={() =>
-                    prizeBoxState ? setprizeBox(false) : setprizeBox(true)
-                  }
-                >
-                  {prizeBoxState ? "Poster" : "List"} mode
-                </div>
-                <PrizeInfo
-                  year={year}
-                  setYear={setYear}
-                  percentValue={percentValue}
-                  prizeBoxState={prizeBoxState}
-                  setprizeBox={setprizeBox}
-                  movieData={movieData}
-                  setMovieData={setMovieData}
-                  listState={listState}
-                  setPercentValue={setPercentValue}
-                  setScroll={setScroll}
-                  loadingOpen={loadingOpen}
-                  resetInfoPosition={resetInfoPosition}
-                  selectPrize={selectPrize}
-                  prizeArr={prizeArr}
-                  listCase={listCase}
-                  movieInfoOpen={movieInfoOpen}
-                  setMovieInfoOpen={setMovieInfoOpen}
-                />
-              </>
-            )}
-            <MovieInfo
-              movieData={movieData}
-              imageBoxEl={imageBoxEl}
-              crewsEl={crewsEl}
-              movieInfoEl={movieInfoEl}
-              prizeBoxState={prizeBoxState}
-              setprizeBox={setprizeBox}
-              userId={userId}
-              likedList={likedList}
-              personList={personList}
-              memberPage={memberPage}
-              loadingOpen={loadingOpen}
-              setLoadingOpen={setLoadingOpen}
-              listCase={listCase}
-              movieInfoOpen={movieInfoOpen}
-              setMovieInfoOpen={setMovieInfoOpen}
-            />
-          </div>
-        </div>
-      </main>
-    </div>
+    <Provider store={store}>
+      <div className={styles.outter}>
+        <Welcome
+          welcomeOpen={welcomeOpen}
+          setWelcome={setWelcome}
+          welcomeRef={welcomeRef}
+        />
+        <Aside
+          setMemberPage={setMemberPage}
+          memberPage={memberPage}
+          percentValue={percentValue}
+          setPercentValue={setPercentValue}
+          yearListRefs={yearListRefs}
+          year={year}
+          setYear={setYear}
+          setScroll={setScroll}
+          isScroll={isScroll}
+          slider={slider}
+        />
+        <Main
+          memberPage={memberPage}
+          setMemberPage={setMemberPage}
+          list={list}
+          yearListRefs={yearListRefs}
+          setlistState={setlistState}
+          listState={listState}
+          setPercentValue={setPercentValue}
+          setScroll={setScroll}
+          selectPrize={selectPrize}
+          prizeArr={prizeArr}
+          setUserId={setUserId}
+          setprizeBox={setprizeBox}
+          listCase={listCase}
+          userId={userId}
+          likedList={likedList}
+          personList={personList}
+          setMovieData={setMovieData}
+          resetInfoPosition={resetInfoPosition}
+          movieInfoOpen={movieInfoOpen}
+          setMovieInfoOpen={setMovieInfoOpen}
+          movieData={movieData}
+          year={year}
+          setYear={setYear}
+          percentValue={percentValue}
+          isScroll={isScroll}
+          slider={slider}
+          prizeBoxState={prizeBoxState}
+          loadingOpen={loadingOpen}
+          imageBoxEl={imageBoxEl}
+          crewsEl={crewsEl}
+          movieInfoEl={movieInfoEl}
+          setLoadingOpen={setLoadingOpen}
+        />
+      </div>
+    </Provider>
   );
 }
 

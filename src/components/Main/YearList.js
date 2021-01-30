@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import styles from "../style/YearList.module.scss";
+import styles from "../../style/YearList.module.scss";
 import MovieCard from "./MovieCard";
-import { dynamicHeightPercentage } from "../utils";
+import { dynamicHeightPercentage } from "../../utils";
 
 function YearList(props) {
   useEffect(() => {

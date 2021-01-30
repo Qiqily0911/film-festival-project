@@ -1,8 +1,8 @@
 import React from "react";
 import Slider from "react-rangeslider";
 import "react-rangeslider/lib/index.css";
-import styles from "../style/App.module.scss";
-import { yearConvert } from "../utils";
+import styles from "../../style/App.module.scss";
+import { yearConvert } from "../../utils";
 
 function ControlSilder(props) {
   function handleChangeStart() {

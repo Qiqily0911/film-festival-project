@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from "react";
-import styles from "../style/MovieInfo.module.scss";
-import { nanoid } from "nanoid";
-import { ReactComponent as Taipeilibrary } from "../image/TaipeiCity_library.svg";
-import { ReactComponent as NewTaipeilibrary } from "../image/newTaipeiCity_library.svg";
-import { ReactComponent as Bookmark } from "../image/icon/add.svg";
-import { ReactComponent as Imdb } from "../image/IMDB_Logo.svg";
-import { ReactComponent as Clock } from "../image/icon/clock.svg";
-import { ReactComponent as Video } from "../image/icon/video.svg";
-import catchplay from "../image/catchplay_logo.png";
-import Loading from "./Loading";
+import styles from "../../style/MovieInfo.module.scss";
+import { ReactComponent as Taipeilibrary } from "../../image/TaipeiCity_library.svg";
+import { ReactComponent as NewTaipeilibrary } from "../../image/newTaipeiCity_library.svg";
+import { ReactComponent as Bookmark } from "../../image/icon/add.svg";
+import { ReactComponent as Imdb } from "../../image/IMDB_Logo.svg";
+import { ReactComponent as Clock } from "../../image/icon/clock.svg";
+import { ReactComponent as Video } from "../../image/icon/video.svg";
+import catchplay from "../../image/catchplay_logo.png";
+import Loading from "../Loading";
 import CrewPopup from "./CrewPopup";
 import MovieInfoCrew from "./MovieInfoCrew";
-import { BtnData } from "../data/LocalSource";
+import { BtnData } from "../../data/LocalSource";
 import {
   ordinalSuffix,
   addLiked,
   cancelLiked,
   overviewChinese,
-} from "../utils";
+} from "../../utils";
 
 function MovieInfo(props) {
   const [imageList, setImageList] = useState("");
@@ -287,7 +286,7 @@ function MovieInfo(props) {
                         <img
                           alt="flag"
                           src={
-                            require(`../data/png100px/${country.iso_3166_1.toLowerCase()}.png`)
+                            require(`../../data/png100px/${country.iso_3166_1.toLowerCase()}.png`)
                               .default || ""
                           }
                         />

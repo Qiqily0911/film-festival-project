@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import styles from "../style/Crew.module.scss";
+import styles from "../../style/Crew.module.scss";
 import CrewMovieCard from "./CrewMovieCard";
-import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
-import { ReactComponent as Star } from "../image/icon/star.svg";
-import Loading from "./Loading";
-import { addLiked, cancelLiked, overviewChinese } from "../utils";
-import { ReactComponent as Imdb } from "../image/IMDB_Logo.svg";
+import { ReactComponent as Arrow } from "../../image/icon/arrow.svg";
+import { ReactComponent as Star } from "../../image/icon/star.svg";
+import Loading from "../Loading";
+import { addLiked, cancelLiked, overviewChinese } from "../../utils";
+import { ReactComponent as Imdb } from "../../image/IMDB_Logo.svg";
 
 function CrewPopup(props) {
   const [personNameCh, setPersonNameCh] = useState("");

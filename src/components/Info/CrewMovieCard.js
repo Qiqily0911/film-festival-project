@@ -1,8 +1,8 @@
 import React from "react";
-import styles from "../style/Crew.module.scss";
-import { ReactComponent as Bookmark } from "../image/icon/add.svg";
-import { ReactComponent as Nopic } from "../image/icon/no-pic.svg";
-import { dataApi, addLiked, cancelLiked } from "../utils";
+import styles from "../../style/Crew.module.scss";
+import { ReactComponent as Bookmark } from "../../image/icon/add.svg";
+import { ReactComponent as Nopic } from "../../image/icon/no-pic.svg";
+import { dataApi, addLiked, cancelLiked } from "../../utils";
 
 function CrewMovieCard(props) {
   const obj = {

@@ -1,6 +1,6 @@
 import React from "react";
-import styles from "../style/MovieInfo.module.scss";
-import { dataApi } from "../utils";
+import styles from "../../style/MovieInfo.module.scss";
+import { dataApi } from "../../utils";
 
 function MovieInfoCrew(props) {
   return (

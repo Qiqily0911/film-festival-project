@@ -1,9 +1,9 @@
 import React from "react";
-import styles from "../style/MovieCard.module.scss";
-import { loadMovieData, addLiked, cancelLiked } from "../utils";
+import styles from "../../style/MovieCard.module.scss";
+import { loadMovieData, addLiked, cancelLiked } from "../../utils";
 
-import { ReactComponent as Bookmark } from "../image/icon/add.svg";
-import { ReactComponent as Nopic } from "../image/icon/no-pic.svg";
+import { ReactComponent as Bookmark } from "../../image/icon/add.svg";
+import { ReactComponent as Nopic } from "../../image/icon/no-pic.svg";
 
 function MovieCard(props) {
   const obj = {

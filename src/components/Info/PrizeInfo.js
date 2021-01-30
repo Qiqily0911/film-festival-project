@@ -1,8 +1,8 @@
 import React from "react";
-import { BtnData } from "../data/LocalSource";
-import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
-import styles from "../style/PrizeInfo.module.scss";
-import { loadMovieData, yearConvert, ordinalSuffix } from "../utils";
+import { BtnData } from "../../data/LocalSource";
+import { ReactComponent as Arrow } from "../../image/icon/arrow.svg";
+import styles from "../../style/PrizeInfo.module.scss";
+import { loadMovieData, yearConvert, ordinalSuffix } from "../../utils";
 
 function PrizeInfo(props) {
   const year = yearConvert(props.percentValue, props.year.max, props.year.min);

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import styles from "../style/MemberBtn.module.scss";
+import styles from "../../style/MemberBtn.module.scss";
 import Login from "./Login";
-import { useAuth } from "../contexts/AuthContexts";
+import { useAuth } from "../../contexts/AuthContexts";
 
-import { ReactComponent as LoginIcon } from "../image/icon/login.svg";
-import { ReactComponent as LogoutIcon } from "../image/icon/logout.svg";
-import { ReactComponent as MenuIcon } from "../image/menu.svg";
+import { ReactComponent as LoginIcon } from "../../image/icon/login.svg";
+import { ReactComponent as LogoutIcon } from "../../image/icon/logout.svg";
+import { ReactComponent as MenuIcon } from "../../image/menu.svg";
 
 function MemberBtn(props) {
   const { logout, currentUser } = useAuth();

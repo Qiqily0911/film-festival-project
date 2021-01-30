@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import styles from "../style/MemberPage.module.scss";
+import styles from "../../style/MemberPage.module.scss";
 import MovieCard from "./MovieCard";
-import { ReactComponent as Star } from "../image/icon/star.svg";
-import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
-import { dataApi, cancelLiked } from "../utils";
-import CrewPopup from "./CrewPopup";
+import { ReactComponent as Star } from "../../image/icon/star.svg";
+import { ReactComponent as Arrow } from "../../image/icon/arrow.svg";
+import { dataApi, cancelLiked } from "../../utils";
+import CrewPopup from "../Info/CrewPopup";
 
 export function MemberNav(props) {
   return (

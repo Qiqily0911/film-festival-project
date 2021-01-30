@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import styles from "../style/MovieFilter.module.scss";
-import { BtnData } from "../data/LocalSource";
+import styles from "../../style/MovieFilter.module.scss";
+import { BtnData } from "../../data/LocalSource";
 
 function MovieFilter(props) {
   const [subBtnVal, setSubBtnVal] = useState({
