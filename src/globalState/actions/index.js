@@ -1,17 +1,4 @@
-export const increment = (num) => {
-  return {
-    type: "INCREMENT",
-    payload: num,
-  };
-};
-
-export const decrement = () => {
-  return {
-    type: "DECREMENT",
-  };
-};
-
-export const setListWith = (num) => {
+export const setListWidth = (num) => {
   return {
     type: "SETLIST_WIDTH",
     num: num,
@@ -37,5 +24,27 @@ export const setListAdd = (num, obj) => {
     type: "SETLIST_ADD",
     index: num,
     select: obj,
+  };
+};
+
+export const setPercentValue = (value) => {
+  return {
+    type: "SETPERCENT",
+    value: value,
+  };
+};
+
+// 處理非同步問題
+export const setLikeMovie = (movie) => {
+  return {
+    type: "SETLIKE_MOVIE",
+    movie: movie,
+  };
+};
+
+export const setLikePerson = (person) => {
+  return {
+    type: "SETLIKE_PERSON",
+    person: person,
   };
 };

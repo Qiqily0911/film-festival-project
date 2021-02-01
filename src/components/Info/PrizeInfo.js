@@ -6,9 +6,11 @@ import { loadMovieData, yearConvert, ordinalSuffix } from "../../utils";
 import { useSelector, useDispatch } from "react-redux";
 
 function PrizeInfo(props) {
-  const year = yearConvert(props.percentValue, props.year.max, props.year.min);
+  const percentValue = useSelector((state) => state.setPercentValue);
   const listState = useSelector((state) => state.setList);
   const dispatch = useDispatch();
+
+  const year = yearConvert(percentValue, props.year.max, props.year.min);
 
   const content = (list, index) => {
     const templist = list.film_list || [];
@@ -132,13 +134,13 @@ function PrizeInfo(props) {
 
   let openState;
   let closeState;
-  if (props.listCase === 3) {
+  if (listState.listCase === 3) {
     openState = "27.6%";
     closeState = "calc(-36.8% + 40px)";
-  } else if (props.listCase === 2) {
+  } else if (listState.listCase === 2) {
     openState = "36%";
     closeState = "-18%";
-  } else if (props.listCase < 2) {
+  } else if (listState.listCase < 2) {
     openState = "0";
     closeState = "-90%";
   }

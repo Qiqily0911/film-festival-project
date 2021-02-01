@@ -18,6 +18,7 @@ import {
   cancelLiked,
   overviewChinese,
 } from "../../utils";
+import { useSelector, useDispatch } from "react-redux";
 
 function MovieInfo(props) {
   const [imageList, setImageList] = useState("");
@@ -25,6 +26,7 @@ function MovieInfo(props) {
   const [isCrewOpen, setCrewOpen] = useState(false);
   const [crewLoading, setCrewLoading] = useState(false);
   const [personData, setPersonData] = useState({});
+  const listState = useSelector((state) => state.setList);
 
   const movieInfo = {
     movieId: props.movieData.localData.movie_id,
@@ -109,12 +111,12 @@ function MovieInfo(props) {
     <div
       className={styles.movieInfo}
       style={
-        props.listCase < 2
+        listState.listCase < 2
           ? { right: props.movieInfoOpen ? "0" : " -100%" }
           : {}
       }
     >
-      {props.listCase < 2 && (
+      {listState.listCase < 2 && (
         <div
           className={styles.closeBtn}
           onClick={() => {

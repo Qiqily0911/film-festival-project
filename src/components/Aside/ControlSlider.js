@@ -3,17 +3,26 @@ import Slider from "react-rangeslider";
 import "react-rangeslider/lib/index.css";
 import styles from "../../style/App.module.scss";
 import { yearConvert } from "../../utils";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setListWidth,
+  setListAdd,
+  setPercentValue,
+} from "../../globalState/actions";
 
 function ControlSilder(props) {
+  const percentValue = useSelector((state) => state.setPercentValue);
+  const dispatch = useDispatch();
+
   function handleChangeStart() {
     props.setScroll(false);
   }
 
   function handleChangeVertical(value) {
-    if (value !== props.percentValue) {
-      props.setPercentValue(value);
+    if (value !== percentValue) {
+      dispatch(setPercentValue(value));
     }
-    const num = formatPc(props.percentValue);
+    const num = formatPc(percentValue);
     if (props.yearListRefs[num] !== null) {
       props.yearListRefs[num].current.scrollIntoView({
         behavior: "smooth",
@@ -39,10 +48,10 @@ function ControlSilder(props) {
       <div className={styles.inner}>
         <div className={styles.yearText}>{props.year.max}</div>
         <Slider
-          value={props.percentValue}
+          value={percentValue}
           orientation="vertical"
           labels={verticalLabels}
-          handleLabel={formatPc(props.percentValue)}
+          handleLabel={formatPc(percentValue)}
           format={formatPc}
           onChangeStart={handleChangeStart}
           onChange={handleChangeVertical}

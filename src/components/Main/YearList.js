@@ -4,8 +4,12 @@ import MovieCard from "./MovieCard";
 import { dynamicHeightPercentage } from "../../utils";
 import { useSelector, useDispatch } from "react-redux";
 
+import { setPercentValue } from "../../globalState/actions";
+
 function YearList(props) {
   const listState = useSelector((state) => state.setList);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (listState.list.every((item) => !item.film_list)) {
       props.slider.current.style.visibility = "hidden";
@@ -38,7 +42,7 @@ function YearList(props) {
         props.year.min,
         props.yearListRefs
       );
-      props.setPercentValue(percentage);
+      dispatch(setPercentValue(percentage));
     }
   }
 

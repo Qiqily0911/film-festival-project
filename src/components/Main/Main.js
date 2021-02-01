@@ -12,11 +12,7 @@ import {
   dynamicHeightPercentage,
   useWindowDimensions,
 } from "../../utils";
-import {
-  setListWith,
-  setListCase,
-  setListClose,
-} from "../../globalState/actions";
+import { setListWidth, setListCase } from "../../globalState/actions";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -39,7 +35,7 @@ export default function Main(props) {
     function widthDetect(listCase, num) {
       if (listCase !== listState.listCase) {
         dispatch(setListCase(listCase));
-        dispatch(setListWith(num));
+        dispatch(setListWidth(num));
       }
     }
   }, [width]);
@@ -55,7 +51,6 @@ export default function Main(props) {
               yearlist={props.list}
               yearListRefs={props.yearListRefs}
               setlistState={props.setlistState}
-              setPercentValue={props.setPercentValue}
               setScroll={props.setScroll}
               selectPrize={props.selectPrize}
               prizeArr={props.prizeArr}
@@ -68,7 +63,6 @@ export default function Main(props) {
               memberPage={props.memberPage}
               setMemberPage={props.setMemberPage}
               setprizeBox={props.setprizeBox}
-              listCase={props.listCase}
             />
           </AuthProvider>
         </div>
@@ -81,7 +75,6 @@ export default function Main(props) {
               personList={props.personList}
               setMovieData={props.setMovieData}
               resetInfoPosition={props.resetInfoPosition}
-              listCase={props.listCase}
               movieInfoOpen={props.movieInfoOpen}
               setMovieInfoOpen={props.setMovieInfoOpen}
             />
@@ -94,14 +87,11 @@ export default function Main(props) {
                 yearListRefs={props.yearListRefs}
                 year={props.year}
                 setYear={props.setYear}
-                setPercentValue={props.setPercentValue}
-                percentValue={props.percentValue}
                 isScroll={props.isScroll}
                 userId={props.userId}
                 likedList={props.likedList}
                 resetInfoPosition={props.resetInfoPosition}
                 slider={props.slider}
-                listCase={props.listCase}
                 movieInfoOpen={props.movieInfoOpen}
                 setMovieInfoOpen={props.setMovieInfoOpen}
               />
@@ -117,19 +107,15 @@ export default function Main(props) {
               </div>
               <PrizeInfo
                 year={props.year}
-                setYear={props.setYear}
-                percentValue={props.percentValue}
                 prizeBoxState={props.prizeBoxState}
                 setprizeBox={props.setprizeBox}
                 movieData={props.movieData}
                 setMovieData={props.setMovieData}
-                setPercentValue={props.setPercentValue}
                 setScroll={props.setScroll}
                 loadingOpen={props.loadingOpen}
                 resetInfoPosition={props.resetInfoPosition}
                 selectPrize={props.selectPrize}
                 prizeArr={props.prizeArr}
-                listCase={props.listCase}
                 movieInfoOpen={props.movieInfoOpen}
                 setMovieInfoOpen={props.setMovieInfoOpen}
               />
@@ -148,7 +134,6 @@ export default function Main(props) {
             memberPage={props.memberPage}
             loadingOpen={props.loadingOpen}
             setLoadingOpen={props.setLoadingOpen}
-            listCase={props.listCase}
             movieInfoOpen={props.movieInfoOpen}
             setMovieInfoOpen={props.setMovieInfoOpen}
           />

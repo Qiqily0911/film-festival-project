@@ -5,14 +5,19 @@ import Welcome from "./components/Welcome";
 
 import Aside from "./components/Aside/Aside";
 import Main from "./components/Main/Main";
-import { InitMovieInfo, InitListState } from "./data/LocalSource";
+import { InitMovieInfo } from "./data/LocalSource";
 import {
   loadMovieData,
   dynamicHeightPercentage,
   useWindowDimensions,
 } from "./utils";
 import { useSelector, useDispatch } from "react-redux";
-import { setListWith, setListCase, setListAdd } from "./globalState/actions";
+import {
+  setListAdd,
+  setPercentValue,
+  setLikeMovie,
+  setLikePerson,
+} from "./globalState/actions";
 
 function fillYearList(emptyYearList, fes, prize, order) {
   if (fes) {
@@ -66,16 +71,12 @@ function App() {
   const [welcomeOpen, setWelcome] = useState(true);
   const [list, setList] = useState([]);
   const [yearListRefs, setRefs] = useState("");
-  //  const [listState, setlistState] = useState(InitListState);
   const [prizeArr, setPrizeArr] = useState([]);
-
   const [loadingOpen, setLoadingOpen] = useState(false);
-
   const [year, setYear] = useState({
     min: 1928,
     max: 2020,
   });
-  const [percentValue, setPercentValue] = useState(100);
   const [isScroll, setScroll] = useState(true);
 
   const [userId, setUserId] = useState();
@@ -90,7 +91,6 @@ function App() {
 
   const [likedList, setLikedList] = useState();
   const [personList, setPersonList] = useState();
-  const [listCase, setListCase] = useState(3);
 
   const [movieInfoOpen, setMovieInfoOpen] = useState(false);
 
@@ -193,7 +193,7 @@ function App() {
         year.min,
         yearListRefs
       );
-      setPercentValue(percentage);
+      dispatch(setPercentValue(percentage));
     }
   }
 
@@ -225,11 +225,8 @@ function App() {
     };
 
     if (preventDoubleSelect(listState.list, btnSelect)) {
-      const arr = [...listState.list];
-      arr[index] = btnSelect;
-
       dispatch(setListAdd(index, btnSelect));
-      setPercentValue(100);
+      dispatch(setPercentValue(100));
     }
   }
 
@@ -239,24 +236,18 @@ function App() {
       <Aside
         setMemberPage={setMemberPage}
         memberPage={memberPage}
-        percentValue={percentValue}
-        setPercentValue={setPercentValue}
         yearListRefs={yearListRefs}
         year={year}
-        setYear={setYear}
         setScroll={setScroll}
         isScroll={isScroll}
         slider={slider}
       />
       <Main
-        listCase={listCase}
-        setListCase={setListCase}
         memberPage={memberPage}
         setMemberPage={setMemberPage}
         list={list}
         yearListRefs={yearListRefs}
         listState={listState}
-        setPercentValue={setPercentValue}
         setScroll={setScroll}
         selectPrize={selectPrize}
         prizeArr={prizeArr}
@@ -272,7 +263,6 @@ function App() {
         movieData={movieData}
         year={year}
         setYear={setYear}
-        percentValue={percentValue}
         isScroll={isScroll}
         slider={slider}
         prizeBoxState={prizeBoxState}

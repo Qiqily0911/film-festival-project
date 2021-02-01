@@ -18,11 +18,8 @@ export default function Aside(props) {
         <div className={styles.slider}></div>
       ) : (
         <ControlSilder
-          percentValue={props.percentValue}
-          setPercentValue={props.setPercentValue}
           yearListRefs={props.yearListRefs}
           year={props.year}
-          setYear={props.setYear}
           setScroll={props.setScroll}
           isScroll={props.isScroll}
           slider={props.slider}
