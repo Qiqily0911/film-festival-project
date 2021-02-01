@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./style/App.module.scss";
 import { firestore } from "./config";
-import { createStore } from "redux";
-import { Provider } from "react-redux";
-import reducer from "./store/reducer";
 import Welcome from "./components/Welcome";
 
 import Aside from "./components/Aside/Aside";
@@ -14,8 +11,8 @@ import {
   dynamicHeightPercentage,
   useWindowDimensions,
 } from "./utils";
-
-const store = createStore(reducer);
+import { useSelector, useDispatch } from "react-redux";
+import { setListWith, setListCase, setListAdd } from "./globalState/actions";
 
 function fillYearList(emptyYearList, fes, prize, order) {
   if (fes) {
@@ -69,7 +66,7 @@ function App() {
   const [welcomeOpen, setWelcome] = useState(true);
   const [list, setList] = useState([]);
   const [yearListRefs, setRefs] = useState("");
-  const [listState, setlistState] = useState(InitListState);
+  //  const [listState, setlistState] = useState(InitListState);
   const [prizeArr, setPrizeArr] = useState([]);
 
   const [loadingOpen, setLoadingOpen] = useState(false);
@@ -94,36 +91,18 @@ function App() {
   const [likedList, setLikedList] = useState();
   const [personList, setPersonList] = useState();
   const [listCase, setListCase] = useState(3);
-  const { height, width } = useWindowDimensions();
+
   const [movieInfoOpen, setMovieInfoOpen] = useState(false);
 
-  useEffect(() => {
-    if (width > 1024) {
-      widthDetect(3, 0);
-    } else if (width <= 1024 && width >= 769) {
-      widthDetect(2, 2);
-    } else if (width <= 768 && width >= 501) {
-      widthDetect(1, 2);
-    } else if (width <= 500) {
-      widthDetect(0, 1);
-    }
-
-    function widthDetect(listCase, listLength) {
-      setListCase(listCase);
-      if (listLength === 0) {
-        setlistState(InitListState);
-      } else {
-        setlistState(InitListState.slice(0, listLength));
-      }
-    }
-  }, [width]);
+  const listState = useSelector((state) => state.setList);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const yearList = [];
 
     for (let i = 2020; i >= 1928; i--) {
       const emptyYearBox = { year: i, list: [] };
-      switch (listCase) {
+      switch (listState.listCase) {
         case 3:
           emptyYearBox.list = [[], [], []];
 
@@ -151,33 +130,33 @@ function App() {
 
     setRefs(yearRefs);
 
-    listState.map((list) =>
+    listState.list.map((list) =>
       fillYearList(yearList, list.film_list, list.prize, list.order)
     );
     setList(yearList);
     setSilderValue();
     setScroll(false);
 
-    for (let i = 0; i < listState.length; i++) {
-      if (listState[i].film_list) {
+    for (let i = 0; i < listState.list.length; i++) {
+      if (listState.list[i].film_list) {
         setScroll(true);
         return;
       }
     }
-  }, [listState, listCase]);
+  }, [listState.list, listState.listCase]);
 
   useEffect(() => {
     const prizeIdArr = [];
-    for (let i = 0; i < listState.length; i++) {
-      if (listState[i].film_list?.length > 0) {
-        prizeIdArr.push(listState[i].prizeId);
+    for (let i = 0; i < listState.list.length; i++) {
+      if (listState.list[i].film_list?.length > 0) {
+        prizeIdArr.push(listState.list[i].prizeId);
       } else {
         prizeIdArr.push(null);
       }
     }
 
     setPrizeArr(prizeIdArr);
-  }, [listState]);
+  }, [listState.list]);
 
   useEffect(() => {
     if (userId) {
@@ -245,71 +224,65 @@ function App() {
       order: index,
     };
 
-    if (preventDoubleSelect(listState, btnSelect)) {
-      const arr = [...listState];
+    if (preventDoubleSelect(listState.list, btnSelect)) {
+      const arr = [...listState.list];
       arr[index] = btnSelect;
 
-      setlistState(arr);
+      dispatch(setListAdd(index, btnSelect));
       setPercentValue(100);
     }
   }
 
   return (
-    <Provider store={store}>
-      <div className={styles.outter}>
-        <Welcome
-          welcomeOpen={welcomeOpen}
-          setWelcome={setWelcome}
-          welcomeRef={welcomeRef}
-        />
-        <Aside
-          setMemberPage={setMemberPage}
-          memberPage={memberPage}
-          percentValue={percentValue}
-          setPercentValue={setPercentValue}
-          yearListRefs={yearListRefs}
-          year={year}
-          setYear={setYear}
-          setScroll={setScroll}
-          isScroll={isScroll}
-          slider={slider}
-        />
-        <Main
-          memberPage={memberPage}
-          setMemberPage={setMemberPage}
-          list={list}
-          yearListRefs={yearListRefs}
-          setlistState={setlistState}
-          listState={listState}
-          setPercentValue={setPercentValue}
-          setScroll={setScroll}
-          selectPrize={selectPrize}
-          prizeArr={prizeArr}
-          setUserId={setUserId}
-          setprizeBox={setprizeBox}
-          listCase={listCase}
-          userId={userId}
-          likedList={likedList}
-          personList={personList}
-          setMovieData={setMovieData}
-          resetInfoPosition={resetInfoPosition}
-          movieInfoOpen={movieInfoOpen}
-          setMovieInfoOpen={setMovieInfoOpen}
-          movieData={movieData}
-          year={year}
-          setYear={setYear}
-          percentValue={percentValue}
-          isScroll={isScroll}
-          slider={slider}
-          prizeBoxState={prizeBoxState}
-          loadingOpen={loadingOpen}
-          imageBoxEl={imageBoxEl}
-          crewsEl={crewsEl}
-          movieInfoEl={movieInfoEl}
-          setLoadingOpen={setLoadingOpen}
-        />
-      </div>
-    </Provider>
+    <div className={styles.outter}>
+      {/* <Welcome welcomeOpen={welcomeOpen} setWelcome={setWelcome} welcomeRef={welcomeRef} /> */}
+      <Aside
+        setMemberPage={setMemberPage}
+        memberPage={memberPage}
+        percentValue={percentValue}
+        setPercentValue={setPercentValue}
+        yearListRefs={yearListRefs}
+        year={year}
+        setYear={setYear}
+        setScroll={setScroll}
+        isScroll={isScroll}
+        slider={slider}
+      />
+      <Main
+        listCase={listCase}
+        setListCase={setListCase}
+        memberPage={memberPage}
+        setMemberPage={setMemberPage}
+        list={list}
+        yearListRefs={yearListRefs}
+        listState={listState}
+        setPercentValue={setPercentValue}
+        setScroll={setScroll}
+        selectPrize={selectPrize}
+        prizeArr={prizeArr}
+        setUserId={setUserId}
+        setprizeBox={setprizeBox}
+        userId={userId}
+        likedList={likedList}
+        personList={personList}
+        setMovieData={setMovieData}
+        resetInfoPosition={resetInfoPosition}
+        movieInfoOpen={movieInfoOpen}
+        setMovieInfoOpen={setMovieInfoOpen}
+        movieData={movieData}
+        year={year}
+        setYear={setYear}
+        percentValue={percentValue}
+        isScroll={isScroll}
+        slider={slider}
+        prizeBoxState={prizeBoxState}
+        loadingOpen={loadingOpen}
+        imageBoxEl={imageBoxEl}
+        crewsEl={crewsEl}
+        movieInfoEl={movieInfoEl}
+        setLoadingOpen={setLoadingOpen}
+      />
+    </div>
   );
 }
 

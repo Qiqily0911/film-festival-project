@@ -7,8 +7,43 @@ import YearList from "./YearList";
 import MovieFilter from "./MovieFilter";
 import MemberBtn from "./MemberBtn";
 import { MemberNav, MemberPage } from "./MemberPage";
+import {
+  loadMovieData,
+  dynamicHeightPercentage,
+  useWindowDimensions,
+} from "../../utils";
+import {
+  setListWith,
+  setListCase,
+  setListClose,
+} from "../../globalState/actions";
+
+import { useSelector, useDispatch } from "react-redux";
 
 export default function Main(props) {
+  const { height, width } = useWindowDimensions();
+  const listState = useSelector((state) => state.setList);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (width > 1024) {
+      widthDetect(3);
+    } else if (width <= 1024 && width >= 769) {
+      widthDetect(2, 2);
+    } else if (width <= 768 && width >= 501) {
+      widthDetect(1, 2);
+    } else if (width <= 500) {
+      widthDetect(0, 1);
+    }
+
+    function widthDetect(listCase, num) {
+      if (listCase !== listState.listCase) {
+        dispatch(setListCase(listCase));
+        dispatch(setListWith(num));
+      }
+    }
+  }, [width]);
+
   return (
     <main>
       <div className={styles.container}>
@@ -20,7 +55,6 @@ export default function Main(props) {
               yearlist={props.list}
               yearListRefs={props.yearListRefs}
               setlistState={props.setlistState}
-              listState={props.listState}
               setPercentValue={props.setPercentValue}
               setScroll={props.setScroll}
               selectPrize={props.selectPrize}
@@ -58,7 +92,6 @@ export default function Main(props) {
                 movieData={props.movieData}
                 yearlist={props.list}
                 yearListRefs={props.yearListRefs}
-                listState={props.listState}
                 year={props.year}
                 setYear={props.setYear}
                 setPercentValue={props.setPercentValue}
@@ -90,7 +123,6 @@ export default function Main(props) {
                 setprizeBox={props.setprizeBox}
                 movieData={props.movieData}
                 setMovieData={props.setMovieData}
-                listState={props.listState}
                 setPercentValue={props.setPercentValue}
                 setScroll={props.setScroll}
                 loadingOpen={props.loadingOpen}

@@ -6,12 +6,14 @@ import { useAuth } from "../../contexts/AuthContexts";
 import { ReactComponent as LoginIcon } from "../../image/icon/login.svg";
 import { ReactComponent as LogoutIcon } from "../../image/icon/logout.svg";
 import { ReactComponent as MenuIcon } from "../../image/menu.svg";
+import { useSelector, useDispatch } from "react-redux";
 
 function MemberBtn(props) {
   const { logout, currentUser } = useAuth();
   const [isOpen, setOpen] = useState(false);
   const [isLogin, setLogin] = useState(false);
   const [error, setError] = useState("");
+  const listState = useSelector((state) => state.setList);
 
   async function handleLogout() {
     setError("");
@@ -85,7 +87,7 @@ function MemberBtn(props) {
 
   return (
     <div className={styles.loginOutter}>
-      {props.listCase < 2 ? (
+      {listState.listCase < 2 ? (
         <MenuIcon />
       ) : (
         <>

@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import styles from "../../style/MovieFilter.module.scss";
 import { BtnData } from "../../data/LocalSource";
+import { setListClose } from "../../globalState/actions";
+import { useSelector, useDispatch } from "react-redux";
 
 function MovieFilter(props) {
+  const listState = useSelector((state) => state.setList);
+  const dispatch = useDispatch();
   const [subBtnVal, setSubBtnVal] = useState({
     "index-0": "",
     "index-1": "",
@@ -28,9 +32,7 @@ function MovieFilter(props) {
 
   function close(e) {
     const order = Number(e.target.dataset.order);
-    const arr = [...props.listState];
-    arr[order] = { film_list: null, order: order };
-    props.setlistState(arr);
+    dispatch(setListClose(order));
   }
 
   function selectFestival(e, i) {
@@ -117,7 +119,8 @@ function MovieFilter(props) {
   return (
     <div className={styles.movieFilter}>
       <div className={styles.titleBox}>
-        {props.listState.map((list, i) => (
+        {/* {console.log(listState.list)} */}
+        {listState.list.map((list, i) => (
           <div className={styles.fesTitle} key={i}>
             {list.film_list ? selectedList(list) : notSelectList(list, i)}
           </div>

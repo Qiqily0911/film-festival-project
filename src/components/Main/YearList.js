@@ -2,14 +2,16 @@ import React, { useEffect } from "react";
 import styles from "../../style/YearList.module.scss";
 import MovieCard from "./MovieCard";
 import { dynamicHeightPercentage } from "../../utils";
+import { useSelector, useDispatch } from "react-redux";
 
 function YearList(props) {
+  const listState = useSelector((state) => state.setList);
   useEffect(() => {
-    if (props.listState.every((item) => !item.film_list)) {
+    if (listState.list.every((item) => !item.film_list)) {
       props.slider.current.style.visibility = "hidden";
     } else {
       props.slider.current.style.visibility = "visible";
-      const arr = props.listState.map(
+      const arr = listState.list.map(
         (item) => item.film_list && item.film_list.map((film) => film.year)
       );
 

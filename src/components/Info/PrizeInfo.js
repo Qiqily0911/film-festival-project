@@ -3,9 +3,12 @@ import { BtnData } from "../../data/LocalSource";
 import { ReactComponent as Arrow } from "../../image/icon/arrow.svg";
 import styles from "../../style/PrizeInfo.module.scss";
 import { loadMovieData, yearConvert, ordinalSuffix } from "../../utils";
+import { useSelector, useDispatch } from "react-redux";
 
 function PrizeInfo(props) {
   const year = yearConvert(props.percentValue, props.year.max, props.year.min);
+  const listState = useSelector((state) => state.setList);
+  const dispatch = useDispatch();
 
   const content = (list, index) => {
     const templist = list.film_list || [];
@@ -166,8 +169,9 @@ function PrizeInfo(props) {
         </div>
       </div>
       <div className={styles.outterBox}>
+        {/* {console.log(listState)} */}
         <div className={styles.innerBox}>
-          {props.listState.map((list, i) => content(list, i))}
+          {listState.list.map((list, i) => content(list, i))}
         </div>
       </div>
     </div>
