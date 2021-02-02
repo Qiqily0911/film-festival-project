@@ -73,10 +73,7 @@ function App() {
   const [yearListRefs, setRefs] = useState("");
   const [prizeArr, setPrizeArr] = useState([]);
   const [loadingOpen, setLoadingOpen] = useState(false);
-  const [year, setYear] = useState({
-    min: 1928,
-    max: 2020,
-  });
+
   const [isScroll, setScroll] = useState(true);
 
   const [userId, setUserId] = useState();
@@ -95,6 +92,7 @@ function App() {
   const [movieInfoOpen, setMovieInfoOpen] = useState(false);
 
   const listState = useSelector((state) => state.setList);
+  const yearRange = useSelector((state) => state.setYear);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -185,12 +183,12 @@ function App() {
   function setSilderValue() {
     if (
       yearListRefs &&
-      yearListRefs[year.min] &&
-      yearListRefs[year.min].current
+      yearListRefs[yearRange.min] &&
+      yearListRefs[yearRange.min].current
     ) {
       const percentage = dynamicHeightPercentage(
-        year.max,
-        year.min,
+        yearRange.max,
+        yearRange.min,
         yearListRefs
       );
       dispatch(setPercentValue(percentage));
@@ -237,7 +235,6 @@ function App() {
         setMemberPage={setMemberPage}
         memberPage={memberPage}
         yearListRefs={yearListRefs}
-        year={year}
         setScroll={setScroll}
         isScroll={isScroll}
         slider={slider}
@@ -261,8 +258,6 @@ function App() {
         movieInfoOpen={movieInfoOpen}
         setMovieInfoOpen={setMovieInfoOpen}
         movieData={movieData}
-        year={year}
-        setYear={setYear}
         isScroll={isScroll}
         slider={slider}
         prizeBoxState={prizeBoxState}

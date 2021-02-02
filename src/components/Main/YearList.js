@@ -4,10 +4,12 @@ import MovieCard from "./MovieCard";
 import { dynamicHeightPercentage } from "../../utils";
 import { useSelector, useDispatch } from "react-redux";
 
-import { setPercentValue } from "../../globalState/actions";
+import { setPercentValue, setYear } from "../../globalState/actions";
 
 function YearList(props) {
   const listState = useSelector((state) => state.setList);
+  const yearRange = useSelector((state) => state.setYear);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -23,23 +25,26 @@ function YearList(props) {
       const min = [];
 
       arr.forEach((list) => {
-        list && max.push(Math.max(...list));
-        list && min.push(Math.min(...list));
+        if (list) {
+          max.push(Math.max(...list));
+          min.push(Math.min(...list));
+        }
       });
 
-      props.setYear({
-        ...props.year,
-        max: Math.max(...max),
-        min: Math.min(...min),
-      });
+      dispatch(setYear(Math.max(...max), Math.min(...min)));
+      // props.setYear({
+      //   ...props.year,
+      //   max: Math.max(...max),
+      //   min: Math.min(...min),
+      // });
     }
   }, [props.yearlist]);
 
   function detectScroll() {
     if (props.isScroll) {
       const percentage = dynamicHeightPercentage(
-        props.year.max,
-        props.year.min,
+        yearRange.max,
+        yearRange.min,
         props.yearListRefs
       );
       dispatch(setPercentValue(percentage));

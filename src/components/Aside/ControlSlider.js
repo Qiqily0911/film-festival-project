@@ -12,6 +12,8 @@ import {
 
 function ControlSilder(props) {
   const percentValue = useSelector((state) => state.setPercentValue);
+  const yearRange = useSelector((state) => state.setYear);
+
   const dispatch = useDispatch();
 
   function handleChangeStart() {
@@ -41,12 +43,12 @@ function ControlSilder(props) {
     75: "•",
   };
 
-  const formatPc = (p) => `${yearConvert(p, props.year.max, props.year.min)}`;
+  const formatPc = (p) => `${yearConvert(p, yearRange.max, yearRange.min)}`;
 
   return (
     <div className={styles.slider} ref={props.slider}>
       <div className={styles.inner}>
-        <div className={styles.yearText}>{props.year.max}</div>
+        <div className={styles.yearText}>{yearRange.max}</div>
         <Slider
           value={percentValue}
           orientation="vertical"
@@ -57,7 +59,7 @@ function ControlSilder(props) {
           onChange={handleChangeVertical}
           onChangeComplete={handleScroll}
         />
-        <div className={styles.yearText}>{props.year.min}</div>
+        <div className={styles.yearText}>{yearRange.min}</div>
       </div>
     </div>
   );

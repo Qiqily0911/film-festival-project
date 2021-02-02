@@ -85,7 +85,6 @@ export default function Main(props) {
                 movieData={props.movieData}
                 yearlist={props.list}
                 yearListRefs={props.yearListRefs}
-                year={props.year}
                 setYear={props.setYear}
                 isScroll={props.isScroll}
                 userId={props.userId}
@@ -106,7 +105,6 @@ export default function Main(props) {
                 {props.prizeBoxState ? "Poster" : "List"} mode
               </div>
               <PrizeInfo
-                year={props.year}
                 prizeBoxState={props.prizeBoxState}
                 setprizeBox={props.setprizeBox}
                 movieData={props.movieData}

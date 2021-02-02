@@ -34,6 +34,14 @@ export const setPercentValue = (value) => {
   };
 };
 
+export const setYear = (max, min) => {
+  return {
+    type: "SETYEAR",
+    max: max,
+    min: min,
+  };
+};
+
 // 處理非同步問題
 export const setLikeMovie = (movie) => {
   return {

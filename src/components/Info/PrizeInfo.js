@@ -8,9 +8,11 @@ import { useSelector, useDispatch } from "react-redux";
 function PrizeInfo(props) {
   const percentValue = useSelector((state) => state.setPercentValue);
   const listState = useSelector((state) => state.setList);
+  const yearRange = useSelector((state) => state.setYear);
+
   const dispatch = useDispatch();
 
-  const year = yearConvert(percentValue, props.year.max, props.year.min);
+  const currentYear = yearConvert(percentValue, yearRange.max, yearRange.min);
 
   const content = (list, index) => {
     const templist = list.film_list || [];
@@ -43,7 +45,7 @@ function PrizeInfo(props) {
                 <div className={styles.lower}>
                   <div>
                     {templist
-                      .filter((film) => film.year === year)
+                      .filter((film) => film.year === currentYear)
                       .map((data, j) => {
                         return (
                           <div
@@ -167,7 +169,7 @@ function PrizeInfo(props) {
                 : "rotate(180deg)",
             }}
           />
-          <span>{year}</span> FESTIVAL
+          <span>{currentYear}</span> FESTIVAL
         </div>
       </div>
       <div className={styles.outterBox}>

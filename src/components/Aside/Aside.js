@@ -19,7 +19,6 @@ export default function Aside(props) {
       ) : (
         <ControlSilder
           yearListRefs={props.yearListRefs}
-          year={props.year}
           setScroll={props.setScroll}
           isScroll={props.isScroll}
           slider={props.slider}
