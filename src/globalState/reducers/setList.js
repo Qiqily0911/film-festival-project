@@ -16,7 +16,6 @@ const setListReducer = (state = initialState, action) => {
       newList.list[action.index] = { film_list: null, order: action.index };
       return newList;
     case "SETLIST_ADD":
-      console.log(state);
       newList.list[action.index] = action.select;
       return newList;
     case "SETLIST_CASE":

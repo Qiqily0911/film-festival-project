@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./style/App.module.scss";
-import { firestore } from "./config";
+
 import Welcome from "./components/Welcome";
 
 import Aside from "./components/Aside/Aside";
 import Navbar from "./components/Navbar/Navbar";
-import SubContainer from "./components/SubContainer/SubContainer";
+import Container from "./components/Container/Container";
 import { InitMovieInfo } from "./data/LocalSource";
 import {
   loadMovieData,
@@ -19,6 +19,7 @@ import {
   setLikeMovie,
   setLikePerson,
   setListYearRef,
+  setMovieData,
 } from "./globalState/actions";
 
 function fillYearList(emptyYearList, fes, prize, order) {
@@ -84,10 +85,8 @@ function App() {
   const [prizeBoxState, setprizeBox] = useState(false);
   const [memberPage, setMemberPage] = useState(false);
 
-  const [likedList, setLikedList] = useState();
-  const [personList, setPersonList] = useState();
-
   const listState = useSelector((state) => state.setList);
+
   const yearRange = useSelector((state) => state.setYear);
   const dispatch = useDispatch();
 
@@ -154,26 +153,6 @@ function App() {
   }, [listState.list]);
 
   useEffect(() => {
-    if (userId) {
-      function userLikedList(firebaseCollection, listHook) {
-        firestore
-          .collection(firebaseCollection)
-          .where("user", "==", userId)
-          .onSnapshot((onSnapshot) => {
-            const arr = [];
-            onSnapshot.forEach((doc) => {
-              arr.push(doc.data());
-            });
-            listHook(arr);
-          });
-      }
-
-      userLikedList("movie_liked", setLikedList);
-      userLikedList("person_liked", setPersonList);
-    }
-  }, [userId]);
-
-  useEffect(() => {
     loadMovieData(496243, "tt6751668", InitMovieInfo, setMovieData);
   }, []);
 
@@ -232,13 +211,13 @@ function App() {
             memberPage={memberPage}
             setprizeBox={setprizeBox}
           />
-          <SubContainer
+          <Container
+            setMovieData={setMovieData}
+            selectPrize={selectPrize}
             movieData={movieData}
             prizeBoxState={prizeBoxState}
             setprizeBox={setprizeBox}
             userId={userId}
-            likedList={likedList}
-            personList={personList}
             memberPage={memberPage}
             prizeArr={prizeArr}
             yearlist={yearlist}

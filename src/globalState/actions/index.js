@@ -49,7 +49,6 @@ export const setYear = (max, min) => {
   };
 };
 
-// 處理非同步問題
 export const setLikeMovie = (movie) => {
   return {
     type: "SETLIKE_MOVIE",
@@ -61,5 +60,12 @@ export const setLikePerson = (person) => {
   return {
     type: "SETLIKE_PERSON",
     person: person,
+  };
+};
+
+export const setMovieData = (dataArr) => {
+  return {
+    type: "SETDATA_MOVIE",
+    data: dataArr,
   };
 };

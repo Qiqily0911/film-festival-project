@@ -4,12 +4,13 @@ import MovieCard from "./MovieCard";
 import { ReactComponent as Star } from "../../image/icon/star.svg";
 import { dataApi, cancelLiked } from "../../utils";
 import CrewPopup from "../Info/CrewPopup";
+import { useSelector } from "react-redux";
 
 export function MemberPage(props) {
   const [isCrewOpen, setCrewOpen] = useState(false);
   const [crewLoading, setCrewLoading] = useState(false);
   const [personData, setPersonData] = useState({});
-
+  const likeList = useSelector((state) => state.likeList);
   return (
     <div className={styles.outter}>
       <div className={styles.innerBox}>
@@ -17,8 +18,8 @@ export function MemberPage(props) {
           <span>收藏的電影</span>
         </div>
         <div className={styles.cardBox}>
-          {props.likedList &&
-            props.likedList
+          {likeList.movieList &&
+            likeList.movieList
               .sort((a, b) => (a.time.seconds > b.time.seconds ? 1 : -1))
               .map((data, i) => {
                 const listData = {
@@ -42,7 +43,6 @@ export function MemberPage(props) {
                     userId={props.userId}
                     isLiked={true}
                     memberPage={props.memberPage}
-                    likedList={props.likedList}
                     resetInfoPosition={props.resetInfoPosition}
                     movieInfoOpen={props.movieInfoOpen}
                     setMovieInfoOpen={props.setMovieInfoOpen}
@@ -58,7 +58,7 @@ export function MemberPage(props) {
           <span>喜愛的演員及導演</span>
         </div>
         <div className={styles.cardBox}>
-          {props.personList
+          {likeList.personList
             .sort((a, b) => (a.time.seconds > b.time.seconds ? 1 : -1))
             .map((data, i) => (
               <div className={styles.personCard} key={i}>
@@ -97,7 +97,7 @@ export function MemberPage(props) {
                     onClick={(e) =>
                       cancelLiked(
                         e,
-                        props.personList,
+                        likeList.personList,
                         "person_liked",
                         data.person_id
                       )
@@ -122,10 +122,8 @@ export function MemberPage(props) {
           userId={props.userId}
           setCrewOpen={setCrewOpen}
           personData={personData}
-          likedList={props.likedList}
           crewLoading={crewLoading}
           setCrewLoading={setCrewLoading}
-          personList={props.personList}
         />
       )}
     </div>

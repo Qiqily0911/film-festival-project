@@ -6,6 +6,7 @@ import { ReactComponent as Star } from "../../image/icon/star.svg";
 import Loading from "../Loading";
 import { addLiked, cancelLiked, overviewChinese } from "../../utils";
 import { ReactComponent as Imdb } from "../../image/IMDB_Logo.svg";
+import { useSelector, useDispatch } from "react-redux";
 
 function CrewPopup(props) {
   const [personNameCh, setPersonNameCh] = useState("");
@@ -21,6 +22,7 @@ function CrewPopup(props) {
   const castData = props.personData && props.personData.crew.cast;
   const personData = props.personData && props.personData.person;
   const overviewEl = useRef(null);
+  const likeList = useSelector((state) => state.likeList);
 
   setTimeout(() => {
     props.setCrewLoading(false);
@@ -100,8 +102,8 @@ function CrewPopup(props) {
   };
 
   const isLiked =
-    props.personList &&
-    props.personList.find((item) => item.person_id === personData.id);
+    likeList.personList &&
+    likeList.personList.find((item) => item.person_id === personData.id);
 
   const crewMovieCards = (title, crewArr) => {
     let newArr = [];
@@ -122,7 +124,6 @@ function CrewPopup(props) {
                 <CrewMovieCard
                   key={i}
                   data={data}
-                  likedList={props.likedList}
                   setInfoOpen={setInfoOpen}
                   userId={props.userId}
                   setCrewMovieData={setCrewMovieData}
@@ -168,7 +169,7 @@ function CrewPopup(props) {
                           isLiked
                             ? cancelLiked(
                                 e,
-                                props.personList,
+                                likeList.personList,
                                 "person_liked",
                                 personData.id
                               )

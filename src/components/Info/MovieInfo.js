@@ -26,6 +26,7 @@ function MovieInfo(props) {
   const [crewLoading, setCrewLoading] = useState(false);
   const [personData, setPersonData] = useState({});
   const listState = useSelector((state) => state.setList);
+  const likeList = useSelector((state) => state.likeList);
 
   const movieInfo = {
     movieId: props.movieData.localData.movie_id,
@@ -61,8 +62,8 @@ function MovieInfo(props) {
   }, [props.movieData]);
 
   const isLiked = Boolean(
-    props.likedList &&
-      props.likedList.find((item) => item.tmdb_id === movieInfo.tmdbId)
+    likeList.movieList &&
+      likeList.movieList.find((item) => item.tmdb_id === movieInfo.tmdbId)
   );
 
   const director =
@@ -180,7 +181,7 @@ function MovieInfo(props) {
                           isLiked
                             ? cancelLiked(
                                 e,
-                                props.likedList,
+                                likeList.movieList,
                                 "movie_liked",
                                 movieInfo.tmdbId
                               )
@@ -345,10 +346,8 @@ function MovieInfo(props) {
               userId={props.userId}
               setCrewOpen={setCrewOpen}
               personData={personData}
-              likedList={props.likedList}
               crewLoading={crewLoading}
               setCrewLoading={setCrewLoading}
-              personList={props.personList}
             />
           )}
         </div>

@@ -4,13 +4,11 @@ const initialState = {
 };
 
 const likeListReducer = (state = initialState, action) => {
-  const newList = { ...state };
   switch (action.type) {
-    // 處理非同步問題
     case "SETLIKE_MOVIE":
-      return (newList.movieList = action.movie);
+      return { ...state, movieList: action.movie };
     case "SETLIKE_PERSON":
-      return (newList.personList = action.person);
+      return { ...state, personList: action.person };
 
     default:
       return state;

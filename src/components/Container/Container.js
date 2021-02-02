@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "../../style/App.module.scss";
-
+import { firestore } from "../../config";
 import MovieInfo from "../Info/MovieInfo";
 import PrizeInfo from "../Info/PrizeInfo";
 import YearList from "./YearList";
@@ -16,28 +16,16 @@ import {
   setPercentValue,
   setListWidth,
   setListCase,
+  setLikeMovie,
+  setLikePerson,
 } from "../../globalState/actions";
 
 import { useSelector, useDispatch } from "react-redux";
 
-function preventDoubleSelect(listState, btnSelect) {
-  for (let i = 0; i < listState.length; i++) {
-    if (
-      listState[i].film_list &&
-      btnSelect.title === listState[i].title &&
-      btnSelect.prize === listState[i].prize
-    ) {
-      alert("選過囉");
-      return false;
-    } else {
-      return true;
-    }
-  }
-}
-
 export default function SubContainer(props) {
   const { height, width } = useWindowDimensions();
   const listState = useSelector((state) => state.setList);
+  const likeList = useSelector((state) => state.likeList);
   const dispatch = useDispatch();
 
   const imageBoxEl = useRef(null);
@@ -45,6 +33,29 @@ export default function SubContainer(props) {
   const movieInfoEl = useRef(null);
   const [loadingOpen, setLoadingOpen] = useState(false);
   const [movieInfoOpen, setMovieInfoOpen] = useState(false);
+
+  useEffect(() => {
+    if (props.userId) {
+      function userLikedList(firebaseCollection, listHook) {
+        firestore
+          .collection(firebaseCollection)
+          .where("user", "==", props.userId)
+          .onSnapshot((onSnapshot) => {
+            const arr = [];
+            onSnapshot.forEach((doc) => {
+              arr.push(doc.data());
+            });
+            listHook(arr);
+          });
+      }
+
+      const setMovieList = (arr) => dispatch(setLikeMovie(arr));
+      const setPersonList = (arr) => dispatch(setLikePerson(arr));
+
+      userLikedList("movie_liked", setMovieList);
+      userLikedList("person_liked", setPersonList);
+    }
+  }, [props.userId]);
 
   function resetInfoPosition() {
     movieInfoEl.current.style.overflow = "hidden";
@@ -57,25 +68,6 @@ export default function SubContainer(props) {
         behavior: "smooth",
         block: "start",
       });
-    }
-  }
-
-  function selectPrize(fesData, prizeData, index) {
-    const btnSelect = {
-      title: fesData.btnText,
-      prize_zh: prizeData.subBtnName,
-      prize_name: prizeData.subBtnText,
-      list_name: fesData.list_name,
-      film_list: fesData.value,
-      prize: prizeData.subBtnValue,
-      prizeId: prizeData.dataId,
-      logo: fesData.logo,
-      order: index,
-    };
-
-    if (preventDoubleSelect(listState.list, btnSelect)) {
-      dispatch(setListAdd(index, btnSelect));
-      dispatch(setPercentValue(100));
     }
   }
 
@@ -104,8 +96,6 @@ export default function SubContainer(props) {
         <MemberPage
           userId={props.userId}
           memberPage={props.memberPage}
-          likedList={props.likedList}
-          personList={props.personList}
           setMovieData={props.setMovieData}
           resetInfoPosition={resetInfoPosition}
           movieInfoOpen={movieInfoOpen}
@@ -118,10 +108,8 @@ export default function SubContainer(props) {
             movieData={props.movieData}
             yearlist={props.yearlist}
             yearListRefs={props.yearListRefs}
-            setYear={props.setYear}
             isScroll={props.isScroll}
             userId={props.userId}
-            likedList={props.likedList}
             resetInfoPosition={resetInfoPosition}
             slider={props.slider}
             movieInfoOpen={movieInfoOpen}
@@ -143,7 +131,7 @@ export default function SubContainer(props) {
             movieData={props.movieData}
             setMovieData={props.setMovieData}
             resetInfoPosition={resetInfoPosition}
-            selectPrize={selectPrize}
+            selectPrize={props.selectPrize}
             prizeArr={props.prizeArr}
             movieInfoOpen={movieInfoOpen}
             setMovieInfoOpen={setMovieInfoOpen}
@@ -158,8 +146,6 @@ export default function SubContainer(props) {
         prizeBoxState={props.prizeBoxState}
         setprizeBox={props.setprizeBox}
         userId={props.userId}
-        likedList={props.likedList}
-        personList={props.personList}
         memberPage={props.memberPage}
         loadingOpen={loadingOpen}
         setLoadingOpen={setLoadingOpen}

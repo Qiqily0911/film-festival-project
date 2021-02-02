@@ -4,8 +4,10 @@ import { loadMovieData, addLiked, cancelLiked } from "../../utils";
 
 import { ReactComponent as Bookmark } from "../../image/icon/add.svg";
 import { ReactComponent as Nopic } from "../../image/icon/no-pic.svg";
+import { useSelector } from "react-redux";
 
 function MovieCard(props) {
+  const likeList = useSelector((state) => state.likeList);
   const obj = {
     user: props.userId,
     movie_id: props.listData.movie_id,
@@ -42,7 +44,7 @@ function MovieCard(props) {
         loadMovieData(tmdbId, imdbId, props.listData, props.setMovieData);
       }}
     >
-      {props.userId ? (
+      {props.userId && (
         <Bookmark
           className={props.isLiked ? styles.addBtn : styles.cancelBtn}
           data-id={props.listData.movie_id}
@@ -50,12 +52,10 @@ function MovieCard(props) {
             const tmdbId = props.listData.tmdb_id;
 
             props.isLiked
-              ? cancelLiked(e, props.likedList, "movie_liked", tmdbId)
+              ? cancelLiked(e, likeList.movieList, "movie_liked", tmdbId)
               : addLiked(e, "movie_liked", obj);
           }}
         />
-      ) : (
-        ""
       )}
 
       <div className={styles.posterBox}>

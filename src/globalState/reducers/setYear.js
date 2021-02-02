@@ -4,13 +4,11 @@ const initialYear = {
 };
 
 const setYearReducer = (state = initialYear, action) => {
-  switch (action.type) {
-    case "SETYEAR":
-      return { ...state, max: action.max, min: action.min };
-
-    default:
-      return state;
+  if (action.type === "SETYEAR") {
+    return { ...state, max: action.max, min: action.min };
   }
+
+  return state;
 };
 
 export default setYearReducer;
