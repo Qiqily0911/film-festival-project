@@ -96,7 +96,6 @@ export default function SubContainer(props) {
         <MemberPage
           userId={props.userId}
           memberPage={props.memberPage}
-          setMovieData={props.setMovieData}
           resetInfoPosition={resetInfoPosition}
           movieInfoOpen={movieInfoOpen}
           setMovieInfoOpen={setMovieInfoOpen}
@@ -104,8 +103,6 @@ export default function SubContainer(props) {
       ) : (
         <>
           <YearList
-            setMovieData={props.setMovieData}
-            movieData={props.movieData}
             yearlist={props.yearlist}
             yearListRefs={props.yearListRefs}
             isScroll={props.isScroll}
@@ -128,8 +125,6 @@ export default function SubContainer(props) {
           <PrizeInfo
             prizeBoxState={props.prizeBoxState}
             setprizeBox={props.setprizeBox}
-            movieData={props.movieData}
-            setMovieData={props.setMovieData}
             resetInfoPosition={resetInfoPosition}
             selectPrize={props.selectPrize}
             prizeArr={props.prizeArr}
@@ -139,7 +134,6 @@ export default function SubContainer(props) {
         </>
       )}
       <MovieInfo
-        movieData={props.movieData}
         imageBoxEl={imageBoxEl}
         crewsEl={crewsEl}
         movieInfoEl={movieInfoEl}

@@ -39,7 +39,6 @@ export function MemberPage(props) {
                   <MovieCard
                     key={i}
                     listData={listData}
-                    setMovieData={props.setMovieData}
                     userId={props.userId}
                     isLiked={true}
                     memberPage={props.memberPage}

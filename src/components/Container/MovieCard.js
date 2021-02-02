@@ -4,9 +4,11 @@ import { loadMovieData, addLiked, cancelLiked } from "../../utils";
 
 import { ReactComponent as Bookmark } from "../../image/icon/add.svg";
 import { ReactComponent as Nopic } from "../../image/icon/no-pic.svg";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setMovieData } from "../../globalState/actions";
 
 function MovieCard(props) {
+  const dispatch = useDispatch();
   const likeList = useSelector((state) => state.likeList);
   const obj = {
     user: props.userId,
@@ -41,7 +43,8 @@ function MovieCard(props) {
         const imdbId = props.listData.movie_id;
         props.setMovieInfoOpen(true);
         props.resetInfoPosition();
-        loadMovieData(tmdbId, imdbId, props.listData, props.setMovieData);
+        const a = (b) => dispatch(setMovieData(b));
+        loadMovieData(tmdbId, imdbId, props.listData, a);
       }}
     >
       {props.userId && (

@@ -23,17 +23,6 @@ export function dataApi(source, category, type, id) {
   });
 }
 
-// export function loadMovieData(tmdbId, imdbId, localData) {
-//    const tmdbApiData = ["", "/videos", "/images", "/credits", "/translations"];
-//    const dataArr = tmdbApiData.map((item) => dataApi("tmdb", "movie", item, tmdbId));
-//    dataArr.push(imdbId !== null && dataApi("omdb", "", "", imdbId));
-
-//    Promise.all(dataArr).then((arr) => {
-//       arr.push(localData);
-//       console.log(arr);
-//       return arr;
-//    });
-// }
 export function loadMovieData(tmdbId, imdbId, localData, setMovieDataHook) {
   const tmdbApiData = ["", "/videos", "/images", "/credits", "/translations"];
   const dataArr = tmdbApiData.map((item) =>
@@ -42,16 +31,8 @@ export function loadMovieData(tmdbId, imdbId, localData, setMovieDataHook) {
   dataArr.push(imdbId !== null && dataApi("omdb", "", "", imdbId));
 
   Promise.all(dataArr).then((arr) => {
-    const obj = {
-      detail: arr[0],
-      video: arr[1],
-      images: arr[2],
-      credits: arr[3],
-      overview_translate: arr[4],
-      omdbData: arr[5],
-      localData: localData,
-    };
-    setMovieDataHook(obj);
+    arr.push(localData);
+    setMovieDataHook(arr);
   });
 }
 

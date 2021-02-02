@@ -10,7 +10,7 @@ const allReducers = combineReducers({
   setPercentValue: setPercentValueReducer,
   likeList: likeListReducer,
   setYear: setYearReducer,
-  // setMovieData: setMovieDataReducer,
+  setMovieData: setMovieDataReducer,
 });
 
 export default allReducers;

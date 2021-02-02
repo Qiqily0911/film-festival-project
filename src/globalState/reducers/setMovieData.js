@@ -21,6 +21,7 @@ const setMovieDataReducer = (state = initialData, action) => {
       localData: action.data[6],
     };
   }
+  return state;
 };
 
 export default setMovieDataReducer;

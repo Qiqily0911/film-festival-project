@@ -89,8 +89,6 @@ function YearList(props) {
                 {yearbox.list.map((data, j) => (
                   <MovieCard
                     setMovieInfoOpen={props.setMovieInfoOpen}
-                    setMovieData={props.setMovieData}
-                    movieData={props.movieData}
                     key={j}
                     listData={listData(data)}
                     isLiked={Boolean(isLiked(data))}

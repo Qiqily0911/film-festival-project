@@ -16,8 +16,6 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   setListAdd,
   setPercentValue,
-  setLikeMovie,
-  setLikePerson,
   setListYearRef,
   setMovieData,
 } from "./globalState/actions";
@@ -60,34 +58,21 @@ function preventDoubleSelect(listState, btnSelect) {
 }
 
 function App() {
-  const [movieData, setMovieData] = useState({
-    detail: "",
-    video: "",
-    images: "",
-    credits: "",
-    localData: "",
-    omdbData: "",
-    imdbRating: "",
-    overview_translate: "",
-  });
   const [welcomeOpen, setWelcome] = useState(true);
   const [yearlist, setList] = useState([]);
   const [yearListRefs, setRefs] = useState("");
   const [prizeArr, setPrizeArr] = useState([]);
-
   const [isScroll, setScroll] = useState(true);
-
   const [userId, setUserId] = useState();
   const welcomeRef = useRef(null);
 
   const slider = useRef(null);
-
   const [prizeBoxState, setprizeBox] = useState(false);
   const [memberPage, setMemberPage] = useState(false);
 
   const listState = useSelector((state) => state.setList);
-
   const yearRange = useSelector((state) => state.setYear);
+  const movieData2 = useSelector((state) => state.setYear);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -153,7 +138,8 @@ function App() {
   }, [listState.list]);
 
   useEffect(() => {
-    loadMovieData(496243, "tt6751668", InitMovieInfo, setMovieData);
+    const a = (b) => dispatch(setMovieData(b));
+    loadMovieData(496243, "tt6751668", InitMovieInfo, a);
   }, []);
 
   function setSilderValue() {
@@ -212,9 +198,7 @@ function App() {
             setprizeBox={setprizeBox}
           />
           <Container
-            setMovieData={setMovieData}
             selectPrize={selectPrize}
-            movieData={movieData}
             prizeBoxState={prizeBoxState}
             setprizeBox={setprizeBox}
             userId={userId}

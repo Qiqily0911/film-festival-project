@@ -4,14 +4,13 @@ import { ReactComponent as Arrow } from "../../image/icon/arrow.svg";
 import styles from "../../style/PrizeInfo.module.scss";
 import { loadMovieData, yearConvert, ordinalSuffix } from "../../utils";
 import { useSelector, useDispatch } from "react-redux";
+import { setMovieData } from "../../globalState/actions";
 
 function PrizeInfo(props) {
+  const dispatch = useDispatch();
   const percentValue = useSelector((state) => state.setPercentValue);
   const listState = useSelector((state) => state.setList);
   const yearRange = useSelector((state) => state.setYear);
-
-  const dispatch = useDispatch();
-
   const currentYear = yearConvert(percentValue, yearRange.max, yearRange.min);
 
   const content = (list, index) => {
@@ -20,7 +19,8 @@ function PrizeInfo(props) {
     function loadData(tmdbId, imdbId, data) {
       props.setMovieInfoOpen(true);
       props.resetInfoPosition();
-      loadMovieData(tmdbId, imdbId, data, props.setMovieData);
+      const a = (b) => dispatch(setMovieData(b));
+      loadMovieData(tmdbId, imdbId, data, a);
     }
 
     const prizeId = (dataId) => dataId.substring(dataId.length - 1) - 1;

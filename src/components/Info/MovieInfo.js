@@ -27,25 +27,26 @@ function MovieInfo(props) {
   const [personData, setPersonData] = useState({});
   const listState = useSelector((state) => state.setList);
   const likeList = useSelector((state) => state.likeList);
+  const movieData = useSelector((state) => state.setMovieData);
 
   const movieInfo = {
-    movieId: props.movieData.localData.movie_id,
-    tmdbId: props.movieData.localData.tmdb_id,
-    videoPath: props.movieData.video.results,
-    images: props.movieData.images,
-    credits: props.movieData.credits,
+    movieId: movieData.localData.movie_id,
+    tmdbId: movieData.localData.tmdb_id,
+    videoPath: movieData.video.results,
+    images: movieData.images,
+    credits: movieData.credits,
   };
 
   const obj = {
     user: props.userId,
     movie_id: movieInfo.movieId,
     tmdb_id: movieInfo.tmdbId,
-    data_id: props.movieData.localData.data_id,
-    poster_path: props.movieData.localData.poster_path,
-    film_name_en: props.movieData.localData.film_name_en,
-    film_name_zh: props.movieData.localData.film_name_zh,
+    data_id: movieData.localData.data_id,
+    poster_path: movieData.localData.poster_path,
+    film_name_en: movieData.localData.film_name_en,
+    film_name_zh: movieData.localData.film_name_zh,
     time: new Date(),
-    year: props.movieData.localData.year,
+    year: movieData.localData.year,
   };
 
   useEffect(() => {
@@ -59,7 +60,7 @@ function MovieInfo(props) {
       props.setLoadingOpen(false);
       props.movieInfoEl.current.style.overflow = "scroll";
     }, 1000);
-  }, [props.movieData]);
+  }, [movieData]);
 
   const isLiked = Boolean(
     likeList.movieList &&
@@ -74,7 +75,7 @@ function MovieInfo(props) {
     movieInfo.credits["cast"].filter((person) => person.order <= 5);
 
   const prizeTitle = () => {
-    const dataId = props.movieData.localData.data_id;
+    const dataId = movieData.localData.data_id;
     if (dataId !== undefined) {
       const filmFes = dataId.slice(0, dataId.lastIndexOf("_"));
       const prizeId = dataId.substring(dataId.length - 1);
@@ -92,9 +93,9 @@ function MovieInfo(props) {
     }
   };
 
-  const searchName = props.movieData.localData.film_name_zh
-    ? props.movieData.localData.film_name_zh
-    : props.movieData.localData.film_name_en;
+  const searchName = movieData.localData.film_name_zh
+    ? movieData.localData.film_name_zh
+    : movieData.localData.film_name_en;
 
   const mediaLink = (title, link, icon) => {
     return (
@@ -162,16 +163,16 @@ function MovieInfo(props) {
               <div className={styles.upper}>
                 <div>
                   <span className={styles.subtitle}>
-                    {props.movieData.localData.th &&
-                      ordinalSuffix(props.movieData.localData.th)}
-                    {props.movieData.localData.year}
+                    {movieData.localData.th &&
+                      ordinalSuffix(movieData.localData.th)}
+                    {movieData.localData.year}
                     {prizeTitle()}
                   </span>
                 </div>
                 <div className={styles.row}>
                   <div className={styles.title}>
-                    <p>{props.movieData.detail.title}</p>
-                    <p>{props.movieData.localData.film_name_zh}</p>
+                    <p>{movieData.detail.title}</p>
+                    <p>{movieData.localData.film_name_zh}</p>
                   </div>
 
                   <div className={isLiked ? styles.addBtn : styles.cancelBtn}>
@@ -198,24 +199,24 @@ function MovieInfo(props) {
               <div className={styles.linkBox}>
                 <div className={styles.box1}>
                   <div className={styles.rating}>
-                    {props.movieData.omdbData.Response !== "False" && (
+                    {movieData.omdbData.Response !== "False" && (
                       <>
                         <a
                           className={styles.imbdBtn}
-                          href={`https://www.imdb.com/title/${props.movieData.localData.movie_id}/`}
+                          href={`https://www.imdb.com/title/${movieData.localData.movie_id}/`}
                           target="_blank"
                           rel="noreferrer"
                         >
                           <Imdb />
                         </a>
-                        <span>{props.movieData.omdbData.imdbRating}</span>
+                        <span>{movieData.omdbData.imdbRating}</span>
                       </>
                     )}
                   </div>
 
                   <div className={styles.clock}>
                     <Clock />
-                    <div>{props.movieData.detail.runtime} min</div>
+                    <div>{movieData.detail.runtime} min</div>
                   </div>
 
                   <div
@@ -276,9 +277,9 @@ function MovieInfo(props) {
               </div>
 
               <div className={styles.flag}>
-                {props.movieData.detail &&
-                  props.movieData.detail.production_countries &&
-                  props.movieData.detail.production_countries
+                {movieData.detail &&
+                  movieData.detail.production_countries &&
+                  movieData.detail.production_countries
                     .slice(0, 5)
                     .map((country, j) => (
                       <div className={styles.tooltip} key={j}>
@@ -302,11 +303,11 @@ function MovieInfo(props) {
                   <span>Overview</span>
                 </div>
 
-                {movieInfo.tmdbId && overviewChinese(props.movieData) && (
-                  <div> {overviewChinese(props.movieData).overview}</div>
+                {movieInfo.tmdbId && overviewChinese(movieData) && (
+                  <div> {overviewChinese(movieData).overview}</div>
                 )}
 
-                <div>{props.movieData.detail.overview}</div>
+                <div>{movieData.detail.overview}</div>
               </div>
             </div>
           </div>
