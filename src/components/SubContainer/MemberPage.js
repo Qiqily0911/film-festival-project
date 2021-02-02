@@ -2,25 +2,9 @@ import React, { useState } from "react";
 import styles from "../../style/MemberPage.module.scss";
 import MovieCard from "./MovieCard";
 import { ReactComponent as Star } from "../../image/icon/star.svg";
-import { ReactComponent as Arrow } from "../../image/icon/arrow.svg";
 import { dataApi, cancelLiked } from "../../utils";
 import CrewPopup from "../Info/CrewPopup";
 
-export function MemberNav(props) {
-  return (
-    <div className={styles.navBox}>
-      <div
-        className={styles.backBtn}
-        onClick={() => {
-          props.setMemberPage(false);
-        }}
-      >
-        <Arrow className={styles.arrow} />
-      </div>
-      <div className={styles.navBtn}>我的收藏夾</div>
-    </div>
-  );
-}
 export function MemberPage(props) {
   const [isCrewOpen, setCrewOpen] = useState(false);
   const [crewLoading, setCrewLoading] = useState(false);

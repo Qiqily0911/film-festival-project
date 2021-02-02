@@ -3,16 +3,21 @@ import styles from "../../style/App.module.scss";
 import { AuthProvider } from "../../contexts/AuthContexts";
 import MovieInfo from "../Info/MovieInfo";
 import PrizeInfo from "../Info/PrizeInfo";
-import YearList from "./YearList";
-import MovieFilter from "./MovieFilter";
-import MemberBtn from "./MemberBtn";
-import { MemberNav, MemberPage } from "./MemberPage";
+import YearList from "../SubContainer/YearList";
+import MovieFilter from "../Navbar/MovieFilter";
+import MemberBtn from "../Navbar/MemberNav";
+import { MemberNav, MemberPage } from "../SubContainer/MemberPage";
 import {
   loadMovieData,
   dynamicHeightPercentage,
   useWindowDimensions,
 } from "../../utils";
-import { setListWidth, setListCase } from "../../globalState/actions";
+import {
+  setListAdd,
+  setPercentValue,
+  setListWidth,
+  setListCase,
+} from "../../globalState/actions";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -20,6 +25,26 @@ export default function Main(props) {
   const { height, width } = useWindowDimensions();
   const listState = useSelector((state) => state.setList);
   const dispatch = useDispatch();
+
+  const imageBoxEl = useRef(null);
+  const crewsEl = useRef(null);
+  const movieInfoEl = useRef(null);
+  const [loadingOpen, setLoadingOpen] = useState(false);
+  const [movieInfoOpen, setMovieInfoOpen] = useState(false);
+
+  function resetInfoPosition() {
+    movieInfoEl.current.style.overflow = "hidden";
+    setLoadingOpen(true);
+
+    if (imageBoxEl.current && crewsEl.current) {
+      crewsEl.current.scrollLeft = 0;
+      imageBoxEl.current.scrollLeft = 0;
+      imageBoxEl.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }
 
   useEffect(() => {
     if (width > 1024) {
@@ -48,11 +73,7 @@ export default function Main(props) {
             <MemberNav setMemberPage={props.setMemberPage} />
           ) : (
             <MovieFilter
-              yearlist={props.list}
               yearListRefs={props.yearListRefs}
-              setlistState={props.setlistState}
-              setScroll={props.setScroll}
-              selectPrize={props.selectPrize}
               prizeArr={props.prizeArr}
             />
           )}
@@ -74,25 +95,25 @@ export default function Main(props) {
               likedList={props.likedList}
               personList={props.personList}
               setMovieData={props.setMovieData}
-              resetInfoPosition={props.resetInfoPosition}
-              movieInfoOpen={props.movieInfoOpen}
-              setMovieInfoOpen={props.setMovieInfoOpen}
+              resetInfoPosition={resetInfoPosition}
+              movieInfoOpen={movieInfoOpen}
+              setMovieInfoOpen={setMovieInfoOpen}
             />
           ) : (
             <>
               <YearList
                 setMovieData={props.setMovieData}
                 movieData={props.movieData}
-                yearlist={props.list}
+                yearlist={props.yearlist}
                 yearListRefs={props.yearListRefs}
                 setYear={props.setYear}
                 isScroll={props.isScroll}
                 userId={props.userId}
                 likedList={props.likedList}
-                resetInfoPosition={props.resetInfoPosition}
+                resetInfoPosition={resetInfoPosition}
                 slider={props.slider}
-                movieInfoOpen={props.movieInfoOpen}
-                setMovieInfoOpen={props.setMovieInfoOpen}
+                movieInfoOpen={movieInfoOpen}
+                setMovieInfoOpen={setMovieInfoOpen}
               />
               <div
                 className={styles.switchBtn}
@@ -109,31 +130,28 @@ export default function Main(props) {
                 setprizeBox={props.setprizeBox}
                 movieData={props.movieData}
                 setMovieData={props.setMovieData}
-                setScroll={props.setScroll}
-                loadingOpen={props.loadingOpen}
-                resetInfoPosition={props.resetInfoPosition}
-                selectPrize={props.selectPrize}
+                resetInfoPosition={resetInfoPosition}
                 prizeArr={props.prizeArr}
-                movieInfoOpen={props.movieInfoOpen}
-                setMovieInfoOpen={props.setMovieInfoOpen}
+                movieInfoOpen={movieInfoOpen}
+                setMovieInfoOpen={setMovieInfoOpen}
               />
             </>
           )}
           <MovieInfo
             movieData={props.movieData}
-            imageBoxEl={props.imageBoxEl}
-            crewsEl={props.crewsEl}
-            movieInfoEl={props.movieInfoEl}
+            imageBoxEl={imageBoxEl}
+            crewsEl={crewsEl}
+            movieInfoEl={movieInfoEl}
             prizeBoxState={props.prizeBoxState}
             setprizeBox={props.setprizeBox}
             userId={props.userId}
             likedList={props.likedList}
             personList={props.personList}
             memberPage={props.memberPage}
-            loadingOpen={props.loadingOpen}
-            setLoadingOpen={props.setLoadingOpen}
-            movieInfoOpen={props.movieInfoOpen}
-            setMovieInfoOpen={props.setMovieInfoOpen}
+            loadingOpen={loadingOpen}
+            setLoadingOpen={setLoadingOpen}
+            movieInfoOpen={movieInfoOpen}
+            setMovieInfoOpen={setMovieInfoOpen}
           />
         </div>
       </div>

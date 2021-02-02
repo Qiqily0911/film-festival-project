@@ -12,6 +12,13 @@ export const setListCase = (num) => {
   };
 };
 
+// export const setListYearRef = (yearRef) => {
+//    return {
+//       type: "SETLIST_YEARREF",
+//       yearRef: yearRef,
+//    };
+// };
+
 export const setListClose = (num) => {
   return {
     type: "SETLIST_CLOSE",

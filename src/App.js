@@ -4,7 +4,8 @@ import { firestore } from "./config";
 import Welcome from "./components/Welcome";
 
 import Aside from "./components/Aside/Aside";
-import Main from "./components/Main/Main";
+import Navbar from "./components/Navbar/Navbar";
+import SubContainer from "./components/SubContainer/SubContainer";
 import { InitMovieInfo } from "./data/LocalSource";
 import {
   loadMovieData,
@@ -17,6 +18,7 @@ import {
   setPercentValue,
   setLikeMovie,
   setLikePerson,
+  setListYearRef,
 } from "./globalState/actions";
 
 function fillYearList(emptyYearList, fes, prize, order) {
@@ -67,20 +69,16 @@ function App() {
     imdbRating: "",
     overview_translate: "",
   });
-
   const [welcomeOpen, setWelcome] = useState(true);
-  const [list, setList] = useState([]);
+  const [yearlist, setList] = useState([]);
   const [yearListRefs, setRefs] = useState("");
   const [prizeArr, setPrizeArr] = useState([]);
-  const [loadingOpen, setLoadingOpen] = useState(false);
 
   const [isScroll, setScroll] = useState(true);
 
   const [userId, setUserId] = useState();
   const welcomeRef = useRef(null);
-  const imageBoxEl = useRef(null);
-  const crewsEl = useRef(null);
-  const movieInfoEl = useRef(null);
+
   const slider = useRef(null);
 
   const [prizeBoxState, setprizeBox] = useState(false);
@@ -89,14 +87,12 @@ function App() {
   const [likedList, setLikedList] = useState();
   const [personList, setPersonList] = useState();
 
-  const [movieInfoOpen, setMovieInfoOpen] = useState(false);
-
   const listState = useSelector((state) => state.setList);
   const yearRange = useSelector((state) => state.setYear);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const yearList = [];
+    const aaa = [];
 
     for (let i = 2020; i >= 1928; i--) {
       const emptyYearBox = { year: i, list: [] };
@@ -118,10 +114,10 @@ function App() {
           emptyYearBox.list = [[], [], []];
       }
 
-      yearList.push(emptyYearBox);
+      aaa.push(emptyYearBox);
     }
 
-    const yearRefs = yearList.reduce((yearRef, yearBox) => {
+    const yearRefs = aaa.reduce((yearRef, yearBox) => {
       yearRef[yearBox.year] = React.createRef();
       return yearRef;
     }, {});
@@ -129,9 +125,10 @@ function App() {
     setRefs(yearRefs);
 
     listState.list.map((list) =>
-      fillYearList(yearList, list.film_list, list.prize, list.order)
+      fillYearList(aaa, list.film_list, list.prize, list.order)
     );
-    setList(yearList);
+
+    setList(aaa);
     setSilderValue();
     setScroll(false);
 
@@ -195,20 +192,6 @@ function App() {
     }
   }
 
-  function resetInfoPosition() {
-    movieInfoEl.current.style.overflow = "hidden";
-    setLoadingOpen(true);
-
-    if (imageBoxEl.current && crewsEl.current) {
-      crewsEl.current.scrollLeft = 0;
-      imageBoxEl.current.scrollLeft = 0;
-      imageBoxEl.current.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
-  }
-
   function selectPrize(fesData, prizeData, index) {
     const btnSelect = {
       title: fesData.btnText,
@@ -236,37 +219,35 @@ function App() {
         memberPage={memberPage}
         yearListRefs={yearListRefs}
         setScroll={setScroll}
-        isScroll={isScroll}
         slider={slider}
       />
-      <Main
-        memberPage={memberPage}
-        setMemberPage={setMemberPage}
-        list={list}
-        yearListRefs={yearListRefs}
-        listState={listState}
-        setScroll={setScroll}
-        selectPrize={selectPrize}
-        prizeArr={prizeArr}
-        setUserId={setUserId}
-        setprizeBox={setprizeBox}
-        userId={userId}
-        likedList={likedList}
-        personList={personList}
-        setMovieData={setMovieData}
-        resetInfoPosition={resetInfoPosition}
-        movieInfoOpen={movieInfoOpen}
-        setMovieInfoOpen={setMovieInfoOpen}
-        movieData={movieData}
-        isScroll={isScroll}
-        slider={slider}
-        prizeBoxState={prizeBoxState}
-        loadingOpen={loadingOpen}
-        imageBoxEl={imageBoxEl}
-        crewsEl={crewsEl}
-        movieInfoEl={movieInfoEl}
-        setLoadingOpen={setLoadingOpen}
-      />
+      <main>
+        <div className={styles.container}>
+          <Navbar
+            setMemberPage={setMemberPage}
+            yearListRefs={yearListRefs}
+            selectPrize={selectPrize}
+            prizeArr={prizeArr}
+            setUserId={setUserId}
+            memberPage={memberPage}
+            setprizeBox={setprizeBox}
+          />
+          <SubContainer
+            movieData={movieData}
+            prizeBoxState={prizeBoxState}
+            setprizeBox={setprizeBox}
+            userId={userId}
+            likedList={likedList}
+            personList={personList}
+            memberPage={memberPage}
+            prizeArr={prizeArr}
+            yearlist={yearlist}
+            yearListRefs={yearListRefs}
+            isScroll={isScroll}
+            slider={slider}
+          />
+        </div>
+      </main>
     </div>
   );
 }

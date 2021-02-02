@@ -65,7 +65,7 @@ function MovieFilter(props) {
     </div>
   );
 
-  const notSelectList = (list, i) => (
+  const notSelectList = (i) => (
     <div name={"index-" + i}>
       <div className={styles.inner}>
         <span>
@@ -119,10 +119,9 @@ function MovieFilter(props) {
   return (
     <div className={styles.movieFilter}>
       <div className={styles.titleBox}>
-        {/* {console.log(listState.list)} */}
         {listState.list.map((list, i) => (
           <div className={styles.fesTitle} key={i}>
-            {list.film_list ? selectedList(list) : notSelectList(list, i)}
+            {list.film_list ? selectedList(list) : notSelectList(i)}
           </div>
         ))}
       </div>

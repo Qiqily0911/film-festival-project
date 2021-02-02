@@ -3,6 +3,7 @@ import { InitListState } from "../../data/LocalSource";
 const initialState = {
   listCase: 3,
   list: InitListState,
+  //  yearRef: "",
 };
 
 const setListReducer = (state = initialState, action) => {
@@ -21,6 +22,9 @@ const setListReducer = (state = initialState, action) => {
     case "SETLIST_CASE":
       newList.listCase = action.listCase;
       return newList;
+    // case "SETLIST_YEARREF":
+    //    newList.yearRef = action.yearRef;
+    //    return newList;
 
     default:
       return state;
