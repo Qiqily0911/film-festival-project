@@ -1,10 +1,10 @@
 import React, { useState, useRef } from "react";
-import styles from "../style/MemberBtn.module.scss";
-import googleIcon from "../image/Google__G__Logo.svg";
-import facebookIcon from "../image/f_logo_RGB-Blue_114.png";
-import { useAuth } from "../contexts/AuthContexts";
-import { googleSignIn, faceBookSignIn } from "../config";
-import { ReactComponent as Logo } from "../image/logo.svg";
+import styles from "../../style/MemberBtn.module.scss";
+import googleIcon from "../../image/Google__G__Logo.svg";
+import facebookIcon from "../../image/f_logo_RGB-Blue_114.png";
+import { useAuth } from "../../contexts/AuthContexts";
+import { googleSignIn, faceBookSignIn } from "../../config";
+import { ReactComponent as Logo } from "../../image/logo.svg";
 
 function Login() {
   const nameRef = useRef();
@@ -43,7 +43,6 @@ function Login() {
         passwordRef.current.value,
         nameRef.current.value
       );
-      console.log(nameRef.current.value);
     } catch {
       return setError("Failed to create an account");
     }

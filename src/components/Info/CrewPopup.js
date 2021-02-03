@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import styles from "../style/Crew.module.scss";
+import styles from "../../style/Crew.module.scss";
 import CrewMovieCard from "./CrewMovieCard";
-import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
-import { ReactComponent as Star } from "../image/icon/star.svg";
-import Loading from "./Loading";
-import { addLiked, cancelLiked, overviewChinese } from "../utils";
-import { ReactComponent as Imdb } from "../image/IMDB_Logo.svg";
+import { ReactComponent as Arrow } from "../../image/icon/arrow.svg";
+import { ReactComponent as Star } from "../../image/icon/star.svg";
+import Loading from "../Loading";
+import { addLiked, cancelLiked, overviewChinese } from "../../utils";
+import { ReactComponent as Imdb } from "../../image/IMDB_Logo.svg";
+import { useSelector, useDispatch } from "react-redux";
 
 function CrewPopup(props) {
   const [personNameCh, setPersonNameCh] = useState("");
@@ -15,12 +16,13 @@ function CrewPopup(props) {
   });
   const [infoOpen, setInfoOpen] = useState(false);
 
-  const crewData =
-    props.personData &&
-    props.personData.crew.crew.filter((data) => data.job === "Director");
-  const castData = props.personData && props.personData.crew.cast;
-  const personData = props.personData && props.personData.person;
+  const crewData = props.personData?.crew.crew.filter(
+    (data) => data.job === "Director"
+  );
+  const castData = props.personData?.crew.cast;
+  const personData = props.personData?.person;
   const overviewEl = useRef(null);
+  const likeList = useSelector((state) => state.likeList);
 
   setTimeout(() => {
     props.setCrewLoading(false);
@@ -61,8 +63,7 @@ function CrewPopup(props) {
 
       <div className={styles.filmTitle}>
         {crewMovieData.overview_translate &&
-          overviewChinese(crewMovieData) &&
-          overviewChinese(crewMovieData).title}
+          overviewChinese(crewMovieData)?.title}
       </div>
       <div className={styles.filmTitle}>
         {crewMovieData.detail.title}
@@ -80,8 +81,7 @@ function CrewPopup(props) {
       <div className={styles.overview}>
         <p ref={overviewEl}>
           {crewMovieData.overview_translate &&
-            overviewChinese(crewMovieData) &&
-            overviewChinese(crewMovieData).overview}
+            overviewChinese(crewMovieData)?.overview}
         </p>
         <p>{crewMovieData.detail.overview}</p>
       </div>
@@ -100,8 +100,8 @@ function CrewPopup(props) {
   };
 
   const isLiked =
-    props.personList &&
-    props.personList.find((item) => item.person_id === personData.id);
+    likeList.personList &&
+    likeList.personList.find((item) => item.person_id === personData.id);
 
   const crewMovieCards = (title, crewArr) => {
     let newArr = [];
@@ -122,7 +122,6 @@ function CrewPopup(props) {
                 <CrewMovieCard
                   key={i}
                   data={data}
-                  likedList={props.likedList}
                   setInfoOpen={setInfoOpen}
                   userId={props.userId}
                   setCrewMovieData={setCrewMovieData}
@@ -168,7 +167,7 @@ function CrewPopup(props) {
                           isLiked
                             ? cancelLiked(
                                 e,
-                                props.personList,
+                                likeList.personList,
                                 "person_liked",
                                 personData.id
                               )

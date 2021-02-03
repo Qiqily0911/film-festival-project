@@ -1,11 +1,17 @@
 import React from "react";
-import { BtnData } from "../data/LocalSource";
-import { ReactComponent as Arrow } from "../image/icon/arrow.svg";
-import styles from "../style/PrizeInfo.module.scss";
-import { loadMovieData, yearConvert, ordinalSuffix } from "../utils";
+import { BtnData } from "../../data/LocalSource";
+import { ReactComponent as Arrow } from "../../image/icon/arrow.svg";
+import styles from "../../style/PrizeInfo.module.scss";
+import { loadMovieData, yearConvert, ordinalSuffix } from "../../utils";
+import { useSelector, useDispatch } from "react-redux";
+import { setMovieData } from "../../globalState/actions";
 
 function PrizeInfo(props) {
-  const year = yearConvert(props.percentValue, props.year.max, props.year.min);
+  const dispatch = useDispatch();
+  const percentValue = useSelector((state) => state.setPercentValue);
+  const listState = useSelector((state) => state.setList);
+  const yearRange = useSelector((state) => state.setYear);
+  const currentYear = yearConvert(percentValue, yearRange.max, yearRange.min);
 
   const content = (list, index) => {
     const templist = list.film_list || [];
@@ -13,7 +19,8 @@ function PrizeInfo(props) {
     function loadData(tmdbId, imdbId, data) {
       props.setMovieInfoOpen(true);
       props.resetInfoPosition();
-      loadMovieData(tmdbId, imdbId, data, props.setMovieData);
+      const setMovieDataReducer = (arr) => dispatch(setMovieData(arr));
+      loadMovieData(tmdbId, imdbId, data, setMovieDataReducer);
     }
 
     const prizeId = (dataId) => dataId.substring(dataId.length - 1) - 1;
@@ -38,7 +45,7 @@ function PrizeInfo(props) {
                 <div className={styles.lower}>
                   <div>
                     {templist
-                      .filter((film) => film.year === year)
+                      .filter((film) => film.year === currentYear)
                       .map((data, j) => {
                         return (
                           <div
@@ -109,7 +116,7 @@ function PrizeInfo(props) {
                           onClick={() => props.selectPrize(fes, prize, index)}
                           style={{
                             color:
-                              props.prizeArr.includes(prize.dataId) &&
+                              listState.prize.includes(prize.dataId) &&
                               "#ad9654",
                           }}
                         >
@@ -129,13 +136,13 @@ function PrizeInfo(props) {
 
   let openState;
   let closeState;
-  if (props.listCase === 3) {
+  if (listState.listCase === 3) {
     openState = "27.6%";
     closeState = "calc(-36.8% + 40px)";
-  } else if (props.listCase === 2) {
+  } else if (listState.listCase === 2) {
     openState = "36%";
     closeState = "-18%";
-  } else if (props.listCase < 2) {
+  } else if (listState.listCase < 2) {
     openState = "0";
     closeState = "-90%";
   }
@@ -162,12 +169,12 @@ function PrizeInfo(props) {
                 : "rotate(180deg)",
             }}
           />
-          <span>{year}</span> FESTIVAL
+          <span>{currentYear}</span> FESTIVAL
         </div>
       </div>
       <div className={styles.outterBox}>
         <div className={styles.innerBox}>
-          {props.listState.map((list, i) => content(list, i))}
+          {listState.list.map((list, i) => content(list, i))}
         </div>
       </div>
     </div>

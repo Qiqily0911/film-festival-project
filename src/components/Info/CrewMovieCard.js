@@ -1,10 +1,12 @@
 import React from "react";
-import styles from "../style/Crew.module.scss";
-import { ReactComponent as Bookmark } from "../image/icon/add.svg";
-import { ReactComponent as Nopic } from "../image/icon/no-pic.svg";
-import { dataApi, addLiked, cancelLiked } from "../utils";
+import styles from "../../style/Crew.module.scss";
+import { ReactComponent as Bookmark } from "../../image/icon/add.svg";
+import { ReactComponent as Nopic } from "../../image/icon/no-pic.svg";
+import { dataApi, addLiked, cancelLiked } from "../../utils";
+import { useSelector, useDispatch } from "react-redux";
 
 function CrewMovieCard(props) {
+  const likeList = useSelector((state) => state.likeList);
   const obj = {
     user: props.userId,
     movie_id: "",
@@ -18,8 +20,8 @@ function CrewMovieCard(props) {
   };
 
   const isLiked = Boolean(
-    props.likedList &&
-      props.likedList.find((item) => item.tmdb_id === props.data.id)
+    likeList.movieList &&
+      likeList.movieList.find((item) => item.tmdb_id === props.data.id)
   );
 
   return (
@@ -33,7 +35,7 @@ function CrewMovieCard(props) {
           className={isLiked ? styles.addBtn : styles.cancelBtn}
           onClick={(e) =>
             isLiked
-              ? cancelLiked(e, props.likedList, "movie_liked", props.data.id)
+              ? cancelLiked(e, likeList.movieList, "movie_liked", props.data.id)
               : addLiked(e, "movie_liked", obj)
           }
         />

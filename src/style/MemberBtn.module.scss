@@ -207,3 +207,41 @@
     outline: none;
   }
 }
+
+.navBox {
+  margin: auto 0;
+  display: flex;
+  .navBtn {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    width: 180px;
+    margin: 10px 20px;
+    padding: 10px;
+    font-weight: 500;
+    font-size: 1rem;
+    color: #06466b;
+    font-weight: 500;
+    font-size: 1rem;
+    color: $color-blue;
+  }
+  .backBtn {
+    cursor: pointer;
+
+    @include centerPosition;
+    margin-left: 80px;
+    .arrow {
+      transform: rotate(180deg);
+      width: 25px;
+      height: 25px;
+      fill: $color-blue;
+      transition: all 0.3s ease;
+    }
+  }
+  .backBtn:hover {
+    .arrow {
+      fill: $color-gold;
+      transition: all 0.3s ease;
+    }
+  }
+}

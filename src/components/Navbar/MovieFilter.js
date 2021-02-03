@@ -1,8 +1,12 @@
 import React, { useState } from "react";
-import styles from "../style/MovieFilter.module.scss";
-import { BtnData } from "../data/LocalSource";
+import styles from "../../style/MovieFilter.module.scss";
+import { BtnData } from "../../data/LocalSource";
+import { setListClose } from "../../globalState/actions";
+import { useSelector, useDispatch } from "react-redux";
 
 function MovieFilter(props) {
+  const listState = useSelector((state) => state.setList);
+  const dispatch = useDispatch();
   const [subBtnVal, setSubBtnVal] = useState({
     "index-0": "",
     "index-1": "",
@@ -28,9 +32,7 @@ function MovieFilter(props) {
 
   function close(e) {
     const order = Number(e.target.dataset.order);
-    const arr = [...props.listState];
-    arr[order] = { film_list: null, order: order };
-    props.setlistState(arr);
+    dispatch(setListClose(order));
   }
 
   function selectFestival(e, i) {
@@ -63,7 +65,7 @@ function MovieFilter(props) {
     </div>
   );
 
-  const notSelectList = (list, i) => (
+  const notSelectList = (i) => (
     <div name={"index-" + i}>
       <div className={styles.inner}>
         <span>
@@ -98,7 +100,7 @@ function MovieFilter(props) {
                     value={subBtn.dataId}
                     data-order={i}
                     style={{
-                      color: props.prizeArr.includes(subBtn.dataId)
+                      color: listState.prize.includes(subBtn.dataId)
                         ? "#ad9654"
                         : "gray",
                     }}
@@ -117,9 +119,9 @@ function MovieFilter(props) {
   return (
     <div className={styles.movieFilter}>
       <div className={styles.titleBox}>
-        {props.listState.map((list, i) => (
+        {listState.list.map((list, i) => (
           <div className={styles.fesTitle} key={i}>
-            {list.film_list ? selectedList(list) : notSelectList(list, i)}
+            {list.film_list ? selectedList(list) : notSelectList(i)}
           </div>
         ))}
       </div>

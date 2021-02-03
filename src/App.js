@@ -1,241 +1,148 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./style/App.module.scss";
-import { firestore } from "./config";
-import { AuthProvider } from "./contexts/AuthContexts";
 import Welcome from "./components/Welcome";
-import ControlSilder from "./components/ControlSlider";
-import YearList from "./components/YearList";
-import MovieInfo from "./components/MovieInfo";
-import PrizeInfo from "./components/PrizeInfo";
-import MovieFilter from "./components/MovieFilter";
-import MemberBtn from "./components/MemberBtn";
-import { MemberNav, MemberPage } from "./components/MemberPage";
-import { InitMovieInfo, InitListState } from "./data/LocalSource";
-import { ReactComponent as Logo } from "./image/logo-2.svg";
+import Aside from "./components/Aside/Aside";
+import Navbar from "./components/Navbar/Navbar";
+import Container from "./components/Container/Container";
+import { InitMovieInfo } from "./data/LocalSource";
+import { loadMovieData, dynamicHeightPercentage } from "./utils";
+import { useSelector, useDispatch } from "react-redux";
 import {
-  loadMovieData,
-  dynamicHeightPercentage,
-  useWindowDimensions,
-} from "./utils";
+  setListAdd,
+  setPercentValue,
+  setListYearRef,
+  setMovieData,
+  setListPrize,
+} from "./globalState/actions";
+
+function fillYearList(emptyYearList, fes, prize, order) {
+  if (fes) {
+    const data = fes.filter((obj) => obj.prize === prize);
+
+    emptyYearList.forEach((yearbox) => {
+      const box = yearbox.list[order];
+      data.forEach((item) => {
+        if (item.year === yearbox.year) {
+          box.push(item);
+        }
+      });
+      if (box.length === 0) {
+        box.push({ prize: null });
+      }
+    });
+  } else {
+    emptyYearList.forEach((yearbox) => {
+      yearbox.list[order].push({ prize: null });
+    });
+  }
+}
+
+function preventDoubleSelect(listState, btnSelect) {
+  for (let i = 0; i < listState.length; i++) {
+    if (
+      listState[i].film_list &&
+      btnSelect.title === listState[i].title &&
+      btnSelect.prize === listState[i].prize
+    ) {
+      alert("選過囉");
+      return false;
+    } else {
+      return true;
+    }
+  }
+}
 
 function App() {
-  const [movieData, setMovieData] = useState({
-    detail: "",
-    video: "",
-    images: "",
-    credits: "",
-    localData: "",
-    omdbData: "",
-    imdbRating: "",
-    overview_translate: "",
-  });
-
   const [welcomeOpen, setWelcome] = useState(true);
-  const [list, setList] = useState([]);
-  const [yearListRefs, setRefs] = useState("");
-  const [listState, setlistState] = useState(InitListState);
-  const [prizeArr, setPrizeArr] = useState([]);
-
-  const [loadingOpen, setLoadingOpen] = useState(false);
-
-  const [year, setYear] = useState({
-    min: 1928,
-    max: 2020,
-  });
-  const [percentValue, setPercentValue] = useState(100);
   const [isScroll, setScroll] = useState(true);
-
-  const [userId, setUserId] = useState();
-  const welcomeRef = useRef(null);
-  const imageBoxEl = useRef(null);
-  const crewsEl = useRef(null);
-  const movieInfoEl = useRef(null);
-  const slider = useRef(null);
-
   const [prizeBoxState, setprizeBox] = useState(false);
   const [memberPage, setMemberPage] = useState(false);
 
-  const [likedList, setLikedList] = useState();
-  const [personList, setPersonList] = useState();
-  const [listCase, setListCase] = useState(3);
-  const { height, width } = useWindowDimensions();
-  const [movieInfoOpen, setMovieInfoOpen] = useState(false);
+  const [yearlist, setList] = useState([]);
+  const [yearListRefs, setRefs] = useState("");
+  const [userId, setUserId] = useState();
+  const welcomeRef = useRef(null);
+  const sliderRef = useRef(null);
+
+  const listState = useSelector((state) => state.setList);
+  const yearRange = useSelector((state) => state.setYear);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (width > 1024) {
-      setListCase(3);
-      setlistState(InitListState);
-    } else if (width <= 1024 && width >= 769) {
-      setListCase(2);
-      setlistState(InitListState.slice(0, 2));
-    } else if (width <= 768 && width >= 501) {
-      setListCase(1);
-      setlistState(InitListState.slice(0, 2));
-    } else if (width <= 500) {
-      setListCase(0);
-      setlistState(InitListState.slice(0, 1));
-    }
-  }, [width]);
+    const allSelectYearList = [];
 
-  useEffect(() => {
-    const yearList = [];
-    // let list;
+    for (let i = 2020; i >= 1928; i--) {
+      const emptyYearBox = { year: i, list: [] };
+      switch (listState.listCase) {
+        case 3:
+          emptyYearBox.list = [[], [], []];
 
-    switch (listCase) {
-      case 3:
-        for (let i = 2020; i >= 1928; i--) {
-          const emptyYearBox = { year: i, list: [[], [], []] };
-          yearList.push(emptyYearBox);
-        }
-        break;
-      case 2:
-      case 1:
-        for (let i = 2020; i >= 1928; i--) {
-          const emptyYearBox = { year: i, list: [[], []] };
-          yearList.push(emptyYearBox);
-        }
-        break;
-      case 0:
-        for (let i = 2020; i >= 1928; i--) {
-          const emptyYearBox = { year: i, list: [[]] };
-          yearList.push(emptyYearBox);
-        }
-        break;
-      default:
-        for (let i = 2020; i >= 1928; i--) {
-          const emptyYearBox = { year: i, list: [[], [], []] };
-          yearList.push(emptyYearBox);
-        }
+          break;
+        case 2:
+        case 1:
+          emptyYearBox.list = [[], []];
+
+          break;
+        case 0:
+          emptyYearBox.list = [[]];
+
+          break;
+        default:
+          emptyYearBox.list = [[], [], []];
+      }
+
+      allSelectYearList.push(emptyYearBox);
     }
 
-    // for (let i = 2020; i >= 1928; i--) {
-    //    const emptyYearBox = { year: i, list: [[], [], []] };
-    //    yearList.push(emptyYearBox);
-    // }
-
-    const yearRefs = yearList.reduce((yearRef, yearBox) => {
+    const yearRefs = allSelectYearList.reduce((yearRef, yearBox) => {
       yearRef[yearBox.year] = React.createRef();
       return yearRef;
     }, {});
 
-    // console.log(yearRefs);
     setRefs(yearRefs);
 
-    listState.map((list) =>
-      fillYearList(yearList, list.film_list, list.prize, list.order)
+    listState.list.map((list) =>
+      fillYearList(allSelectYearList, list.film_list, list.prize, list.order)
     );
-    setList(yearList);
+
+    setList(allSelectYearList);
     setSilderValue();
     setScroll(false);
 
-    for (let i = 0; i < listState.length; i++) {
-      if (listState[i].film_list) {
+    for (let i = 0; i < listState.list.length; i++) {
+      if (listState.list[i].film_list) {
         setScroll(true);
         return;
       }
     }
-  }, [listState, listCase]);
+  }, [listState.list, listState.listCase]);
 
   useEffect(() => {
     const prizeIdArr = [];
-    for (let i = 0; i < listState.length; i++) {
-      if (listState[i].film_list?.length > 0) {
-        prizeIdArr.push(listState[i].prizeId);
+    for (let i = 0; i < listState.list.length; i++) {
+      if (listState.list[i].film_list?.length > 0) {
+        prizeIdArr.push(listState.list[i].prizeId);
       } else {
         prizeIdArr.push(null);
       }
     }
 
-    setPrizeArr(prizeIdArr);
-  }, [listState]);
+    dispatch(setListPrize(prizeIdArr));
+  }, [listState.list]);
 
   useEffect(() => {
-    if (userId) {
-      function userLikedList(firebaseCollection, listHook) {
-        firestore
-          .collection(firebaseCollection)
-          .where("user", "==", userId)
-          .onSnapshot((onSnapshot) => {
-            const arr = [];
-            onSnapshot.forEach((doc) => {
-              arr.push(doc.data());
-            });
-            listHook(arr);
-          });
-      }
-
-      userLikedList("movie_liked", setLikedList);
-      userLikedList("person_liked", setPersonList);
-    }
-  }, [userId]);
-
-  useEffect(() => {
-    loadMovieData(496243, "tt6751668", InitMovieInfo, setMovieData);
+    const setMovieDataReducer = (arr) => dispatch(setMovieData(arr));
+    loadMovieData(496243, "tt6751668", InitMovieInfo, setMovieDataReducer);
   }, []);
 
-  function fillYearList(emptyYearList, fes, prize, order) {
-    if (fes) {
-      const data = fes.filter((obj) => obj.prize === prize);
-
-      emptyYearList.forEach((yearbox) => {
-        const box = yearbox.list[order];
-        data.forEach((item) => {
-          if (item.year === yearbox.year) {
-            box.push(item);
-          }
-        });
-        if (box.length === 0) {
-          box.push({ prize: null });
-        }
-      });
-    } else {
-      emptyYearList.forEach((yearbox) => {
-        yearbox.list[order].push({ prize: null });
-      });
-    }
-  }
-
   function setSilderValue() {
-    if (
-      yearListRefs &&
-      yearListRefs[year.min] &&
-      yearListRefs[year.min].current
-    ) {
+    if (yearListRefs && yearListRefs[yearRange.min]?.current) {
       const percentage = dynamicHeightPercentage(
-        year.max,
-        year.min,
+        yearRange.max,
+        yearRange.min,
         yearListRefs
       );
-      setPercentValue(percentage);
-    }
-  }
-
-  function resetInfoPosition() {
-    movieInfoEl.current.style.overflow = "hidden";
-    setLoadingOpen(true);
-
-    if (imageBoxEl.current && crewsEl.current) {
-      crewsEl.current.scrollLeft = 0;
-      imageBoxEl.current.scrollLeft = 0;
-      imageBoxEl.current.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
-  }
-
-  function preventDoubleSelect(btnSelect) {
-    for (let i = 0; i < listState.length; i++) {
-      if (
-        listState[i].film_list &&
-        btnSelect.title === listState[i].title &&
-        btnSelect.prize === listState[i].prize
-      ) {
-        alert("選過囉");
-        return false;
-      } else {
-        return true;
-      }
+      dispatch(setPercentValue(percentage));
     }
   }
 
@@ -252,12 +159,9 @@ function App() {
       order: index,
     };
 
-    if (preventDoubleSelect(btnSelect)) {
-      const arr = [...listState];
-      arr[index] = btnSelect;
-
-      setlistState(arr);
-      setPercentValue(100);
+    if (preventDoubleSelect(listState.list, btnSelect)) {
+      dispatch(setListAdd(index, btnSelect));
+      dispatch(setPercentValue(100));
     }
   }
 
@@ -265,144 +169,37 @@ function App() {
     <div className={styles.outter}>
       <Welcome
         welcomeOpen={welcomeOpen}
-        welcomeRef={welcomeRef}
         setWelcome={setWelcome}
+        welcomeRef={welcomeRef}
       />
-      <aside>
-        <div
-          className={styles.logo}
-          onClick={() => {
-            setMemberPage(false);
-          }}
-        >
-          <Logo />
-        </div>
-        {memberPage ? (
-          <div className={styles.slider}></div>
-        ) : (
-          <ControlSilder
-            percentValue={percentValue}
-            setPercentValue={setPercentValue}
-            yearListRefs={yearListRefs}
-            year={year}
-            setYear={setYear}
-            setScroll={setScroll}
-            isScroll={isScroll}
-            slider={slider}
-          />
-        )}
-      </aside>
+      <Aside
+        setMemberPage={setMemberPage}
+        memberPage={memberPage}
+        yearListRefs={yearListRefs}
+        setScroll={setScroll}
+        sliderRef={sliderRef}
+      />
       <main>
         <div className={styles.container}>
-          <div className={styles.navbar}>
-            {memberPage ? (
-              <MemberNav setMemberPage={setMemberPage} />
-            ) : (
-              <MovieFilter
-                yearlist={list}
-                yearListRefs={yearListRefs}
-                setlistState={setlistState}
-                listState={listState}
-                setPercentValue={setPercentValue}
-                setScroll={setScroll}
-                selectPrize={selectPrize}
-                prizeArr={prizeArr}
-              />
-            )}
-
-            <AuthProvider>
-              <MemberBtn
-                setUserId={setUserId}
-                memberPage={memberPage}
-                setMemberPage={setMemberPage}
-                setprizeBox={setprizeBox}
-                listCase={listCase}
-              />
-            </AuthProvider>
-          </div>
-          <div className={styles.subContainer}>
-            {memberPage ? (
-              <>
-                <MemberPage
-                  userId={userId}
-                  memberPage={memberPage}
-                  likedList={likedList}
-                  personList={personList}
-                  setMovieData={setMovieData}
-                  resetInfoPosition={resetInfoPosition}
-                  listCase={listCase}
-                  movieInfoOpen={movieInfoOpen}
-                  setMovieInfoOpen={setMovieInfoOpen}
-                />
-              </>
-            ) : (
-              <>
-                <YearList
-                  setMovieData={setMovieData}
-                  movieData={movieData}
-                  yearlist={list}
-                  yearListRefs={yearListRefs}
-                  listState={listState}
-                  year={year}
-                  setYear={setYear}
-                  setPercentValue={setPercentValue}
-                  percentValue={percentValue}
-                  isScroll={isScroll}
-                  userId={userId}
-                  likedList={likedList}
-                  resetInfoPosition={resetInfoPosition}
-                  slider={slider}
-                  listCase={listCase}
-                  movieInfoOpen={movieInfoOpen}
-                  setMovieInfoOpen={setMovieInfoOpen}
-                />
-                <div
-                  className={styles.switchBtn}
-                  onClick={() =>
-                    prizeBoxState ? setprizeBox(false) : setprizeBox(true)
-                  }
-                >
-                  {prizeBoxState ? "Poster" : "List"} mode
-                </div>
-                <PrizeInfo
-                  year={year}
-                  setYear={setYear}
-                  percentValue={percentValue}
-                  prizeBoxState={prizeBoxState}
-                  setprizeBox={setprizeBox}
-                  movieData={movieData}
-                  setMovieData={setMovieData}
-                  listState={listState}
-                  setPercentValue={setPercentValue}
-                  setScroll={setScroll}
-                  loadingOpen={loadingOpen}
-                  resetInfoPosition={resetInfoPosition}
-                  selectPrize={selectPrize}
-                  prizeArr={prizeArr}
-                  listCase={listCase}
-                  movieInfoOpen={movieInfoOpen}
-                  setMovieInfoOpen={setMovieInfoOpen}
-                />
-              </>
-            )}
-            <MovieInfo
-              movieData={movieData}
-              imageBoxEl={imageBoxEl}
-              crewsEl={crewsEl}
-              movieInfoEl={movieInfoEl}
-              prizeBoxState={prizeBoxState}
-              setprizeBox={setprizeBox}
-              userId={userId}
-              likedList={likedList}
-              personList={personList}
-              memberPage={memberPage}
-              loadingOpen={loadingOpen}
-              setLoadingOpen={setLoadingOpen}
-              listCase={listCase}
-              movieInfoOpen={movieInfoOpen}
-              setMovieInfoOpen={setMovieInfoOpen}
-            />
-          </div>
+          <Navbar
+            setMemberPage={setMemberPage}
+            memberPage={memberPage}
+            yearListRefs={yearListRefs}
+            selectPrize={selectPrize}
+            setUserId={setUserId}
+            setprizeBox={setprizeBox}
+          />
+          <Container
+            selectPrize={selectPrize}
+            prizeBoxState={prizeBoxState}
+            setprizeBox={setprizeBox}
+            userId={userId}
+            memberPage={memberPage}
+            yearlist={yearlist}
+            yearListRefs={yearListRefs}
+            isScroll={isScroll}
+            sliderRef={sliderRef}
+          />
         </div>
       </main>
     </div>

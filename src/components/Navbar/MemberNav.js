@@ -1,17 +1,36 @@
 import React, { useState, useEffect } from "react";
-import styles from "../style/MemberBtn.module.scss";
+import styles from "../../style/MemberBtn.module.scss";
 import Login from "./Login";
-import { useAuth } from "../contexts/AuthContexts";
+import { useAuth } from "../../contexts/AuthContexts";
 
-import { ReactComponent as LoginIcon } from "../image/icon/login.svg";
-import { ReactComponent as LogoutIcon } from "../image/icon/logout.svg";
-import { ReactComponent as MenuIcon } from "../image/menu.svg";
+import { ReactComponent as Arrow } from "../../image/icon/arrow.svg";
+import { ReactComponent as LoginIcon } from "../../image/icon/login.svg";
+import { ReactComponent as LogoutIcon } from "../../image/icon/logout.svg";
+import { ReactComponent as MenuIcon } from "../../image/menu.svg";
+import { useSelector, useDispatch } from "react-redux";
 
-function MemberBtn(props) {
+export function MemberNav(props) {
+  return (
+    <div className={styles.navBox}>
+      <div
+        className={styles.backBtn}
+        onClick={() => {
+          props.setMemberPage(false);
+        }}
+      >
+        <Arrow className={styles.arrow} />
+      </div>
+      <div className={styles.navBtn}>我的收藏夾</div>
+    </div>
+  );
+}
+
+export function MemberBtn(props) {
   const { logout, currentUser } = useAuth();
   const [isOpen, setOpen] = useState(false);
   const [isLogin, setLogin] = useState(false);
   const [error, setError] = useState("");
+  const listState = useSelector((state) => state.setList);
 
   async function handleLogout() {
     setError("");
@@ -85,7 +104,7 @@ function MemberBtn(props) {
 
   return (
     <div className={styles.loginOutter}>
-      {props.listCase < 2 ? (
+      {listState.listCase < 2 ? (
         <MenuIcon />
       ) : (
         <>
@@ -96,5 +115,3 @@ function MemberBtn(props) {
     </div>
   );
 }
-
-export default MemberBtn;

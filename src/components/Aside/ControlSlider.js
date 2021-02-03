@@ -1,19 +1,30 @@
 import React from "react";
 import Slider from "react-rangeslider";
 import "react-rangeslider/lib/index.css";
-import styles from "../style/App.module.scss";
-import { yearConvert } from "../utils";
+import styles from "../../style/App.module.scss";
+import { yearConvert } from "../../utils";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setListWidth,
+  setListAdd,
+  setPercentValue,
+} from "../../globalState/actions";
 
 function ControlSilder(props) {
+  const percentValue = useSelector((state) => state.setPercentValue);
+  const yearRange = useSelector((state) => state.setYear);
+
+  const dispatch = useDispatch();
+
   function handleChangeStart() {
     props.setScroll(false);
   }
 
   function handleChangeVertical(value) {
-    if (value !== props.percentValue) {
-      props.setPercentValue(value);
+    if (value !== percentValue) {
+      dispatch(setPercentValue(value));
     }
-    const num = formatPc(props.percentValue);
+    const num = formatPc(percentValue);
     if (props.yearListRefs[num] !== null) {
       props.yearListRefs[num].current.scrollIntoView({
         behavior: "smooth",
@@ -32,23 +43,23 @@ function ControlSilder(props) {
     75: "•",
   };
 
-  const formatPc = (p) => `${yearConvert(p, props.year.max, props.year.min)}`;
+  const formatPc = (p) => `${yearConvert(p, yearRange.max, yearRange.min)}`;
 
   return (
-    <div className={styles.slider} ref={props.slider}>
+    <div className={styles.slider} ref={props.sliderRef}>
       <div className={styles.inner}>
-        <div className={styles.yearText}>{props.year.max}</div>
+        <div className={styles.yearText}>{yearRange.max}</div>
         <Slider
-          value={props.percentValue}
+          value={percentValue}
           orientation="vertical"
           labels={verticalLabels}
-          handleLabel={formatPc(props.percentValue)}
+          handleLabel={formatPc(percentValue)}
           format={formatPc}
           onChangeStart={handleChangeStart}
           onChange={handleChangeVertical}
           onChangeComplete={handleScroll}
         />
-        <div className={styles.yearText}>{props.year.min}</div>
+        <div className={styles.yearText}>{yearRange.min}</div>
       </div>
     </div>
   );

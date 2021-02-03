@@ -1,15 +1,22 @@
 import React, { useEffect } from "react";
-import styles from "../style/YearList.module.scss";
+import styles from "../../style/YearList.module.scss";
 import MovieCard from "./MovieCard";
-import { dynamicHeightPercentage } from "../utils";
+import { dynamicHeightPercentage } from "../../utils";
+import { useSelector, useDispatch } from "react-redux";
+import { setPercentValue, setYear } from "../../globalState/actions";
 
 function YearList(props) {
+  const listState = useSelector((state) => state.setList);
+  const likeList = useSelector((state) => state.likeList);
+  const yearRange = useSelector((state) => state.setYear);
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    if (props.listState.every((item) => !item.film_list)) {
-      props.slider.current.style.visibility = "hidden";
+    if (listState.list.every((item) => !item.film_list)) {
+      props.sliderRef.current.style.visibility = "hidden";
     } else {
-      props.slider.current.style.visibility = "visible";
-      const arr = props.listState.map(
+      props.sliderRef.current.style.visibility = "visible";
+      const arr = listState.list.map(
         (item) => item.film_list && item.film_list.map((film) => film.year)
       );
 
@@ -17,32 +24,30 @@ function YearList(props) {
       const min = [];
 
       arr.forEach((list) => {
-        list && max.push(Math.max(...list));
-        list && min.push(Math.min(...list));
+        if (list) {
+          max.push(Math.max(...list));
+          min.push(Math.min(...list));
+        }
       });
 
-      props.setYear({
-        ...props.year,
-        max: Math.max(...max),
-        min: Math.min(...min),
-      });
+      dispatch(setYear(Math.max(...max), Math.min(...min)));
     }
   }, [props.yearlist]);
 
   function detectScroll() {
     if (props.isScroll) {
       const percentage = dynamicHeightPercentage(
-        props.year.max,
-        props.year.min,
+        yearRange.max,
+        yearRange.min,
         props.yearListRefs
       );
-      props.setPercentValue(percentage);
+      dispatch(setPercentValue(percentage));
     }
   }
 
   const isLiked = (data) =>
-    props.likedList &&
-    props.likedList.find((item) => item.movie_id === data[0].movie_id);
+    likeList.movieList &&
+    likeList.movieList.find((item) => item.movie_id === data[0].movie_id);
 
   const listData = (data) => {
     return {
@@ -81,13 +86,10 @@ function YearList(props) {
                 {yearbox.list.map((data, j) => (
                   <MovieCard
                     setMovieInfoOpen={props.setMovieInfoOpen}
-                    setMovieData={props.setMovieData}
-                    movieData={props.movieData}
                     key={j}
                     listData={listData(data)}
                     isLiked={Boolean(isLiked(data))}
                     userId={props.userId}
-                    likedList={props.likedList}
                     setLoadingOpen={props.setLoadingOpen}
                     resetInfoPosition={props.resetInfoPosition}
                   />

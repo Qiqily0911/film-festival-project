@@ -28,19 +28,11 @@ export function loadMovieData(tmdbId, imdbId, localData, setMovieDataHook) {
   const dataArr = tmdbApiData.map((item) =>
     dataApi("tmdb", "movie", item, tmdbId)
   );
-  dataArr.push(imdbId !== "" ? dataApi("omdb", "", "", imdbId) : "");
+  dataArr.push(imdbId !== null && dataApi("omdb", "", "", imdbId));
 
   Promise.all(dataArr).then((arr) => {
-    const obj = {
-      detail: arr[0],
-      video: arr[1],
-      images: arr[2],
-      credits: arr[3],
-      localData: localData,
-      overview_translate: arr[4],
-      omdbData: arr[5],
-    };
-    setMovieDataHook(obj);
+    arr.push(localData);
+    setMovieDataHook(arr);
   });
 }
 
