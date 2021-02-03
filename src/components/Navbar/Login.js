@@ -43,7 +43,6 @@ function Login() {
         passwordRef.current.value,
         nameRef.current.value
       );
-      console.log(nameRef.current.value);
     } catch {
       return setError("Failed to create an account");
     }

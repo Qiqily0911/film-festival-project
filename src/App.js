@@ -1,23 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./style/App.module.scss";
-
 import Welcome from "./components/Welcome";
-
 import Aside from "./components/Aside/Aside";
 import Navbar from "./components/Navbar/Navbar";
 import Container from "./components/Container/Container";
 import { InitMovieInfo } from "./data/LocalSource";
-import {
-  loadMovieData,
-  dynamicHeightPercentage,
-  useWindowDimensions,
-} from "./utils";
+import { loadMovieData, dynamicHeightPercentage } from "./utils";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setListAdd,
   setPercentValue,
   setListYearRef,
   setMovieData,
+  setListPrize,
 } from "./globalState/actions";
 
 function fillYearList(emptyYearList, fes, prize, order) {
@@ -59,24 +54,22 @@ function preventDoubleSelect(listState, btnSelect) {
 
 function App() {
   const [welcomeOpen, setWelcome] = useState(true);
-  const [yearlist, setList] = useState([]);
-  const [yearListRefs, setRefs] = useState("");
-  const [prizeArr, setPrizeArr] = useState([]);
   const [isScroll, setScroll] = useState(true);
-  const [userId, setUserId] = useState();
-  const welcomeRef = useRef(null);
-
-  const slider = useRef(null);
   const [prizeBoxState, setprizeBox] = useState(false);
   const [memberPage, setMemberPage] = useState(false);
 
+  const [yearlist, setList] = useState([]);
+  const [yearListRefs, setRefs] = useState("");
+  const [userId, setUserId] = useState();
+  const welcomeRef = useRef(null);
+  const sliderRef = useRef(null);
+
   const listState = useSelector((state) => state.setList);
   const yearRange = useSelector((state) => state.setYear);
-  const movieData2 = useSelector((state) => state.setYear);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const aaa = [];
+    const allSelectYearList = [];
 
     for (let i = 2020; i >= 1928; i--) {
       const emptyYearBox = { year: i, list: [] };
@@ -98,10 +91,10 @@ function App() {
           emptyYearBox.list = [[], [], []];
       }
 
-      aaa.push(emptyYearBox);
+      allSelectYearList.push(emptyYearBox);
     }
 
-    const yearRefs = aaa.reduce((yearRef, yearBox) => {
+    const yearRefs = allSelectYearList.reduce((yearRef, yearBox) => {
       yearRef[yearBox.year] = React.createRef();
       return yearRef;
     }, {});
@@ -109,10 +102,10 @@ function App() {
     setRefs(yearRefs);
 
     listState.list.map((list) =>
-      fillYearList(aaa, list.film_list, list.prize, list.order)
+      fillYearList(allSelectYearList, list.film_list, list.prize, list.order)
     );
 
-    setList(aaa);
+    setList(allSelectYearList);
     setSilderValue();
     setScroll(false);
 
@@ -134,20 +127,16 @@ function App() {
       }
     }
 
-    setPrizeArr(prizeIdArr);
+    dispatch(setListPrize(prizeIdArr));
   }, [listState.list]);
 
   useEffect(() => {
-    const a = (b) => dispatch(setMovieData(b));
-    loadMovieData(496243, "tt6751668", InitMovieInfo, a);
+    const setMovieDataReducer = (arr) => dispatch(setMovieData(arr));
+    loadMovieData(496243, "tt6751668", InitMovieInfo, setMovieDataReducer);
   }, []);
 
   function setSilderValue() {
-    if (
-      yearListRefs &&
-      yearListRefs[yearRange.min] &&
-      yearListRefs[yearRange.min].current
-    ) {
+    if (yearListRefs && yearListRefs[yearRange.min]?.current) {
       const percentage = dynamicHeightPercentage(
         yearRange.max,
         yearRange.min,
@@ -178,23 +167,26 @@ function App() {
 
   return (
     <div className={styles.outter}>
-      {/* <Welcome welcomeOpen={welcomeOpen} setWelcome={setWelcome} welcomeRef={welcomeRef} /> */}
+      <Welcome
+        welcomeOpen={welcomeOpen}
+        setWelcome={setWelcome}
+        welcomeRef={welcomeRef}
+      />
       <Aside
         setMemberPage={setMemberPage}
         memberPage={memberPage}
         yearListRefs={yearListRefs}
         setScroll={setScroll}
-        slider={slider}
+        sliderRef={sliderRef}
       />
       <main>
         <div className={styles.container}>
           <Navbar
             setMemberPage={setMemberPage}
+            memberPage={memberPage}
             yearListRefs={yearListRefs}
             selectPrize={selectPrize}
-            prizeArr={prizeArr}
             setUserId={setUserId}
-            memberPage={memberPage}
             setprizeBox={setprizeBox}
           />
           <Container
@@ -203,11 +195,10 @@ function App() {
             setprizeBox={setprizeBox}
             userId={userId}
             memberPage={memberPage}
-            prizeArr={prizeArr}
             yearlist={yearlist}
             yearListRefs={yearListRefs}
             isScroll={isScroll}
-            slider={slider}
+            sliderRef={sliderRef}
           />
         </div>
       </main>

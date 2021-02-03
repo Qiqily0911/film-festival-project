@@ -3,22 +3,19 @@ import styles from "../../style/YearList.module.scss";
 import MovieCard from "./MovieCard";
 import { dynamicHeightPercentage } from "../../utils";
 import { useSelector, useDispatch } from "react-redux";
-
 import { setPercentValue, setYear } from "../../globalState/actions";
 
 function YearList(props) {
   const listState = useSelector((state) => state.setList);
   const likeList = useSelector((state) => state.likeList);
-
   const yearRange = useSelector((state) => state.setYear);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (listState.list.every((item) => !item.film_list)) {
-      props.slider.current.style.visibility = "hidden";
+      props.sliderRef.current.style.visibility = "hidden";
     } else {
-      props.slider.current.style.visibility = "visible";
+      props.sliderRef.current.style.visibility = "visible";
       const arr = listState.list.map(
         (item) => item.film_list && item.film_list.map((film) => film.year)
       );

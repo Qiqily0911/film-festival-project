@@ -46,7 +46,7 @@ function ControlSilder(props) {
   const formatPc = (p) => `${yearConvert(p, yearRange.max, yearRange.min)}`;
 
   return (
-    <div className={styles.slider} ref={props.slider}>
+    <div className={styles.slider} ref={props.sliderRef}>
       <div className={styles.inner}>
         <div className={styles.yearText}>{yearRange.max}</div>
         <Slider

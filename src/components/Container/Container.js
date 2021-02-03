@@ -6,14 +6,8 @@ import PrizeInfo from "../Info/PrizeInfo";
 import YearList from "./YearList";
 
 import { MemberPage } from "./MemberPage";
+import { useWindowDimensions } from "../../utils";
 import {
-  loadMovieData,
-  dynamicHeightPercentage,
-  useWindowDimensions,
-} from "../../utils";
-import {
-  setListAdd,
-  setPercentValue,
   setListWidth,
   setListCase,
   setLikeMovie,
@@ -25,12 +19,16 @@ import { useSelector, useDispatch } from "react-redux";
 export default function SubContainer(props) {
   const { height, width } = useWindowDimensions();
   const listState = useSelector((state) => state.setList);
-  const likeList = useSelector((state) => state.likeList);
   const dispatch = useDispatch();
 
   const imageBoxEl = useRef(null);
   const crewsEl = useRef(null);
   const movieInfoEl = useRef(null);
+  const infoBoxRef = {
+    imageBox: imageBoxEl,
+    crewBox: crewsEl,
+    movieInfoBox: movieInfoEl,
+  };
   const [loadingOpen, setLoadingOpen] = useState(false);
   const [movieInfoOpen, setMovieInfoOpen] = useState(false);
 
@@ -97,7 +95,6 @@ export default function SubContainer(props) {
           userId={props.userId}
           memberPage={props.memberPage}
           resetInfoPosition={resetInfoPosition}
-          movieInfoOpen={movieInfoOpen}
           setMovieInfoOpen={setMovieInfoOpen}
         />
       ) : (
@@ -108,8 +105,7 @@ export default function SubContainer(props) {
             isScroll={props.isScroll}
             userId={props.userId}
             resetInfoPosition={resetInfoPosition}
-            slider={props.slider}
-            movieInfoOpen={movieInfoOpen}
+            sliderRef={props.sliderRef}
             setMovieInfoOpen={setMovieInfoOpen}
           />
           <div
@@ -127,16 +123,12 @@ export default function SubContainer(props) {
             setprizeBox={props.setprizeBox}
             resetInfoPosition={resetInfoPosition}
             selectPrize={props.selectPrize}
-            prizeArr={props.prizeArr}
-            movieInfoOpen={movieInfoOpen}
             setMovieInfoOpen={setMovieInfoOpen}
           />
         </>
       )}
       <MovieInfo
-        imageBoxEl={imageBoxEl}
-        crewsEl={crewsEl}
-        movieInfoEl={movieInfoEl}
+        infoBoxRef={infoBoxRef}
         prizeBoxState={props.prizeBoxState}
         setprizeBox={props.setprizeBox}
         userId={props.userId}

@@ -43,8 +43,8 @@ function MovieCard(props) {
         const imdbId = props.listData.movie_id;
         props.setMovieInfoOpen(true);
         props.resetInfoPosition();
-        const a = (b) => dispatch(setMovieData(b));
-        loadMovieData(tmdbId, imdbId, props.listData, a);
+        const setMovieDataReducer = (arr) => dispatch(setMovieData(arr));
+        loadMovieData(tmdbId, imdbId, props.listData, setMovieDataReducer);
       }}
     >
       {props.userId && (

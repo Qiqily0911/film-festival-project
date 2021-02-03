@@ -100,7 +100,7 @@ function MovieFilter(props) {
                     value={subBtn.dataId}
                     data-order={i}
                     style={{
-                      color: props.prizeArr.includes(subBtn.dataId)
+                      color: listState.prize.includes(subBtn.dataId)
                         ? "#ad9654"
                         : "gray",
                     }}

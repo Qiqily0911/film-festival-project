@@ -58,7 +58,7 @@ function MovieInfo(props) {
 
     setTimeout(() => {
       props.setLoadingOpen(false);
-      props.movieInfoEl.current.style.overflow = "scroll";
+      props.infoBoxRef.movieInfoBox.current.style.overflow = "scroll";
     }, 1000);
   }, [movieData]);
 
@@ -128,7 +128,7 @@ function MovieInfo(props) {
         </div>
       )}
 
-      <div className={styles.outterBox} ref={props.movieInfoEl}>
+      <div className={styles.outterBox} ref={props.infoBoxRef.movieInfoBox}>
         {props.loadingOpen && (
           <div className={styles.loadingAnimate}>
             <Loading />
@@ -142,7 +142,7 @@ function MovieInfo(props) {
 
           <div>
             <div className={styles.imageBox}>
-              <div className={styles.imageWrap} ref={props.imageBoxEl}>
+              <div className={styles.imageWrap} ref={props.infoBoxRef.imageBox}>
                 {imageList ? (
                   imageList.map((path, i) => (
                     <img
@@ -277,8 +277,7 @@ function MovieInfo(props) {
               </div>
 
               <div className={styles.flag}>
-                {movieData.detail &&
-                  movieData.detail.production_countries &&
+                {movieData.detail?.production_countries &&
                   movieData.detail.production_countries
                     .slice(0, 5)
                     .map((country, j) => (
@@ -313,7 +312,7 @@ function MovieInfo(props) {
           </div>
 
           <div className={styles.crew}>
-            <div className={styles.outter} ref={props.crewsEl}>
+            <div className={styles.outter} ref={props.infoBoxRef.crewBox}>
               <div>
                 <span className={styles.title}>Director</span>
                 <div className={styles.castBox}>

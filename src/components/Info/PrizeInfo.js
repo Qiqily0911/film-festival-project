@@ -19,8 +19,8 @@ function PrizeInfo(props) {
     function loadData(tmdbId, imdbId, data) {
       props.setMovieInfoOpen(true);
       props.resetInfoPosition();
-      const a = (b) => dispatch(setMovieData(b));
-      loadMovieData(tmdbId, imdbId, data, a);
+      const setMovieDataReducer = (arr) => dispatch(setMovieData(arr));
+      loadMovieData(tmdbId, imdbId, data, setMovieDataReducer);
     }
 
     const prizeId = (dataId) => dataId.substring(dataId.length - 1) - 1;
@@ -116,7 +116,7 @@ function PrizeInfo(props) {
                           onClick={() => props.selectPrize(fes, prize, index)}
                           style={{
                             color:
-                              props.prizeArr.includes(prize.dataId) &&
+                              listState.prize.includes(prize.dataId) &&
                               "#ad9654",
                           }}
                         >
@@ -173,7 +173,6 @@ function PrizeInfo(props) {
         </div>
       </div>
       <div className={styles.outterBox}>
-        {/* {console.log(listState)} */}
         <div className={styles.innerBox}>
           {listState.list.map((list, i) => content(list, i))}
         </div>

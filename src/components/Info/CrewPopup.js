@@ -16,11 +16,11 @@ function CrewPopup(props) {
   });
   const [infoOpen, setInfoOpen] = useState(false);
 
-  const crewData =
-    props.personData &&
-    props.personData.crew.crew.filter((data) => data.job === "Director");
-  const castData = props.personData && props.personData.crew.cast;
-  const personData = props.personData && props.personData.person;
+  const crewData = props.personData?.crew.crew.filter(
+    (data) => data.job === "Director"
+  );
+  const castData = props.personData?.crew.cast;
+  const personData = props.personData?.person;
   const overviewEl = useRef(null);
   const likeList = useSelector((state) => state.likeList);
 
@@ -63,8 +63,7 @@ function CrewPopup(props) {
 
       <div className={styles.filmTitle}>
         {crewMovieData.overview_translate &&
-          overviewChinese(crewMovieData) &&
-          overviewChinese(crewMovieData).title}
+          overviewChinese(crewMovieData)?.title}
       </div>
       <div className={styles.filmTitle}>
         {crewMovieData.detail.title}
@@ -82,8 +81,7 @@ function CrewPopup(props) {
       <div className={styles.overview}>
         <p ref={overviewEl}>
           {crewMovieData.overview_translate &&
-            overviewChinese(crewMovieData) &&
-            overviewChinese(crewMovieData).overview}
+            overviewChinese(crewMovieData)?.overview}
         </p>
         <p>{crewMovieData.detail.overview}</p>
       </div>

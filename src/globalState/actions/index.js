@@ -19,6 +19,13 @@ export const setListCase = (num) => {
 //    };
 // };
 
+export const setListPrize = (arr) => {
+  return {
+    type: "SETLIST_PRIZE",
+    prizeArr: arr,
+  };
+};
+
 export const setListClose = (num) => {
   return {
     type: "SETLIST_CLOSE",

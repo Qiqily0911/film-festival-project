@@ -20,7 +20,6 @@ export default function Navbar(props) {
         <MovieFilter
           yearListRefs={props.yearListRefs}
           selectPrize={props.selectPrize}
-          prizeArr={props.prizeArr}
         />
       )}
 

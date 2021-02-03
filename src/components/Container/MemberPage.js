@@ -43,7 +43,6 @@ export function MemberPage(props) {
                     isLiked={true}
                     memberPage={props.memberPage}
                     resetInfoPosition={props.resetInfoPosition}
-                    movieInfoOpen={props.movieInfoOpen}
                     setMovieInfoOpen={props.setMovieInfoOpen}
                   />
                 );
