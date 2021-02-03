@@ -6,9 +6,9 @@ import { dataApi, addLiked, cancelLiked } from "../../utils";
 import { useSelector, useDispatch } from "react-redux";
 
 function CrewMovieCard(props) {
-  const likeList = useSelector((state) => state.likeList);
+  const userLike = useSelector((state) => state.userLike);
   const obj = {
-    user: props.userId,
+    user: userLike.user.uid,
     movie_id: "",
     tmdb_id: props.data.id,
     data_id: "",
@@ -20,8 +20,8 @@ function CrewMovieCard(props) {
   };
 
   const isLiked = Boolean(
-    likeList.movieList &&
-      likeList.movieList.find((item) => item.tmdb_id === props.data.id)
+    userLike.movieList &&
+      userLike.movieList.find((item) => item.tmdb_id === props.data.id)
   );
 
   return (
@@ -30,12 +30,12 @@ function CrewMovieCard(props) {
       key={props.data.credit_id}
       value={props.data.id}
     >
-      {props.userId && (
+      {userLike.user.uid && (
         <Bookmark
           className={isLiked ? styles.addBtn : styles.cancelBtn}
           onClick={(e) =>
             isLiked
-              ? cancelLiked(e, likeList.movieList, "movie_liked", props.data.id)
+              ? cancelLiked(e, userLike.movieList, "movie_liked", props.data.id)
               : addLiked(e, "movie_liked", obj)
           }
         />

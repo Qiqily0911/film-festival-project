@@ -12,7 +12,7 @@ function Login() {
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
   const { login, signup, currentUser } = useAuth();
-  const [error, setError] = useState("");
+  const [error, setError] = useState();
   const [loading, setLoading] = useState(false);
   const [isSignup, setSignup] = useState(true);
 
@@ -83,8 +83,8 @@ function Login() {
               <input
                 type="email"
                 ref={emailRef}
+                defaultValue="test@gmail.com"
                 required
-                value="test@gmail.com"
               />
             </div>
             <div id="password">
@@ -93,8 +93,8 @@ function Login() {
               <input
                 type="password"
                 ref={passwordRef}
+                defaultValue="123456"
                 required
-                value="123456"
               />
             </div>
 

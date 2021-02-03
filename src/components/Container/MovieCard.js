@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "../../style/MovieCard.module.scss";
 import { loadMovieData, addLiked, cancelLiked } from "../../utils";
-
 import { ReactComponent as Bookmark } from "../../image/icon/add.svg";
 import { ReactComponent as Nopic } from "../../image/icon/no-pic.svg";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,9 +8,9 @@ import { setMovieData } from "../../globalState/actions";
 
 function MovieCard(props) {
   const dispatch = useDispatch();
-  const likeList = useSelector((state) => state.likeList);
+  const userLike = useSelector((state) => state.userLike);
   const obj = {
-    user: props.userId,
+    user: userLike.user.uid,
     movie_id: props.listData.movie_id,
     tmdb_id: props.listData.tmdb_id,
     data_id: props.listData.data_id,
@@ -47,7 +46,7 @@ function MovieCard(props) {
         loadMovieData(tmdbId, imdbId, props.listData, setMovieDataReducer);
       }}
     >
-      {props.userId && (
+      {userLike.user.uid && (
         <Bookmark
           className={props.isLiked ? styles.addBtn : styles.cancelBtn}
           data-id={props.listData.movie_id}
@@ -55,7 +54,7 @@ function MovieCard(props) {
             const tmdbId = props.listData.tmdb_id;
 
             props.isLiked
-              ? cancelLiked(e, likeList.movieList, "movie_liked", tmdbId)
+              ? cancelLiked(e, userLike.movieList, "movie_liked", tmdbId)
               : addLiked(e, "movie_liked", obj);
           }}
         />

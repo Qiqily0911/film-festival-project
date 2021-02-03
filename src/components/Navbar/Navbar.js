@@ -1,15 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import styles from "../../style/App.module.scss";
 import { AuthProvider } from "../../contexts/AuthContexts";
-
 import MovieFilter from "./MovieFilter";
 import { MemberNav, MemberBtn } from "./MemberNav";
-import {
-  setListAdd,
-  setPercentValue,
-  setListWidth,
-  setListCase,
-} from "../../globalState/actions";
 
 export default function Navbar(props) {
   return (
@@ -18,14 +11,13 @@ export default function Navbar(props) {
         <MemberNav setMemberPage={props.setMemberPage} />
       ) : (
         <MovieFilter
-          yearListRefs={props.yearListRefs}
+          setPrizeArr={props.setPrizeArr}
           selectPrize={props.selectPrize}
         />
       )}
 
       <AuthProvider>
         <MemberBtn
-          setUserId={props.setUserId}
           memberPage={props.memberPage}
           setMemberPage={props.setMemberPage}
           setprizeBox={props.setprizeBox}

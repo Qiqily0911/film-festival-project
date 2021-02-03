@@ -7,15 +7,16 @@ import { setPercentValue, setYear } from "../../globalState/actions";
 
 function YearList(props) {
   const listState = useSelector((state) => state.setList);
-  const likeList = useSelector((state) => state.likeList);
+  const userLike = useSelector((state) => state.userLike);
   const yearRange = useSelector((state) => state.setYear);
   const dispatch = useDispatch();
 
   useEffect(() => {
+    const sliderStyle = props.sliderRef.current.style;
     if (listState.list.every((item) => !item.film_list)) {
-      props.sliderRef.current.style.visibility = "hidden";
+      sliderStyle.visibility = "hidden";
     } else {
-      props.sliderRef.current.style.visibility = "visible";
+      sliderStyle.visibility = "visible";
       const arr = listState.list.map(
         (item) => item.film_list && item.film_list.map((film) => film.year)
       );
@@ -46,8 +47,8 @@ function YearList(props) {
   }
 
   const isLiked = (data) =>
-    likeList.movieList &&
-    likeList.movieList.find((item) => item.movie_id === data[0].movie_id);
+    userLike.movieList &&
+    userLike.movieList.find((item) => item.movie_id === data[0].movie_id);
 
   const listData = (data) => {
     return {
@@ -89,7 +90,6 @@ function YearList(props) {
                     key={j}
                     listData={listData(data)}
                     isLiked={Boolean(isLiked(data))}
-                    userId={props.userId}
                     setLoadingOpen={props.setLoadingOpen}
                     resetInfoPosition={props.resetInfoPosition}
                   />

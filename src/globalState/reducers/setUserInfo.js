@@ -1,13 +1,16 @@
 const initialState = {
+  user: "",
   movieList: [],
   personList: [],
 };
 
-const likeListReducer = (state = initialState, action) => {
+const setUserInfoReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "SETLIKE_MOVIE":
+    case "SETUSER_INFO":
+      return { ...state, user: action.user };
+    case "SETUSER_MOVIE":
       return { ...state, movieList: action.movie };
-    case "SETLIKE_PERSON":
+    case "SETUSER_PERSON":
       return { ...state, personList: action.person };
 
     default:
@@ -15,4 +18,4 @@ const likeListReducer = (state = initialState, action) => {
   }
 };
 
-export default likeListReducer;
+export default setUserInfoReducer;

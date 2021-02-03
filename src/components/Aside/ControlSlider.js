@@ -4,16 +4,11 @@ import "react-rangeslider/lib/index.css";
 import styles from "../../style/App.module.scss";
 import { yearConvert } from "../../utils";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  setListWidth,
-  setListAdd,
-  setPercentValue,
-} from "../../globalState/actions";
+import { setPercentValue } from "../../globalState/actions";
 
 function ControlSilder(props) {
   const percentValue = useSelector((state) => state.setPercentValue);
   const yearRange = useSelector((state) => state.setYear);
-
   const dispatch = useDispatch();
 
   function handleChangeStart() {

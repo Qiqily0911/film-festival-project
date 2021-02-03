@@ -10,7 +10,7 @@ export function MemberPage(props) {
   const [isCrewOpen, setCrewOpen] = useState(false);
   const [crewLoading, setCrewLoading] = useState(false);
   const [personData, setPersonData] = useState({});
-  const likeList = useSelector((state) => state.likeList);
+  const userLike = useSelector((state) => state.userLike);
   return (
     <div className={styles.outter}>
       <div className={styles.innerBox}>
@@ -18,8 +18,8 @@ export function MemberPage(props) {
           <span>收藏的電影</span>
         </div>
         <div className={styles.cardBox}>
-          {likeList.movieList &&
-            likeList.movieList
+          {userLike.movieList &&
+            userLike.movieList
               .sort((a, b) => (a.time.seconds > b.time.seconds ? 1 : -1))
               .map((data, i) => {
                 const listData = {
@@ -39,7 +39,6 @@ export function MemberPage(props) {
                   <MovieCard
                     key={i}
                     listData={listData}
-                    userId={props.userId}
                     isLiked={true}
                     memberPage={props.memberPage}
                     resetInfoPosition={props.resetInfoPosition}
@@ -56,11 +55,10 @@ export function MemberPage(props) {
           <span>喜愛的演員及導演</span>
         </div>
         <div className={styles.cardBox}>
-          {likeList.personList
+          {userLike.personList
             .sort((a, b) => (a.time.seconds > b.time.seconds ? 1 : -1))
             .map((data, i) => (
               <div className={styles.personCard} key={i}>
-                {console.log(data)}
                 <div
                   className={styles.posterBox}
                   onClick={() => {
@@ -95,7 +93,7 @@ export function MemberPage(props) {
                     onClick={(e) =>
                       cancelLiked(
                         e,
-                        likeList.personList,
+                        userLike.personList,
                         "person_liked",
                         data.person_id
                       )
@@ -117,7 +115,6 @@ export function MemberPage(props) {
 
       {isCrewOpen && (
         <CrewPopup
-          userId={props.userId}
           setCrewOpen={setCrewOpen}
           personData={personData}
           crewLoading={crewLoading}

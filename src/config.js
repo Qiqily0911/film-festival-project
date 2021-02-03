@@ -19,12 +19,12 @@ providerGoogle.setCustomParameters({
 export const googleSignIn = () =>
   firebaseAuth
     .signInWithPopup(providerGoogle)
-    .then(function (result) {
-      console.log(result);
-      //  var token = result.credential.accessToken; //  Google Access Token
-      // var user = result.user; // The signed-in user info.
-      // createUser(user);
-    })
+    // .then(function (result) {
+    //    console.log(result);
+    //  var token = result.credential.accessToken; //  Google Access Token
+    // var user = result.user; // The signed-in user info.
+    // createUser(user);
+    // })
     .catch(function (error) {
       // Handle Errors here.
       var errorCode = error.code;

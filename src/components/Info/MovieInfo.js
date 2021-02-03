@@ -26,7 +26,7 @@ function MovieInfo(props) {
   const [crewLoading, setCrewLoading] = useState(false);
   const [personData, setPersonData] = useState({});
   const listState = useSelector((state) => state.setList);
-  const likeList = useSelector((state) => state.likeList);
+  const userLike = useSelector((state) => state.userLike);
   const movieData = useSelector((state) => state.setMovieData);
 
   const movieInfo = {
@@ -38,7 +38,7 @@ function MovieInfo(props) {
   };
 
   const obj = {
-    user: props.userId,
+    user: userLike.user.uid,
     movie_id: movieInfo.movieId,
     tmdb_id: movieInfo.tmdbId,
     data_id: movieData.localData.data_id,
@@ -63,8 +63,8 @@ function MovieInfo(props) {
   }, [movieData]);
 
   const isLiked = Boolean(
-    likeList.movieList &&
-      likeList.movieList.find((item) => item.tmdb_id === movieInfo.tmdbId)
+    userLike.movieList &&
+      userLike.movieList.find((item) => item.tmdb_id === movieInfo.tmdbId)
   );
 
   const director =
@@ -178,11 +178,11 @@ function MovieInfo(props) {
                   <div className={isLiked ? styles.addBtn : styles.cancelBtn}>
                     <Bookmark
                       onClick={(e) => {
-                        if (props.userId) {
+                        if (userLike.user.uid) {
                           isLiked
                             ? cancelLiked(
                                 e,
-                                likeList.movieList,
+                                userLike.movieList,
                                 "movie_liked",
                                 movieInfo.tmdbId
                               )
@@ -343,7 +343,6 @@ function MovieInfo(props) {
           </div>
           {isCrewOpen && (
             <CrewPopup
-              userId={props.userId}
               setCrewOpen={setCrewOpen}
               personData={personData}
               crewLoading={crewLoading}

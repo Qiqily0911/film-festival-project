@@ -22,7 +22,7 @@ function CrewPopup(props) {
   const castData = props.personData?.crew.cast;
   const personData = props.personData?.person;
   const overviewEl = useRef(null);
-  const likeList = useSelector((state) => state.likeList);
+  const userLike = useSelector((state) => state.userLike);
 
   setTimeout(() => {
     props.setCrewLoading(false);
@@ -95,13 +95,13 @@ function CrewPopup(props) {
     person_imdb_id: personData.imdb_id,
     profile_path: personData.profile_path,
     department: personData.known_for_department,
-    user: props.userId,
+    user: userLike.user.uid,
     time: new Date(),
   };
 
   const isLiked =
-    likeList.personList &&
-    likeList.personList.find((item) => item.person_id === personData.id);
+    userLike.personList &&
+    userLike.personList.find((item) => item.person_id === personData.id);
 
   const crewMovieCards = (title, crewArr) => {
     let newArr = [];
@@ -123,7 +123,6 @@ function CrewPopup(props) {
                   key={i}
                   data={data}
                   setInfoOpen={setInfoOpen}
-                  userId={props.userId}
                   setCrewMovieData={setCrewMovieData}
                   overviewEl={overviewEl}
                 />
@@ -160,14 +159,14 @@ function CrewPopup(props) {
                   )}
 
                   <div className={styles.likeBtn}>
-                    {props.userId && (
+                    {userLike.user.uid && (
                       <Star
                         className={isLiked ? styles.addBtn : styles.cancelBtn}
                         onClick={(e) =>
                           isLiked
                             ? cancelLiked(
                                 e,
-                                likeList.personList,
+                                userLike.personList,
                                 "person_liked",
                                 personData.id
                               )
