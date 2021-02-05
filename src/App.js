@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { AuthProvider } from "./contexts/AuthContexts";
 import styles from "./style/App.module.scss";
 import Welcome from "./components/Welcome";
 import Aside from "./components/Aside/Aside";

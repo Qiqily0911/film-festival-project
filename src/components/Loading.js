@@ -1,18 +1,22 @@
 import React from "react";
 import styles from "../style/Loading.module.scss";
 
+const Text = (props) => (
+  <span className={styles.loadingTextWords}>{props.name}</span>
+);
+
 export default function Loading() {
   return (
     <div className={styles.loadingText}>
-      <span className={styles.loadingTextWords}>f</span>
-      <span className={styles.loadingTextWords}>i</span>
-      <span className={styles.loadingTextWords}>l</span>
-      <span className={styles.loadingTextWords}>m</span>
-      <span className={styles.loadingTextWords}>-</span>
-      <span className={styles.loadingTextWords}>l</span>
-      <span className={styles.loadingTextWords}>i</span>
-      <span className={styles.loadingTextWords}>n</span>
-      <span className={styles.loadingTextWords}>e</span>
+      <Text name="f" />
+      <Text name="i" />
+      <Text name="l" />
+      <Text name="m" />
+      <Text name="-" />
+      <Text name="l" />
+      <Text name="i" />
+      <Text name="n" />
+      <Text name="e" />
     </div>
   );
 }
