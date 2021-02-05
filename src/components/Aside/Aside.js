@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import styles from "../../style/App.module.scss";
 import ControlSilder from "../Aside/ControlSlider";
 import { ReactComponent as Logo } from "../../image/logo-2.svg";

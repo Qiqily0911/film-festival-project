@@ -24,6 +24,26 @@ function CrewMovieCard(props) {
       userLike.movieList.find((item) => item.tmdb_id === props.data.id)
   );
 
+  function getData() {
+    Promise.all([
+      dataApi("tmdb", "movie", "", props.data.id),
+      dataApi("tmdb", "movie", "/translations", props.data.id),
+    ])
+      .then((arr) => {
+        props.setCrewMovieData({
+          ...props.crewMovieData,
+          detail: arr[0],
+          overview_translate: arr[1],
+        });
+      })
+      .then(props.setInfoOpen(true));
+
+    props.overviewEl.current.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
+
   return (
     <div
       className={styles.movieCard}
@@ -41,28 +61,7 @@ function CrewMovieCard(props) {
         />
       )}
 
-      <div
-        className={styles.poster}
-        onClick={() => {
-          Promise.all([
-            dataApi("tmdb", "movie", "", props.data.id),
-            dataApi("tmdb", "movie", "/translations", props.data.id),
-          ])
-            .then((arr) => {
-              props.setCrewMovieData({
-                ...props.crewMovieData,
-                detail: arr[0],
-                overview_translate: arr[1],
-              });
-            })
-            .then(props.setInfoOpen(true));
-
-          props.overviewEl.current.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
-        }}
-      >
+      <div className={styles.poster} onClick={getData}>
         {props.data.poster_path !== null ? (
           <img
             alt="poster"

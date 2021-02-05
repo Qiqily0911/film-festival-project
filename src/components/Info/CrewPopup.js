@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "../../style/Crew.module.scss";
 import CrewMovieCard from "./CrewMovieCard";
-import { ReactComponent as Arrow } from "../../image/icon/arrow.svg";
-import { ReactComponent as Star } from "../../image/icon/star.svg";
+import SideInfo from "./SideInfo";
+import SideProfile from "./SideProfile";
 import Loading from "../Loading";
-import { addLiked, cancelLiked, overviewChinese } from "../../utils";
-import { ReactComponent as Imdb } from "../../image/IMDB_Logo.svg";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 function CrewPopup(props) {
   const [personNameCh, setPersonNameCh] = useState("");
@@ -41,52 +39,6 @@ function CrewPopup(props) {
       }
     }
   }, [personData]);
-
-  const infoBox = (
-    // style={{ right: infoOpen ? "0" : "-30%" }}
-    // className={`${styles.infoBox} ${infoOpen ? styles.move : styles.back}`
-    <div className={styles.infoBox} style={{ right: infoOpen ? "0" : "-30%" }}>
-      <div className={styles.arrow} onClick={() => setInfoOpen(false)}>
-        <Arrow />
-      </div>
-
-      <div>
-        {crewMovieData.detail.poster_path ? (
-          <img
-            alt="poster"
-            src={`https://image.tmdb.org/t/p/w154${crewMovieData.detail.poster_path}`}
-          />
-        ) : (
-          <div className={styles.noPoster}>no poster</div>
-        )}
-      </div>
-
-      <div className={styles.filmTitle}>
-        {crewMovieData.overview_translate &&
-          overviewChinese(crewMovieData)?.title}
-      </div>
-      <div className={styles.filmTitle}>
-        {crewMovieData.detail.title}
-        <a
-          href={`https://www.imdb.com/title/${crewMovieData.detail.imdb_id}`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          <Imdb />
-        </a>
-      </div>
-      <div className={styles.filmTitle2}>
-        {crewMovieData.detail.original_title}
-      </div>
-      <div className={styles.overview}>
-        <p ref={overviewEl}>
-          {crewMovieData.overview_translate &&
-            overviewChinese(crewMovieData)?.overview}
-        </p>
-        <p>{crewMovieData.detail.overview}</p>
-      </div>
-    </div>
-  );
 
   const obj = {
     person_name: personData.name,
@@ -142,59 +94,20 @@ function CrewPopup(props) {
           ×
         </div>
         <div className={styles.container}>
-          {infoBox}
+          <SideInfo
+            infoOpen={infoOpen}
+            setInfoOpen={setInfoOpen}
+            crewMovieData={crewMovieData}
+            overviewEl={overviewEl}
+          />
           <div className={styles.wrap}>
-            <div className={styles.profile}>
-              <div className={styles.photo}>
-                <div>
-                  {personData.profile_path ? (
-                    <img
-                      alt="profile"
-                      src={`https://image.tmdb.org/t/p/w154${personData.profile_path}`}
-                    />
-                  ) : (
-                    <div className={styles.noprofile}>
-                      <p>No Photo</p>
-                    </div>
-                  )}
+            <SideProfile
+              personData={personData}
+              isLiked={isLiked}
+              personNameCh={personNameCh}
+              obj={obj}
+            />
 
-                  <div className={styles.likeBtn}>
-                    {userLike.user.uid && (
-                      <Star
-                        className={isLiked ? styles.addBtn : styles.cancelBtn}
-                        onClick={(e) =>
-                          isLiked
-                            ? cancelLiked(
-                                e,
-                                userLike.personList,
-                                "person_liked",
-                                personData.id
-                              )
-                            : addLiked(e, "person_liked", obj)
-                        }
-                      />
-                    )}
-                  </div>
-                </div>
-              </div>
-              <span className={styles.name}>{personData.name}</span>
-              {personNameCh}
-
-              <div className={styles.below}>
-                {personData.birthday}
-                <a
-                  href={`https://www.imdb.com/name/${personData.imdb_id}/`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <Imdb />
-                </a>
-              </div>
-
-              <div className={styles.biography}>
-                <p>{personData.biography}</p>
-              </div>
-            </div>
             <div className={styles.movieBox}>
               {crewMovieCards("Director", crewData)}
               {crewMovieCards("Cast", castData)}

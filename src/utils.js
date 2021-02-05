@@ -36,6 +36,19 @@ export function loadMovieData(tmdbId, imdbId, localData, setMovieDataHook) {
   });
 }
 
+export function loadUserLikedList(userId, firebaseCollection, listHook) {
+  firestore
+    .collection(firebaseCollection)
+    .where("user", "==", userId)
+    .onSnapshot((onSnapshot) => {
+      const arr = [];
+      onSnapshot.forEach((doc) => {
+        arr.push(doc.data());
+      });
+      listHook(arr);
+    });
+}
+
 export function addLiked(e, collectionName, obj) {
   const db = firestore.collection(collectionName);
   db.add(obj).then((res) => {
@@ -58,6 +71,57 @@ export function cancelLiked(e, userLikedList, collectionName, id) {
   }
 
   e.stopPropagation();
+}
+
+export function fillYearList(emptyYearList, fes, prize, order) {
+  if (fes) {
+    const data = fes.filter((obj) => obj.prize === prize);
+
+    emptyYearList.forEach((yearbox) => {
+      const box = yearbox.list[order];
+      data.forEach((item) => {
+        if (item.year === yearbox.year) {
+          box.push(item);
+        }
+      });
+      if (box.length === 0) {
+        box.push({ prize: null });
+      }
+    });
+  } else {
+    emptyYearList.forEach((yearbox) => {
+      yearbox.list[order].push({ prize: null });
+    });
+  }
+}
+
+export function makeYearBoxes(listCase) {
+  const emptyYearBoxes = [];
+
+  for (let i = 2020; i >= 1928; i--) {
+    const emptyYearBox = { year: i, list: [] };
+    switch (listCase) {
+      case 3:
+        emptyYearBox.list = [[], [], []];
+
+        break;
+      case 2:
+      case 1:
+        emptyYearBox.list = [[], []];
+
+        break;
+      case 0:
+        emptyYearBox.list = [[]];
+
+        break;
+      default:
+        emptyYearBox.list = [[], [], []];
+    }
+
+    emptyYearBoxes.push(emptyYearBox);
+  }
+
+  return emptyYearBoxes;
 }
 
 export function yearConvert(percentage, max, min) {

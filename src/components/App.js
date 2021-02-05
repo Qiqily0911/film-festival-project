@@ -1,11 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
-import styles from "./style/App.module.scss";
-import Welcome from "./components/Welcome";
-import Aside from "./components/Aside/Aside";
-import Navbar from "./components/Navbar/Navbar";
-import Container from "./components/Container/Container";
-import { InitMovieInfo } from "./data/LocalSource";
-import { loadMovieData, dynamicHeightPercentage } from "./utils";
+import styles from "../style/App.module.scss";
+import Welcome from "./Welcome";
+import Aside from "./Aside/Aside";
+import Navbar from "./Navbar/Navbar";
+import Container from "./Container/Container";
+import { InitMovieInfo } from "../data/LocalSource";
+import {
+  loadMovieData,
+  fillYearList,
+  makeYearBoxes,
+  dynamicHeightPercentage,
+} from "../utils";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setListAdd,
@@ -13,29 +18,7 @@ import {
   setListYearRef,
   setMovieData,
   setListPrize,
-} from "./globalState/actions";
-
-function fillYearList(emptyYearList, fes, prize, order) {
-  if (fes) {
-    const data = fes.filter((obj) => obj.prize === prize);
-
-    emptyYearList.forEach((yearbox) => {
-      const box = yearbox.list[order];
-      data.forEach((item) => {
-        if (item.year === yearbox.year) {
-          box.push(item);
-        }
-      });
-      if (box.length === 0) {
-        box.push({ prize: null });
-      }
-    });
-  } else {
-    emptyYearList.forEach((yearbox) => {
-      yearbox.list[order].push({ prize: null });
-    });
-  }
-}
+} from "../globalState/actions";
 
 function App() {
   const [welcomeOpen, setWelcome] = useState(true);
@@ -54,30 +37,7 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const allSelectYearList = [];
-
-    for (let i = 2020; i >= 1928; i--) {
-      const emptyYearBox = { year: i, list: [] };
-      switch (listState.listCase) {
-        case 3:
-          emptyYearBox.list = [[], [], []];
-
-          break;
-        case 2:
-        case 1:
-          emptyYearBox.list = [[], []];
-
-          break;
-        case 0:
-          emptyYearBox.list = [[]];
-
-          break;
-        default:
-          emptyYearBox.list = [[], [], []];
-      }
-
-      allSelectYearList.push(emptyYearBox);
-    }
+    const allSelectYearList = makeYearBoxes(listState.listCase);
 
     const yearRefs = allSelectYearList.reduce((yearRef, yearBox) => {
       yearRef[yearBox.year] = React.createRef();

@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "../../style/App.module.scss";
-import { firestore } from "../../config";
 import MovieInfo from "../Info/MovieInfo";
 import PrizeInfo from "../Info/PrizeInfo";
 import YearList from "./YearList";
 
 import { MemberPage } from "./MemberPage";
-import { useWindowDimensions } from "../../utils";
+import { loadUserLikedList, useWindowDimensions } from "../../utils";
 import {
   setListWidth,
   setListCase,
@@ -33,25 +32,13 @@ export default function SubContainer(props) {
   const [movieInfoOpen, setMovieInfoOpen] = useState(false);
 
   useEffect(() => {
-    if (userLike.user.uid) {
-      function userLikedList(firebaseCollection, listHook) {
-        firestore
-          .collection(firebaseCollection)
-          .where("user", "==", userLike.user.uid)
-          .onSnapshot((onSnapshot) => {
-            const arr = [];
-            onSnapshot.forEach((doc) => {
-              arr.push(doc.data());
-            });
-            listHook(arr);
-          });
-      }
-
+    const userId = userLike.user.uid;
+    if (userId) {
       const setMovieList = (arr) => dispatch(setLikeMovie(arr));
       const setPersonList = (arr) => dispatch(setLikePerson(arr));
 
-      userLikedList("movie_liked", setMovieList);
-      userLikedList("person_liked", setPersonList);
+      loadUserLikedList(userId, "movie_liked", setMovieList);
+      loadUserLikedList(userId, "person_liked", setPersonList);
     }
   }, [userLike.user.uid]);
 
