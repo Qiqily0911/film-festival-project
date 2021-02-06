@@ -194,8 +194,8 @@
         }
 
         .flag {
-          margin: 10px;
           display: flex;
+          flex-wrap: wrap;
           .tooltip:hover .tooltiptext {
             visibility: visible;
             opacity: 1;
@@ -203,8 +203,6 @@
 
           .tooltip {
             position: relative;
-
-            height: 33px;
             margin-right: 10px;
 
             .tooltiptext {
@@ -216,21 +214,18 @@
               color: #fff;
               text-align: center;
               padding: 5px;
-
               z-index: 1;
               opacity: 0;
               transition: opacity 0.3s;
-              top: 160%;
+              top: 110%;
               left: 50%;
               transform: translate(-50%, -50%);
             }
           }
 
           img {
-            // width: 100%;
-            // max-width: 50px;
-            max-height: 33px;
-            @include shadow;
+            max-width: 50px;
+            filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.2));
           }
         }
 
@@ -310,7 +305,7 @@
         }
 
         .overview {
-          margin: 50px 0 30px 0;
+          margin: 20px 0 30px 0;
           font-size: $font-p;
           color: $color-gray;
           span {

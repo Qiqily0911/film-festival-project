@@ -13,10 +13,11 @@ export default function FlagBox() {
 
             <img
               alt="flag"
-              src={
-                require(`../../data/png100px/${country.iso_3166_1.toLowerCase()}.png`)
-                  .default || ""
-              }
+              src={`https://www.countryflags.io/${country.iso_3166_1.toLowerCase()}/flat/64.png`}
+              // src={
+              //   require(`../../data/png100px/${country.iso_3166_1.toLowerCase()}.png`)
+              //     .default || ""
+              // }
             />
           </div>
         ))}
