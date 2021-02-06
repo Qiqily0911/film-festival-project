@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "../../style/App.module.scss";
-import MovieInfo from "../Info/MovieInfo";
-import PrizeInfo from "../Info/PrizeInfo";
+import MovieInfo from "../MovieInfo/MovieInfo";
+import PrizeInfo from "../MovieInfo/PrizeInfo";
 import YearList from "./YearList";
 
 import { MemberPage } from "./MemberPage";

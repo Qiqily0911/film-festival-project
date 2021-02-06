@@ -11,47 +11,36 @@ function MovieCard(props) {
   const userLike = useSelector((state) => state.userLike);
   const obj = {
     user: userLike.user.uid,
-    movie_id: props.listData.movie_id,
-    tmdb_id: props.listData.tmdb_id,
-    data_id: props.listData.data_id,
-    poster_path: props.listData.poster_path,
-    film_name_en: props.listData.film_name_en,
-    film_name_zh: props.listData.film_name_zh,
+    movie_id: props.data.movie_id,
+    tmdb_id: props.data.tmdb_id,
+    data_id: props.data.data_id,
+    poster_path: props.data.poster_path,
+    film_name_en: props.data.film_name_en,
+    film_name_zh: props.data.film_name_zh,
     time: new Date(),
-    year: props.listData.year,
+    year: props.data.year,
   };
 
-  const notFound = (
-    <div className={styles.movieCard} style={{ cursor: "default" }}>
-      <div className={styles.notFound}></div>
-      <div className={styles.basicInfo}>
-        <div>
-          <div className={styles.titleZh}>尚無資料</div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const hasCard = (
+  return (
     <div
       className={styles.movieCard}
       style={{ margin: props.memberPage ? "20px" : "" }}
-      key={props.listData.movie_id}
+      key={props.data.movie_id}
       onClick={() => {
-        const tmdbId = props.listData.tmdb_id;
-        const imdbId = props.listData.movie_id;
+        const tmdbId = props.data.tmdb_id;
+        const imdbId = props.data.movie_id;
         props.setMovieInfoOpen(true);
         props.resetInfoPosition();
         const setMovieDataReducer = (arr) => dispatch(setMovieData(arr));
-        loadMovieData(tmdbId, imdbId, props.listData, setMovieDataReducer);
+        loadMovieData(tmdbId, imdbId, props.data, setMovieDataReducer);
       }}
     >
       {userLike.user.uid && (
         <Bookmark
           className={props.isLiked ? styles.addBtn : styles.cancelBtn}
-          data-id={props.listData.movie_id}
+          data-id={props.data.movie_id}
           onClick={(e) => {
-            const tmdbId = props.listData.tmdb_id;
+            const tmdbId = props.data.tmdb_id;
 
             props.isLiked
               ? cancelLiked(e, userLike.movieList, "movie_liked", tmdbId)
@@ -61,8 +50,8 @@ function MovieCard(props) {
       )}
 
       <div className={styles.posterBox}>
-        {props.listData.poster_path === null ||
-        props.listData.poster_path === undefined ? (
+        {props.data.poster_path === null ||
+        props.data.poster_path === undefined ? (
           <div className={styles.noPoster}>
             <Nopic />
           </div>
@@ -70,21 +59,19 @@ function MovieCard(props) {
           <img
             alt="poster"
             loading="lazy"
-            src={`https://image.tmdb.org/t/p/w342${props.listData.poster_path}`}
+            src={`https://image.tmdb.org/t/p/w342${props.data.poster_path}`}
           />
         )}
       </div>
 
       <div className={styles.basicInfo}>
         <div>
-          <div className={styles.titleEn}>{props.listData.film_name_en}</div>
-          <div className={styles.titleZh}>{props.listData.film_name_zh}</div>
+          <div className={styles.titleEn}>{props.data.film_name_en}</div>
+          <div className={styles.titleZh}>{props.data.film_name_zh}</div>
         </div>
       </div>
     </div>
   );
-
-  return props.listData.prize === null ? notFound : hasCard;
 }
 
 export default React.memo(MovieCard);

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import styles from "../../style/YearList.module.scss";
 import MovieCard from "./MovieCard";
+import NotFoundCard from "./NotFoundCard";
 import { dynamicHeightPercentage } from "../../utils";
 import { useSelector, useDispatch } from "react-redux";
 import { setPercentValue, setYear } from "../../globalState/actions";
@@ -50,22 +51,6 @@ function YearList(props) {
     userLike.movieList &&
     userLike.movieList.find((item) => item.movie_id === data[0].movie_id);
 
-  const listData = (data) => {
-    return {
-      th: data[0].th,
-      year: data[0].year,
-      prize: data[0].prize,
-      atmovie_link: data[0].atmovie_link,
-      imdb_link: data[0].imdb_link,
-      movie_id: data[0].movie_id,
-      tmdb_id: data[0].tmdb_id,
-      data_id: data[0].data_id,
-      film_name_zh: data[0].film_name_zh,
-      film_name_en: data[0].film_name_en,
-      poster_path: data[0].poster_path,
-    };
-  };
-
   return (
     <div className={styles.yearListBox} onWheel={detectScroll}>
       <div className={styles.yearList}>
@@ -84,16 +69,20 @@ function YearList(props) {
                 <div className={styles.line}></div>
               </div>
               <div className={styles.cardWrap}>
-                {yearbox.list.map((data, j) => (
-                  <MovieCard
-                    setMovieInfoOpen={props.setMovieInfoOpen}
-                    key={j}
-                    listData={listData(data)}
-                    isLiked={Boolean(isLiked(data))}
-                    setLoadingOpen={props.setLoadingOpen}
-                    resetInfoPosition={props.resetInfoPosition}
-                  />
-                ))}
+                {yearbox.list.map((data, j) =>
+                  data[0].prize === null ? (
+                    <NotFoundCard key={j} />
+                  ) : (
+                    <MovieCard
+                      setMovieInfoOpen={props.setMovieInfoOpen}
+                      key={j}
+                      data={data[0]}
+                      isLiked={Boolean(isLiked(data))}
+                      setLoadingOpen={props.setLoadingOpen}
+                      resetInfoPosition={props.resetInfoPosition}
+                    />
+                  )
+                )}
               </div>
             </div>
           )

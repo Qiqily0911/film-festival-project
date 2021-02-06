@@ -15,7 +15,6 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   setListAdd,
   setPercentValue,
-  setListYearRef,
   setMovieData,
   setListPrize,
 } from "../globalState/actions";
@@ -38,7 +37,6 @@ function App() {
 
   useEffect(() => {
     const allSelectYearList = makeYearBoxes(listState.listCase);
-
     const yearRefs = allSelectYearList.reduce((yearRef, yearBox) => {
       yearRef[yearBox.year] = React.createRef();
       return yearRef;

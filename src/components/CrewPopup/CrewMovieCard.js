@@ -65,6 +65,7 @@ function CrewMovieCard(props) {
         {props.data.poster_path !== null ? (
           <img
             alt="poster"
+            loading="lazy"
             src={`https://image.tmdb.org/t/p/w154${props.data.poster_path}`}
           />
         ) : (

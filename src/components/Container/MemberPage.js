@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import styles from "../../style/MemberPage.module.scss";
 import MovieCard from "./MovieCard";
 import PersonCard from "./PersonCard";
-import { ReactComponent as Star } from "../../image/icon/star.svg";
-import { dataApi, cancelLiked } from "../../utils";
-import CrewPopup from "../Info/CrewPopup";
+import CrewPopup from "../CrewPopup/CrewPopup";
 import { useSelector } from "react-redux";
 
 export function MemberPage(props) {
@@ -29,23 +27,10 @@ export function MemberPage(props) {
             userLike.movieList
               .sort((a, b) => (a.time.seconds > b.time.seconds ? 1 : -1))
               .map((data, i) => {
-                const listData = {
-                  th: "",
-                  year: data.year,
-                  prize: "",
-                  atmovie_link: "",
-                  imdb_link: "",
-                  movie_id: data.movie_id,
-                  tmdb_id: data.tmdb_id,
-                  data_id: data.data_id,
-                  film_name_zh: data.film_name_zh,
-                  film_name_en: data.film_name_en,
-                  poster_path: data.poster_path,
-                };
                 return (
                   <MovieCard
                     key={i}
-                    listData={listData}
+                    data={data}
                     isLiked={true}
                     memberPage={props.memberPage}
                     resetInfoPosition={props.resetInfoPosition}
