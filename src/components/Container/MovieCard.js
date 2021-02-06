@@ -69,6 +69,7 @@ function MovieCard(props) {
         ) : (
           <img
             alt="poster"
+            loading="lazy"
             src={`https://image.tmdb.org/t/p/w342${props.listData.poster_path}`}
           />
         )}
