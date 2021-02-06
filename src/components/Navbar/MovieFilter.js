@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "../../style/MovieFilter.module.scss";
 import { BtnData } from "../../data/LocalSource";
-import { setListClose } from "../../globalState/actions";
+import { setListClose, setListPrize } from "../../globalState/actions";
 import { useSelector, useDispatch } from "react-redux";
 
 function MovieFilter(props) {
@@ -33,6 +33,7 @@ function MovieFilter(props) {
   function close(e) {
     const order = Number(e.target.dataset.order);
     dispatch(setListClose(order));
+    props.setPrizeArr();
   }
 
   function selectFestival(e, i) {

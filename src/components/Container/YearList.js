@@ -1,21 +1,23 @@
 import React, { useEffect } from "react";
 import styles from "../../style/YearList.module.scss";
 import MovieCard from "./MovieCard";
+import NotFoundCard from "./NotFoundCard";
 import { dynamicHeightPercentage } from "../../utils";
 import { useSelector, useDispatch } from "react-redux";
 import { setPercentValue, setYear } from "../../globalState/actions";
 
 function YearList(props) {
   const listState = useSelector((state) => state.setList);
-  const likeList = useSelector((state) => state.likeList);
+  const userLike = useSelector((state) => state.userLike);
   const yearRange = useSelector((state) => state.setYear);
   const dispatch = useDispatch();
 
   useEffect(() => {
+    const sliderStyle = props.sliderRef.current.style;
     if (listState.list.every((item) => !item.film_list)) {
-      props.sliderRef.current.style.visibility = "hidden";
+      sliderStyle.visibility = "hidden";
     } else {
-      props.sliderRef.current.style.visibility = "visible";
+      sliderStyle.visibility = "visible";
       const arr = listState.list.map(
         (item) => item.film_list && item.film_list.map((film) => film.year)
       );
@@ -46,24 +48,8 @@ function YearList(props) {
   }
 
   const isLiked = (data) =>
-    likeList.movieList &&
-    likeList.movieList.find((item) => item.movie_id === data[0].movie_id);
-
-  const listData = (data) => {
-    return {
-      th: data[0].th,
-      year: data[0].year,
-      prize: data[0].prize,
-      atmovie_link: data[0].atmovie_link,
-      imdb_link: data[0].imdb_link,
-      movie_id: data[0].movie_id,
-      tmdb_id: data[0].tmdb_id,
-      data_id: data[0].data_id,
-      film_name_zh: data[0].film_name_zh,
-      film_name_en: data[0].film_name_en,
-      poster_path: data[0].poster_path,
-    };
-  };
+    userLike.movieList &&
+    userLike.movieList.find((item) => item.movie_id === data[0].movie_id);
 
   return (
     <div className={styles.yearListBox} onWheel={detectScroll}>
@@ -83,17 +69,20 @@ function YearList(props) {
                 <div className={styles.line}></div>
               </div>
               <div className={styles.cardWrap}>
-                {yearbox.list.map((data, j) => (
-                  <MovieCard
-                    setMovieInfoOpen={props.setMovieInfoOpen}
-                    key={j}
-                    listData={listData(data)}
-                    isLiked={Boolean(isLiked(data))}
-                    userId={props.userId}
-                    setLoadingOpen={props.setLoadingOpen}
-                    resetInfoPosition={props.resetInfoPosition}
-                  />
-                ))}
+                {yearbox.list.map((data, j) =>
+                  data[0].prize === null ? (
+                    <NotFoundCard key={j} />
+                  ) : (
+                    <MovieCard
+                      setMovieInfoOpen={props.setMovieInfoOpen}
+                      key={j}
+                      data={data[0]}
+                      isLiked={Boolean(isLiked(data))}
+                      setLoadingOpen={props.setLoadingOpen}
+                      resetInfoPosition={props.resetInfoPosition}
+                    />
+                  )
+                )}
               </div>
             </div>
           )

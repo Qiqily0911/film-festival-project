@@ -8,6 +8,7 @@ import { ReactComponent as LoginIcon } from "../../image/icon/login.svg";
 import { ReactComponent as LogoutIcon } from "../../image/icon/logout.svg";
 import { ReactComponent as MenuIcon } from "../../image/menu.svg";
 import { useSelector, useDispatch } from "react-redux";
+import { setUserInfo } from "../../globalState/actions";
 
 export function MemberNav(props) {
   return (
@@ -31,13 +32,14 @@ export function MemberBtn(props) {
   const [isLogin, setLogin] = useState(false);
   const [error, setError] = useState("");
   const listState = useSelector((state) => state.setList);
+  const dispatch = useDispatch();
 
   async function handleLogout() {
     setError("");
     try {
       await logout();
       props.setMemberPage(false);
-      props.setUserId("");
+      dispatch(setUserInfo(""));
     } catch {
       setError("Failed to log out");
     }
@@ -47,14 +49,9 @@ export function MemberBtn(props) {
     if (currentUser) {
       setLogin(true);
       setOpen(false);
+      dispatch(setUserInfo(currentUser));
     } else {
       setLogin(false);
-    }
-  }, [currentUser, props]);
-
-  useEffect(() => {
-    if (currentUser) {
-      currentUser && props.setUserId(currentUser.uid);
     }
   }, [currentUser]);
 

@@ -55,17 +55,23 @@ export const setYear = (max, min) => {
     min: min,
   };
 };
+export const setUserInfo = (user) => {
+  return {
+    type: "SETUSER_INFO",
+    user: user,
+  };
+};
 
 export const setLikeMovie = (movie) => {
   return {
-    type: "SETLIKE_MOVIE",
+    type: "SETUSER_MOVIE",
     movie: movie,
   };
 };
 
 export const setLikePerson = (person) => {
   return {
-    type: "SETLIKE_PERSON",
+    type: "SETUSER_PERSON",
     person: person,
   };
 };

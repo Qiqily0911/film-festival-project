@@ -1,56 +1,23 @@
 import React, { useState, useEffect, useRef } from "react";
-import styles from "./style/App.module.scss";
-import Welcome from "./components/Welcome";
-import Aside from "./components/Aside/Aside";
-import Navbar from "./components/Navbar/Navbar";
-import Container from "./components/Container/Container";
-import { InitMovieInfo } from "./data/LocalSource";
-import { loadMovieData, dynamicHeightPercentage } from "./utils";
+import styles from "../style/App.module.scss";
+import Welcome from "./Welcome";
+import Aside from "./Aside/Aside";
+import Navbar from "./Navbar/Navbar";
+import Container from "./Container/Container";
+import { InitMovieInfo } from "../data/LocalSource";
+import {
+  loadMovieData,
+  fillYearList,
+  makeYearBoxes,
+  dynamicHeightPercentage,
+} from "../utils";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setListAdd,
   setPercentValue,
-  setListYearRef,
   setMovieData,
   setListPrize,
-} from "./globalState/actions";
-
-function fillYearList(emptyYearList, fes, prize, order) {
-  if (fes) {
-    const data = fes.filter((obj) => obj.prize === prize);
-
-    emptyYearList.forEach((yearbox) => {
-      const box = yearbox.list[order];
-      data.forEach((item) => {
-        if (item.year === yearbox.year) {
-          box.push(item);
-        }
-      });
-      if (box.length === 0) {
-        box.push({ prize: null });
-      }
-    });
-  } else {
-    emptyYearList.forEach((yearbox) => {
-      yearbox.list[order].push({ prize: null });
-    });
-  }
-}
-
-function preventDoubleSelect(listState, btnSelect) {
-  for (let i = 0; i < listState.length; i++) {
-    if (
-      listState[i].film_list &&
-      btnSelect.title === listState[i].title &&
-      btnSelect.prize === listState[i].prize
-    ) {
-      alert("選過囉");
-      return false;
-    } else {
-      return true;
-    }
-  }
-}
+} from "../globalState/actions";
 
 function App() {
   const [welcomeOpen, setWelcome] = useState(true);
@@ -60,7 +27,7 @@ function App() {
 
   const [yearlist, setList] = useState([]);
   const [yearListRefs, setRefs] = useState("");
-  const [userId, setUserId] = useState();
+
   const welcomeRef = useRef(null);
   const sliderRef = useRef(null);
 
@@ -69,31 +36,7 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const allSelectYearList = [];
-
-    for (let i = 2020; i >= 1928; i--) {
-      const emptyYearBox = { year: i, list: [] };
-      switch (listState.listCase) {
-        case 3:
-          emptyYearBox.list = [[], [], []];
-
-          break;
-        case 2:
-        case 1:
-          emptyYearBox.list = [[], []];
-
-          break;
-        case 0:
-          emptyYearBox.list = [[]];
-
-          break;
-        default:
-          emptyYearBox.list = [[], [], []];
-      }
-
-      allSelectYearList.push(emptyYearBox);
-    }
-
+    const allSelectYearList = makeYearBoxes(listState.listCase);
     const yearRefs = allSelectYearList.reduce((yearRef, yearBox) => {
       yearRef[yearBox.year] = React.createRef();
       return yearRef;
@@ -115,20 +58,7 @@ function App() {
         return;
       }
     }
-  }, [listState.list, listState.listCase]);
-
-  useEffect(() => {
-    const prizeIdArr = [];
-    for (let i = 0; i < listState.list.length; i++) {
-      if (listState.list[i].film_list?.length > 0) {
-        prizeIdArr.push(listState.list[i].prizeId);
-      } else {
-        prizeIdArr.push(null);
-      }
-    }
-
-    dispatch(setListPrize(prizeIdArr));
-  }, [listState.list]);
+  }, [listState]);
 
   useEffect(() => {
     const setMovieDataReducer = (arr) => dispatch(setMovieData(arr));
@@ -146,6 +76,29 @@ function App() {
     }
   }
 
+  function setPrizeArr() {
+    const prizeIdArr = [];
+    for (let i = 0; i < listState.list.length; i++) {
+      if (listState.list[i].film_list?.length > 0) {
+        prizeIdArr.push(listState.list[i].prizeId);
+      } else {
+        prizeIdArr.push(null);
+      }
+    }
+
+    dispatch(setListPrize(prizeIdArr));
+  }
+
+  function preventDoubleSelect(prizeId) {
+    for (let i = 0; i < listState.prize.length; i++) {
+      if (listState.prize[i] === prizeId) {
+        alert("選過囉");
+        return false;
+      }
+    }
+    return true;
+  }
+
   function selectPrize(fesData, prizeData, index) {
     const btnSelect = {
       title: fesData.btnText,
@@ -159,19 +112,19 @@ function App() {
       order: index,
     };
 
-    if (preventDoubleSelect(listState.list, btnSelect)) {
+    if (preventDoubleSelect(prizeData.dataId)) {
       dispatch(setListAdd(index, btnSelect));
-      dispatch(setPercentValue(100));
+      setPrizeArr();
     }
   }
 
   return (
     <div className={styles.outter}>
-      <Welcome
+      {/* <Welcome
         welcomeOpen={welcomeOpen}
         setWelcome={setWelcome}
         welcomeRef={welcomeRef}
-      />
+      /> */}
       <Aside
         setMemberPage={setMemberPage}
         memberPage={memberPage}
@@ -184,16 +137,14 @@ function App() {
           <Navbar
             setMemberPage={setMemberPage}
             memberPage={memberPage}
-            yearListRefs={yearListRefs}
             selectPrize={selectPrize}
-            setUserId={setUserId}
+            setPrizeArr={setPrizeArr}
             setprizeBox={setprizeBox}
           />
           <Container
             selectPrize={selectPrize}
             prizeBoxState={prizeBoxState}
             setprizeBox={setprizeBox}
-            userId={userId}
             memberPage={memberPage}
             yearlist={yearlist}
             yearListRefs={yearListRefs}

@@ -1,24 +1,23 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "../../style/App.module.scss";
-import { firestore } from "../../config";
-import MovieInfo from "../Info/MovieInfo";
-import PrizeInfo from "../Info/PrizeInfo";
+import MovieInfo from "../MovieInfo/MovieInfo";
+import PrizeInfo from "../MovieInfo/PrizeInfo";
 import YearList from "./YearList";
 
 import { MemberPage } from "./MemberPage";
-import { useWindowDimensions } from "../../utils";
+import { loadUserLikedList, useWindowDimensions } from "../../utils";
 import {
   setListWidth,
   setListCase,
   setLikeMovie,
   setLikePerson,
 } from "../../globalState/actions";
-
 import { useSelector, useDispatch } from "react-redux";
 
 export default function SubContainer(props) {
   const { height, width } = useWindowDimensions();
   const listState = useSelector((state) => state.setList);
+  const userLike = useSelector((state) => state.userLike);
   const dispatch = useDispatch();
 
   const imageBoxEl = useRef(null);
@@ -33,27 +32,15 @@ export default function SubContainer(props) {
   const [movieInfoOpen, setMovieInfoOpen] = useState(false);
 
   useEffect(() => {
-    if (props.userId) {
-      function userLikedList(firebaseCollection, listHook) {
-        firestore
-          .collection(firebaseCollection)
-          .where("user", "==", props.userId)
-          .onSnapshot((onSnapshot) => {
-            const arr = [];
-            onSnapshot.forEach((doc) => {
-              arr.push(doc.data());
-            });
-            listHook(arr);
-          });
-      }
-
+    const userId = userLike.user.uid;
+    if (userId) {
       const setMovieList = (arr) => dispatch(setLikeMovie(arr));
       const setPersonList = (arr) => dispatch(setLikePerson(arr));
 
-      userLikedList("movie_liked", setMovieList);
-      userLikedList("person_liked", setPersonList);
+      loadUserLikedList(userId, "movie_liked", setMovieList);
+      loadUserLikedList(userId, "person_liked", setPersonList);
     }
-  }, [props.userId]);
+  }, [userLike.user.uid]);
 
   function resetInfoPosition() {
     movieInfoEl.current.style.overflow = "hidden";
@@ -92,7 +79,6 @@ export default function SubContainer(props) {
     <div className={styles.subContainer}>
       {props.memberPage ? (
         <MemberPage
-          userId={props.userId}
           memberPage={props.memberPage}
           resetInfoPosition={resetInfoPosition}
           setMovieInfoOpen={setMovieInfoOpen}
@@ -103,7 +89,6 @@ export default function SubContainer(props) {
             yearlist={props.yearlist}
             yearListRefs={props.yearListRefs}
             isScroll={props.isScroll}
-            userId={props.userId}
             resetInfoPosition={resetInfoPosition}
             sliderRef={props.sliderRef}
             setMovieInfoOpen={setMovieInfoOpen}
@@ -131,7 +116,6 @@ export default function SubContainer(props) {
         infoBoxRef={infoBoxRef}
         prizeBoxState={props.prizeBoxState}
         setprizeBox={props.setprizeBox}
-        userId={props.userId}
         memberPage={props.memberPage}
         loadingOpen={loadingOpen}
         setLoadingOpen={setLoadingOpen}

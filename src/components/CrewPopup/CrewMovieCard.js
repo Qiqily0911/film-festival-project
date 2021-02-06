@@ -6,9 +6,9 @@ import { dataApi, addLiked, cancelLiked } from "../../utils";
 import { useSelector, useDispatch } from "react-redux";
 
 function CrewMovieCard(props) {
-  const likeList = useSelector((state) => state.likeList);
+  const userLike = useSelector((state) => state.userLike);
   const obj = {
-    user: props.userId,
+    user: userLike.user.uid,
     movie_id: "",
     tmdb_id: props.data.id,
     data_id: "",
@@ -20,9 +20,29 @@ function CrewMovieCard(props) {
   };
 
   const isLiked = Boolean(
-    likeList.movieList &&
-      likeList.movieList.find((item) => item.tmdb_id === props.data.id)
+    userLike.movieList &&
+      userLike.movieList.find((item) => item.tmdb_id === props.data.id)
   );
+
+  function getData() {
+    Promise.all([
+      dataApi("tmdb", "movie", "", props.data.id),
+      dataApi("tmdb", "movie", "/translations", props.data.id),
+    ])
+      .then((arr) => {
+        props.setCrewMovieData({
+          ...props.crewMovieData,
+          detail: arr[0],
+          overview_translate: arr[1],
+        });
+      })
+      .then(props.setInfoOpen(true));
+
+    props.overviewEl.current.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
 
   return (
     <div
@@ -30,42 +50,22 @@ function CrewMovieCard(props) {
       key={props.data.credit_id}
       value={props.data.id}
     >
-      {props.userId && (
+      {userLike.user.uid && (
         <Bookmark
           className={isLiked ? styles.addBtn : styles.cancelBtn}
           onClick={(e) =>
             isLiked
-              ? cancelLiked(e, likeList.movieList, "movie_liked", props.data.id)
+              ? cancelLiked(e, userLike.movieList, "movie_liked", props.data.id)
               : addLiked(e, "movie_liked", obj)
           }
         />
       )}
 
-      <div
-        className={styles.poster}
-        onClick={() => {
-          Promise.all([
-            dataApi("tmdb", "movie", "", props.data.id),
-            dataApi("tmdb", "movie", "/translations", props.data.id),
-          ])
-            .then((arr) => {
-              props.setCrewMovieData({
-                ...props.crewMovieData,
-                detail: arr[0],
-                overview_translate: arr[1],
-              });
-            })
-            .then(props.setInfoOpen(true));
-
-          props.overviewEl.current.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
-        }}
-      >
+      <div className={styles.poster} onClick={getData}>
         {props.data.poster_path !== null ? (
           <img
             alt="poster"
+            loading="lazy"
             src={`https://image.tmdb.org/t/p/w154${props.data.poster_path}`}
           />
         ) : (
