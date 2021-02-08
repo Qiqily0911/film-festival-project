@@ -7,8 +7,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { setPercentValue } from "../../globalState/actions";
 
 function ControlSilder(props) {
-  const percentValue = useSelector((state) => state.setPercentValue);
-  const yearRange = useSelector((state) => state.setYear);
+  const percentValue = useSelector((state) => state.setPercentYear);
+  const yearRange = percentValue.yearRange;
   const dispatch = useDispatch();
 
   function handleChangeStart() {
@@ -16,10 +16,10 @@ function ControlSilder(props) {
   }
 
   function handleChangeVertical(value) {
-    if (value !== percentValue) {
+    if (value !== percentValue.percent.percent) {
       dispatch(setPercentValue(value));
     }
-    const num = formatPc(percentValue);
+    const num = percentValue.percent.currentYear;
     if (props.yearListRefs[num] !== null) {
       props.yearListRefs[num].current.scrollIntoView({
         behavior: "smooth",
@@ -45,10 +45,10 @@ function ControlSilder(props) {
       <div className={styles.inner}>
         <div className={styles.yearText}>{yearRange.max}</div>
         <Slider
-          value={percentValue}
+          value={percentValue.percent.percent}
           orientation="vertical"
           labels={verticalLabels}
-          handleLabel={formatPc(percentValue)}
+          handleLabel={percentValue.percent.currentYear.toString()}
           format={formatPc}
           onChangeStart={handleChangeStart}
           onChange={handleChangeVertical}

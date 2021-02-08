@@ -32,7 +32,7 @@ function App() {
   const sliderRef = useRef(null);
 
   const listState = useSelector((state) => state.setList);
-  const yearRange = useSelector((state) => state.setYear);
+  const yearRange = useSelector((state) => state.setPercentYear).yearRange;
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -120,11 +120,11 @@ function App() {
 
   return (
     <div className={styles.outter}>
-      {/* <Welcome
+      <Welcome
         welcomeOpen={welcomeOpen}
         setWelcome={setWelcome}
         welcomeRef={welcomeRef}
-      /> */}
+      />
       <Aside
         setMemberPage={setMemberPage}
         memberPage={memberPage}

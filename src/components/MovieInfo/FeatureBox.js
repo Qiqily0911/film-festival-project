@@ -8,20 +8,21 @@ import { ReactComponent as Video } from "../../image/icon/video.svg";
 import catchplay from "../../image/catchplay_logo.png";
 import { useSelector } from "react-redux";
 
+function mediaLink(title, link, icon) {
+  return (
+    <div className={styles.tooltip}>
+      <span className={styles.tooltiptext}>{title}</span>
+      <a href={link} target="_blank" rel="noreferrer">
+        {icon}
+      </a>
+    </div>
+  );
+}
+
 export default function FeatureBox(props) {
   const movieData = useSelector((state) => state.setMovieData);
 
   const [isVideoOpen, setVideoOpen] = useState(false);
-  const mediaLink = (title, link, icon) => {
-    return (
-      <div className={styles.tooltip}>
-        <span className={styles.tooltiptext}>{title}</span>
-        <a href={link} target="_blank" rel="noreferrer">
-          {icon}
-        </a>
-      </div>
-    );
-  };
 
   const searchName = movieData.localData.film_name_zh
     ? movieData.localData.film_name_zh

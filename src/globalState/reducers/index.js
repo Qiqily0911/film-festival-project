@@ -1,15 +1,13 @@
 import setListReducer from "./setList";
-import setPercentValueReducer from "./setPercentValue";
+import setPercentYearReducer from "./setPercentYear";
 import setUserInfoReducer from "./setUserInfo";
-import setYearReducer from "./setYear";
 import setMovieDataReducer from "./setMovieData";
 import { combineReducers } from "redux";
 
 const allReducers = combineReducers({
   setList: setListReducer,
-  setPercentValue: setPercentValueReducer,
+  setPercentYear: setPercentYearReducer,
   userLike: setUserInfoReducer,
-  setYear: setYearReducer,
   setMovieData: setMovieDataReducer,
 });
 
