@@ -48,7 +48,8 @@ export default function UpperTitle(props) {
         if (BtnData[i].list_name === filmFes) {
           return (
             <>
-              {BtnData[i].official_name}
+              ｜{BtnData[i].official_name}
+              <br />
               {BtnData[i].arr[prizeId - 1].subBtnText}
             </>
           );
@@ -59,25 +60,18 @@ export default function UpperTitle(props) {
 
   return (
     <div className={styles.upper}>
-      <div>
+      <div className={styles.row}>
         <div className={styles.title}>
           <Title>
             <span>
-              {" "}
               {movieData.localData.th &&
                 ordinalSuffix(movieData.localData.th) + "｜"}
             </span>
-            <span> {movieData.localData.year}</span>
+            <span>{movieData.localData.year}</span>
             {prizeTitle()}
           </Title>
           <p>{movieData.detail.title}</p>
           <TitleCh>{movieData.localData.film_name_zh}</TitleCh>
-        </div>
-      </div>
-      <div className={styles.row}>
-        <div className={styles.title}>
-          <p>{movieData.detail.title}</p>
-          <p>{movieData.localData.film_name_zh}</p>
         </div>
 
         <div className={isLiked ? styles.addBtn : styles.cancelBtn}>

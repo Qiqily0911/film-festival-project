@@ -72,6 +72,7 @@
         .notFound {
           color: $color-gray;
           width: 100%;
+          aspect-ratio: 78/44;
           margin: auto 0;
 
           @include centerPosition;
@@ -99,9 +100,6 @@
               color: $color-blue;
               font-size: 2rem;
               font-weight: 600;
-              :nth-child(2) {
-                font-size: 1.5rem;
-              }
             }
 
             .addBtn {
