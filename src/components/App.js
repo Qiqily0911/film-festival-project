@@ -120,11 +120,11 @@ function App() {
 
   return (
     <div className={styles.outter}>
-      {/* <Welcome
+      <Welcome
         welcomeOpen={welcomeOpen}
         setWelcome={setWelcome}
         welcomeRef={welcomeRef}
-      /> */}
+      />
       <Aside
         setMemberPage={setMemberPage}
         memberPage={memberPage}

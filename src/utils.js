@@ -130,9 +130,10 @@ export function yearConvert(percentage, max, min) {
 
 export function dynamicHeightPercentage(max, min, ref) {
   const interval = max - min + 1;
-  const unitHeight = ref[min].current.getBoundingClientRect();
-  const totalHeight = interval * unitHeight.height;
-  return Math.floor(((unitHeight.bottom - 100) / totalHeight) * 100);
+  const minYearBox = ref[min].current.getBoundingClientRect();
+  //  console.log((window.innerHeight - 100 - minYearBox.height) / 2);
+  const totalHeight = interval * minYearBox.height;
+  return Math.round(((minYearBox.bottom - 100) / totalHeight) * 100);
 }
 
 export function overviewChinese(source) {
