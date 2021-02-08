@@ -3,6 +3,7 @@ import { ReactComponent as Bookmark } from "../../image/icon/add.svg";
 import { ordinalSuffix, addLiked, cancelLiked } from "../../utils";
 import { BtnData } from "../../data/LocalSource";
 import { useSelector } from "react-redux";
+import styled from "styled-components";
 
 export default function UpperTitle(props) {
   const movieData = useSelector((state) => state.setMovieData);
@@ -26,6 +27,17 @@ export default function UpperTitle(props) {
     year: movieData.localData.year,
   };
 
+  const Title = styled.div`
+    color: gray;
+    font-size: 0.9rem;
+    font-weight: 400;
+    margin-bottom: 10px;
+  `;
+
+  const TitleCh = styled.span`
+    font-size: 1.5rem;
+  `;
+
   const prizeTitle = () => {
     const dataId = movieData.localData.data_id;
     if (dataId) {
@@ -36,8 +48,9 @@ export default function UpperTitle(props) {
         if (BtnData[i].list_name === filmFes) {
           return (
             <>
-              {BtnData[i].official_name}
-              {BtnData[i].arr[prizeId - 1].subBtnText}
+              ｜<span> {BtnData[i].official_name}</span>
+              <br />
+              <span> {BtnData[i].arr[prizeId - 1].subBtnText}</span>
             </>
           );
         }
@@ -47,17 +60,20 @@ export default function UpperTitle(props) {
 
   return (
     <div className={styles.upper}>
-      <div>
-        <span className={styles.subtitle}>
-          {movieData.localData.th && ordinalSuffix(movieData.localData.th)}
-          {movieData.localData.year}
-          {prizeTitle()}
-        </span>
-      </div>
+      <div></div>
       <div className={styles.row}>
         <div className={styles.title}>
+          <Title>
+            <span>
+              {" "}
+              {movieData.localData.th &&
+                ordinalSuffix(movieData.localData.th) + "｜"}
+            </span>
+            <span> {movieData.localData.year}</span>
+            {prizeTitle()}
+          </Title>
           <p>{movieData.detail.title}</p>
-          <p>{movieData.localData.film_name_zh}</p>
+          <TitleCh>{movieData.localData.film_name_zh}</TitleCh>
         </div>
 
         <div className={isLiked ? styles.addBtn : styles.cancelBtn}>

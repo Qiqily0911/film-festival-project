@@ -64,6 +64,7 @@
 
         .imageWrap {
           display: flex;
+
           img {
             width: 100%;
           }
@@ -72,22 +73,17 @@
         .notFound {
           color: $color-gray;
           width: 100%;
+          aspect-ratio: 78/44;
           margin: auto 0;
-
           @include centerPosition;
         }
       }
 
       .infoBox {
-        padding: $padding-l;
+        padding: 1.5rem;
 
         .upper {
           margin-bottom: 20px;
-          .subtitle {
-            color: $color-gray;
-            font-size: 0.9rem;
-          }
-
           .row {
             margin: 10px 0;
             display: flex;
@@ -95,13 +91,9 @@
             .title {
               border-left: 8px solid $color-blue;
               padding-left: 16px;
-
               color: $color-blue;
               font-size: 2rem;
               font-weight: 600;
-              :nth-child(2) {
-                font-size: 1.5rem;
-              }
             }
 
             .addBtn {
