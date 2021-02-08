@@ -1,19 +1,18 @@
 import React from "react";
 import { BtnData } from "../../data/LocalSource";
-import { ReactComponent as Arrow } from "../../image/icon/arrow.svg";
+import PrizeHandleBar from "./PrizeHandleBar";
 import styles from "../../style/PrizeInfo.module.scss";
-import { loadMovieData, yearConvert, ordinalSuffix } from "../../utils";
+import { loadMovieData, ordinalSuffix } from "../../utils";
 import { useSelector, useDispatch } from "react-redux";
 import { setMovieData } from "../../globalState/actions";
 
 function PrizeInfo(props) {
   const dispatch = useDispatch();
-  const percentValue = useSelector((state) => state.setPercentValue);
+  const percentValue = useSelector((state) => state.setPercentYear);
   const listState = useSelector((state) => state.setList);
-  const yearRange = useSelector((state) => state.setYear);
-  const currentYear = yearConvert(percentValue, yearRange.max, yearRange.min);
+  const currentYear = percentValue.percent.currentYear;
 
-  const content = (list, index) => {
+  const column = (list, index) => {
     const templist = list.film_list || [];
 
     function loadData(tmdbId, imdbId, data) {
@@ -152,29 +151,16 @@ function PrizeInfo(props) {
       className={styles.prizeInfo}
       style={{ right: props.prizeBoxState ? openState : closeState }}
     >
-      <div
-        className={styles.handleBar}
-        onClick={() => {
-          props.prizeBoxState
-            ? props.setprizeBox(false)
-            : props.setprizeBox(true);
-        }}
-      >
-        <div>
-          <Arrow
-            className={styles.arrow}
-            style={{
-              transform: props.prizeBoxState
-                ? "rotate(0deg)"
-                : "rotate(180deg)",
-            }}
-          />
-          <span>{currentYear}</span> FESTIVAL
-        </div>
-      </div>
+      <PrizeHandleBar
+        prizeBoxState={props.prizeBoxState}
+        setprizeBox={props.setprizeBox}
+        currentYear={currentYear}
+      />
+
       <div className={styles.outterBox}>
+        {/* {console.log(listState.list)} */}
         <div className={styles.innerBox}>
-          {listState.list.map((list, i) => content(list, i))}
+          {listState.list.map((list, i) => column(list, i))}
         </div>
       </div>
     </div>

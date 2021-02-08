@@ -32,7 +32,7 @@ function App() {
   const sliderRef = useRef(null);
 
   const listState = useSelector((state) => state.setList);
-  const yearRange = useSelector((state) => state.setYear);
+  const yearRange = useSelector((state) => state.setPercentYear).yearRange;
   const dispatch = useDispatch();
 
   useEffect(() => {

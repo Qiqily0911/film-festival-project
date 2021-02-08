@@ -9,7 +9,7 @@ import { setPercentValue, setYear } from "../../globalState/actions";
 function YearList(props) {
   const listState = useSelector((state) => state.setList);
   const userLike = useSelector((state) => state.userLike);
-  const yearRange = useSelector((state) => state.setYear);
+  const yearRange = useSelector((state) => state.setPercentYear).yearRange;
   const dispatch = useDispatch();
 
   useEffect(() => {
