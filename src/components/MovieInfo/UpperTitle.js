@@ -3,6 +3,18 @@ import { ReactComponent as Bookmark } from "../../image/icon/add.svg";
 import { ordinalSuffix, addLiked, cancelLiked } from "../../utils";
 import { BtnData } from "../../data/LocalSource";
 import { useSelector } from "react-redux";
+import styled from "styled-components";
+
+const Title = styled.div`
+  color: gray;
+  font-size: 0.9rem;
+  font-weight: 400;
+  margin-bottom: 10px;
+`;
+
+const TitleCh = styled.span`
+  font-size: 1.5rem;
+`;
 
 export default function UpperTitle(props) {
   const movieData = useSelector((state) => state.setMovieData);
@@ -48,11 +60,19 @@ export default function UpperTitle(props) {
   return (
     <div className={styles.upper}>
       <div>
-        <span className={styles.subtitle}>
-          {movieData.localData.th && ordinalSuffix(movieData.localData.th)}
-          {movieData.localData.year}
-          {prizeTitle()}
-        </span>
+        <div className={styles.title}>
+          <Title>
+            <span>
+              {" "}
+              {movieData.localData.th &&
+                ordinalSuffix(movieData.localData.th) + "｜"}
+            </span>
+            <span> {movieData.localData.year}</span>
+            {prizeTitle()}
+          </Title>
+          <p>{movieData.detail.title}</p>
+          <TitleCh>{movieData.localData.film_name_zh}</TitleCh>
+        </div>
       </div>
       <div className={styles.row}>
         <div className={styles.title}>
